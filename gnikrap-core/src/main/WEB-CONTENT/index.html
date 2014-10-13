@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<!--
+ * Copyright (C) 2014 Jean BENECH
+ * 
+ * This file is part of Gnikrap.
+ * 
+ * Gnikrap is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Gnikrap is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+  <head>
+    <!-- Only for mobiles devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Other meta -->
+    <meta name="description" content="Gnikrap application">
+    <meta name="author" content="Jean BENECH">
+    <link rel="shortcut icon" href="images/gnikrap.png">
+
+    <title>Gnikrap</title>
+    <style type="text/css" media="screen">
+      /* Styles for the code editor */
+      #editor {
+        height: 550px; /* Editor height is mandatory in order to have it appears */
+        /* resize: vertical; overflow: auto; */
+      }
+      
+      /* Add margin within bootstrap */
+      [class*="col"] { margin-bottom: 5px; margin-left: 5px; margin-right: 5px }
+      
+      /* Needed for the fixed nav-bar */
+      body { padding-top: 60px; }
+    </style>
+
+    <!-- Load bootstrap styles -->
+    <link href="lib/bootstrap/3.2.0/css/bootstrap.css" rel="stylesheet"/>
+    <!-- link href="lib/bootstrap/3.2.0/css/bootstrap-theme.css" rel="stylesheet"/ --> <!-- Provide a 3D effect on buttons -->
+    <!-- link href="test.css" rel="stylesheet"/ -->
+    
+    <!-- Load libraries (Updated SEP2014) -->
+    <script src="lib/jquery/2.1.1/jquery.min.js"></script>
+    <script src="lib/bootstrap/3.2.0/js/bootstrap.js"></script>
+    <script src="lib/bootbox/4.3.0/bootbox.js"></script>
+    <script src="lib/knockout/3.2.0/knockout.min.js"></script>
+    <script src="lib/i18next/1.7.4/i18next.min.js"></script>
+    <script src="lib/ace/1.1.6.min/ace.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+    <!-- ############################################################ -->
+    <!-- Main screen -->
+    <div id="main" class="container-fluid">
+      <!-- Navigation bar -->
+      <div class="navbar navbar-default navbar-fixed-top">
+        <div class="nav navbar-nav" style="padding-top: 5px; padding-left: 5px">
+          <button class="btn btn-success" data-bind="click: onRunScript">
+            <span class="glyphicon glyphicon-play"></span> <span class="i18n" data-i18n="script.toolbar.run">RUN</span></button>
+          <button class="btn btn-warning" data-bind="click: onStopScript">
+            <span class="glyphicon glyphicon-stop"></span> <span class="i18n" data-i18n="script.toolbar.stop">STOP</span></button>
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="i18n" data-i18n="script.toolbar.scriptMenu._">SCRIPT</span>&nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a data-bind="click: onResetScript"><span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.clear">CLEAR</span></a></li>
+              <li><a data-bind="click: onLoadScript"><span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.loadAndManage">LOAD_MANAGE</span></a></li>
+              <li><a data-bind="click: onSaveScript"><span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.save">SAVE</span></a></li>
+            </ul>
+          </div>
+          
+          <div class="btn-group">
+            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="i18n" data-i18n="script.toolbar.messagesMenu._">MESSAGE</span>&nbsp;&nbsp;<span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a data-bind="click: onResetMessages"><span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="script.toolbar.messagesMenu.clear">CLEAR</span></a></li>
+              <li><a><input type="checkbox" data-bind="checked: keepOnlyLastMessage"> <span class="i18n" data-i18n="script.toolbar.messagesMenu.keepLast">KEEP_LAST</span></a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="navbar-header pull-right">
+          <!-- disabled -->
+          <button class="btn" data-bind="click: onDisplayAbout"><strong>Gnikrap</strong> <img src="images/gnikrap.png"></button>     
+        </div>
+      </div>
+
+      <!-- Code editor -->
+      <div class="row-fluid">
+        <div class="col-sm-8">
+          <div id="editor">// Loading script...</div>
+        </div>
+        <div class="col-sm-3">
+          <ul class="list-group" data-bind="foreach: messages" style="font-size:11px">
+            <li class="list-group-item" data-bind="css: cssClazz">
+              <small data-bind="text: time">00:00:00</small> - <span data-bind="text: text">Message</span><span class="badge" data-bind="visible: count > 1, text: count">0</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+		</div>
+    <!-- End of the layout -->
+    
+    
+    <!-- ############################################################ -->
+    <!-- Scrip file management modal -->
+    <div id="manageScriptFilesModal" class="modal fade" tabindex="-1"> <!-- role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">CrossCloseButton</span></button>
+            <h4 class="modal-title" id="myModalLabel"><span class="i18n" data-i18n="manageScriptFilesModal.title">MANAGE_SCRIPTS</span></h4>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th class="i18n" data-i18n="manageScriptFilesModal.c1.title">FILENAME</th>
+                  <th class="i18n" data-i18n="manageScriptFilesModal.c2.title">LANGUAGE</th>
+                </tr>
+              </thead>
+              <tbody data-bind="foreach: files">
+                <tr>
+                  <td data-bind="text: name">nameOfTheFile</td><td>Unknown</td>
+                  <td>
+                    <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onLoadScript">
+                      <!-- span class="glyphicon glyphicon-open"></span --><span class="i18n" data-i18n="manageScriptFilesModal.load">LOAD</span></button>
+                    <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onDeleteScript, visible: isReadWrite">
+                      <!-- span class="glyphicon glyphicon glyphicon-trash"></span --><span class="i18n" data-i18n="manageScriptFilesModal.delete">DELETE</span></button>
+                  </td>
+                </tr> <!-- $index $parent -->
+              </tbody>
+            </table>
+            <!-- TODO: Manage paging: https://blog.safaribooksonline.com/2014/02/03/creating-basic-re-usable-component-knockout-3-0/ -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              <span class="i18n" data-i18n="manageScriptFilesModal.cancel">CANCEL</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal HTML -->
+    <div id="aboutModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <body>
+              <div class="modal-header">
+                <h3 class="modal-title"><img src="/images/gnikrap.png"/> <strong>Gnikrap 0.2.0</strong></h3>
+              </div>
+              <div class="modal-body">
+                <p class="i18n" data-i18n="[html]aboutModal.gnikrapShortDescription">GNIKRAP_SHORT_DESCRIPTION</p>
+                <br/>
+                <p><span class="i18n" data-i18n="aboutModal.softwareUsed">SOFTWARE_USED</span>
+                  <ul class="list-inline">
+                    <li><a href="http://ace.c9.io/" target="_blank" title="Ace is an embeddable code editor written in JavaScript - BSD license">Ace</a></li>
+                    <li><a href="http://bootboxjs.com/" target="_blank" title="A small JavaScript library which allows you to create programmatic dialog boxes using Bootstrap modals - MIT License">Bootboxjs</a></li>
+                    <li><a href="http://getbootstrap.com/" target="_blank" title="A sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development - MIT License">Bootsrap</a></li>
+                    <li><a href="http://i18next.com/" target="_blank" title="A full-featured i18n javascript library for translating your webapplication - MIT license">i18next</a></li>
+                    <li><a href="http://jquery.com/" target="_blank" title="A fast, small, and feature-rich JavaScript library - MIT license">jQuery</a></li>
+                    <li><a href="http://knockoutjs.com/" target="_blank" title="Simplify dynamic JavaScript UIs with the Model-View-View-Model (MVVM) pattern - MIT license">Knockout.</a></li>
+                    <li><a href="http://www.lejos.org/" target="_blank" title="Java for Lego Mindstorm - MPL? (not sure of the licence)">Lejos</a></li>
+                    <li><a href="https://github.com/ralfstx/minimal-json" target="_blank" title="A minimal, but complete JSON parser and writer for Java - Eclipse Public License">minimal-json</a></li>
+                    <li><a href="http://undertow.io/" target="_blank" title="A flexible performant web server written in java - Apache 2.0">Undertow</a></li>
+                  </ul>
+                </p>
+                <br/>
+                <p class="i18n" data-i18n="[html]aboutModal.gnikrapLicence">GNIKRAP_LICENCE</p>
+                <pre class="i18n" data-i18n="[html]aboutModal.gplV3Notice">GLP_V3_NOTICE</pre>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                  <span class="i18n" data-i18n="aboutModal.close">CLOSE</span></button>
+              </div>
+            </body>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- ############################################################ -->
+    <!-- ############################################################ -->
+		<script>
+      /**
+       * Translation function
+       */
+      function translateScript(script) {
+        var value = script;
+        var api = i18n.t("ev3api", { returnObjectTrees: true });
+        if(api != undefined) {
+          for(var k in api) {
+            var v = api[k];
+            if((k.indexOf('@') == -1) && (v.length > 0)) {
+              //console.log("replacing: " + v + " by " + k);
+              var r = new RegExp("(\\.\\s*)(" + v + ")(\\s*\\()", "img"); // Case insensitive (?), multi-line search, global (replace all)
+              value = value.replace(r, "$1" + k + "$3");
+              //console.log("   result: " + value);
+            }
+          }
+        }
+        return value;
+      }
+      
+      /**
+       * Check if the script translation is reversible.
+       * @retruns the list of fields in error
+       */
+      function checkScriptTranslation() {
+        var api = i18n.t("ev3api", { returnObjectTrees: true });
+        var apiRevert = {}; // Store the API in reverse
+        var errors = []; // List of errors found
+        if(api != undefined) {
+          for(var k in api) {
+            var v = api[k];
+            if((k.indexOf('@') == -1) && (v.length > 0)) {
+              if(apiRevert[v] == undefined) {
+                apiRevert[v] = k;
+              } else {
+                errors.push(v);
+              }
+            }
+          }
+        }
+        return errors;
+      }
+    
+		  // Object that manage the editor
+		  function Editor() {
+        var self = this;
+			  var editor;
+			  // Init
+			  {
+				  editor = ace.edit("editor")
+			    editor.setTheme("ace/theme/chrome");
+			    editor.getSession().setMode("ace/mode/javascript");
+			  }
+			  
+			  this.getValue = function() {
+				  return editor.getValue();
+			  }
+        
+        this.setValue = function(value) {
+          editor.setValue(value);
+          editor.moveCursorTo(0, 0);
+        }
+        
+        this.clear = function() {
+          editor.setValue("");
+        }
+        
+        this.resizeVertically = function() {
+          var h = window.innerHeight;
+          $('#editor').css('height', (h - (60 + 10)).toString() + 'px'); // 60 should be synchronized with body.padding-top
+        };
+		  }
+
+		  // Model to manage the main page data and actions
+		  function EV3ScriptViewModel() {
+			  var self = this;
+        self.manageScriptFilesVM = undefined;
+			  self.editor = undefined;
+			  self.myServer = undefined;
+        self.messages = ko.observableArray();
+        self.messages.extend({ rateLimit: 50 }); // Accept lower refresh rate
+        self.keepOnlyLastMessage = ko.observable(true);
+        self.scriptFilename = undefined;
+			  
+			  self.onResetScript = function() {
+          bootbox.confirm(i18n.t("clearScriptModal.title"), function(result) {
+            if(result) {
+              self.editor.clear();
+            }
+          });
+			  }
+        
+        self.onLoadScript = function() {
+          self.manageScriptFilesVM.display();
+        }
+			  
+			  self.onRunScript = function() {
+				  var value = (self.editor != undefined ? self.editor.getValue() : null);
+
+          // Execute the script
+				  self.myServer.runScript(translateScript(value));
+			  }
+			  
+			  self.onStopScript = function() {
+				  self.myServer.stopScript();
+			  }
+        
+        self.onDisplayAbout = function() {
+          $('#aboutModal').modal("show");
+        }
+        
+        self.addMessage = function(isError, message) {
+          //console.log("new message: " + isError + " / " + message);
+          function doAddMessage(isError, message, count) {
+            self.messages.unshift({
+              "time": new Date().toLocaleTimeString(), 
+              "isError": isError,
+              "cssClazz":  (isError ? "list-group-item-danger" : "list-group-item-info"),
+              "text": message,
+              "count": count
+            });
+              
+            if(self.keepOnlyLastMessage()) {
+              self.messages.splice(15); // Keep the first n messages
+            }
+          }
+
+          // Manage the message count
+          var m0 = (self.messages().length > 0 ? self.messages()[0] : undefined);
+          if((m0 != undefined) && (m0.isError == isError) && (m0.text == message)) {
+            self.messages.shift();
+            doAddMessage(isError, message, m0.count + 1);
+          } else {
+            doAddMessage(isError, message, 1);
+          }
+        }
+        
+        self.onResetMessages = function() {
+          self.messages.removeAll();
+        }
+        
+        self.loadScriptFile = function(filename) {
+          self.editor.setValue(i18n.t("miscellaneous.loadingScripWait", { "filename": filename }));
+          self.scriptFilename = undefined;
+          $.ajax({
+            url: "/rest/scriptfiles/" + filename,
+            success: function(data, status) {
+              var scriptFile = JSON.parse(data);
+              self.editor.setValue(scriptFile.content);
+              if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
+                self.scriptFilename = filename;
+              }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              // XMLHttpRequest.status: HTTP response code
+              self.addMessage(true, i18n.t("errors.cantLoadScriptFile", 
+                { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+            }
+          });
+        }
+
+        self.onSaveScript = function() {
+          bootbox.prompt({
+            title: i18n.t('saveScriptModal.title'),
+            value: (self.scriptFilename == undefined ? "" : self.scriptFilename),
+            callback: function(result) {
+              if ((result != null) && (result.trim().lenght != 0)) {
+                var filename = result.trim();
+                console.log("Save script: '" + filename + "'");
+                $.ajax({
+                  url: "/rest/scriptfiles/" + filename,
+                  content: "application/json",
+                  data:  JSON.stringify({
+                    name: filename,
+                    content: self.editor.getValue()
+                  }),
+                  type: "PUT",
+                  success: function(data, status) {
+                    self.scriptFilename = filename;
+                    self.addMessage(false, i18n.t("miscellaneous.scriptSuccessfullySaved", {"filename": filename }));
+                  },
+                  error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    self.addMessage(true, i18n.t("errors.cantSaveScriptFile", 
+                      { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+                  }
+                });
+              } // else: cancel clicked
+            }
+          });
+        }
+		  }
+
+      function ManageScriptFilesViewModel() {
+        var self = this;
+        self.ev3ScriptVM = undefined;
+        self.files = ko.observableArray();
+        
+        self.display = function() {
+          self.doRefreshFileList();
+          $('#manageScriptFilesModal').modal('show');
+        }
+        
+        self.hide = function() {
+          $('#manageScriptFilesModal').modal('hide');
+        }
+        
+        self.doRefreshFileList = function() {
+          // Retrieve the list from the server
+          self.files.removeAll();
+          $.ajax({
+            url: "/rest/scriptfiles/",
+            success: function(data, status) {
+              var scriptFiles = JSON.parse(data);
+              for(var i = 0; i < scriptFiles.length; i++) {
+                //console.log("Adding: " + scriptFiles[i]);
+                scriptFiles[i].isReadWrite = (scriptFiles[i].name.indexOf("__") != 0);
+                self.files.push(scriptFiles[i]);
+              }
+              $("#manageScriptFilesModal .i18n").i18n(); // DOM generated by Knockout isn't i18n => Need to re-translate the modal
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              // XMLHttpRequest.status: HTTP response code
+              self.addMessage(true, i18n.t("errors.cantRetrieveListOfScriptFiles", 
+                { causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+              self.hide();
+            }
+          });
+        }
+        
+        self.onLoadScript = function(file) {
+          self.hide();
+          self.ev3ScriptVM.loadScriptFile(file.name);
+        }
+
+        self.onDeleteScript = function(file) {
+          bootbox.confirm(i18n.t("miscellaneous.confirmScriptFileDeletion", { filename: file.name }), function(result) {
+            if(result) {
+              self.files.remove(file);
+              $.ajax({
+                url: "/rest/scriptfiles/" + file.name,
+                type: "DELETE",
+                success: function(data, status) {
+                  console.log("Script file: '" + file.name + "' successfully deleted");
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                  // XMLHttpRequest.status: HTTP response code
+                  alert(i18n.t("errors.cantDeleteScriptFile", 
+                      { filename: result, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+                  self.doRefreshList();
+                }
+              });
+            }
+          });
+        }        
+      }
+		  
+		  function MyServer() {
+			  var self = this;
+        self.ws = undefined;
+        self.ev3ScriptVM = undefined;
+
+			  // Init
+			  self.initialize = function() {
+				  if ("WebSocket" in window) {
+            var wsURI = "ws://" + location.host + "/ws/gnikrap/script";
+            try {
+              self.ws = new WebSocket(wsURI);
+              self.ws.onopen = function(evt) { self.__onOpen(evt) };
+              self.ws.onclose = function(evt) { self.__onClose(evt) };
+              self.ws.onmessage = function(evt) { self.__onMessage(evt); }
+              self.ws.onerror = function(evt) { console.log("onError - " + evt); };
+            } catch(ex) {
+              self.ev3ScriptVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
+              console.log("Fail to open websocket to: '" + wsURI + "'");
+            }
+				  }
+				  else {
+            self.ev3ScriptVM.addMessage(true, i18n.t("errors.websocketNotSupported"));
+				  }
+			  }
+			  
+			  self.__onOpen = function(evt) {
+          self.ev3ScriptVM.addMessage(false, i18n.t("miscellaneous.ev3ConnectionOk"));
+        }
+        
+			  self.__onMessage = function(evt) {
+	        var received_msg = evt.data;
+          var received_data = JSON.parse(received_msg);
+          var msgType = received_data.msgTyp;
+	        console.log("Message received: " + received_msg);
+          
+          if(msgType=="ScriptException" || msgType=="Exception") {
+            self.ev3ScriptVM.addMessage(true, i18n.t("server.errors." + received_data.code, received_data.params));
+          } else if(msgType=="InfoCoded") {
+            self.ev3ScriptVM.addMessage(false, i18n.t("server.messages." + received_data.code, received_data.params));
+          } else {
+            // Default: Assume this is a text message
+            self.ev3ScriptVM.addMessage(false, received_data.txt);
+          }
+			  }
+        
+			  self.__onClose = function(evt) { 
+          self.ev3ScriptVM.addMessage(true, i18n.t("errors.ev3ConnectionNok"));
+        }
+			  
+			  self.runScript = function(scriptCode) {
+				  var jsonMsg = JSON.stringify({
+						  act: "runScript",
+						  sLang: "javascript",
+						  sText: scriptCode
+				  });
+				  console.log("run - " + jsonMsg);
+				  self.ws.send(jsonMsg);
+			  }
+        
+        self.stopScript = function() {
+          var jsonMsg = JSON.stringify({
+						  act: "stopScript",
+				  });
+				  console.log("stop - " + jsonMsg);
+				  self.ws.send(jsonMsg);
+        }
+		  }
+      
+// ///////////////////////////////////////////////////////////////////////////
+/*
+function createCookie(name, value, days) {
+    var expires;
+
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    } else {
+        expires = "";
+    }
+    document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
+}
+
+function readCookie(name) {
+    var nameEQ = escape(name) + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return unescape(c.substring(nameEQ.length, c.length));
+    }
+    return null;
+}
+
+function eraseCookie(name) {
+    createCookie(name, "", -1);
+} 
+*/     
+// ///////////////////////////////////////////////////////////////////////////
+      
+		  // Initialization while document is ready
+      $(document).ready(function() {
+        // Translation
+        //var language_complete = navigator.language.split("-");
+        //var language = (language_complete[0]);
+        //console.log("Browser language (root): %s", language);
+
+        i18n.init({ fallbackLng: 'en', lng: 'fr' /*, resGetPath: 'locales/__ns__-__lng__.json', lng: language */ }, function() { 
+          $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
+          console.log("Function that cannot be translated: " + checkScriptTranslation());
+        });
+        // i18n.setLng('en-US', function(t) { /* loading done */ });
+
+        // Other objects initialization
+        var myServer = new MyServer();
+        var editor = new Editor();
+        var ev3ScriptVM = new EV3ScriptViewModel();
+        var manageScriptFilesVM = new ManageScriptFilesViewModel();
+        ev3ScriptVM.editor = editor;
+        ev3ScriptVM.myServer = myServer;
+        ev3ScriptVM.manageScriptFilesVM = manageScriptFilesVM;
+        manageScriptFilesVM.ev3ScriptVM = ev3ScriptVM;
+        myServer.ev3ScriptVM = ev3ScriptVM;
+        ko.applyBindings(ev3ScriptVM, $("#main")[0]);
+        ko.applyBindings(manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
+        myServer.initialize(); // WS connexion with the server
+
+        // Load default script
+        ev3ScriptVM.loadScriptFile("__default__.js");
+        
+        // Register windows events
+        $(window).on('resize', function () {
+            editor.resizeVertically();
+        });
+        editor.resizeVertically();
+
+        
+// TODO Keyboard shortcut for Load/Save (at least save)
+/*
+$(document).keydown(function(evt){
+    if (evt.keyCode==83 && (evt.ctrlKey)){
+        evt.preventDefault();
+        alert('worked');
+    }
+}); */
+
+//i18n.t("tree", { returnObjectTrees: true }); // -> { res: 'added' }
+      });
+		</script>  
+  </body>
+</html>

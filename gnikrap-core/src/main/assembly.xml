@@ -1,0 +1,25 @@
+<assembly>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<formats>
+		<format>dir</format>
+    <!-- format>tar</format -->
+    <format>zip</format>
+	</formats>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory>/bin</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/WEB-CONTENT</directory>
+			<outputDirectory>/WEB-CONTENT</outputDirectory>
+		</fileSet>
+	</fileSets>
+
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>lib</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+  
+</assembly>

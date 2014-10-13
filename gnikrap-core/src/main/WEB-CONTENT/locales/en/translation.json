@@ -1,0 +1,113 @@
+{
+  "@comment": "English translation (also used as default translation)",
+  
+  "script": {
+    "@comment": "The 'Script windows'",
+    "toolbar": {
+      "run": "Run",
+      "stop": "Stop",
+      "scriptMenu": {
+        "_": "Script",
+        "clear": "Clear the script",
+        "loadAndManage": "Load/Manage scripts...",
+        "save": "Save the script..."
+      },
+      "messagesMenu": {
+        "_": "Messages",
+        "clear": "Clear the messages",
+        "keepLast": "Keep only last messages"
+      }
+    }
+  },
+  
+  "manageScriptFilesModal": {
+    "@comment": "The manage scripts modal",
+    "title": "Manage script files",
+    "c1": {
+      "title": "Filename"
+    },
+    "c2": {
+      "title": "Language"
+    },
+    "load": "Load",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  
+  "saveScriptModal": {
+    "@comment": "The save script 'Dialog'",
+    "title": "Save the script with the following name:"
+  },
+  
+  "clearScriptModal": {
+    "@comment": "The clear script 'Dialog'",
+    "title": "Are you sure to clear the current script ?"
+  },
+  
+  "aboutModal": {
+    "@comment": "The about modal",
+    "gnikrapShortDescription": "<a href=\"https://github.com/jbenech/gnikrap\" target=\"_blank\">Gnikrap</a> is a simple scripting environment for the <a href=\"http://www.lego.com/mindstorms/\" target=\"_blank\">Lego Mindstrom EV3</a>.",
+    "softwareUsed": "This software has been made possible by using several open-source software:",
+    "gnikrapLicence": "Licence (full text of the <a href=\"licence-lgpl-3.0.txt\" target=\"_blank\">GPL v3</a> licence):",
+    "gplV3Notice": [
+      "Gnikrap is a simple scripting environment for the Lego Mindstrom EV3",
+      "Copyright (C) 2014 Jean BENECH",
+      "",
+      "This program is free software: you can redistribute it and/or modify",
+      "it under the terms of the GNU General Public License as published by",
+      "the Free Software Foundation, either version 3 of the License, or",
+      "(at your option) any later version.",
+      "",
+      "This program is distributed in the hope that it will be useful,",
+      "but WITHOUT ANY WARRANTY; without even the implied warranty of",
+      "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the",
+      "GNU General Public License for more details.",
+      "",
+      "You should have received a copy of the GNU General Public License",
+      "along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\" target=\"_blank\">http://www.gnu.org/licenses/</a>"
+    ],
+    "close": "Close"
+  },
+  
+  "errors": {
+    "@comment": "All the error messages",
+    "cantSaveScriptFile": "Can't save '__filename__' script file. [__causedBy__]",
+    "cantLoadScriptFile": "Can't load '__filename__' script file. [__causedBy__]",
+    "cantRetrieveListOfScriptFiles": "Can't retrieve the list of files. [__cansedBy__]",
+    "cantDeleteScriptFile": "Can't delete '__filename__' script file. [__causedBy__]",
+    "webSocketNotSupported": "WebSocket not supported by your Browser. Please try with a recent version of your browser. If not possible, please consider installing Firefox.",
+    "ev3ConnectionFailed": "EV3 Brick connection failed. Cause: __causedBy__",
+    "ev3ConnectionNok": "EV3 Brick connection closed by the EV3 brick"
+  },
+  
+  "miscellaneous": {
+    "@comment": "All other text messages that can't be associated to another group",
+    "loadingScripWait": "// Loading script: '__filename__', please wait...",
+    "confirmScriptFileDeletion": "Confirm you really want to delete '__filename__' ?",
+    "scriptSuccessfullySaved": "Script '__filename__' successfully saved",
+    "ev3ConnectionOk": "EV3 Brick connection ok"
+  },
+  
+  "server": {
+    "errors": {
+      "@comment": "All the errors/exception that come from the server are here",
+      "INVALID_MESSAGE_FIELD_FORMAT": "Field: '__field__' isn't of type text",
+      "MESSAGE_FIELD_NOT_FOUND": "Can't found field: '__field__' in parameter message",
+      "SCRITP_LANGUAGE_NOT_SUPPORTED": "Language: '__language__, isn't supported. Try JavaScript instead.",
+      "UNKNOWN_ACTION": "No processor registered for action name: '__action__'",
+      
+      "INVALID_SENSOR_PORT": "Sensor port '__port__' isn't valid should be in [S1, S2, S3, S4] or [1, 2, 3, 4]",
+      "INVALID_MOTOR_PORT": "Motor port '__port__' isn't valid, should be in [A, B, C, D]",
+      "API_NOT_IMPLEMENTED": "__function__ not implemented",
+      "INVALID_CHANNEL_VALUE": "Invalid channel value: '__channel__', valid values in [1, 2, 3, 4]",
+      "INVALID_NOTE": "Invalid note: '__note__', should be in [C1-B7, # allowed on C, D, F, G, A] or [Do-Si, # allowed on Do, Re, Fa, Sol, La]",
+      "UNEXPECTED_ERROR": "Unexpected error: '__error__'",
+      "SCRIPT_STOP_FORCED": "Script forced to stop, please use \"ev3.isRunning()\""
+    },
+    "messages": {
+      "@comment": "All the coded messages that come from the server are here",
+      "SCRIPT_STARTING": "Script starting",
+      "SCRIPT_ENDED": "Script gently ended"
+    }
+  }  
+}
