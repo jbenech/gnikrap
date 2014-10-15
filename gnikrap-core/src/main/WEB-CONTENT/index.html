@@ -44,7 +44,6 @@
     <!-- Load bootstrap styles -->
     <link href="lib/bootstrap/3.2.0/css/bootstrap.css" rel="stylesheet"/>
     <!-- link href="lib/bootstrap/3.2.0/css/bootstrap-theme.css" rel="stylesheet"/ --> <!-- Provide a 3D effect on buttons -->
-    <!-- link href="test.css" rel="stylesheet"/ -->
     
     <!-- Load libraries (Updated SEP2014) -->
     <script src="lib/jquery/2.1.1/jquery.min.js"></script>
@@ -190,49 +189,6 @@
     <!-- ############################################################ -->
     <!-- ############################################################ -->
 		<script>
-      /**
-       * Translation function
-       */
-      function translateScript(script) {
-        var value = script;
-        var api = i18n.t("ev3api", { returnObjectTrees: true });
-        if(api != undefined) {
-          for(var k in api) {
-            var v = api[k];
-            if((k.indexOf('@') == -1) && (v.length > 0)) {
-              //console.log("replacing: " + v + " by " + k);
-              var r = new RegExp("(\\.\\s*)(" + v + ")(\\s*\\()", "img"); // Case insensitive (?), multi-line search, global (replace all)
-              value = value.replace(r, "$1" + k + "$3");
-              //console.log("   result: " + value);
-            }
-          }
-        }
-        return value;
-      }
-      
-      /**
-       * Check if the script translation is reversible.
-       * @retruns the list of fields in error
-       */
-      function checkScriptTranslation() {
-        var api = i18n.t("ev3api", { returnObjectTrees: true });
-        var apiRevert = {}; // Store the API in reverse
-        var errors = []; // List of errors found
-        if(api != undefined) {
-          for(var k in api) {
-            var v = api[k];
-            if((k.indexOf('@') == -1) && (v.length > 0)) {
-              if(apiRevert[v] == undefined) {
-                apiRevert[v] = k;
-              } else {
-                errors.push(v);
-              }
-            }
-          }
-        }
-        return errors;
-      }
-    
 		  // Object that manage the editor
 		  function Editor() {
         var self = this;
@@ -290,7 +246,7 @@
 				  var value = (self.editor != undefined ? self.editor.getValue() : null);
 
           // Execute the script
-				  self.myServer.runScript(translateScript(value));
+				  self.myServer.runScript(value);
 			  }
 			  
 			  self.onStopScript = function() {
@@ -514,48 +470,16 @@
         }
 		  }
       
-// ///////////////////////////////////////////////////////////////////////////
-/*
-function createCookie(name, value, days) {
-    var expires;
-
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toGMTString();
-    } else {
-        expires = "";
-    }
-    document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
-}
-
-function readCookie(name) {
-    var nameEQ = escape(name) + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return unescape(c.substring(nameEQ.length, c.length));
-    }
-    return null;
-}
-
-function eraseCookie(name) {
-    createCookie(name, "", -1);
-} 
-*/     
-// ///////////////////////////////////////////////////////////////////////////
       
 		  // Initialization while document is ready
       $(document).ready(function() {
         // Translation
-        //var language_complete = navigator.language.split("-");
-        //var language = (language_complete[0]);
-        //console.log("Browser language (root): %s", language);
+        var language_complete = navigator.language.split("-");
+        var language = (language_complete[0]);
 
-        i18n.init({ fallbackLng: 'en', lng: 'fr' /*, resGetPath: 'locales/__ns__-__lng__.json', lng: language */ }, function() { 
+        i18n.init({ fallbackLng: 'en', lng: language }, function() { 
           $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
-          console.log("Function that cannot be translated: " + checkScriptTranslation());
+          //console.log("Current language used: " + i18n.lng());
         });
         // i18n.setLng('en-US', function(t) { /* loading done */ });
 
@@ -581,18 +505,6 @@ function eraseCookie(name) {
             editor.resizeVertically();
         });
         editor.resizeVertically();
-
-        
-// TODO Keyboard shortcut for Load/Save (at least save)
-/*
-$(document).keydown(function(evt){
-    if (evt.keyCode==83 && (evt.ctrlKey)){
-        evt.preventDefault();
-        alert('worked');
-    }
-}); */
-
-//i18n.t("tree", { returnObjectTrees: true }); // -> { res: 'added' }
       });
 		</script>  
   </body>
