@@ -25,4 +25,15 @@ public class SimpleEV3LargeMotor extends SimpleEV3Motor {
   public SimpleEV3LargeMotor(Port port) {
     super(port, new EV3LargeRegulatedMotor(port));
   }
+
+  /**
+   * From the LEGO site (http://shop.lego.com/en-US/EV3-Large-Servo-Motor-45502):
+   * <ul>
+   * <li>Large motor can go to 160RPM => 960°/s - Don't see a big difference between 720 and 960.</li>
+   * </ul>
+   */
+  @Override
+  protected float getSpeedRatio() {
+    return 7.2f;
+  }
 }

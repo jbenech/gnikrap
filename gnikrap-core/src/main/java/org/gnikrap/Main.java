@@ -82,6 +82,8 @@ import org.gnikrap.utils.LoggerUtils;
 public class Main {
 
   public static void main(String[] args) throws IOException {
+    System.out.println("Git main branch !!!");
+
     // Tech init
     LoggerUtils.initializeLogging();
 

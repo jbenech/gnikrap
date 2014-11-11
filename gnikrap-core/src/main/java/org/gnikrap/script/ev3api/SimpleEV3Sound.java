@@ -59,13 +59,13 @@ final public class SimpleEV3Sound implements EV3Device {
   /**
    * Play with the volume defined with {{@link #setVolume(int)} .
    */
-  public void playTone(int freq, float durationInS) {
-    playTone(freq, durationInS, volume);
+  public void playTone(int frequency, int durationInMS) {
+    audio.playTone(frequency, durationInMS, volume);
   }
 
-  public void playTone(int freq, float durationInS, int vol) {
-    audio.playTone(freq, (int) (durationInS * 1000), vol);
-  }
+  // public void playTone(int frequency, int durationInMS, int vol) {
+  // audio.playTone(frequency, durationInMS, vol);
+  // }
 
   public void playFile(String filename) throws EV3ScriptException {
     playFile(filename, volume);
@@ -148,7 +148,7 @@ final public class SimpleEV3Sound implements EV3Device {
    * @return
    * @throws EV3ScriptException
    */
-  public static int getFrequency(String note) throws EV3ScriptException {
+  static int getFrequency(String note) throws EV3ScriptException {
     int length = note.length();
     boolean isLength3orUpper = length >= 3;
     if (length >= 2) {

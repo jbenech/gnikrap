@@ -26,6 +26,7 @@ import com.eclipsesource.json.JsonValue;
 
 /**
  * Basic configuration object (need: have an abstraction on the configuration). <br/>
+ * 
  * Note: Not a "generic/powerfull" object, only what has been needed has been put here.
  */
 public final class Configuration {

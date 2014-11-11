@@ -61,7 +61,7 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
     WebSocketSession wss = new WebSocketSession(channel, ev3ActionProcessor);
     sessions.add(wss);
     if (sessions.size() > 5) {
-      // TODO Check that is not a problem (should work even if not optimal...)
+      // TODO Check that is not a problem
       LOGGER.warning("Several (" + sessions.size() + ") EV3-Remote-Control websocket session openned at the same time");
     }
     channel.resumeReceives(); // /!\ channel don't receive nothing if not called

@@ -38,7 +38,7 @@ public final class EV3MessageBuilder {
         .add(JsonMessageFields.MESSAGE_TYPE, JsonMessageFields.MESSAGE_TYPE_INFO_USER) //
         .add(JsonMessageFields.TEXT, text);
 
-    return JsonUtils.toString(json, 256);
+    return JsonUtils.toString(json, 512);
   }
 
   /**
@@ -50,7 +50,7 @@ public final class EV3MessageBuilder {
         .add(JsonMessageFields.CODE, code) //
         .add(JsonMessageFields.PARAMS, JsonUtils.toJsonObject(params));
 
-    return JsonUtils.toString(json, 256);
+    return JsonUtils.toString(json, 512);
   }
 
   /**
@@ -67,6 +67,6 @@ public final class EV3MessageBuilder {
     json.add(JsonMessageFields.CODE, ev3ex.getCode()) //
         .add(JsonMessageFields.PARAMS, JsonUtils.toJsonObject(ev3ex.getParams()));
 
-    return JsonUtils.toString(json, 256);
+    return JsonUtils.toString(json, 512);
   }
 }

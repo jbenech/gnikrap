@@ -94,30 +94,44 @@ public class SimpleEV3Motor implements EV3Device {
   }
 
   /**
+   * Set the speed of the motor (in degrees per second)
+   * 
+   * @param speed
+   */
+  final public void setSpeed(float degreePerSecond) {
+    delegate.setSpeed(degreePerSecond);
+  }
+
+  /**
    * Set the speed of the motor (100 => about 120RPM for large motor and 180RPM for medium motor)
    * 
    * @param percent The percent of speed regarding the maximum speed.
    */
-  final public void setSpeed(int percent) {
-    delegate.setSpeed(getSpeedRatio() * Math.min(percent, 100));
+  final public void setSpeedPercent(int percent) {
+    setSpeed(getSpeedRatio() * Math.min(Math.max(percent, 0), 100));
   }
 
   /**
-   * From the LEGO site (http://shop.lego.com/en-US/EV3-Large-Servo-Motor-45502):
-   * <ul>
-   * <li>Large motor can go to 160RPM => 960°/s - Don't see a big difference between 720 and 960.
-   * <li>medium motor can go to 240RPM => 1440°/s - Don't see a big difference between 1080 and 1440.
+   * Used to convert (set/get) the speed in %
    * 
-   * @return the motor speed (angle by second) for 1% of speed.
+   * @return the motor speed (degrees per second) for 1% of speed.
    */
   protected float getSpeedRatio() {
-    return 7.2f;
+    // Default is based on the maximum speed of the lejos API (which don't take in account the motor type ?!).
+    return delegate.getMaxSpeed() / 100.0f;
   }
 
   /**
-   * @returns The speed
+   * @returns The speed in degress by second
    */
-  final public int getSpeed() {
+  final public float getSpeed() {
+    return delegate.getSpeed();
+  }
+
+  /**
+   * @return The speed in percent
+   */
+  final public int getSpeedPercent() {
     return (int) (delegate.getSpeed() / getSpeedRatio());
   }
 

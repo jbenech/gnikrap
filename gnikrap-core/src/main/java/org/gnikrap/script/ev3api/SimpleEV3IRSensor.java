@@ -127,7 +127,7 @@ final public class SimpleEV3IRSensor implements EV3Device {
       return value == 9;
     }
 
-    public boolean noButtonPressed() {
+    public boolean nothingEnabled() {
       return value == 0;
     }
 
@@ -150,7 +150,7 @@ final public class SimpleEV3IRSensor implements EV3Device {
     }
 
     /**
-     * @return true if bearing detected, false otherwise.
+     * @return true if beacon detected, false otherwise.
      */
     public boolean isBeaconFound() {
       return (getBearing() != 0) && (getDistance() != 128);
@@ -162,7 +162,7 @@ final public class SimpleEV3IRSensor implements EV3Device {
      * @throws EV3ScriptException
      */
     public boolean isBeaconFound(int channel) throws EV3ScriptException {
-      return (getBearing(channel) == 0) && (getDistance(channel) == 255);
+      return (getBearing(channel) != 0) && (getDistance(channel) != 128);
     }
 
     /**

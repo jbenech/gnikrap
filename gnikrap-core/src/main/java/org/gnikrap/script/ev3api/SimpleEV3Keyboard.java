@@ -125,7 +125,7 @@ final public class SimpleEV3Keyboard implements EV3Device {
       waitForPress();
       while (sc.isRunning() && isDown()) {
         if (wait) {
-          sc.sleepInMs(WAIT_TIME_FOR_KEY_EVENTS);
+          sc.sleep(WAIT_TIME_FOR_KEY_EVENTS);
         }
       }
     }
@@ -141,69 +141,6 @@ final public class SimpleEV3Keyboard implements EV3Device {
 
     public int getId() {
       return delegate.getId();
-    }
-  }
-
-  final public static class SimpleEV3Led {
-
-    final int BUTTON_LED_OFF = 0;
-    final int BUTTON_LED_GREEN = 1;
-    final int BUTTON_LED_RED = 2;
-    final int BUTTON_LED_ORANGE = 3;
-    // final int BUTTON_LED_GREEN_BLINK = 4;
-    // final int BUTTON_LED_RED_BLINK = 5;
-    // final int BUTTON_LED_ORANGE_BLINK = 5;
-    // final int BUTTON_LED_GREEN_BLINK2 = 7;
-    // final int BUTTON_LED_RED_BLINK2 = 8;
-    // final int BUTTON_LED_ORANGE_BLINK2 = 9;
-    // final int BUTTON_LED_UNK = 10;
-
-    private int color;
-    private int blink;
-
-    private void doLight() {
-      int temp;
-      if (color == BUTTON_LED_OFF) {
-        temp = color;
-      } else {
-        temp = color + 3 * blink;
-      }
-      Button.LEDPattern(temp);
-    }
-
-    public void off() {
-      color = BUTTON_LED_OFF;
-      doLight();
-    }
-
-    public SimpleEV3Led green() {
-      color = BUTTON_LED_GREEN;
-      blink = 0;
-      doLight();
-      return this;
-    }
-
-    public SimpleEV3Led red() {
-      color = BUTTON_LED_RED;
-      blink = 0;
-      doLight();
-      return this;
-    }
-
-    public SimpleEV3Led orange() {
-      color = BUTTON_LED_ORANGE;
-      blink = 0;
-      doLight();
-      return this;
-    }
-
-    /**
-     * 2 blink mode available, call {@link #blink()} twice to enable the 2nd mode.
-     */
-    public SimpleEV3Led blink() {
-      blink = (blink + 1) % 3;
-      doLight();
-      return this;
     }
   }
 }

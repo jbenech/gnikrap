@@ -26,6 +26,12 @@ public class SimpleEV3MediumMotor extends SimpleEV3Motor {
     super(port, new EV3MediumRegulatedMotor(port));
   }
 
+  /**
+   * From the LEGO site (http://shop.lego.com/en-US/EV3-Large-Servo-Motor-45502):
+   * <ul>
+   * <li>Medium motor can go to 240RPM => 1440°/s - Don't see a big difference between 1080 and 1440.</li>
+   * </ul>
+   */
   @Override
   protected float getSpeedRatio() {
     return 10.8f;

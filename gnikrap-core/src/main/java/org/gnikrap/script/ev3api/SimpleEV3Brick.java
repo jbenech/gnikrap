@@ -101,6 +101,10 @@ public class SimpleEV3Brick {
     return getKeyboard();
   }
 
+  public SimpleEV3Led getLed() {
+    return getKeyboard().getLed();
+  }
+
   // Sensors
   public SimpleEV3Battery getBattery() {
     EV3Device d = devices.get(EV3Constants.BATTERY_KEY);

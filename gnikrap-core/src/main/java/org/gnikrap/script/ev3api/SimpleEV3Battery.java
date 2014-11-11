@@ -57,7 +57,7 @@ public final class SimpleEV3Battery implements EV3Device {
   }
 
   /**
-   * The NXT uses 6 batteries of 1500 mV each.
+   * The EV3 uses 6 batteries of 1500 mV each.
    * 
    * @return Battery voltage in mV. ~9000 = full.
    */

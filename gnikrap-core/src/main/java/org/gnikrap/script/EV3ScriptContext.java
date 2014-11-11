@@ -18,11 +18,6 @@
 package org.gnikrap.script;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,7 +81,7 @@ public final class EV3ScriptContext {
       if (confIsRunningWait == 0) {
         Thread.yield();
       } else {
-        sleepInMs(confIsRunningWait);
+        sleep(confIsRunningWait);
       }
       // Check button escape
       if (confIsRunningCheckEscapeKey && (escape != null) && escape.isDown()) {
@@ -106,11 +101,14 @@ public final class EV3ScriptContext {
   /**
    * Sleep for the given number of seconds
    */
-  public void sleep(float s) {
-    sleepInMs((int) (s * 1000));
+  public void sleepInS(float s) {
+    sleep((int) (s * 1000));
   }
 
-  public void sleepInMs(int ms) {
+  /**
+   * Sleep for the given number of milliseconds
+   */
+  public void sleep(int ms) {
     try {
       Thread.sleep(ms);
     } catch (InterruptedException e) {
@@ -124,42 +122,23 @@ public final class EV3ScriptContext {
     }
   }
 
-  Object myProxy;
-
-  public Object getPP() {
-    if (myProxy == null) {
-      myProxy = Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { Serializable.class }, new InvocationHandler() {
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-          System.out.println("invoke: " + method + " with args: " + Arrays.toString(args));
-          return "Wonderfull world !";
-        }
-      });
-    }
-    return myProxy;
-  }
-
   public class Configuration {
 
     /**
-     * @param waitTime the waiting time in seconds, between [0.0, 1.0]. 0 means no wait.
+     * @param waitTime the waiting time in seconds, 0 means no wait.
      */
-    public Configuration setIsRunningWait(float waitTime) {
-      int i = (int) (waitTime * 1000); // convert in ms
-      if (i < 2) {
+    public Configuration setIsRunningWait(int timeInMs) {
+      if (timeInMs < 1) {
         confIsRunningWait = 0;
-      } else if (i < 1000) {
-        confIsRunningWait = i;
       } else {
-        confIsRunningWait = 1000;
+        confIsRunningWait = timeInMs;
       }
 
       return this;
     }
 
-    public float isRunningWait() {
-      return confIsRunningWait / 1000f;
+    public int isRunningWait() {
+      return confIsRunningWait;
     }
 
     public Configuration setIsRunningCheckEscapeKey(boolean checkEscapeKey) {
@@ -173,14 +152,13 @@ public final class EV3ScriptContext {
     }
 
     /**
-     * @param time waiting time before hard kill of the script, between [0.5, 30]
+     * @param time waiting time before hard kill of the script, between [500, 30000]
      */
-    public Configuration setWaitingTimeBeforeHardKill(float time) {
-      int i = (int) (time * 1000); // convert in ms
-      if (i < 500) {
+    public Configuration setWaitingTimeBeforeHardKill(int timeIsMs) {
+      if (timeIsMs < 500) {
         confWaitingTimeBeforeHardKill = 500;
-      } else if (i < 30000) {
-        confWaitingTimeBeforeHardKill = i;
+      } else if (timeIsMs < 30000) {
+        confWaitingTimeBeforeHardKill = timeIsMs;
       } else {
         confWaitingTimeBeforeHardKill = 30000;
       }
@@ -188,8 +166,8 @@ public final class EV3ScriptContext {
       return this;
     }
 
-    public float getWaitingTimeBeforeHardKill() {
-      return confWaitingTimeBeforeHardKill / 1000f;
+    public int getWaitingTimeBeforeHardKill() {
+      return confWaitingTimeBeforeHardKill;
     }
   }
 }
