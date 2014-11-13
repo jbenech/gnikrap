@@ -24,7 +24,7 @@ import org.gnikrap.script.EV3Message;
 import org.gnikrap.script.JsonMessageFields;
 
 /**
- * Run the script that is inside the message
+ * Run the script that is inside the message. Can also stop the running script (if force stop was enabled).
  */
 public class RunScript implements ActionMessageProcessor {
 
@@ -32,7 +32,18 @@ public class RunScript implements ActionMessageProcessor {
   public void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception {
     String language = msg.getFieldAsText(JsonMessageFields.SCRIPT_LANGUAGE);
     String scriptText = msg.getFieldAsText(JsonMessageFields.SCRIPT_TEXT);
+    boolean force = msg.getFieldAsBoolean(JsonMessageFields.SCRIPT_FORCE_STOP);
 
-    context.getContext().runScript(language, scriptText);
+    context.getContext().runScript(language, scriptText, force);
+  }
+
+  @Override
+  public String getName() {
+    return "runScript";
+  }
+
+  @Override
+  public boolean isAsyncNeeded() {
+    return true;
   }
 }

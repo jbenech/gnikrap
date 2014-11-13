@@ -47,7 +47,6 @@ package org.gnikrap.script;
 public interface JsonMessageFields {
 
   // Both side
-  // /** Message id (generated only by the browser). */
   // String MESSAGE_ID = "msgID";
   /** Message type field. */
   String MESSAGE_TYPE = "msgTyp";
@@ -72,6 +71,12 @@ public interface JsonMessageFields {
   /** Parameters field */
   String PARAMS = "params";
 
+  /** Script properties fields */
   String SCRIPT_LANGUAGE = "sLang";
   String SCRIPT_TEXT = "sText";
+  String SCRIPT_FORCE_STOP = "sFStop"; // Force stop script while running a script and a script is already running
+
+  /** External sensor fields */
+  String EXTERNAL_SENSOR_NAME = "extSnsName";
+  String EXTERNAL_SENSOR_VALUE = "extSnsVal";
 }

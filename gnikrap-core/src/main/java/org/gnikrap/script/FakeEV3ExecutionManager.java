@@ -20,7 +20,7 @@ package org.gnikrap.script;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 
 /**
- * Class mainly used in order to perform tests without EV3 brick
+ * Class mainly used in order to perform some basics tests without EV3 brick
  */
 public class FakeEV3ExecutionManager extends ScriptExecutionManager {
 
@@ -32,53 +32,5 @@ public class FakeEV3ExecutionManager extends ScriptExecutionManager {
   public SimpleEV3Brick buildNewEV3Brick() {
     return null;
   }
-
-  // static class FakeEV3Brick extends SimpleEV3Brick {
-  //
-  // @Override
-  // public SimpleEV3Battery getBattery() {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3ColorSensor getColorSensor(String port) {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3IRSensor getIRSensor(String port) {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3Keyboard getKeyboard() {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3LargeMotor getLargeMotor(String port) {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3MediumMotor getMediumMotor(String port) {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3Screen getScreen() {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3Sound getSound() {
-  // return null;
-  // }
-  //
-  // @Override
-  // public SimpleEV3TouchSensor getTouchSensor(String port) {
-  // return null;
-  // }
-  // }
 
 }

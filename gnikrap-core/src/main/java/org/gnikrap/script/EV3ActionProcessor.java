@@ -88,19 +88,34 @@ public final class EV3ActionProcessor {
    * 
    * @param message The message to process
    */
-  public void processMessage(final String message) {
-    // TODO: Run quick message directly here.
-    executor.execute(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          process(message);
-        } catch (EV3Exception ev3e) {
-          // Send back exception message
-          sendBackException(ev3e);
-        }
+  public void processMessage(final String rawMessage) {
+    try {
+      // Parse the message and check if the action is quick or not
+      final EV3Message message = new EV3Message(rawMessage);
+      String key = message.getActionName();
+      final ActionMessageProcessor processor = actionMessageProcessorRepository.get(key);
+      if (processor == null) {
+        throw new EV3Exception(EV3Exception.UNKNOWN_ACTION, MapBuilder.buildHashMap("action", key).build());
       }
-    });
+
+      // Process the action (in the executor'thread or in the XNIO'thread)
+      if (processor.isAsyncNeeded()) {
+        executor.execute(new Runnable() {
+          @Override
+          public void run() {
+            try {
+              processor.process(message, EV3ActionProcessor.this);
+            } catch (EV3Exception ev3e) {
+              sendBackException(ev3e);
+            }
+          }
+        });
+      } else {
+        processor.process(message, EV3ActionProcessor.this);
+      }
+    } catch (EV3Exception ev3e) {
+      sendBackException(ev3e);
+    }
   }
 
   /**
@@ -119,8 +134,8 @@ public final class EV3ActionProcessor {
     }
   }
 
-  public void registerActionMessageProcessor(String action, ActionMessageProcessor processor) {
-    actionMessageProcessorRepository.put(action, processor);
+  public void registerActionMessageProcessor(ActionMessageProcessor processor) {
+    actionMessageProcessorRepository.put(processor.getName(), processor);
   }
 
   public void unregisterActionMessageProcessor(String action) {
@@ -129,21 +144,5 @@ public final class EV3ActionProcessor {
 
   public ScriptExecutionManager getContext() {
     return context;
-  }
-
-  private void process(String rawMessage) throws EV3Exception {
-    EV3Message message = new EV3Message(rawMessage);
-    String key = message.getActionName();
-    ActionMessageProcessor processor = actionMessageProcessorRepository.get(key);
-    if (processor != null) {
-      try {
-        processor.process(message, this);
-        // sendBackSuccess(message); // TODO: Isn't usefull here.
-      } catch (EV3Exception ev3e) {
-        sendBackException(ev3e);
-      }
-    } else {
-      throw new EV3Exception(EV3Exception.UNKNOWN_ACTION, MapBuilder.buildHashMap("action", key).build());
-    }
   }
 }

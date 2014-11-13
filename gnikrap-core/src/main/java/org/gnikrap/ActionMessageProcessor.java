@@ -32,4 +32,14 @@ public interface ActionMessageProcessor {
    * If no exception launched, the action is considered successfully done.
    */
   void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception;
+
+  /**
+   * @return the name of the actions (received in the message from the browser).
+   */
+  String getName();
+
+  /**
+   * @return true if the action need to be processed in asynchronous or not (i.e. the action is really quick and don't need external resources).
+   */
+  boolean isAsyncNeeded();
 }

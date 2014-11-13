@@ -31,27 +31,39 @@ public final class EV3Message {
   private String action;
 
   public EV3Message(String rawData) {
-    this(JsonObject.readFrom(rawData));
-  }
-
-  public EV3Message(JsonObject data) {
-    this.jsonMessage = data;
+    this.jsonMessage = JsonObject.readFrom(rawData);
   }
 
   /**
-   * Returns the String value of the node with name nodeName, throws an <code>EV3Exception</code> if not found.
+   * Returns the {@link JsonValue} of the node with the name {@code fieldName}, throws an {@link EV3Exception} if not found.
    */
-  public String getFieldAsText(String fieldName) throws EV3Exception {
-    // TODO: Confirm if we need all these checks...
+  public JsonValue getField(String fieldName) throws EV3Exception {
     JsonValue keyNode = jsonMessage.get(fieldName);
     if (keyNode != null) {
-      if (keyNode.isString()) {
-        return keyNode.asString();
-      } else {
-        throw new EV3Exception(EV3Exception.INVALID_MESSAGE_FIELD_FORMAT, MapBuilder.buildHashMap("field", fieldName).build());
-      }
+      return keyNode;
     } else {
       throw new EV3Exception(EV3Exception.MESSAGE_FIELD_NOT_FOUND, MapBuilder.buildHashMap("field", fieldName).build());
+    }
+  }
+
+  /**
+   * Returns the String value of the node with name fieldName, throws an {@link EV3Exception} if not found.
+   */
+  public String getFieldAsText(String fieldName) throws EV3Exception {
+    JsonValue keyNode = getField(fieldName);
+    if (keyNode.isString()) {
+      return keyNode.asString();
+    } else {
+      throw new EV3Exception(EV3Exception.INVALID_MESSAGE_FIELD_FORMAT, MapBuilder.buildHashMap("field", fieldName).build());
+    }
+  }
+
+  public boolean getFieldAsBoolean(String fieldName) throws EV3Exception {
+    JsonValue keyNode = getField(fieldName);
+    if (keyNode.isBoolean()) {
+      return keyNode.asBoolean();
+    } else {
+      throw new EV3Exception(EV3Exception.INVALID_MESSAGE_FIELD_FORMAT, MapBuilder.buildHashMap("field", fieldName).build());
     }
   }
 

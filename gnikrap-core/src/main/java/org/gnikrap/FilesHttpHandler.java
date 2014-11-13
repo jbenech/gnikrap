@@ -232,7 +232,7 @@ public class FilesHttpHandler implements HttpHandler {
     public JsonValue toJson() {
       return new JsonObject() //
           .add("name", name).add("content", content) //
-          .add("tags", JsonUtils.toJsonArray(tags));
+          .add("tags", JsonUtils.toJson(tags));
     }
 
     public static ScriptFile fromJson(JsonObject json) {

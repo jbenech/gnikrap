@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.gnikrap.script.ev3api.ExternalSensor;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
 import org.gnikrap.utils.LoggerUtils;
@@ -34,6 +35,7 @@ public final class EV3ScriptContext {
   private boolean running;
   private final SimpleEV3Button escape;
   private final SimpleEV3Brick ev3;
+  private final ExternalSensor xsensor;
 
   // Configuration
   private final Configuration configuration = new Configuration();
@@ -42,9 +44,10 @@ public final class EV3ScriptContext {
   private int confWaitingTimeBeforeHardKill = 5000;
   private final ScriptExecutionManager ctx;
 
-  public EV3ScriptContext(SimpleEV3Brick ev3, ScriptExecutionManager ctx) {
+  public EV3ScriptContext(SimpleEV3Brick ev3, ScriptExecutionManager ctx, ExternalSensor xsensor) {
     this.ev3 = ev3;
     this.ctx = ctx;
+    this.xsensor = xsensor;
     if (ev3 != null) {
       escape = ev3.getKeyboard().getEscape();
     } else {
@@ -99,16 +102,23 @@ public final class EV3ScriptContext {
   }
 
   /**
+   * Return the object that enable to read external sensors values.
+   */
+  public ExternalSensor getXSensor() {
+    return xsensor;
+  }
+
+  /**
    * Sleep for the given number of seconds
    */
   public void sleepInS(float s) {
-    sleep((int) (s * 1000));
+    sleep((long) (s * 1000));
   }
 
   /**
    * Sleep for the given number of milliseconds
    */
-  public void sleep(int ms) {
+  public void sleep(long ms) {
     try {
       Thread.sleep(ms);
     } catch (InterruptedException e) {
@@ -128,7 +138,7 @@ public final class EV3ScriptContext {
      * @param waitTime the waiting time in seconds, 0 means no wait.
      */
     public Configuration setIsRunningWait(int timeInMs) {
-      if (timeInMs < 1) {
+      if (timeInMs < 1) { // Avoid negative numbers
         confIsRunningWait = 0;
       } else {
         confIsRunningWait = timeInMs;
@@ -155,12 +165,12 @@ public final class EV3ScriptContext {
      * @param time waiting time before hard kill of the script, between [500, 30000]
      */
     public Configuration setWaitingTimeBeforeHardKill(int timeIsMs) {
-      if (timeIsMs < 500) {
-        confWaitingTimeBeforeHardKill = 500;
-      } else if (timeIsMs < 30000) {
+      if (timeIsMs < 1000) { // Wait at least 1 second
+        confWaitingTimeBeforeHardKill = 1000;
+      } else if (timeIsMs < 60000) { // Wait maximum 1 minute
         confWaitingTimeBeforeHardKill = timeIsMs;
       } else {
-        confWaitingTimeBeforeHardKill = 30000;
+        confWaitingTimeBeforeHardKill = 60000;
       }
 
       return this;

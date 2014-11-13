@@ -28,10 +28,13 @@ import javax.script.ScriptEngineManager;
 
 import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
 import org.gnikrap.script.ev3api.EV3ScriptException;
+import org.gnikrap.script.ev3api.ExternalSensor;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 import org.gnikrap.utils.StopableExecutor;
+
+import com.eclipsesource.json.JsonValue;
 
 /**
  * Manage the execution of the script
@@ -58,7 +61,7 @@ public class ScriptExecutionManager {
       scriptContext.releaseResources();
     } else {
       SimpleEV3Brick brick = buildNewEV3Brick();
-      scriptContext = new EV3ScriptContext(brick, this);
+      scriptContext = new EV3ScriptContext(brick, this, new ExternalSensor());
       if (brick != null) {
         brick.setScriptContext(scriptContext);
       }
@@ -72,10 +75,15 @@ public class ScriptExecutionManager {
   /**
    * Sample language: JavaScript, Groovy, Jython, etc..
    */
-  public void runScript(final String language, final String scriptText) throws EV3Exception {
+  public void runScript(final String language, final String scriptText, boolean stopRunningScriptIfNeeded) throws EV3Exception {
     if ((scriptResult != null) && (scriptResult.isDone() == false)) {
-      LOGGER.warning("Submiting a new script while a first one is already running => Stoping the runing script");
-      stopScript();
+      // Script is running => Force stop or not
+      if (stopRunningScriptIfNeeded) {
+        LOGGER.warning("Submiting a new script while a first one is already running => Stoping the runing script");
+        stopScript();
+      } else {
+        throw new EV3ScriptException(EV3ScriptException.SCRIPT_ALREADY_RUNNING, Collections.<String, String> emptyMap());
+      }
     }
     reset();
 
@@ -117,9 +125,9 @@ public class ScriptExecutionManager {
   }
 
   public void stopScript() {
-    int waitTime = 5000;
+    long waitTime = 5000;
     if (scriptContext != null) {
-      waitTime = (int) (1000 * scriptContext.getConfiguration().getWaitingTimeBeforeHardKill());
+      waitTime = scriptContext.getConfiguration().getWaitingTimeBeforeHardKill();
     }
     stopScript(waitTime);
   }
@@ -154,5 +162,11 @@ public class ScriptExecutionManager {
     scriptResult = null;
     // Script ended, release all the hardware resources
     reset();
+  }
+
+  public void setExternalSensorValue(String sensorName, JsonValue rawSensorvalue) {
+    if (scriptContext != null) {
+      scriptContext.getXSensor().getSensor(sensorName).setRawValue(rawSensorvalue);
+    }
   }
 }

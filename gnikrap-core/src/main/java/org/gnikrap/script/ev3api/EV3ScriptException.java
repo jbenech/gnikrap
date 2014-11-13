@@ -63,6 +63,11 @@ public class EV3ScriptException extends EV3Exception {
    */
   public static final String SCRIPT_STOP_FORCED = "SCRIPT_STOP_FORCED";
 
+  /**
+   * "Script already running while trying to launch another script"
+   */
+  public static final String SCRIPT_ALREADY_RUNNING = "SCRIPT_ALREADY_RUNNING";
+
   public EV3ScriptException(String code, Map<String, String> params) {
     super(code, params);
   }

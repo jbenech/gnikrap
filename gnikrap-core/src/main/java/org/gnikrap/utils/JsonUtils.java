@@ -19,7 +19,10 @@ package org.gnikrap.utils;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,30 +41,9 @@ public final class JsonUtils {
     // Avoid instantiation
   }
 
-  public static JsonValue toJsonObject(Map<String, String> data) {
-    if (data != null) {
-      JsonObject result = new JsonObject();
-      for (Map.Entry<String, String> me : data.entrySet()) {
-        result.add(me.getKey(), me.getValue());
-      }
-      return result;
-    } else {
-      return JsonValue.NULL;
-    }
-  }
-
-  public static JsonValue toJsonArray(String[] data) {
-    if (data != null) {
-      JsonArray result = new JsonArray();
-      for (String s : data) {
-        result.add(s);
-      }
-      return result;
-    } else {
-      return JsonValue.NULL;
-    }
-  }
-
+  /**
+   * @return a {@link String} value if the {@link JsonValue} is of type String, null otherwise.
+   */
   public static String safeAsString(JsonValue v) {
     if ((v != null) && v.isString()) {
       return v.asString();
@@ -69,25 +51,124 @@ public final class JsonUtils {
     return null;
   }
 
+  /**
+   * @return a {@code String[]} value if the {@link JsonValue} is an array, null otherwise.
+   */
   public static String[] safeAsStringArray(JsonValue v) {
     if ((v != null) && v.isArray()) {
-      ArrayList<String> temp = new ArrayList<>();
-      for (JsonValue i : (JsonArray) v) {
-        temp.add(safeAsString(i));
+      JsonArray array = v.asArray();
+      String[] result = new String[array.size()];
+      for (int i = array.size() - 1; i >= 0; i--) {
+        result[i] = safeAsString(array.get(i));
       }
-      return temp.toArray(new String[temp.size()]);
+      return result;
     }
     return null;
   }
 
-  public static String toString(JsonValue json, int expectedSize) {
-    try (StringWriter sw = new StringWriter(expectedSize)) {
+  /**
+   * The aim of the method is to avoid multiple copy (while increasing the size of the buffer) of the data by preallocating a buffer large enough to store all the data.
+   */
+  public static String toString(JsonValue json, int maxExpectedSize) {
+    try (StringWriter sw = new StringWriter(maxExpectedSize)) {
       json.writeTo(sw);
       return sw.toString();
     } catch (IOException ioe) {
       // StringWriter don't throw IOException
-      LOGGER.log(Level.WARNING, "Error wroiting Json", ioe);
+      LOGGER.log(Level.WARNING, "Error writing Json", ioe);
       throw new RuntimeException(ioe);
     }
+  }
+
+  /**
+   * Deeply convert the JsonValue to something more "javaic". The returned object can be a simple type ({@link String}, {@link Boolean}, {@link Float} or {@link Integer}), or complex object (Object
+   * arrays or {@link Map}).
+   */
+  public static Object toObject(JsonValue json) {
+    // Try to process from more to less common
+    if (json.isString()) {
+      return json.asString();
+    }
+    if (json.isNumber()) {
+      String number = json.toString();
+      if (number.indexOf('.') == -1) { // indexOf has an optimized version for char (while contains process only String)
+        return new Integer(json.asInt()); // Use Integer as EV3 is 32bit
+      } else {
+        return new Float(json.asFloat()); // Use Float as EV3 is 32bit
+      }
+    }
+    if (json.isObject()) {
+      JsonObject object = json.asObject();
+      Map<String, Object> map = new HashMap<String, Object>(object.size());
+      for (String f : object.names()) {
+        map.put(f, toObject(object.get(f)));
+      }
+    }
+    if (json.isArray()) {
+      List<JsonValue> values = json.asArray().values();
+      Object[] array = new Object[values.size()];
+      for (int i = array.length - 1; i >= 0; i--) {
+        array[i] = toObject(values.get(i));
+      }
+    }
+
+    if (json.isTrue()) {
+      return Boolean.TRUE;
+    }
+    if (json.isFalse()) {
+      return Boolean.FALSE;
+    }
+    // if (json.isNull()) {
+    return null;
+    // }
+  }
+
+  /**
+   * Build JsonValue from simple types ({@link String}, {@link Boolean}, {@link Float}, {@link Double}, {@link Long} or {@link Integer}) or complex types ({@link Map}, {@link Collection} or arrays).
+   */
+  public static JsonValue toJson(Object obj) {
+    if (obj == null) {
+      return JsonValue.NULL;
+    }
+    if (obj instanceof Collection<?>) {
+      Collection<?> col = (Collection<?>) obj;
+      JsonArray result = new JsonArray();
+      for (Object o : col) {
+        result.add(toJson(o));
+      }
+      return result;
+    }
+    if (obj instanceof Map) {
+      Map<?, ?> map = (Map<?, ?>) obj;
+      JsonObject object = new JsonObject();
+      for (Object key : map.keySet()) {
+        object.add(String.valueOf(key), toJson(map.get(key)));
+      }
+      return object;
+    }
+    if (obj.getClass().isArray()) { // TODO check if primitive type are wrapped ?
+      return toJson(Arrays.asList((Object[]) obj));
+    }
+    if (obj instanceof String) {
+      return JsonValue.valueOf((String) obj);
+    }
+    if (obj instanceof Integer) {
+      return JsonValue.valueOf((Integer) obj);
+    }
+    if (obj instanceof Float) {
+      return JsonValue.valueOf((Float) obj);
+    }
+    if (obj instanceof Long) {
+      return JsonValue.valueOf((Long) obj);
+    }
+    if (obj instanceof Double) {
+      return JsonValue.valueOf((Double) obj);
+    }
+    if (obj instanceof Boolean) {
+      return JsonValue.valueOf((Boolean) obj);
+    }
+
+    // TODO Process other objects as beans if needed
+    throw new IllegalStateException("Can convert only raw types, Arrays, Maps and List to Json");
   }
 }

@@ -31,4 +31,14 @@ public class StopScript implements ActionMessageProcessor {
   public void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception {
     context.getContext().stopScript();
   }
+
+  @Override
+  public String getName() {
+    return "stopScript";
+  }
+
+  @Override
+  public boolean isAsyncNeeded() {
+    return true;
+  }
 }

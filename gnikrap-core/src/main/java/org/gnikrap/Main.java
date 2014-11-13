@@ -28,6 +28,7 @@ import java.io.IOException;
 
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.FakeEV3ExecutionManager;
+import org.gnikrap.script.actions.SetExternalSensorValue;
 import org.gnikrap.script.actions.RunScript;
 import org.gnikrap.script.actions.StopScript;
 import org.gnikrap.utils.Configuration;
@@ -82,8 +83,6 @@ import org.gnikrap.utils.LoggerUtils;
 public class Main {
 
   public static void main(String[] args) throws IOException {
-    System.out.println("Git main branch !!!");
-
     // Tech init
     LoggerUtils.initializeLogging();
 
@@ -124,8 +123,9 @@ public class Main {
       actionProcessor.setContext(new FakeEV3ExecutionManager());
     }
     // Register actions
-    actionProcessor.registerActionMessageProcessor("runScript", new RunScript());
-    actionProcessor.registerActionMessageProcessor("stopScript", new StopScript());
+    actionProcessor.registerActionMessageProcessor(new RunScript());
+    actionProcessor.registerActionMessageProcessor(new StopScript());
+    actionProcessor.registerActionMessageProcessor(new SetExternalSensorValue());
 
     return actionProcessor;
   }
