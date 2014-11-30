@@ -135,7 +135,11 @@ public final class EV3ActionProcessor {
   }
 
   public void registerActionMessageProcessor(ActionMessageProcessor processor) {
-    actionMessageProcessorRepository.put(processor.getName(), processor);
+    String key = processor.getName();
+    if (actionMessageProcessorRepository.containsKey(key)) {
+      LOGGER.warning("The action processor '" + actionMessageProcessorRepository.get(key) + "' is already registered for key '" + key + "', it will be replaced");
+    }
+    actionMessageProcessorRepository.put(key, processor);
   }
 
   public void unregisterActionMessageProcessor(String action) {

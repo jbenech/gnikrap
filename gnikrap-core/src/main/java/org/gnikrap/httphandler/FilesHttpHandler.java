@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gnikrap;
+package org.gnikrap.httphandler;
 
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
@@ -56,12 +56,12 @@ public class FilesHttpHandler implements HttpHandler {
 
   private static final Charset CHARSET = StandardCharsets.UTF_8;
 
-  private final File scriptsFolder;
+  private final File dataFolder;
 
-  public FilesHttpHandler(String scriptsFolder) {
-    this.scriptsFolder = new File(scriptsFolder);
-    if (this.scriptsFolder.exists() == false) {
-      this.scriptsFolder.mkdirs();
+  public FilesHttpHandler(String dataFolder) {
+    this.dataFolder = new File(dataFolder);
+    if (this.dataFolder.exists() == false) {
+      this.dataFolder.mkdirs();
     }
   }
 
@@ -127,7 +127,7 @@ public class FilesHttpHandler implements HttpHandler {
   }
 
   private String getStorageFilename(String filename) {
-    return scriptsFolder + File.separator + filename.trim();
+    return dataFolder + File.separator + filename.trim();
   }
 
   /**
@@ -203,13 +203,13 @@ public class FilesHttpHandler implements HttpHandler {
    */
   private void doReturnListOfFiles(final HttpServerExchange exchange) throws IOException {
     JsonArray fileList = new JsonArray();
-    for (File f : scriptsFolder.listFiles()) {
+    for (File f : dataFolder.listFiles()) {
       if (f.isFile()) {
         fileList.add(new ScriptFile(f.getName(), null, null).toJson());
       }
     }
 
-    String data = JsonUtils.toString(fileList, 1024); // Must be done before setResponseCode
+    String data = JsonUtils.writeToString(fileList, 1024); // Must be done before setResponseCode
     exchange.setResponseCode(200);
     exchange.getResponseSender().send(data);
     exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "application/json");
@@ -236,8 +236,8 @@ public class FilesHttpHandler implements HttpHandler {
     }
 
     public static ScriptFile fromJson(JsonObject json) {
-      return new ScriptFile(JsonUtils.safeAsString(json.get("name")), //
-          JsonUtils.safeAsString(json.get("content")), //
+      return new ScriptFile(JsonUtils.toPrimitive(json.get("name"), String.class), //
+          JsonUtils.toPrimitive(json.get("content"), String.class), //
           JsonUtils.safeAsStringArray(json.get("tag")));
     }
 

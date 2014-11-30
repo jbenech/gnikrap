@@ -86,7 +86,7 @@
     "confirmScriptFileDeletion": "Confirm you really want to delete '__filename__' ?",
     "scriptSuccessfullySaved": "Script '__filename__' successfully saved",
     "ev3ConnectionOk": "EV3 Brick connection ok",
-    "confirmStopScriptAlreadyRunning": "A script is already running, stop it ?"
+    "confirmStopScriptAlreadyRunning": "A script is already running, stop the script currently running and start the new script ?"
   },
   
   "server": {
