@@ -1,0 +1,17 @@
+:toc: left
+:imagesdir: ./images
+:experimental:
+
+Gnikrap 
+=======
+Jean Bénech <jbenech at free dot fr>
+v0.2.0, 2014-12
+
+A simple scripting environment for http://mindstroms.lego.com[Lego Mindstrom EV3]
+
+// Paragraphs
+
+include::about.adoc[]
+
+include::how_to_install.adoc[]
+

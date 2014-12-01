@@ -1,0 +1,32 @@
+== About
+
+The key points of Gnikrap are:
+
+* *Provide a simple way to make script based programming on the EV3*. The main advantages are:
+** Simple to use.
+** Can be used on a computer or a tablet, in fact any device that have a modern browser (HTML5 compatible).
+** Can use the scripting language of your choice. Javascript is the default, but you can use any 
+   http://en.wikipedia.org/wiki/List_of_JVM_languages[script language supported by the JVM].
+   
+* *Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked 
+  to the EV3 device*. The list of sensors planned is:
+** Gyroscope: Be able to react to the 3D gyroscope available in the tablet
+** Tactile screen: Be able to remotely control the EV3 without the limitation of the 5 buttons of the IR beacon
+** Webcam: Be able to use video in order to react to, for example, object location, motion, etc.
+
+* Off course there is *some limitations compared to other EV3 programming environment and tools*:
+** Compared to full featured framework like http://www.lejos.org/[leJOS] or http://www.monobrick.dk/[MonoBrick]
+*** No access to a full featured API (access to third parties sensors, location API, etc.). So if your plan is to write a 
+    really complex program, consider using another tool. +
+    _Note:_ Gnikrap is internally based on leJOS, so all the feature provided by leJOS are "available" within Gnikrap by using the leJOS API. 
+    However some back-door have to be written in the current API in order to be able to use in a quite simple way theses features.
+
+*** Script language are slower to execute than compiled code. So if speed is one of your key choice criteria, consider using
+    another tool
+
+** Compared to graphical programming software like the EV3 software provided by Lego:
+*** No software development learning is needed to use this tools. This tool is efficient to have really simple programs works quickly. 
+    When your program become a bit more complex it is difficult to have something clear and "redeable" on a standard screen (I don't have a 4K screen :-) ). 
+
+    
+_Note:_ Using the mobile device sensors is currently not available in the version 0.2.0 of the project

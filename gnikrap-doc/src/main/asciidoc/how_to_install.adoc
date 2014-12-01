@@ -1,0 +1,69 @@
+== How to install
+
+Here are the steps needed in order to have Gnikrap working on your EV3:
+
+
+. Download and install http://www.lejos.org/[leJOS] as described on the page: http://sourceforge.net/p/lejos/wiki/Installing%20leJOS/[Installing leJOS
+
+. Configure a network link between your computer and the EV3:
+** Either with Wifi, see http://sourceforge.net/p/lejos/wiki/Configuring%20Wifi/[Configuring Wifi]
+** Either with bluetooth PAN, see http://sourceforge.net/p/lejos/wiki/Configuring%20Bluetooth%20PAN/[Pairing (from the PC)]
+
+. Download the Gnikrap distribution https://github.com/jbenech/gnikrap/releases/download/Gnikrap-0.2.0/gnikrap-core-0.2.0.zip[here]
+
+. Donwload WinSCP http://winscp.net/eng/download.php[here] (the Portable distribution does it)
+
+. Connect by using the following settings (Host name can depend of your network settings. 
+  10.0.1.1 is the IP address to use while connected with bluetooth):
++
+image::install/0010_WinSCP_Session.png[WinSCP session]
++
+_Note:_ There is no password for the root account on the EV3.
++
+image::install/0020_WinSCP_PasswordPrompt.png[]
+
+
+. Put the Gnikrap zip on the EV3.
++
+image::install/030_WinSCP_DownloadFile.png[]
++
+_Note:_ The network speed with the EV3 is quite slow.
+
+. Download Putty http://the.earth.li/~sgtatham/putty/latest/x86/putty.zip[here]
+
+. Connect to the EV3 brick with Putty
++
+image::install/0100_Putty_Session.png[]
++
+Login with "root" as user and no password: image:install/0110_Putty_Login.png[]
+
+.Unzip the Gnikrap software:
+** Create a folder for Gnikrap with the command `mkdir gnikrap-0.2.0`
++
+_Note: "gnikrap-0.2.0" has to be replaced by the folder name of your choice.
+** Unzip the files with the command `unzip gnikrap-core-0.2.0.zip -d gnikrap-0.2.0
++
+_Note:_ "gnikrap-core-0.2.0.zip" has to be replaced by the right zip filename. "gnikrap-0.2.0" has to be replaced by the folder name of your choice.
+
+. Optionally, kill the current running lejos:
+** Found, the process with the command: `ps | grep ejre`.
+** Kill the process with the command: `kill 1527` where "1527" is the process Id found with the ps command
+
+. Launch Gnikrap:
+** Go to the bin folder: `cd gnikrap-0.2.0/bin`
+** Start Gnikrap: `./start.sh`
+
+. Finally open a browser on your computer and connect to Gnikrap with the following URL: `http://10.0.1.1`
+  You should have (it will take several seconds to download) the Gnikrap main screen:
++
+image::install/0200_Gnikrap_MainScreen.png[]
++
+_Note:_ The first time you launch a script it will take several seconds (more than 10s), because there some initialization to be done. 
+        Latter script execution are instantaneous.
+
+. In order to shutdown the EV3 brick you should stop the Gnikrap application kbd:[Ctrl + C]. 
+  Then you should use the command: `shutdown -h now`
+
+        
+            
+Note: I plan to provide an image pre-packaged (See Release note and future plan for more details)
