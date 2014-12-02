@@ -1,6 +1,9 @@
 :toc: left
+:toclevels: 4
 :imagesdir: ./images
 :experimental:
+:source-highlighter: coderay
+:numbered:
 
 Gnikrap 
 =======
@@ -14,4 +17,6 @@ A simple scripting environment for http://mindstroms.lego.com[Lego Mindstrom EV3
 include::about.adoc[]
 
 include::how_to_install.adoc[]
+
+include::script_api.adoc[]
 

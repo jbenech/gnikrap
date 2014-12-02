@@ -1,0 +1,495 @@
+== Script API
+
+All the API can be retrieved from the object named `ev3`.
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The ev3 object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+isRunning():: Enable to known is the script can safely run or not. Returns `true` if the script is running, `false` if the script should stop.
+
+getBrick():: Returns <<The Brick object>>.
+
+message(text):: Display a message on the Gnikrap interface. +
+                `text` the text of the mesasge to display.
+
+sleep(timeInMs):: Make the script sleeping for the given number of milliseconds. +
+                    `timeInMs` the sleeping time (in milliseconds).
+
+getConfiguration():: Returns a <<Configuration object>>. Enable to configure some behaviour of the scripting environment.
+****
+
+
+==== Configuration object
+
+****
+setIsRunningCheckEscapeKey(checkEscapeKey)::  Enable the check of the kbd:[Escape] Mindstrom brick key when
+                                              `isRunning()` is called. *Default is `true`*. +
+                                              `checkEscapeKey` if `true` check the kbd:[Escape] key, if `false` don't check nothing.
+
+isRunningCheckEscapeKey(checkEscapeKey):: Returns `true` if kbd:[Escape] key check on `isRunning()` is enabled, `false` otherwise (don't check).
+
+setIsRunningWait(timeInMs):: Set a waiting time when `isRunning()` is called. *Default is `0` (no waiting time)*. +
+                            `timeInMs` the waiting time, `0` means no waiting time.
+
+isRunningWait():: Returns the waiting time used when `isRunning()` is called.
+
+setWaitingTimeBeforeHardKill(timeInMs)::  Set a maximum time to wait before hard killing the script (eg. infinite loop).
+                                          *Default is 5000 (5 seconds)*. +
+                                          `timeInMs` the time to wait before hard killing the script. Valid values between 500 and 30000.
+
+getWaitingTimeBeforeHardKill()::  Returns the time to wait before hard killing the script.
+****
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Brick object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+getMediumMotor(port):: Return a <<The Motor object,medium Motor>> object for the given port. +
+                       `port` value should be in [`"A"`, `"B"`, `"C"`, `"D"`].
+
+getLargeMotor(port):: Return a <<The Motor object,large Motor>> object for the given port. +
+                      `port` value should be in [`"A"`, `"B"`, `"C"`, `"D"`].
+
+getColorSensor(port):: Return a <<The Color sensor object,Color sensor object>> for the given port. +
+                       `port` value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+
+getIRSensor(port):: Return an <<The IR (Infra-Red) sensor object,Infra-Red sensor>> object for the given port. +
+                    `port` value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+
+getTouchSensor(port):: Return a <<The Touch sensor object,Touch sensor>> object for the given port. +
+                       `port` value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+
+getKeyboard():: Return <<The Keyboard object, Keyboard object>>.
+
+getLed():: Return the <<The Led object,Led object>>.
+
+getSound():: Return the <<The Sound object,Sound object>>.
+
+getScreen():: Return the <<The Screen object,Screen object>>.
+
+getBattery():: Return the <<The Battery object,Battery object>>.
+****
+
+See the others objects in order to have sample usage of the brick object.
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Motor object
+// ///////////////////////////////////////////////////////////////////////////
+
+Note: On the motor API, some call wait that the operation is ended on the motor (so when the
+function returns the motor has ended the expected job) while other immediately returns (so
+the motor is still operating/moving while the function returns). The behaviour is specified for each function.
+
+****
+forward():: Motor rotate forward until `stop()`. This call immediately return.
+
+backward():: Motor rotate backward until `stop()`. This call immediately return.
+
+stop():: Stop and lock the motor. This call immediately return.
+
+stop(lock):: Stop and lock or not the motor. This call immediately return. +
+             `lock` is the motor locked ? Value should be in [`true`, `false`]
+
+stop(lock, immediateReturn):: Stop and lock or not the motor. +
+                              `lock` should be in [`true`, `false`] +
+                              `immediateReturn` Is the function returns immediately or wait that the motor was locked ?
+                              Values should be in [`true`, `false`]
+
+rotate(angle):: Rotate the given number of degree. This call wait the end of the motor move. +
+                `angle` the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
+
+rotate(angle, immediateReturn):: Rotate the given number of degree. This call wait the end of the motor move. +
+                                 `angle` the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
+                                 `immediateReturn` Is the function returns immediately or wait that the motor rotation was ended ?
+                                 Values should be in [`true`, `false`]
+
+isMoving():: Returns `true` if the motors is currently moving, `false` otherwise.
+
+getTachoCount():: Returns the tacho count in degree of the motor (_i.e._ the degree rotated since the last `resetTachoCount`).
+
+resetTachoCount():: Reset the tacho count to `0`.
+
+setSpeedPercent(percent):: Set the speed in percent of the maximum speed. +
+                           `percent` the speed in percent of the maximum speed, 100 is full speed, 1 is minimum speed.
+
+getSpeedPercent():: Get the speed in percent of the maximum speed.
+
+setSpeed(degreePerSecond):: Set the speed in degrees per second. +
+                            `degreePerSecond` the number of degrees per second that the motor should target ; one motor rotation is 360 degrees.
+                             According to the LEGO documentation, the maximum sustainable speed is 960° per second for the large motor (i.e. 160 rotation per minute as claimed in the documentation)
+                             and 1440° per second for the medium motor (i.e. 240 rotation per minute as claimed in the documentation).
+                             In all cases, it seems that the maximum sustainable speed is 100 * battery voltage (which is lower than 900)
+
+getSpeed():: Get the speed in degrees per second.
+****
+
+Sample code for the Motor object:
+
+[source,javascript]
+----
+var largeMotor = ev3.getBrick().getLargeMotor("B");
+
+// Rotate and wait end of rotation
+largeMotor.rotate(360);
+largeMotor.setSpeedPercent(100);
+largeMotor.rotate(-360);
+
+// Retrieve tacho
+largeMotor.rotate(60);
+ev3.message("TachoA: " + largeMotor.getTachoCount());
+largeMotor.rotate(-60);
+ev3.message("TachoB: " + largeMotor.getTachoCount());
+largeMotor.resetTachoCount();
+ev3.message("TachoC: " + largeMotor.getTachoCount());
+
+// Rotate and don't wait
+var tacho;
+largeMotor.rotate(360 * 3, true);
+while((tacho = largeMotor.getTachoCount()) < 1000) {
+  ev3.message("Tacho: " + tacho);
+  ev3.sleep(200);
+}
+----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Color sensor object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+getReflectedLight():: Returns the reflected light: a value between 0 and 100.
+
+getAmbientLight():: Returns the ambient light: a value between 0 and 100.
+
+getColor():: Returns a <<Color object>>.
+****
+
+==== Color object
+
+****
+value():: Returns the color values as a number.
+
+noColor():: Returns `true` if no color was detected, `false` otherwise.
+
+isBlack():: Returns `true` if the black color was detected, `false` otherwise.
+
+isBlue():: Returns `true` if the blue color was detected, `false` otherwise.
+
+isYellow():: Returns `true` if the yellow color was detected, `false` otherwise.
+
+isRed():: Returns `true` if the red color was detected, `false` otherwise
+
+isWhite():: Returns `true` if the white color was detected, `false` otherwise.
+
+isBrown():: Returns `true` if the brown color was detected, `false` otherwise.
+
+getColorAsText:: Returns the color as a string.
+****
+
+
+Sample code for the color sensor:
+[source,javascript]
+.Reflected light API:
+----
+var colorSensor = ev3.getBrick().getColorSensor("S1");
+while(ev3.isRunning()) {
+  ev3.message("Reflected light: " + colorSensor.getReflectedLight());
+  ev3.sleep(200);
+}
+----
+
+[source,javascript]
+.Ambiant light API:
+----
+var colorSensor = ev3.getBrick().getColorSensor("S1");
+while(ev3.isRunning()) {
+  ev3.message("Ambiant light: " + colorSensor.getAmbientLight());
+  ev3.sleep(200);
+}
+----
+
+[source,javascript]
+.Color API:
+----
+var colorSensor = ev3.getBrick().getColorSensor("S1");
+while(enterKey.isUp() && ev3.isRunning()) {
+  ev3.message("Color: " + colorSensor.getColor());
+  ev3.sleep(200);
+}
+----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The IR (Infra-Red) sensor object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+setChannel(channel):: Set the channel to use with the IR sensor. +
+                      `channel` the channel number, value should be in [1, 2, 3, 4].
+
+getChannel():: Return the channel currently used.
+
+getDistance():: Returns the distance for the IR sensor to something in cm, the value is from 0 to 100cm.
+
+getRemoteCommand():: Check for remote command (beacon) buttons usage. Returns a <<RemoteCommandResult object>>.
+
+seekBeacon():: Look for the beacon and returns a <<SeekBeaconResult object>>.
+****
+
+
+==== RemoteCommandResult object
+
+****
+value():: Returns integer value of the remote beacon.
+
+isTopLeftEnabled():: Returns `true` if the top left button was pressed, `false` otherwise.
+
+isTopRightEnabled():: Returns `true` if the top right button was pressed, `false` otherwise.
+
+isBottomLeftEnabled():: Returns `true` if the bottom left button was pressed, `false` otherwise.
+
+isBottomRightEnabled():: Returns `true` if the bottom right button was pressed, `false` otherwise.
+
+isBeaconEnabled():: Returns `true` if beacon mode was enabled, `false` otherwise.
+
+nothingEnabled():: Returns `true` nothing was enabled, `false` otherwise.
+****
+
+==== SeekBeaconResult object
+
+****
+isBeaconFound():: Returns `true` if the beacon was detected, `false` otherwise.
+
+getBearing():: Returns the beacon bearing value from -12 to 12 (with values increasing clockwise when looking from behind the sensor.
+               A bearing of 0 indicates the beacon is directly in front of the sensor).
+
+getDistance():: Returns beacon distance in cm from 0 to 100cm. If the beacon is not found, 128 was returned.
+
+isBeaconFound(channel):: Same as `isBeaconFound()` on the given channel.
+
+getBearing(channel):: Same as `getBearing()` on the given channel.
+
+getDistance(channel):: Same as `getDistance()` on the given channel.
+****
+
+
+Sample code for the IR sensor object:
+
+[source,javascript]
+.Distance API:
+----
+var irSensor = ev3.getBrick().getIRSensor("S1");
+while(ev3.isRunning()) {
+  ev3.message("Distance: " + irSensor.getDistance());
+  ev3.sleep(200);
+}
+----
+
+[source,javascript]
+.Seek beacon API:
+----
+var irSensor = ev3.getBrick().getIRSensor("S1");
+while(ev3.isRunning()) {
+  var x = irSensor.seekBeacon();
+  ev3.message("Beacon found: " + x.isBeaconFound() + ", bearing: " + x.getBearing() + ", distance: " + x.getDistance());
+  ev3.sleep(200);
+}
+----
+
+[source,javascript]
+.Remote command API:
+----
+var irSensor = ev3.getBrick().getIRSensor("S1");
+while(ev3.isRunning()) {
+  var x = irSensor.getRemoteCommand();
+  ev3.message("value: " + x.value() + ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() + ", bl: " + x.isBottomLeftEnabled() + ", br: " + x.isBottomRightEnabled() + ", bea: " + x.isBeaconEnabled() + " nothing: " + x.noButtonPressed());
+  ev3.sleep(200);
+}
+----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Touch sensor object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+isPushed():: Returns `true` if the sensor was pushed, `false` otherwise.
+****
+
+Sample code for the Touch sensor object
+[source,javascript]
+----
+// Touch sensor API
+var touchSensor = ev3.getBrick().getTouchSensor("S2");
+while(ev3.isRunning()) {
+  ev3.message("Push button: " + touchSensor.isPushed());
+  ev3.sleep(200);
+}
+----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Keyboard object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+getDown():: Returns a <<Button object>> for the kbd:[Down] button.
+
+getEnter():: Returns a <<Button object>> for the kbd:[Enter] button.
+
+getEscape():: Returns a <<Button object>> for the kbd:[Escape] button. +
+              _Note:_ The kbd:[Escape] button can also be checked by the `isRunning()` function.
+
+getLeft():: Returns a <<Button object>> for the kbd:[Left] button.
+
+getRight():: Returns a <<Button object>> for the kbd:[Right] button.
+
+getUp():: Returns a <<Button object>> for the kbd:[Up] button.
+
+waitForAnyPress():: Wait for some button to be pressed. Returns the id of the button that has been pressed.
+
+getLed():: Returns a <<The Led object,Led object>>. The Led object enable to pilot the LED integrated to the Mindstorm brick keyboard.
+****
+
+
+==== Button object
+
+****
+isUp():: Returns `true` if the button is up, `false` otherwise.
+
+isDown():: Returns `true` if the button is down, `false` otherwise.
+
+waitForPress():: Wait until the button has been pressed.
+
+waitForPressAndRelease():: Wait until the button has been pressed and released.
+
+getId():: Returns the id (number) of the button.
+****
+
+
+Sample code for the Keyboard object:
+[source,javascript]
+----
+// Keyboard API
+var enterKey = ev3.getBrick().getKeyboard().getEnter();
+ev3.message("Press enter to continue");
+while(enterKey.isUp() && ev3.isRunning()) {
+  ev3.sleep(200);
+}
+ev3.message("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
+----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Led object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+off():: Disable the LED.
+
+green():: Enable the green LED.
+
+red():: Enable the red LED.
+
+orange():: Enable the orange LED.
+
+blink():: Set the LED blinking. Note calling once blink set the 1st mode, calling twice, set the 2nd mode and calling 3 time don't blink anymore.
+****
+
+
+Sample code for the Led object:
+[source,javascript]
+----
+// Led API
+var leds = ev3.getBrick().getLed();
+leds.green();
+ev3.sleep(2000);
+leds.orange().blink();
+ev3.sleep(2000);
+leds.red().blink().blink();
+ev3.sleep(2000);
+leds.off();
+----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Sound object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+setVolume(vol):: Set the sound volume. +
+                 `vol` the volumne, valid values are betwwen 0 and 100.
+
+getVolume():: Returns the sound volume.
+
+beep()::Play a beep.
+
+playTone(frequency, durationInMs):: Play a tone of the given frequency for the given duration. +
+                                    `frequency` the frequency of the tone in Hertz (Hz). Note: In order to be audible, use values between 50 and 2000. +
+                                    `durationInMs` the duration in milliseconds.
+
+playNote(note, durationInMs):: Play the given note for the given duration. +
+                               `note` the note to play. Notes should be in ["C1"-"B7", # allowed on C, D, F, G, A] or ["Do"-"Si", # allowed on Do, Re, Fa, Sol, La]. +
+                               `durationInMs` the duration in milliseconds.
+****
+
+
+Sample script with Sound object:
+[source,javascript]
+----
+// Sound API
+var sound = ev3.getBrick().getSound();
+sound.setVolume(90);
+sound.beep();
+for(freq = 50; freq < 1500; freq = freq + 10) {
+  sound.playTone(freq, 5);
+}
+sound.playNote("Do", 500);
+sound.playNote("Re", 500);
+sound.playNote("Mi", 500);
+sound.playNote("Fa", 500);
+sound.playNote("Sol", 500);
+sound.playNote("La", 500);
+sound.playNote("Si", 500);
+----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Screen object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+clear():: Clear the LCD screen.
+
+TODO - other methods currently not working.
+****
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Battery object
+// ///////////////////////////////////////////////////////////////////////////
+
+****
+getBatteryCurrent():: Returns current draw from the battery (in Amps).
+
+getMotorCurrent():: Returns current draw by the motors (in Amps).
+
+getVoltageMilliVolt():: Battery voltage in mV. ~9000 = full.
+****
+
+
+Sample script with Battery object:
+[source,javascript]
+----
+// Battery API
+var battery = ev3.getBrick().getBattery();
+ev3.message("Battery current: " + battery.getBatteryCurrent());
+ev3.message("Motor current: " + battery.getMotorCurrent());
+ev3.message("Voltage: " + battery.getVoltageMilliVolt());
+----
