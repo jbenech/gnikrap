@@ -82,9 +82,12 @@ See the others objects in order to have sample usage of the brick object.
 === The Motor object
 // ///////////////////////////////////////////////////////////////////////////
 
-Note: On the motor API, some call wait that the operation is ended on the motor (so when the
+[NOTE]
+====
+On the motor API, some call wait that the operation is ended on the motor (so when the
 function returns the motor has ended the expected job) while other immediately returns (so
 the motor is still operating/moving while the function returns). The behaviour is specified for each function.
+====
 
 ****
 forward():: Motor rotate forward until `stop()`. This call immediately return.

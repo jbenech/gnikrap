@@ -20,3 +20,6 @@ include::how_to_install.adoc[]
 
 include::script_api.adoc[]
 
+// Samples
+
+include::changelog.adoc[]
