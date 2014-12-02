@@ -23,7 +23,7 @@
           </execution>
         </executions>
         <configuration>
-          <sourceHighlighter>coderay</sourceHighlighter>
+          <sourceHighlighter>highlightjs</sourceHighlighter> <!-- coderay -->
           <!-- sourceDirectory>src/main/asciidoc</sourceDirectory -->
           <!-- outputDirectory>${project.build.directory}/generated-docs</outputDirectory -->
           <backend>html5</backend> <!-- default: docbook -->

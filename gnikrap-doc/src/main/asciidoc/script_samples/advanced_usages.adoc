@@ -1,0 +1,10 @@
+=== Advanced usage
+
+* Defining/Using script library file of utility/standard functions. It is possible to do it, 
+  however the syntax can change in future version of Gnikrap (the Javascript engine currently enbedded in Java7 
+  is https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino[Rhino],
+  while the Javascript engine embedded in Java8 is http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html[Nashorm]). +
+  Knowing that point, if you still want to import script, the current syntax (for Java7) is TODO (TODO-LINK).
+
+* Using Java library. Another question could be how to use Java library (eg. Lejos) directly for the script engine. 
+  Here again, it is possible, but part of the syntax can change in future versions.

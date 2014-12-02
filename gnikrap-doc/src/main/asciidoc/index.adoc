@@ -2,7 +2,7 @@
 :toclevels: 4
 :imagesdir: ./images
 :experimental:
-:source-highlighter: coderay
+:source-highlighter: highlightjs
 :numbered:
 
 Gnikrap 
@@ -20,6 +20,6 @@ include::how_to_install.adoc[]
 
 include::script_api.adoc[]
 
-// Samples
+include::script_samples.adoc[]
 
 include::changelog.adoc[]

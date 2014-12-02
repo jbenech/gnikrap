@@ -1,0 +1,68 @@
+=== A robot controlled with the remote beacon
+
+Here is a full working sample. This script enable to remote control a crawler robot.
+
+[source,javascript]
+----
+///////////////////////////////////////////////////////////////////////////////
+// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
+//
+// Note: Please adjust the port to what is physically connected on your brick.
+///////////////////////////////////////////////////////////////////////////////
+
+// Initialization // <1>
+var leftMotor = ev3.getBrick().getLargeMotor("C");
+leftMotor.setSpeedPercent(90);
+var rightMotor = ev3.getBrick().getLargeMotor("B");
+rightMotor.setSpeedPercent(90);
+var medMotor = ev3.getBrick().getMediumMotor("A");
+medMotor.setSpeedPercent(75);
+var irSensor = ev3.getBrick().getIRSensor("4");
+
+
+// Main loop // <2>
+while(ev3.isRunning()) {
+  var rc = irSensor.getRemoteCommand(); // // <3>
+  // Left motor // <4>
+  if(rc.isTopLeftEnabled()) {
+      leftMotor.backward();
+  } else if(rc.isBottomLeftEnabled()) {
+      leftMotor.forward();
+  } else {
+      leftMotor.stop();
+  }
+  // Right motor // <5>
+  if(rc.isTopRightEnabled()) {
+      rightMotor.backward();
+  } else if(rc.isBottomRightEnabled()) {
+      rightMotor.forward();
+  } else {
+      rightMotor.stop();
+  }
+  // Fire // <6>
+  if(rc.isBeaconEnabled()) {
+      medMotor.rotate(3* 360);
+      while(irSensor.getRemoteCommand().isBeaconEnabled() && ev3.isRunning()) {
+          // Wait that the beacon button was released
+      }
+  }
+}
+
+
+// Finalization
+// None (motors will be automatically stopped)
+----
+<1> Here we retrieve all ev3 objects needed in the main loop. Caution: The port has to match with what is physically 
+    connected on the brick
+
+<2> The "program" itself. We have 4 main parts:
+<3> We retrieve the value of the remote beacon. This value has to be retrieve at each loop because the value 
+    change according to the button enabled or not.
+    
+<4> The motor for the left BELT which is managed, so we make the motor going forward/backward or stopped according
+    to the buttons enabled.
+
+<5> The same for the right BELT motor.
+
+<6> While the beacon button was pressed: Fire a ball (3 turn of the mid-sized motor). While it's done,
+    we wait that the beacon button was no more enabled before return to the main loop (this is to avoid multi-fire).

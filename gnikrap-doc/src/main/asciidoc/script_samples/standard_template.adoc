@@ -1,0 +1,49 @@
+=== The standard template
+
+Here is the "standard" template for a script within Gnikrap:
+
+[NOTE]
+====
+We present here the "standard" template for a script within Gnikrap. This template is the default 
+script that is loaded while you start Gnikrap.
+====
+
+[source,javascript]
+----
+// Initialization
+// ... // <1>
+
+
+// You can also define functions here if needed
+// ... // <2>
+
+
+// Perform calibration if needed
+// ... // <3>
+
+
+// Main loop - This is the main program
+while(ev3.isRunning()) {
+  // ... // <4>
+}
+
+// Finalization
+// Note: The finalization must run very fast, otherwise the script will be force-killed
+// ... // <5>
+----
+<1> You will typically found here all the initialisation of the ev3 objects: 
+    Retrieve the sensors/motors objects, define and initialize "global" variables, perform other initializations 
+    that can take some times.
+
+<2> Here you can define functions that will be used later. It can typically be some algorithm or computation function.
+
+<3> Here you can perform calibration, Typically, these calibration (eg. default light sensor level 
+    calibration, etc.)  have to be done only once at the beginning of the script.
+
+<4> Here is the main loop of your program. It is important to have `ev3.isRunning()` in the 
+    while condition in order to be able to stop gently the script while using the "Stop" button (in fact, `ev3.isRunning()`
+    will returns `false` one the Stop button was clicked => The main loop will exit in a clean way). If you don't
+    put this condition, the script will be force-closed (stop abruptly).
+    
+<5> You can perform some finalization here. However theses finalization should be very quick otherwise the script will be force-closed. +
+    _Note:_ You can increase the time before the script was force-closed with the `ev3.getConfiguration()` object.
