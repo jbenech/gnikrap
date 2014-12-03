@@ -1,7 +1,9 @@
-Gnikrap, a simple scripting environment for the Lego Mindstrom EV3
-------------------------------------------------------------------
+Gnikrap 
+-------
 
-For more information, visit the home page [here](http://jbenech.github.io/gnikrap)
+Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
+
+For more information, visit the [home page](http://jbenech.github.io/gnikrap)
 
 
 #### Changelog
@@ -9,10 +11,9 @@ For more information, visit the home page [here](http://jbenech.github.io/gnikra
 Gnikrap chanlog is avaiable [here](gnikrap-core/src/main/scripts/history.txt)
 
 
-#### Copyright / License
+#### License
 
 Gnikrap is distributed under the GPL-v3 License. See [LICENSE](LICENSE) for further details.
-Copyright (c) 2014-2014 Jean Bénech.
 
 
 #### Thank you!
