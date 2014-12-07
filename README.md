@@ -8,7 +8,7 @@ For more information, visit the [home page](http://jbenech.github.io/gnikrap)
 
 #### Changelog
 
-Gnikrap chanlog is avaiable [here](gnikrap-core/src/main/scripts/history.txt)
+Gnikrap changelog is available [here](gnikrap-core/src/main/scripts/history.txt)
 
 
 #### License
