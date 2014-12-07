@@ -376,6 +376,8 @@
       // Model to manage the keyboard x-Sensor
       function KeyboardSensorTabViewModel() {
         var self = this;
+        
+        // TODO !
       }
       
       // Model that manage the message log view
@@ -486,10 +488,10 @@
         }
       }
 
-      // TODO: On error start a Timer in order to retry connexion each n seconds
+      // Manage the interaction with the server on the EV3 brick
 		  function MyServer() {
 			  var self = this;
-        self.ws = undefined;
+        self.ws = undefined; // undefined <=> no connection with the EV3 brick
         self.navigationBarVM = undefined;
         self.messageLogVM = undefined;
 
@@ -499,13 +501,14 @@
             var wsURI = "ws://" + location.host + "/ws/gnikrap/script";
             try {
               self.ws = new WebSocket(wsURI);
-              self.ws.onopen = function(evt) { self.__onOpen(evt) };
-              self.ws.onclose = function(evt) { self.__onClose(evt) };
-              self.ws.onmessage = function(evt) { self.__onMessage(evt); }
-              self.ws.onerror = function(evt) { console.log("onError - " + evt); };
+              self.ws.onopen = function(evt) { self.__onWSOpen(evt) };
+              self.ws.onclose = function(evt) { self.__onWSClose(evt) };
+              self.ws.onmessage = function(evt) { self.__onWSMessage(evt); }
+              self.ws.onerror = function(evt) { self.__onWSError(evt); };
             } catch(ex) {
-              self.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
               console.log("Fail to open websocket to: '" + wsURI + "'");
+              self.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
+              self.__doWSReconnection();
             }
 				  }
 				  else {
@@ -513,11 +516,11 @@
 				  }
 			  }
 
-			  self.__onOpen = function(evt) {
+			  self.__onWSOpen = function(evt) {
           self.messageLogVM.addMessage(false, i18n.t("miscellaneous.ev3ConnectionOk"));
         }
 
-			  self.__onMessage = function(evt) {
+			  self.__onWSMessage = function(evt) {
 	        var received_msg = evt.data;
           var received_data = JSON.parse(received_msg);
           var msgType = received_data.msgTyp;
@@ -543,27 +546,45 @@
           }
 			  }
 
-			  self.__onClose = function(evt) {
+			  self.__onWSClose = function(evt) {
           self.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionNok"));
+          self.__doWSReconnection();
+        }
+        
+        self.__onWSError = function(evt) {
+          // Does nothing, onError seems redundant with onClose, see http://www.w3.org/TR/websockets/#feedback-from-the-protocol
+        }
+        
+        self.__doWSReconnection = function() {
+          self.ws = undefined;
+          setTimeout(self.initialize, 15000); // Run once in 15s
         }
 
 			  self.runScript = function(scriptCode, stopRunningScript) {
-				  var jsonMsg = JSON.stringify({
-						  act: "runScript",
-						  sLang: "javascript",
-						  sText: scriptCode,
-              sFStop: stopRunningScript
-				  });
-				  console.log("run - " + jsonMsg);
-				  self.ws.send(jsonMsg);
+          if(ws != undefined) {
+            var jsonMsg = JSON.stringify({
+                act: "runScript",
+                sLang: "javascript",
+                sText: scriptCode,
+                sFStop: stopRunningScript
+            });
+            // console.log("run - " + jsonMsg);
+            self.ws.send(jsonMsg);
+          } else {
+            self.messageLogVM.addMessage(true, i18n.t("errors.cantRunScriptEV3ConnectionNok"));
+          }
 			  }
 
         self.stopScript = function() {
-          var jsonMsg = JSON.stringify({
-						  act: "stopScript"
-				  });
-				  console.log("stop - " + jsonMsg);
-				  self.ws.send(jsonMsg);
+          if(ws != undefined) {
+            var jsonMsg = JSON.stringify({
+                act: "stopScript"
+            });
+            // console.log("stop - " + jsonMsg);
+            self.ws.send(jsonMsg);
+          } else {
+            self.messageLogVM.addMessage(true, i18n.t("errors.cantStopScriptEV3ConnectionNok"));
+          }
         }
 		  }
 
@@ -599,6 +620,7 @@
           // Dialogs
           context.manageScriptFilesVM = new ManageScriptFilesViewModel();
 
+          // Dependency-Injection :-)
           context.navigationBarVM.myServer = context.myServer;
           context.navigationBarVM.scriptEditorTabVM = context.scriptEditorTabVM;
           context.manageScriptFilesVM.scriptEditorTabVM = context.scriptEditorTabVM;

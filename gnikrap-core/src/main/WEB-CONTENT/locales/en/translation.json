@@ -85,7 +85,9 @@
     "cantDeleteScriptFile": "Can't delete '__filename__' script file. [__causedBy__]",
     "webSocketNotSupported": "WebSocket not supported by your Browser. Please try with a recent version of your browser. If not possible, please consider installing Firefox.",
     "ev3ConnectionFailed": "EV3 Brick connection failed. Cause: __causedBy__",
-    "ev3ConnectionNok": "EV3 Brick connection closed by the EV3 brick"
+    "ev3ConnectionNok": "EV3 Brick connection closed by the EV3 brick",
+    "cantRunScriptEV3ConnectionNok": "Can't execute the script, the connection with the EV3 brick is down",
+    "cantStopScriptEV3ConnectionNok": "Can't stop the script, the connection with the EV3 brick is down"
   },
   
   "miscellaneous": {

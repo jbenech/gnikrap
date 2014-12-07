@@ -3,7 +3,7 @@ Change-log:
 Known defects:
  - Fix screen API - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
 
-Features to add (no specific order): 
+Features to add (no specific order):
  - Add import/export
  - Add "external" sensors
  - Add real time sensor probes
@@ -14,14 +14,20 @@ Features to add (no specific order):
  - Feature to shutdown the brick from the browser
 
 
+ 0.3.0:
+    - Rework and polish on layout, navigation-bar and tool-bars
+    - Add automatic EV3 brick reconnection (if connection has been lost)
+    - Add xSensors in the GUI
+
+
  0.2.0:
     - Load/Delete/Save script added
     - About box added
-    - Internationalization (GUI, ...)
+    - GUI Internationalization
     - Jackson JSON parser replaced by 'minimal-json' which is faster on the EV3 hardware
- 
 
- 0.1.0 (private release): 
+
+ 0.1.0 (private release):
     - Proof of concept: Ensure that the performance reached are acceptable.
     - Simple API to manipulate the EV3 brick:
       - Battery
