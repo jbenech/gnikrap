@@ -1,23 +1,31 @@
 {
   "@comment": "English translation (also used as default translation)",
   
-  "script": {
-    "@comment": "The 'Script windows'",
-    "toolbar": {
-      "run": "Run",
-      "stop": "Stop",
-      "scriptMenu": {
-        "_": "Script",
-        "clear": "Clear the script",
-        "loadAndManage": "Load/Manage scripts...",
-        "save": "Save the script..."
-      },
-      "messagesMenu": {
-        "_": "Messages",
-        "clear": "Clear the messages",
-        "keepLast": "Keep only last messages"
-      }
+  "navigationBar": {
+    "run": "Run",
+    "stop": "Stop",
+    "gnikrap": {
+      "about": "About..."
     }
+  },
+  
+  "workArea": {
+    "@comment": "The list of the work area available",
+    "scriptEditorTab": "Script editor",
+    "keyboardSensorTab": "x-Keyboard",
+    "videoSensorTab": "x-Video",
+    "gyroSensorTab": "x-Gyroscope"
+  },
+
+  "messageLog": {
+    "clear": "Clear",
+    "keepLast": "Last messages only"
+  },
+  
+  "scriptEditorTab": {
+    "clear": "Clear",
+    "loadAndManage": "Load/Manage",
+    "save": "Save"
   },
   
   "manageScriptFilesModal": {

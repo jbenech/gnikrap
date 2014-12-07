@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <!--
  * Copyright (C) 2014 Jean BENECH
- * 
+ *
  * This file is part of Gnikrap.
- * 
+ *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Gnikrap is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
 -->
@@ -27,77 +27,103 @@
     <link rel="shortcut icon" href="images/gnikrap.png">
 
     <title>Gnikrap</title>
+
+    <!-- Load bootstrap styles -->
+    <link href="lib/bootstrap-3.2.0/css/bootstrap.css" rel="stylesheet"/>
+    <link href="lib/bootstrap-3.2.0/css/bootstrap-theme.css" rel="stylesheet"/> <!-- Provide 'soft' 3D effects -->
+
+    <!-- /!\ To be defined after the css import in order to overwrite it (see http://getbootstrap.com/components/#navbar-fixed-bottom) -->
     <style type="text/css" media="screen">
-      /* Styles for the code editor */
-      #editor {
-        height: 550px; /* Editor height is mandatory in order to have it appears */
-        /* resize: vertical; overflow: auto; */
-      }
-      
-      /* Add margin within bootstrap */
-      [class*="col"] { margin-bottom: 5px; margin-left: 5px; margin-right: 5px }
-      
       /* Needed for the fixed nav-bar */
       body { padding-top: 60px; }
     </style>
 
-    <!-- Load bootstrap styles -->
-    <link href="lib/bootstrap/3.2.0/css/bootstrap.css" rel="stylesheet"/>
-    <!-- link href="lib/bootstrap/3.2.0/css/bootstrap-theme.css" rel="stylesheet"/ --> <!-- Provide a 3D effect on buttons -->
-    
     <!-- Load libraries (Updated SEP2014) -->
-    <script src="lib/jquery/2.1.1/jquery.min.js"></script>
-    <script src="lib/bootstrap/3.2.0/js/bootstrap.js"></script>
-    <script src="lib/bootbox/4.3.0/bootbox.js"></script>
-    <script src="lib/knockout/3.2.0/knockout.min.js"></script>
-    <script src="lib/i18next/1.7.4/i18next.min.js"></script>
-    <script src="lib/ace/1.1.6.min/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/jquery-2.1.1/jquery.min.js"></script> <!-- JQuery used by bootstrap, bootbox, knockout (optional) and i18next -->
+    <script src="lib/bootstrap-3.2.0/js/bootstrap.js"></script> <!-- Bootstrap used by bootbox -->
+    <script src="lib/bootbox-4.3.0/bootbox.js"></script>
+    <script src="lib/knockout-3.2.0/knockout.min.js"></script>
+    <script src="lib/i18next-1.7.4/i18next.min.js"></script>
+    <script src="lib/ace-1.1.6.min/ace.js" type="text/javascript" charset="utf-8"></script>
   </head>
   <body>
     <!-- ############################################################ -->
     <!-- Main screen -->
-    <div id="main" class="container-fluid">
-      <!-- Navigation bar -->
-      <div class="navbar navbar-default navbar-fixed-top">
-        <div class="nav navbar-nav" style="padding-top: 5px; padding-left: 5px">
-          <button class="btn btn-success" data-bind="click: onRunScript">
-            <span class="glyphicon glyphicon-play"></span> <span class="i18n" data-i18n="script.toolbar.run">RUN</span></button>
-          <button class="btn btn-warning" data-bind="click: onStopScript">
-            <span class="glyphicon glyphicon-stop"></span> <span class="i18n" data-i18n="script.toolbar.stop">STOP</span></button>
+    <div class="container-fluid">
+      <!-- Navigation/Menu bar -->
+      <div id="navigationBar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav navbar-left">
+            <li><button class="btn btn-success navbar-btn" data-bind="click: onRunScript">
+              <span class="glyphicon glyphicon-play"></span> <span class="i18n" data-i18n="navigationBar.run">RUN</span></button></li>
+            <li style="margin-left: 2px"><button class="btn btn-warning navbar-btn" data-bind="click: onStopScript">
+              <span class="glyphicon glyphicon-stop"></span> <span class="i18n" data-i18n="navigationBar.stop">STOP</span></button>
+            </li>
 
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <span class="i18n" data-i18n="script.toolbar.scriptMenu._">SCRIPT</span>&nbsp;&nbsp;<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a data-bind="click: onResetScript"><span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.clear">CLEAR</span></a></li>
-              <li><a data-bind="click: onLoadScript"><span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.loadAndManage">LOAD_MANAGE</span></a></li>
-              <li><a data-bind="click: onSaveScript"><span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.save">SAVE</span></a></li>
-            </ul>
-          </div>
-          
-          <div class="btn-group">
-            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-              <span class="i18n" data-i18n="script.toolbar.messagesMenu._">MESSAGE</span>&nbsp;&nbsp;<span class="caret"></span></button>
-            <ul class="dropdown-menu" role="menu">
-              <li><a data-bind="click: onResetMessages"><span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="script.toolbar.messagesMenu.clear">CLEAR</span></a></li>
-              <li><a><input type="checkbox" data-bind="checked: keepOnlyLastMessage"> <span class="i18n" data-i18n="script.toolbar.messagesMenu.keepLast">KEEP_LAST</span></a></li>
-            </ul>
-          </div>
-        </div>
+            <li><span style="margin-left: 10px"/></li> <!-- Add some space -->
+            <!-- ko foreach: workAreaItems -->
+                <li style="margin-left: 2px"><button class="btn btn-primary navbar-btn"
+                  data-bind="css: { active: active }, click: $parent.onShowWorkAreaItem">
+                  <span data-bind="text: name">nameOfTheWorkAreaElement</span></li>
+            <!-- /ko -->
+          </ul>
 
-        <div class="navbar-header pull-right">
-          <!-- disabled -->
-          <button class="btn" data-bind="click: onDisplayAbout"><strong>Gnikrap</strong> <img src="images/gnikrap.png"></button>     
+          <div class="navbar-right" >
+            <div class="btn-group">
+              <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li class="divider"/>
+                  <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.about">ABOUT</span></a></li>
+                </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Code editor -->
+      <!-- The work area -->
       <div class="row-fluid">
+        <!-- Work area 'tabs' part -->
         <div class="col-sm-8">
-          <div id="editor">// Loading script...</div>
+          <div class="tab-content">
+            <div role="tabpanel" id="scriptEditorTab" class="tab-pane active">
+              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+                <button class="btn btn-default btn-sm" data-bind="click: onClearScript">
+                  <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="scriptEditorTab.clear">CLEAR</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onLoadScript">
+                  <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="scriptEditorTab.loadAndManage">LOAD_MANAGE</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onSaveScript">
+                  <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="scriptEditorTab.save">SAVE</span></button>
+              </div>
+              <div id="editor" style="height: 350px">// Loading script...</div>
+            </div>
+            <div role="tabpanel" id="keyboardSensorTab" class="tab-pane">
+              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+                <!-- button class="btn btn-default btn-sm" data-bind="click: onResetScript">
+                  <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.clear">CLEAR</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onLoadScript">
+                  <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.loadAndManage">LOAD_MANAGE</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onSaveScript">
+                  <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.save">SAVE</span></button -->
+              </div>
+              <p>This is an Keyboard xSensor test</p>
+            </div>
+            <div role="tabpanel" id="gyroSensorTab" class="tab-pane">
+              <p>This is a Gyroscopic xSensor test</p>
+            </div>
+            <div role="tabpanel" id="videoSensorTab" class="tab-pane">
+              <p>This is a Video xSensor test</p>
+            </div>
+          </div>
         </div>
-        <div class="col-sm-3">
+
+        <!-- Event notification part -->
+        <div id="messageLog" class="col-sm-4">
+          <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+            <button class="btn btn-default btn-sm" data-bind="click: onResetMessages">
+              <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="messageLog.clear">CLEAR</span></button>
+            <button class="btn btn-default btn-sm" data-bind="css: {active: keepOnlyLastMessage}, click: onKeepOnlyLastMessage">
+              <span class="i18n" data-i18n="messageLog.keepLast">KEEP_LAST</span></button>
+          </div>
           <ul class="list-group" data-bind="foreach: messages" style="font-size:11px">
             <li class="list-group-item" data-bind="css: cssClazz">
               <small data-bind="text: time">00:00:00</small> - <span data-bind="text: text">Message</span><span class="badge" data-bind="visible: count > 1, text: count">0</span>
@@ -107,8 +133,8 @@
       </div>
 		</div>
     <!-- End of the layout -->
-    
-    
+
+
     <!-- ############################################################ -->
     <!-- Scrip file management modal -->
     <div id="manageScriptFilesModal" class="modal fade" tabindex="-1"> <!-- role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
@@ -147,14 +173,15 @@
         </div>
       </div>
     </div>
-    
-    <!-- Modal HTML -->
+
+    <!-- ############################################################ -->
+    <!-- About modal -->
     <div id="aboutModal" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
             <body>
               <div class="modal-header">
-                <h3 class="modal-title"><img src="/images/gnikrap.png"/> <strong>Gnikrap 0.2.0</strong></h3>
+                <h3 class="modal-title"><img src="/images/gnikrap.png"/> <strong>Gnikrap 0.3.0</strong></h3>
               </div>
               <div class="modal-body">
                 <p class="i18n" data-i18n="[html]aboutModal.gnikrapShortDescription">GNIKRAP_SHORT_DESCRIPTION</p>
@@ -185,127 +212,113 @@
       </div>
     </div>
 
-    
+
     <!-- ############################################################ -->
     <!-- ############################################################ -->
 		<script>
-		  // Object that manage the editor
-		  function Editor() {
-        var self = this;
-			  var editor;
-			  // Init
-			  {
-				  editor = ace.edit("editor")
-			    editor.setTheme("ace/theme/chrome");
-			    editor.getSession().setMode("ace/mode/javascript");
-			  }
-			  
-			  this.getValue = function() {
-				  return editor.getValue();
-			  }
-        
-        this.setValue = function(value) {
-          editor.setValue(value);
-          editor.moveCursorTo(0, 0);
-        }
-        
-        this.clear = function() {
-          editor.setValue("");
-        }
-        
-        this.resizeVertically = function() {
-          var h = window.innerHeight;
-          $('#editor').css('height', (h - (60 + 10)).toString() + 'px'); // 60 should be synchronized with body.padding-top
-        };
-		  }
-
-		  // Model to manage the main page data and actions
-		  function EV3ScriptViewModel() {
+		  // Model to manage the navigation bar actions
+		  function NavigationBarViewModel() {
 			  var self = this;
-        self.manageScriptFilesVM = undefined;
-			  self.editor = undefined;
+        self.workAreaItems = ko.observableArray();
+
+			  self.scriptEditorTabVM = undefined;
 			  self.myServer = undefined;
-        self.messages = ko.observableArray();
-        self.messages.extend({ rateLimit: 50 }); // Accept lower refresh rate
-        self.keepOnlyLastMessage = ko.observable(true);
-        self.scriptFilename = undefined;
-			  
-			  self.onResetScript = function() {
-          bootbox.confirm(i18n.t("clearScriptModal.title"), function(result) {
-            if(result) {
-              self.editor.clear();
-            }
+
+        // Init
+        {
+          self.workAreaItems.push({
+            name: i18n.t("workArea.scriptEditorTab"),
+            tabId: "scriptEditorTab",
+            active: ko.observable(true)
           });
-			  }
-        
-        self.onLoadScript = function() {
-          self.manageScriptFilesVM.display();
+          self.workAreaItems.push({
+            name: i18n.t("workArea.keyboardSensorTab"),
+            tabId: "keyboardSensorTab",
+            active: ko.observable(false)
+          });
+          self.workAreaItems.push({
+            name: i18n.t("workArea.gyroSensorTab"),
+            tabId: "gyroSensorTab",
+            active: ko.observable(false)
+          });
+          self.workAreaItems.push({
+            name: i18n.t("workArea.videoSensorTab"),
+            tabId: "videoSensorTab",
+            active: ko.observable(false)
+          });
         }
-			  
+
 			  self.onRunScript = function() {
           self.doRunScript(false);
 			  }
-        
+
         self.doRunScript = function(stopRunningScript) {
-				  var value = (self.editor != undefined ? self.editor.getValue() : null);
+				  var value = (self.scriptEditorTabVM != undefined ? self.scriptEditorTabVM.getValue() : null);
 
           // Execute the script
 				  self.myServer.runScript(value, stopRunningScript);
         }
-			  
+
 			  self.onStopScript = function() {
 				  self.myServer.stopScript();
 			  }
-        
+
         self.onDisplayAbout = function() {
           $('#aboutModal').modal("show");
         }
-        
-        self.addMessage = function(isError, message) {
-          //console.log("new message: " + isError + " / " + message);
-          function doAddMessage(isError, message, count) {
-            self.messages.unshift({
-              "time": new Date().toLocaleTimeString(), 
-              "isError": isError,
-              "cssClazz":  (isError ? "list-group-item-danger" : "list-group-item-info"),
-              "text": message,
-              "count": count
-            });
-              
-            if(self.keepOnlyLastMessage()) {
-              self.messages.splice(15); // Keep the first n messages
-            }
-          }
 
-          // Manage the message count
-          var m0 = (self.messages().length > 0 ? self.messages()[0] : undefined);
-          if((m0 != undefined) && (m0.isError == isError) && (m0.text == message)) {
-            self.messages.shift();
-            doAddMessage(isError, message, m0.count + 1);
-          } else {
-            doAddMessage(isError, message, 1);
+        self.onShowWorkAreaItem = function(workAreaItem) {
+          // Set the active item in the model and on screen
+          var items = self.workAreaItems(); // return a regular array
+          for(var i = 0; i < items.length; i++) {
+            items[i].active(items[i].tabId == workAreaItem.tabId);
+            $("#" + items[i].tabId).toggleClass("active", items[i].active());
           }
         }
+		  }
+
+      // Model to manage the script editor tab
+      function ScriptEditorTabViewModel() {
+        var self = this;
+			  self.editor;
+        self.scriptFilename = undefined;
+        self.manageScriptFilesVM = undefined;
+        self.messageLogVM = undefined;
         
-        self.onResetMessages = function() {
-          self.messages.removeAll();
+			  // Init
+			  {
+				  self.editor = ace.edit("editor")
+			    self.editor.setTheme("ace/theme/chrome");
+			    self.editor.getSession().setMode("ace/mode/javascript");
+			  }
+
+			  self.onClearScript = function() {
+          bootbox.confirm(i18n.t("clearScriptModal.title"), function(result) {
+            if(result) {
+              self.__doClearScript();
+            }
+          });
+			  }
+
+        self.onLoadScript = function() {
+          self.manageScriptFilesVM.display();
         }
-        
+
         self.loadScriptFile = function(filename) {
-          self.editor.setValue(i18n.t("miscellaneous.loadingScripWait", { "filename": filename }));
+          self.__setValue(i18n.t("miscellaneous.loadingScripWait", { "filename": filename }));
           self.scriptFilename = undefined;
           $.ajax({
             url: "/rest/scriptfiles/" + filename,
             success: function(data, status) {
               var scriptFile = JSON.parse(data);
-              self.editor.setValue(scriptFile.content);
+              self.__setValue(scriptFile.content);
               if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
                 self.scriptFilename = filename;
               }
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
               // XMLHttpRequest.status: HTTP response code
-              self.addMessage(true, i18n.t("errors.cantLoadScriptFile", 
+              self.messageLogVM.addMessage(true, i18n.t("errors.cantLoadScriptFile",
                 { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
             }
           });
@@ -329,10 +342,10 @@
                   type: "PUT",
                   success: function(data, status) {
                     self.scriptFilename = filename;
-                    self.addMessage(false, i18n.t("miscellaneous.scriptSuccessfullySaved", {"filename": filename }));
+                    self.messageLogVM.addMessage(false, i18n.t("miscellaneous.scriptSuccessfullySaved", {"filename": filename }));
                   },
-                  error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    self.addMessage(true, i18n.t("errors.cantSaveScriptFile", 
+                  error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    self.messageLogVM.addMessage(true, i18n.t("errors.cantSaveScriptFile",
                       { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
                   }
                 });
@@ -340,22 +353,89 @@
             }
           });
         }
-		  }
+        
+			  this.getValue = function() {
+				  return self.editor.getValue();
+			  }
 
+        this.resizeVertically = function() {
+          var h = window.innerHeight;
+          $('#editor').css('height', Math.max(350, h - (100 + 10)).toString() + 'px'); // 100 should be synchronized with body.padding-top and buttonbar
+        };
+        
+        this.__doClearScript = function() {
+          self.__setValue("");
+        }
+        
+        this.__setValue = function(value) {
+          self.editor.moveCursorTo(0, 0);
+          self.editor.setValue(value);
+        }
+      }
+
+      // Model to manage the keyboard x-Sensor
+      function KeyboardSensorTabViewModel() {
+        var self = this;
+      }
+      
+      // Model that manage the message log view
+      function MessageLogViewModel() {
+        var self = this;
+        self.messages = ko.observableArray();
+        self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
+        self.keepOnlyLastMessage = ko.observable(true);
+        
+        self.addMessage = function(isError, message) {
+          //console.log("new message: " + isError + " / " + message);
+          function doAddMessage(isError, message, count) {
+            self.messages.unshift({
+              "time": new Date().toLocaleTimeString(),
+              "isError": isError,
+              "cssClazz":  (isError ? "list-group-item-danger" : "list-group-item-info"),
+              "text": message,
+              "count": count
+            });
+
+            if(self.keepOnlyLastMessage()) {
+              self.messages.splice(15); // Keep the first n messages
+            }
+          }
+
+          // Manage the message count
+          var m0 = (self.messages().length > 0 ? self.messages()[0] : undefined);
+          if((m0 != undefined) && (m0.isError == isError) && (m0.text == message)) {
+            self.messages.shift();
+            doAddMessage(isError, message, m0.count + 1);
+          } else {
+            doAddMessage(isError, message, 1);
+          }
+        }
+
+        self.onResetMessages = function() {
+          self.messages.removeAll();
+        }
+
+        self.onKeepOnlyLastMessage = function() {
+          self.keepOnlyLastMessage(!self.keepOnlyLastMessage());
+        }
+      }
+      
+      // Model that manage the "load/manage scripts" dialog
       function ManageScriptFilesViewModel() {
         var self = this;
-        self.ev3ScriptVM = undefined;
         self.files = ko.observableArray();
-        
+        self.scriptEditorTabVM = undefined;
+        self.messageLogVM = undefined;
+
         self.display = function() {
           self.doRefreshFileList();
           $('#manageScriptFilesModal').modal('show');
         }
-        
+
         self.hide = function() {
           $('#manageScriptFilesModal').modal('hide');
         }
-        
+
         self.doRefreshFileList = function() {
           // Retrieve the list from the server
           self.files.removeAll();
@@ -370,18 +450,18 @@
               }
               $("#manageScriptFilesModal .i18n").i18n(); // DOM generated by Knockout isn't i18n => Need to re-translate the modal
             },
-            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
               // XMLHttpRequest.status: HTTP response code
-              self.addMessage(true, i18n.t("errors.cantRetrieveListOfScriptFiles", 
+              self.messageLogVM.addMessage(true, i18n.t("errors.cantRetrieveListOfScriptFiles",
                 { causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
               self.hide();
             }
           });
         }
-        
+
         self.onLoadScript = function(file) {
           self.hide();
-          self.ev3ScriptVM.loadScriptFile(file.name);
+          self.scriptEditorTabVM.loadScriptFile(file.name);
         }
 
         self.onDeleteScript = function(file) {
@@ -394,9 +474,9 @@
                 success: function(data, status) {
                   console.log("Script file: '" + file.name + "' successfully deleted");
                 },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
                   // XMLHttpRequest.status: HTTP response code
-                  alert(i18n.t("errors.cantDeleteScriptFile", 
+                  alert(i18n.t("errors.cantDeleteScriptFile",
                       { filename: result, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
                   self.doRefreshList();
                 }
@@ -405,12 +485,13 @@
           });
         }
       }
-		  
+
       // TODO: On error start a Timer in order to retry connexion each n seconds
 		  function MyServer() {
 			  var self = this;
         self.ws = undefined;
-        self.ev3ScriptVM = undefined;
+        self.navigationBarVM = undefined;
+        self.messageLogVM = undefined;
 
 			  // Init
 			  self.initialize = function() {
@@ -423,49 +504,49 @@
               self.ws.onmessage = function(evt) { self.__onMessage(evt); }
               self.ws.onerror = function(evt) { console.log("onError - " + evt); };
             } catch(ex) {
-              self.ev3ScriptVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
+              self.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
               console.log("Fail to open websocket to: '" + wsURI + "'");
             }
 				  }
 				  else {
-            self.ev3ScriptVM.addMessage(true, i18n.t("errors.websocketNotSupported"));
+            self.messageLogVM.addMessage(true, i18n.t("errors.websocketNotSupported"));
 				  }
 			  }
-			  
+
 			  self.__onOpen = function(evt) {
-          self.ev3ScriptVM.addMessage(false, i18n.t("miscellaneous.ev3ConnectionOk"));
+          self.messageLogVM.addMessage(false, i18n.t("miscellaneous.ev3ConnectionOk"));
         }
-        
+
 			  self.__onMessage = function(evt) {
 	        var received_msg = evt.data;
           var received_data = JSON.parse(received_msg);
           var msgType = received_data.msgTyp;
 	        console.log("Message received: " + received_msg);
-          
+
           if(msgType == "ScriptException" || msgType == "Exception") {
             if(received_data.code == "SCRIPT_ALREADY_RUNNING") {
               // Ask confirmation in order to stop the script
               bootbox.confirm(i18n.t("miscellaneous.confirmStopScriptAlreadyRunning"), function(result) {
                 if(result) {
-                  self.ev3ScriptVM.doRunScript(true);
+                  self.navigationBarVM.doRunScript(true);
                 } // else cancel
               });
             }
             else {
-              self.ev3ScriptVM.addMessage(true, i18n.t("server.errors." + received_data.code, received_data.params));
+              self.messageLogVM.addMessage(true, i18n.t("server.errors." + received_data.code, received_data.params));
             }
           } else if(msgType == "InfoCoded") {
-            self.ev3ScriptVM.addMessage(false, i18n.t("server.messages." + received_data.code, received_data.params));
+            self.messageLogVM.addMessage(false, i18n.t("server.messages." + received_data.code, received_data.params));
           } else {
             // Default: Assume this is a text message
-            self.ev3ScriptVM.addMessage(false, received_data.txt);
+            self.messageLogVM.addMessage(false, received_data.txt);
           }
 			  }
-        
-			  self.__onClose = function(evt) { 
-          self.ev3ScriptVM.addMessage(true, i18n.t("errors.ev3ConnectionNok"));
+
+			  self.__onClose = function(evt) {
+          self.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionNok"));
         }
-			  
+
 			  self.runScript = function(scriptCode, stopRunningScript) {
 				  var jsonMsg = JSON.stringify({
 						  act: "runScript",
@@ -476,7 +557,7 @@
 				  console.log("run - " + jsonMsg);
 				  self.ws.send(jsonMsg);
 			  }
-        
+
         self.stopScript = function() {
           var jsonMsg = JSON.stringify({
 						  act: "stopScript"
@@ -485,43 +566,69 @@
 				  self.ws.send(jsonMsg);
         }
 		  }
+
+
+      // Knockout configuration - add textI18N binding
+      ko.bindingHandlers.textI18N = {
+        update: function (element, valueAccessor) {
+          console.log("textI18n: " + valueAccessor() + " -> " + i18n.t(valueAccessor()));
+          $(element).text(i18n.t(valueAccessor()));
+        }
+      };      
       
-      
+      /////////////////////////////////////////
 		  // Initialization while document is ready
+      var context = {};
+      
       $(document).ready(function() {
         // Translation
         var language_complete = navigator.language.split("-");
         var language = (language_complete[0]);
 
-        i18n.init({ fallbackLng: 'en', lng: language }, function() { 
+        i18n.init({ fallbackLng: 'en', lng: language }, function() {
           $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
           //console.log("Current language used: " + i18n.lng());
+
+          // Objects and 'ViewModel' initialization
+          context.myServer = new MyServer();
+          context.navigationBarVM = new NavigationBarViewModel();
+          context.messageLogVM = new MessageLogViewModel();
+          // Tabs
+          context.scriptEditorTabVM = new ScriptEditorTabViewModel();
+          context.keyboardSensorTabVM = new KeyboardSensorTabViewModel();
+          // Dialogs
+          context.manageScriptFilesVM = new ManageScriptFilesViewModel();
+
+          context.navigationBarVM.myServer = context.myServer;
+          context.navigationBarVM.scriptEditorTabVM = context.scriptEditorTabVM;
+          context.manageScriptFilesVM.scriptEditorTabVM = context.scriptEditorTabVM;
+          context.manageScriptFilesVM.messageLogVM = context.messageLogVM;
+          context.scriptEditorTabVM.manageScriptFilesVM = context.manageScriptFilesVM;
+          context.scriptEditorTabVM.messageLogVM = context.messageLogVM;
+          context.myServer.navigationBarVM = context.navigationBarVM;
+          context.myServer.messageLogVM = context.messageLogVM;
+          
+          ko.applyBindings(context.navigationBarVM, $("#navigationBar")[0]);
+          ko.applyBindings(context.messageLogVM, $("#messageLog")[0]);
+          // Tabs
+          ko.applyBindings(context.scriptEditorTabVM, $("#scriptEditorTab")[0]);
+          ko.applyBindings(context.keyboardSensorTabVM, $("#keyboardSensorTab")[0]);
+          // Dialogs
+          ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
+          
+          context.myServer.initialize(); // WS connexion with the server
+
+          // Load default script
+          context.scriptEditorTabVM.loadScriptFile("__default__.js");
+
+          // Register windows events
+          $(window).on('resize', function () {
+              context.scriptEditorTabVM.resizeVertically();
+          });
+          context.scriptEditorTabVM.resizeVertically();
         });
         // i18n.setLng('en-US', function(t) { /* loading done */ });
-
-        // Other objects initialization
-        var myServer = new MyServer();
-        var editor = new Editor();
-        var ev3ScriptVM = new EV3ScriptViewModel();
-        var manageScriptFilesVM = new ManageScriptFilesViewModel();
-        ev3ScriptVM.editor = editor;
-        ev3ScriptVM.myServer = myServer;
-        ev3ScriptVM.manageScriptFilesVM = manageScriptFilesVM;
-        manageScriptFilesVM.ev3ScriptVM = ev3ScriptVM;
-        myServer.ev3ScriptVM = ev3ScriptVM;
-        ko.applyBindings(ev3ScriptVM, $("#main")[0]);
-        ko.applyBindings(manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
-        myServer.initialize(); // WS connexion with the server
-
-        // Load default script
-        ev3ScriptVM.loadScriptFile("__default__.js");
-        
-        // Register windows events
-        $(window).on('resize', function () {
-            editor.resizeVertically();
-        });
-        editor.resizeVertically();
       });
-		</script>  
+		</script>
   </body>
 </html>
