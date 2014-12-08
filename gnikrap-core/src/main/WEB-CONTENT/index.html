@@ -36,6 +36,12 @@
     <style type="text/css" media="screen">
       /* Needed for the fixed nav-bar */
       body { padding-top: 60px; }
+      /* Used to debug bootstrap layout */
+      .debug { background-color: blue; border-style: solid; border-color: white; border-radius: 5px; }
+      /* Used for xKeybord touch */
+      .xkeyboard-touch { 
+        background-color: #5bc0de; border-style: solid; border-color: white; border-radius: 5px;
+        display: flex; justify-content: center; align-items: center; }
     </style>
 
     <!-- Load libraries (Updated SEP2014) -->
@@ -53,38 +59,48 @@
       <!-- Navigation/Menu bar -->
       <div id="navigationBar" class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
-          <ul class="nav navbar-nav navbar-left">
-            <li><button class="btn btn-success navbar-btn" data-bind="click: onRunScript">
-              <span class="glyphicon glyphicon-play"></span> <span class="i18n" data-i18n="navigationBar.run">RUN</span></button></li>
-            <li style="margin-left: 2px"><button class="btn btn-warning navbar-btn" data-bind="click: onStopScript">
+          <!-- Core buttons (Start / Stop) and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <button class="btn btn-success navbar-btn" data-bind="click: onRunScript">
+              <span class="glyphicon glyphicon-play"></span> <span class="i18n" data-i18n="navigationBar.run">RUN</span></button>
+            <button class="btn btn-warning navbar-btn" data-bind="click: onStopScript">
               <span class="glyphicon glyphicon-stop"></span> <span class="i18n" data-i18n="navigationBar.stop">STOP</span></button>
-            </li>
-
-            <li><span style="margin-left: 10px"/></li> <!-- Add some space -->
-            <!-- ko foreach: workAreaItems -->
-                <li style="margin-left: 2px"><button class="btn btn-primary navbar-btn"
-                  data-bind="css: { active: active }, click: $parent.onShowWorkAreaItem">
-                  <span data-bind="text: name">nameOfTheWorkAreaElement</span></li>
-            <!-- /ko -->
-          </ul>
-
-          <div class="navbar-right" >
-            <div class="btn-group">
-              <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/></button>
-                <ul class="dropdown-menu" role="menu">
-                  <li class="divider"/>
-                  <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.about">ABOUT</span></a></li>
-                </ul>
-            </div>
           </div>
+
+          <!-- Other buttons could be toggled -->
+          <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+            <span style="margin-left: 10px"></span>
+            <!-- ko foreach: workAreaItems -->
+              <button class="btn btn-primary navbar-btn"
+                data-bind="css: { active: active }, click: $parent.onShowWorkAreaItem">
+                <span data-bind="text: name">nameOfTheWorkAreaElement</span></button>
+            <!-- /ko -->
+            
+            <div class="navbar-right" >
+              <div class="btn-group" role="group">
+                <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/></button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li class="divider"></li>
+                    <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.about">ABOUT</span></a></li>
+                  </ul>
+              </div>
+            </div>
+          </div> <!-- div ./collapse -->
         </div>
-      </div>
+      </div> <!-- div ./navigationBar -->
 
       <!-- The work area -->
       <div class="row-fluid">
         <!-- Work area 'tabs' part -->
         <div class="col-sm-8">
           <div class="tab-content">
+            <!-- Script editor tab -->
             <div role="tabpanel" id="scriptEditorTab" class="tab-pane active">
               <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
                 <button class="btn btn-default btn-sm" data-bind="click: onClearScript">
@@ -96,18 +112,29 @@
               </div>
               <div id="editor" style="height: 350px">// Loading script...</div>
             </div>
+            
+            <!-- Keyboard sensor tab -->
             <div role="tabpanel" id="keyboardSensorTab" class="tab-pane">
               <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <!-- button class="btn btn-default btn-sm" data-bind="click: onResetScript">
-                  <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.clear">CLEAR</span></button>
-                <button class="btn btn-default btn-sm" data-bind="click: onLoadScript">
-                  <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.loadAndManage">LOAD_MANAGE</span></button>
-                <button class="btn btn-default btn-sm" data-bind="click: onSaveScript">
-                  <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="script.toolbar.scriptMenu.save">SAVE</span></button -->
+                <button class="btn btn-default btn-sm" data-bind="click: onResetKeyboard">
+                  <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="keyboardSensorTab.clear">CLEAR</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onLoadKeyboard">
+                  <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="keyboardSensorTab.loadAndManage">LOAD_MANAGE</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onSaveKeyboard">
+                  <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="keyboardSensorTab.save">SAVE</span></button>
               </div>
-              <p>This is an Keyboard xSensor test</p>
+              <!-- Nest a bootstrap grid inside <=> 12 columns available -->
+              <div data-bind="foreach: buttons">
+                <div class="row" data-bind="foreach: $data">
+                  <div class="col-sm-2 xkeyboard-touch" data-bind="text: name"></div>
+                </div>
+              </div>
             </div>
             <div role="tabpanel" id="gyroSensorTab" class="tab-pane">
+              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+                <button class="btn btn-default btn-sm" data-bind="click: onCalibrate">
+                  <span class="i18n" data-i18n="gyroSensorTab.calibrate">CALIBRATE</span></button>
+              </div>
               <p>This is a Gyroscopic xSensor test</p>
             </div>
             <div role="tabpanel" id="videoSensorTab" class="tab-pane">
@@ -131,7 +158,7 @@
           </ul>
         </div>
       </div>
-		</div>
+    </div>
     <!-- End of the layout -->
 
 
@@ -179,35 +206,32 @@
     <div id="aboutModal" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
-            <body>
-              <div class="modal-header">
-                <h3 class="modal-title"><img src="/images/gnikrap.png"/> <strong>Gnikrap 0.3.0</strong></h3>
-              </div>
-              <div class="modal-body">
-                <p class="i18n" data-i18n="[html]aboutModal.gnikrapShortDescription">GNIKRAP_SHORT_DESCRIPTION</p>
-                <br/>
-                <p><span class="i18n" data-i18n="aboutModal.softwareUsed">SOFTWARE_USED</span>
-                  <ul class="list-inline">
-                    <li><a href="http://ace.c9.io/" target="_blank" title="Ace is an embeddable code editor written in JavaScript - BSD license">Ace</a></li>
-                    <li><a href="http://bootboxjs.com/" target="_blank" title="A small JavaScript library which allows you to create programmatic dialog boxes using Bootstrap modals - MIT License">Bootboxjs</a></li>
-                    <li><a href="http://getbootstrap.com/" target="_blank" title="A sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development - MIT License">Bootsrap</a></li>
-                    <li><a href="http://i18next.com/" target="_blank" title="A full-featured i18n javascript library for translating your webapplication - MIT license">i18next</a></li>
-                    <li><a href="http://jquery.com/" target="_blank" title="A fast, small, and feature-rich JavaScript library - MIT license">jQuery</a></li>
-                    <li><a href="http://knockoutjs.com/" target="_blank" title="Simplify dynamic JavaScript UIs with the Model-View-View-Model (MVVM) pattern - MIT license">Knockout.</a></li>
-                    <li><a href="http://www.lejos.org/" target="_blank" title="Java for Lego Mindstorm - MPL? (not sure of the licence)">Lejos</a></li>
-                    <li><a href="https://github.com/ralfstx/minimal-json" target="_blank" title="A minimal, but complete JSON parser and writer for Java - Eclipse Public License">minimal-json</a></li>
-                    <li><a href="http://undertow.io/" target="_blank" title="A flexible performant web server written in java - Apache 2.0">Undertow</a></li>
-                  </ul>
-                </p>
-                <br/>
-                <p class="i18n" data-i18n="[html]aboutModal.gnikrapLicence">GNIKRAP_LICENCE</p>
-                <pre class="i18n" data-i18n="[html]aboutModal.gplV3Notice">GLP_V3_NOTICE</pre>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                  <span class="i18n" data-i18n="aboutModal.close">CLOSE</span></button>
-              </div>
-            </body>
+          <div class="modal-header">
+            <h3 class="modal-title"><img src="/images/gnikrap.png"/> <strong>Gnikrap 0.3.0</strong></h3>
+          </div>
+          <div class="modal-body">
+            <p class="i18n" data-i18n="[html]aboutModal.gnikrapShortDescription">GNIKRAP_SHORT_DESCRIPTION</p>
+            <p></p>
+            <span class="i18n" data-i18n="aboutModal.softwareUsed">SOFTWARE_USED</span>
+            <ul class="list-inline">
+              <li><a href="http://ace.c9.io/" target="_blank" title="Ace is an embeddable code editor written in JavaScript - BSD license">Ace</a></li>
+              <li><a href="http://bootboxjs.com/" target="_blank" title="A small JavaScript library which allows you to create programmatic dialog boxes using Bootstrap modals - MIT License">Bootboxjs</a></li>
+              <li><a href="http://getbootstrap.com/" target="_blank" title="A sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development - MIT License">Bootsrap</a></li>
+              <li><a href="http://i18next.com/" target="_blank" title="A full-featured i18n javascript library for translating your webapplication - MIT license">i18next</a></li>
+              <li><a href="http://jquery.com/" target="_blank" title="A fast, small, and feature-rich JavaScript library - MIT license">jQuery</a></li>
+              <li><a href="http://knockoutjs.com/" target="_blank" title="Simplify dynamic JavaScript UIs with the Model-View-View-Model (MVVM) pattern - MIT license">Knockout.</a></li>
+              <li><a href="http://www.lejos.org/" target="_blank" title="Java for Lego Mindstorm - MPL? (not sure of the licence)">Lejos</a></li>
+              <li><a href="https://github.com/ralfstx/minimal-json" target="_blank" title="A minimal, but complete JSON parser and writer for Java - Eclipse Public License">minimal-json</a></li>
+              <li><a href="http://undertow.io/" target="_blank" title="A flexible performant web server written in java - Apache 2.0">Undertow</a></li>
+            </ul>
+            <p></p>
+            <p class="i18n" data-i18n="[html]aboutModal.gnikrapLicence">GNIKRAP_LICENCE</p>
+            <pre class="i18n" data-i18n="[html]aboutModal.gplV3Notice">GLP_V3_NOTICE</pre>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              <span class="i18n" data-i18n="aboutModal.close">CLOSE</span></button>
+          </div>
         </div>
       </div>
     </div>
@@ -219,11 +243,9 @@
 		  // Model to manage the navigation bar actions
 		  function NavigationBarViewModel() {
 			  var self = this;
+        self.context = undefined; // The application context
         self.workAreaItems = ko.observableArray();
-
-			  self.scriptEditorTabVM = undefined;
-			  self.myServer = undefined;
-
+        
         // Init
         {
           self.workAreaItems.push({
@@ -253,14 +275,14 @@
 			  }
 
         self.doRunScript = function(stopRunningScript) {
-				  var value = (self.scriptEditorTabVM != undefined ? self.scriptEditorTabVM.getValue() : null);
+				  var value = (self.context.scriptEditorTabVM != undefined ? self.context.scriptEditorTabVM.getValue() : null);
 
           // Execute the script
-				  self.myServer.runScript(value, stopRunningScript);
+				  self.context.myServer.runScript(value, stopRunningScript);
         }
 
 			  self.onStopScript = function() {
-				  self.myServer.stopScript();
+				  self.context.myServer.stopScript();
 			  }
 
         self.onDisplayAbout = function() {
@@ -280,10 +302,9 @@
       // Model to manage the script editor tab
       function ScriptEditorTabViewModel() {
         var self = this;
-			  self.editor;
+        self.context = undefined; // The application context
+			  self.editor = undefined;
         self.scriptFilename = undefined;
-        self.manageScriptFilesVM = undefined;
-        self.messageLogVM = undefined;
         
 			  // Init
 			  {
@@ -301,7 +322,7 @@
 			  }
 
         self.onLoadScript = function() {
-          self.manageScriptFilesVM.display();
+          self.context.manageScriptFilesVM.display();
         }
 
         self.loadScriptFile = function(filename) {
@@ -318,7 +339,7 @@
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
               // XMLHttpRequest.status: HTTP response code
-              self.messageLogVM.addMessage(true, i18n.t("errors.cantLoadScriptFile",
+              self.context.messageLogVM.addMessage(true, i18n.t("errors.cantLoadScriptFile",
                 { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
             }
           });
@@ -342,10 +363,10 @@
                   type: "PUT",
                   success: function(data, status) {
                     self.scriptFilename = filename;
-                    self.messageLogVM.addMessage(false, i18n.t("miscellaneous.scriptSuccessfullySaved", {"filename": filename }));
+                    self.context.messageLogVM.addMessage(false, i18n.t("miscellaneous.scriptSuccessfullySaved", {"filename": filename }));
                   },
                   error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    self.messageLogVM.addMessage(true, i18n.t("errors.cantSaveScriptFile",
+                    self.context.messageLogVM.addMessage(true, i18n.t("errors.cantSaveScriptFile",
                       { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
                   }
                 });
@@ -358,7 +379,7 @@
 				  return self.editor.getValue();
 			  }
 
-        this.resizeVertically = function() {
+        this.doResize = function() {
           var h = window.innerHeight;
           $('#editor').css('height', Math.max(350, h - (100 + 10)).toString() + 'px'); // 100 should be synchronized with body.padding-top and buttonbar
         };
@@ -368,14 +389,61 @@
         }
         
         this.__setValue = function(value) {
-          self.editor.moveCursorTo(0, 0);
           self.editor.setValue(value);
+          self.editor.moveCursorTo(0, 0);
         }
       }
 
       // Model to manage the keyboard x-Sensor
       function KeyboardSensorTabViewModel() {
         var self = this;
+        self.context = undefined; // The application context
+        self.buttons = [];
+        
+        // Init
+        {
+          for(var i = 0; i < 4; i++) {
+            self.buttons[i] = [];
+            for(var j = 0; j < 6; j++) {
+              self.buttons[i].push({
+                name: "item[" + i + "][" + j + "]"
+              });
+            }
+          }
+        }
+        
+        self.onResetKeyboard = function() {
+          console.log("onResetKeyboard");
+        }
+        
+        self.onLoadKeyboard = function() {
+          console.log("onLoadKeyboard");
+        }
+        
+        self.onSaveKeyboard = function() {
+          console.log("onLoadKeyboard");
+        }
+        
+        self.doResize = function() {
+          var h = window.innerHeight;
+          $('.xkeyboard-touch').css('height', Math.round(Math.max(30, h - 100) / 4).toString() + 'px');
+        }
+      }
+      
+      // Model to manage the Gyroscope x-Sensor
+      function GyroscopeSensorTabViewModel() {
+        var self = this;
+        self.context = undefined; // The application context
+        
+        self.onCalibrate = function() {
+          console.log("onCalibrate");
+        }
+      }
+      
+      // Model to manage the Video x-Sensor
+      function VideoSensorTabViewModel() {
+        var self = this;
+        self.context = undefined; // The application context
         
         // TODO !
       }
@@ -425,9 +493,8 @@
       // Model that manage the "load/manage scripts" dialog
       function ManageScriptFilesViewModel() {
         var self = this;
+        self.context = undefined; // The application context
         self.files = ko.observableArray();
-        self.scriptEditorTabVM = undefined;
-        self.messageLogVM = undefined;
 
         self.display = function() {
           self.doRefreshFileList();
@@ -454,7 +521,7 @@
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
               // XMLHttpRequest.status: HTTP response code
-              self.messageLogVM.addMessage(true, i18n.t("errors.cantRetrieveListOfScriptFiles",
+              self.context.messageLogVM.addMessage(true, i18n.t("errors.cantRetrieveListOfScriptFiles",
                 { causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
               self.hide();
             }
@@ -463,7 +530,7 @@
 
         self.onLoadScript = function(file) {
           self.hide();
-          self.scriptEditorTabVM.loadScriptFile(file.name);
+          self.context.scriptEditorTabVM.loadScriptFile(file.name);
         }
 
         self.onDeleteScript = function(file) {
@@ -491,9 +558,8 @@
       // Manage the interaction with the server on the EV3 brick
 		  function MyServer() {
 			  var self = this;
+        self.context = undefined; // The application context
         self.ws = undefined; // undefined <=> no connection with the EV3 brick
-        self.navigationBarVM = undefined;
-        self.messageLogVM = undefined;
 
 			  // Init
 			  self.initialize = function() {
@@ -507,17 +573,17 @@
               self.ws.onerror = function(evt) { self.__onWSError(evt); };
             } catch(ex) {
               console.log("Fail to open websocket to: '" + wsURI + "'");
-              self.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
+              self.context.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
               self.__doWSReconnection();
             }
 				  }
 				  else {
-            self.messageLogVM.addMessage(true, i18n.t("errors.websocketNotSupported"));
+            self.context.messageLogVM.addMessage(true, i18n.t("errors.websocketNotSupported"));
 				  }
 			  }
 
 			  self.__onWSOpen = function(evt) {
-          self.messageLogVM.addMessage(false, i18n.t("miscellaneous.ev3ConnectionOk"));
+          self.context.messageLogVM.addMessage(false, i18n.t("miscellaneous.ev3ConnectionOk"));
         }
 
 			  self.__onWSMessage = function(evt) {
@@ -531,23 +597,23 @@
               // Ask confirmation in order to stop the script
               bootbox.confirm(i18n.t("miscellaneous.confirmStopScriptAlreadyRunning"), function(result) {
                 if(result) {
-                  self.navigationBarVM.doRunScript(true);
+                  self.context.navigationBarVM.doRunScript(true);
                 } // else cancel
               });
             }
             else {
-              self.messageLogVM.addMessage(true, i18n.t("server.errors." + received_data.code, received_data.params));
+              self.context.messageLogVM.addMessage(true, i18n.t("server.errors." + received_data.code, received_data.params));
             }
           } else if(msgType == "InfoCoded") {
-            self.messageLogVM.addMessage(false, i18n.t("server.messages." + received_data.code, received_data.params));
+            self.context.messageLogVM.addMessage(false, i18n.t("server.messages." + received_data.code, received_data.params));
           } else {
             // Default: Assume this is a text message
-            self.messageLogVM.addMessage(false, received_data.txt);
+            self.context.messageLogVM.addMessage(false, received_data.txt);
           }
 			  }
 
 			  self.__onWSClose = function(evt) {
-          self.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionNok"));
+          self.context.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionNok"));
           self.__doWSReconnection();
         }
         
@@ -561,7 +627,7 @@
         }
 
 			  self.runScript = function(scriptCode, stopRunningScript) {
-          if(ws != undefined) {
+          if(self.ws != undefined) {
             var jsonMsg = JSON.stringify({
                 act: "runScript",
                 sLang: "javascript",
@@ -571,19 +637,19 @@
             // console.log("run - " + jsonMsg);
             self.ws.send(jsonMsg);
           } else {
-            self.messageLogVM.addMessage(true, i18n.t("errors.cantRunScriptEV3ConnectionNok"));
+            self.context.messageLogVM.addMessage(true, i18n.t("errors.cantRunScriptEV3ConnectionNok"));
           }
 			  }
 
         self.stopScript = function() {
-          if(ws != undefined) {
+          if(self.ws != undefined) {
             var jsonMsg = JSON.stringify({
                 act: "stopScript"
             });
             // console.log("stop - " + jsonMsg);
             self.ws.send(jsonMsg);
           } else {
-            self.messageLogVM.addMessage(true, i18n.t("errors.cantStopScriptEV3ConnectionNok"));
+            self.context.messageLogVM.addMessage(true, i18n.t("errors.cantStopScriptEV3ConnectionNok"));
           }
         }
 		  }
@@ -610,44 +676,43 @@
           $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
           //console.log("Current language used: " + i18n.lng());
 
-          // Objects and 'ViewModel' initialization
+          // Objects and 'ViewModel/VM' instantiation
           context.myServer = new MyServer();
+          context.myServer.context = context;
           context.navigationBarVM = new NavigationBarViewModel();
+          context.navigationBarVM.context = context;
           context.messageLogVM = new MessageLogViewModel();
           // Tabs
           context.scriptEditorTabVM = new ScriptEditorTabViewModel();
+          context.scriptEditorTabVM.context = context;
           context.keyboardSensorTabVM = new KeyboardSensorTabViewModel();
+          context.gyroscopeSensorTabVM = new GyroscopeSensorTabViewModel();
+          context.videoSensorTabVM = new VideoSensorTabViewModel();
           // Dialogs
           context.manageScriptFilesVM = new ManageScriptFilesViewModel();
+          context.manageScriptFilesVM.context = context;
 
-          // Dependency-Injection :-)
-          context.navigationBarVM.myServer = context.myServer;
-          context.navigationBarVM.scriptEditorTabVM = context.scriptEditorTabVM;
-          context.manageScriptFilesVM.scriptEditorTabVM = context.scriptEditorTabVM;
-          context.manageScriptFilesVM.messageLogVM = context.messageLogVM;
-          context.scriptEditorTabVM.manageScriptFilesVM = context.manageScriptFilesVM;
-          context.scriptEditorTabVM.messageLogVM = context.messageLogVM;
-          context.myServer.navigationBarVM = context.navigationBarVM;
-          context.myServer.messageLogVM = context.messageLogVM;
-          
+          // Knockout bindings
           ko.applyBindings(context.navigationBarVM, $("#navigationBar")[0]);
           ko.applyBindings(context.messageLogVM, $("#messageLog")[0]);
           // Tabs
           ko.applyBindings(context.scriptEditorTabVM, $("#scriptEditorTab")[0]);
           ko.applyBindings(context.keyboardSensorTabVM, $("#keyboardSensorTab")[0]);
+          ko.applyBindings(context.gyroscopeSensorTabVM, $("#gyroSensorTab")[0]);
+          ko.applyBindings(context.videoSensorTabVM, $("#videoSensorTab")[0]);
           // Dialogs
           ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
           
+          // Other initialization
           context.myServer.initialize(); // WS connexion with the server
-
-          // Load default script
-          context.scriptEditorTabVM.loadScriptFile("__default__.js");
-
-          // Register windows events
+          context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
+          
+          // Register windows events for editor auto-resize
           $(window).on('resize', function () {
-              context.scriptEditorTabVM.resizeVertically();
+              context.scriptEditorTabVM.doResize();
+              context.keyboardSensorTabVM.doResize();
           });
-          context.scriptEditorTabVM.resizeVertically();
+          $(window).resize();
         });
         // i18n.setLng('en-US', function(t) { /* loading done */ });
       });
