@@ -56,6 +56,11 @@ public interface JsonMessageFields {
   /** Action name field */
   String ACTION = "act";
 
+  // Possible actions
+  String ACTION_RUN_SCRIPT = "runScript";
+  String ACTION_STOP_SCRIPT = "stopScript";
+  String ACTION_SET_XSENSOR_VALUE = "setXSnsValue";
+
   // Messages sent by the EV3 to the browser
   /** Message type value: Exception */
   String MESSAGE_TYPE_EV3_EXCEPTION = "Exception";
@@ -77,6 +82,6 @@ public interface JsonMessageFields {
   String SCRIPT_FORCE_STOP = "sFStop"; // Force stop script while running a script and a script is already running
 
   /** External sensor fields */
-  String EXTERNAL_SENSOR_NAME = "extSnsName";
-  String EXTERNAL_SENSOR_VALUE = "extSnsVal";
+  String EXTERNAL_SENSOR_NAME = "XSnsName";
+  String EXTERNAL_SENSOR_VALUE = "XSnsVal";
 }

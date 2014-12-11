@@ -36,12 +36,19 @@
     <style type="text/css" media="screen">
       /* Needed for the fixed nav-bar */
       body { padding-top: 60px; }
-      /* Used to debug bootstrap layout */
-      .debug { background-color: blue; border-style: solid; border-color: white; border-radius: 5px; }
-      /* Used for xKeybord touch */
+      
+      /* Used for xKeybord touch.
+         Note: "flex" isn't supported only by recent browser but it's the simplest way to center both horizontally and vertically. */
+      /*
+      .xkeyboard-touch-inactive,
+      .xkeyboard-touch-configure,
       .xkeyboard-touch { 
-        background-color: #5bc0de; border-style: solid; border-color: white; border-radius: 5px;
+        border-style: solid; border-color: #ffffff; border-radius: 5px;
+        color: #ffffff; font-weight: bold;
         display: flex; justify-content: center; align-items: center; }
+      .xkeyboard-touch { background-color: #666666; }
+      .xkeyboard-touch-inactive { background-color: #ffffff; }
+      .xkeyboard-touch-configure { background-color: #6666A3; } */
     </style>
 
     <!-- Load libraries (Updated SEP2014) -->
@@ -116,26 +123,38 @@
             <!-- Keyboard sensor tab -->
             <div role="tabpanel" id="keyboardSensorTab" class="tab-pane">
               <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+                <button class="btn btn-default btn-sm" data-bind="css: {active: configurationMode}, click: onConfigureKeyboard">
+                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="keyboardSensorTab.configure">CONFIGURE</span></button>
                 <button class="btn btn-default btn-sm" data-bind="click: onResetKeyboard">
                   <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="keyboardSensorTab.clear">CLEAR</span></button>
-                <button class="btn btn-default btn-sm" data-bind="click: onLoadKeyboard">
+                <button class="btn btn-default btn-sm" disabled="false" data-bind="click: onLoadKeyboard">
                   <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="keyboardSensorTab.loadAndManage">LOAD_MANAGE</span></button>
-                <button class="btn btn-default btn-sm" data-bind="click: onSaveKeyboard">
+                <button class="btn btn-default btn-sm" disabled="true" data-bind="click: onSaveKeyboard">
                   <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="keyboardSensorTab.save">SAVE</span></button>
               </div>
               <!-- Nest a bootstrap grid inside <=> 12 columns available -->
               <div data-bind="foreach: buttons">
                 <div class="row" data-bind="foreach: $data">
-                  <div class="col-sm-2 xkeyboard-touch" data-bind="text: name"></div>
+                  <button class="col-sm-2 btn btn-default btn-lg xkeyboard-touch" role="button" data-bind="disabled: name, text: name, click: $parent.onKeyboardTouch">BUTTON</button>
                 </div>
               </div>
             </div>
             <div role="tabpanel" id="gyroSensorTab" class="tab-pane">
               <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <button class="btn btn-default btn-sm" data-bind="click: onCalibrate">
+                <button class="btn btn-default btn-sm disabled" data-bind="click: onCalibrate">
                   <span class="i18n" data-i18n="gyroSensorTab.calibrate">CALIBRATE</span></button>
               </div>
               <p>This is a Gyroscopic xSensor test</p>
+              <table>
+                <tr>
+                  <td>Event supported</td>
+                  <td id="doEvent"></td>
+                </tr>
+                <tr>
+                  <td>Tilt left-right [Gamma]</td>
+                  <td id="toTiltLR"></td>
+                </tr>
+              </table>
             </div>
             <div role="tabpanel" id="videoSensorTab" class="tab-pane">
               <p>This is a Video xSensor test</p>
@@ -241,9 +260,9 @@
     <!-- ############################################################ -->
 		<script>
 		  // Model to manage the navigation bar actions
-		  function NavigationBarViewModel() {
+		  function NavigationBarViewModel(appContext) {
 			  var self = this;
-        self.context = undefined; // The application context
+        self.context = appContext; // The application context
         self.workAreaItems = ko.observableArray();
         
         // Init
@@ -258,11 +277,13 @@
             tabId: "keyboardSensorTab",
             active: ko.observable(false)
           });
-          self.workAreaItems.push({
-            name: i18n.t("workArea.gyroSensorTab"),
-            tabId: "gyroSensorTab",
-            active: ko.observable(false)
-          });
+          if(window.DeviceOrientationEvent) {
+            self.workAreaItems.push({
+              name: i18n.t("workArea.gyroSensorTab"),
+              tabId: "gyroSensorTab",
+              active: ko.observable(false)
+            });
+          } // else: Don't show Gyro, not supported by the browser
           self.workAreaItems.push({
             name: i18n.t("workArea.videoSensorTab"),
             tabId: "videoSensorTab",
@@ -300,9 +321,9 @@
 		  }
 
       // Model to manage the script editor tab
-      function ScriptEditorTabViewModel() {
+      function ScriptEditorTabViewModel(appContext) {
         var self = this;
-        self.context = undefined; // The application context
+        self.context = appContext; // The application context
 			  self.editor = undefined;
         self.scriptFilename = undefined;
         
@@ -395,10 +416,11 @@
       }
 
       // Model to manage the keyboard x-Sensor
-      function KeyboardSensorTabViewModel() {
+      function KeyboardSensorTabViewModel(appContext) {
         var self = this;
-        self.context = undefined; // The application context
+        self.context = appContext; // The application context
         self.buttons = [];
+        self.configurationMode = ko.observable(false);
         
         // Init
         {
@@ -406,14 +428,59 @@
             self.buttons[i] = [];
             for(var j = 0; j < 6; j++) {
               self.buttons[i].push({
-                name: "item[" + i + "][" + j + "]"
+                name: ko.observable(""), // "" + i + "-" + j),
+                actions: [],
+                isDisabled: ko.observable(true)
               });
             }
           }
         }
+
+        self.onConfigureKeyboard = function() {
+          self.configurationMode(!self.configurationMode());
+          
+          // Switch the touch status according to the mode
+          self.buttons.forEach(function(e0) {
+            e0.forEach(function(e1) {
+              console.log("Set disabled to: " + (!self.configurationMode() && (e1.name.length == 0)));
+              e1.isDisabled(!self.configurationMode() && (e1.name.length == 0));
+            })
+          });
+        }
+
+        /*
+              var btn = buttons[i][j];
+              var actions = btn.name().trim().split(",").map(function(e) {
+                return e.trim();
+              }).filter(function(e) {
+                return e.length > 0
+              });
+              var name = actions.reduce(function(v, e) { 
+                return (v.length == 0 ? "" : v + ", ") + e;
+              }, "");
+
+              btn.name(name); // Re-assign
+*/        
         
+        self.onKeyboardTouch = function() {
+        }
+                
         self.onResetKeyboard = function() {
-          console.log("onResetKeyboard");
+          bootbox.confirm(i18n.t("resetKeyboardModal.title"), function(result) {
+            if(result) {
+              self.__doResetKeyboard();
+            }
+          });
+        }
+
+        self.__doResetKeyboard = function() {
+          self.buttons.forEach(function(e0) {
+            e0.forEach(function(e1) {
+              e1.name("");
+              e1.actions = [];
+              e1.isDisabled(false);
+            });
+          });
         }
         
         self.onLoadKeyboard = function() {
@@ -431,25 +498,50 @@
       }
       
       // Model to manage the Gyroscope x-Sensor
-      function GyroscopeSensorTabViewModel() {
+      function GyroscopeSensorTabViewModel(appContext) {
         var self = this;
-        self.context = undefined; // The application context
+        self.context = appContext; // The application context
+
+        // Init
+        {
+          // Is device orientation supported
+          if(window.DeviceOrientationEvent) {
+            // TODO
+          } else {
+            // It should have already been checked while adding tabs, so only debug
+            console.log("Device orientation not supported !");
+          }
+        }
         
         self.onCalibrate = function() {
           console.log("onCalibrate");
         }
+        
+        // 3 axis: x, y, z
+        //   x: side-to-side (device in front ?portrait?), positive to right
+        //   y: back-to-font (device in front ?portrait?), positive away from user
+        //   z: straight-up, positive when move up
+        //
+        // Rotation (# of degrees different from normal):
+        //   beta: tilted fromt-back (x axis don't move ?)
+        //   gamma: tilted side-to-side (y axis don't move ?)
+        //   alpha (option, not always): rotated around z axis (z axis don't move) - on most devices, compass heading (not always, eg. safarai which is the 1st call that make the reference)
+        //
+        // Acceleration (m/s^2)
+        //   Value returned for x, y and z axis.
+        
       }
       
       // Model to manage the Video x-Sensor
-      function VideoSensorTabViewModel() {
+      function VideoSensorTabViewModel(appContext) {
         var self = this;
-        self.context = undefined; // The application context
+        self.context = appContext; // The application context
         
         // TODO !
       }
       
       // Model that manage the message log view
-      function MessageLogViewModel() {
+      function MessageLogViewModel(appContext) { // appContext not used for MessageLog
         var self = this;
         self.messages = ko.observableArray();
         self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
@@ -491,9 +583,9 @@
       }
       
       // Model that manage the "load/manage scripts" dialog
-      function ManageScriptFilesViewModel() {
+      function ManageScriptFilesViewModel(appContext) {
         var self = this;
-        self.context = undefined; // The application context
+        self.context = appContext; // The application context
         self.files = ko.observableArray();
 
         self.display = function() {
@@ -556,9 +648,9 @@
       }
 
       // Manage the interaction with the server on the EV3 brick
-		  function MyServer() {
+		  function MyServer(appContext) {
 			  var self = this;
-        self.context = undefined; // The application context
+        self.context = appContext; // The application context
         self.ws = undefined; // undefined <=> no connection with the EV3 brick
 
 			  // Init
@@ -655,17 +747,26 @@
 		  }
 
 
-      // Knockout configuration - add textI18N binding
-      ko.bindingHandlers.textI18N = {
+      ///////////////////////////
+      // Knockout 'configuration'
+
+      // Binding used for enabling/disabling the bootstrap buttons
+      ko.bindingHandlers.disabled = {
         update: function (element, valueAccessor) {
-          console.log("textI18n: " + valueAccessor() + " -> " + i18n.t(valueAccessor()));
-          $(element).text(i18n.t(valueAccessor()));
+          var v = valueAccessor();
+          console.log("disabled binding: " + valueAccessor + " - " + v + " - " + v());
+          if(valueAccessor()) { // Function that should return true / false
+            $(element).attr("disabled", "true");
+          } else {
+            $(element).removeAttr("disabled");
+          }
         }
-      };      
-      
+      }
+
+
       /////////////////////////////////////////
 		  // Initialization while document is ready
-      var context = {};
+      var context = {}; // The application context - used for sort of basic dependency-injection
       
       $(document).ready(function() {
         // Translation
@@ -677,20 +778,16 @@
           //console.log("Current language used: " + i18n.lng());
 
           // Objects and 'ViewModel/VM' instantiation
-          context.myServer = new MyServer();
-          context.myServer.context = context;
-          context.navigationBarVM = new NavigationBarViewModel();
-          context.navigationBarVM.context = context;
-          context.messageLogVM = new MessageLogViewModel();
+          context.myServer = new MyServer(context);
+          context.navigationBarVM = new NavigationBarViewModel(context);
+          context.messageLogVM = new MessageLogViewModel(context);
           // Tabs
-          context.scriptEditorTabVM = new ScriptEditorTabViewModel();
-          context.scriptEditorTabVM.context = context;
-          context.keyboardSensorTabVM = new KeyboardSensorTabViewModel();
-          context.gyroscopeSensorTabVM = new GyroscopeSensorTabViewModel();
-          context.videoSensorTabVM = new VideoSensorTabViewModel();
+          context.scriptEditorTabVM = new ScriptEditorTabViewModel(context);
+          context.keyboardSensorTabVM = new KeyboardSensorTabViewModel(context);
+          context.gyroscopeSensorTabVM = new GyroscopeSensorTabViewModel(context);
+          context.videoSensorTabVM = new VideoSensorTabViewModel(context);
           // Dialogs
-          context.manageScriptFilesVM = new ManageScriptFilesViewModel();
-          context.manageScriptFilesVM.context = context;
+          context.manageScriptFilesVM = new ManageScriptFilesViewModel(context);
 
           // Knockout bindings
           ko.applyBindings(context.navigationBarVM, $("#navigationBar")[0]);

@@ -30,7 +30,7 @@ import org.gnikrap.httphandler.FilesHttpHandler;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.FakeEV3ExecutionManager;
 import org.gnikrap.script.actions.RunScript;
-import org.gnikrap.script.actions.SetExternalSensorValue;
+import org.gnikrap.script.actions.SetXSensorValue;
 import org.gnikrap.script.actions.StopScript;
 import org.gnikrap.utils.Configuration;
 import org.gnikrap.utils.LoggerUtils;
@@ -138,7 +138,7 @@ public class Main {
     // Register actions
     actionProcessor.registerActionMessageProcessor(new RunScript());
     actionProcessor.registerActionMessageProcessor(new StopScript());
-    actionProcessor.registerActionMessageProcessor(new SetExternalSensorValue());
+    actionProcessor.registerActionMessageProcessor(new SetXSensorValue());
 
     return actionProcessor;
   }

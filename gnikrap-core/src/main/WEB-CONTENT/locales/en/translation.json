@@ -12,9 +12,9 @@
   "workArea": {
     "@comment": "The list of the work area available",
     "scriptEditorTab": "Script editor",
-    "keyboardSensorTab": "x-Keyboard",
-    "videoSensorTab": "x-Video",
-    "gyroSensorTab": "x-Gyroscope"
+    "keyboardSensorTab": "xTouch",
+    "videoSensorTab": "xVideo",
+    "gyroSensorTab": "xGyroscope"
   },
 
   "messageLog": {

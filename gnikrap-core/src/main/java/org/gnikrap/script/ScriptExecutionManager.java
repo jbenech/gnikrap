@@ -28,13 +28,12 @@ import javax.script.ScriptEngineManager;
 
 import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
 import org.gnikrap.script.ev3api.EV3ScriptException;
-import org.gnikrap.script.ev3api.ExternalSensor;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
+import org.gnikrap.script.ev3api.xsensors.FutureValue;
+import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 import org.gnikrap.utils.StopableExecutor;
-
-import com.eclipsesource.json.JsonValue;
 
 /**
  * Manage the execution of the script
@@ -61,7 +60,7 @@ public class ScriptExecutionManager {
       scriptContext.releaseResources();
     } else {
       SimpleEV3Brick brick = buildNewEV3Brick();
-      scriptContext = new EV3ScriptContext(brick, this, new ExternalSensor());
+      scriptContext = new EV3ScriptContext(brick, this, new XSensorManager());
       if (brick != null) {
         brick.setScriptContext(scriptContext);
       }
@@ -164,9 +163,9 @@ public class ScriptExecutionManager {
     reset();
   }
 
-  public void setExternalSensorValue(String sensorName, JsonValue rawSensorvalue) {
+  public void setXSensorFutureValue(String sensorName, FutureValue value) {
     if (scriptContext != null) {
-      scriptContext.getXSensor().getSensor(sensorName).setRawValue(rawSensorvalue);
+      scriptContext.getXSensor().getSensor(sensorName).setFutureValue(value);
     }
   }
 }

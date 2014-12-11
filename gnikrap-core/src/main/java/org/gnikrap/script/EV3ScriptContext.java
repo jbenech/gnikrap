@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.gnikrap.script.ev3api.ExternalSensor;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
+import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.utils.LoggerUtils;
 
 /**
@@ -35,7 +35,7 @@ public final class EV3ScriptContext {
   private boolean running;
   private final SimpleEV3Button escape;
   private final SimpleEV3Brick ev3;
-  private final ExternalSensor xsensor;
+  private final XSensorManager xsensor;
 
   // Configuration
   private final Configuration configuration = new Configuration();
@@ -44,7 +44,7 @@ public final class EV3ScriptContext {
   private int confWaitingTimeBeforeHardKill = 5000;
   private final ScriptExecutionManager ctx;
 
-  public EV3ScriptContext(SimpleEV3Brick ev3, ScriptExecutionManager ctx, ExternalSensor xsensor) {
+  public EV3ScriptContext(SimpleEV3Brick ev3, ScriptExecutionManager ctx, XSensorManager xsensor) {
     this.ev3 = ev3;
     this.ctx = ctx;
     this.xsensor = xsensor;
@@ -104,7 +104,7 @@ public final class EV3ScriptContext {
   /**
    * Return the object that enable to read external sensors values.
    */
-  public ExternalSensor getXSensor() {
+  public XSensorManager getXSensor() {
     return xsensor;
   }
 
