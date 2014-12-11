@@ -21,6 +21,7 @@ import org.gnikrap.ActionMessageProcessor;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;
+import org.gnikrap.script.JsonMessageFields;
 
 /**
  * Stop the script that is running (if any)
@@ -34,7 +35,7 @@ public class StopScript implements ActionMessageProcessor {
 
   @Override
   public String getName() {
-    return "stopScript";
+    return JsonMessageFields.ACTION_STOP_SCRIPT;
   }
 
   @Override

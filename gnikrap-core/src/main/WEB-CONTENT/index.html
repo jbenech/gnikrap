@@ -127,7 +127,7 @@
                   <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="keyboardSensorTab.configure">CONFIGURE</span></button>
                 <button class="btn btn-default btn-sm" data-bind="click: onResetKeyboard">
                   <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="keyboardSensorTab.clear">CLEAR</span></button>
-                <button class="btn btn-default btn-sm" disabled="false" data-bind="click: onLoadKeyboard">
+                <button class="btn btn-default btn-sm" disabled="yes" data-bind="click: onLoadKeyboard">
                   <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="keyboardSensorTab.loadAndManage">LOAD_MANAGE</span></button>
                 <button class="btn btn-default btn-sm" disabled="true" data-bind="click: onSaveKeyboard">
                   <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="keyboardSensorTab.save">SAVE</span></button>
@@ -135,10 +135,13 @@
               <!-- Nest a bootstrap grid inside <=> 12 columns available -->
               <div data-bind="foreach: buttons">
                 <div class="row" data-bind="foreach: $data">
-                  <button class="col-sm-2 btn btn-default btn-lg xkeyboard-touch" role="button" data-bind="disabled: name, text: name, click: $parent.onKeyboardTouch">BUTTON</button>
+                  <button class="col-sm-2 btn btn-default btn-lg xkeyboard-touch" role="button" 
+                    data-bind="disabled: isDisabled, text: name, click: onKeyboardTouch, event: {mousedown: onPressed, mouseup: onRelease, mouseout: onRelease}">BUTTON</button>
                 </div>
               </div>
             </div>
+            
+            <!-- Gyro sensor tab -->
             <div role="tabpanel" id="gyroSensorTab" class="tab-pane">
               <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
                 <button class="btn btn-default btn-sm disabled" data-bind="click: onCalibrate">
@@ -430,7 +433,21 @@
               self.buttons[i].push({
                 name: ko.observable(""), // "" + i + "-" + j),
                 actions: [],
-                isDisabled: ko.observable(true)
+                isDisabled: ko.observable(true),
+                isPressed: false,
+                onKeyboardTouch: function(btn) {
+                  self.__doOnKeyboardTouch(btn);
+                },
+                onPressed: function(btn) {
+                  btn.isPressed = true;
+                  self.__doNotifyStateChanged(btn);
+                },
+                onRelease: function(btn) {
+                  if(btn.isPressed) {
+                    btn.isPressed = false;
+                    self.__doNotifyStateChanged(btn);
+                  } // else, useless event
+                }
               });
             }
           }
@@ -442,27 +459,52 @@
           // Switch the touch status according to the mode
           self.buttons.forEach(function(e0) {
             e0.forEach(function(e1) {
-              console.log("Set disabled to: " + (!self.configurationMode() && (e1.name.length == 0)));
-              e1.isDisabled(!self.configurationMode() && (e1.name.length == 0));
+              e1.isDisabled(!self.configurationMode() && (e1.name().length == 0));
+              e1.isPressed = false;
             })
           });
         }
-
-        /*
-              var btn = buttons[i][j];
-              var actions = btn.name().trim().split(",").map(function(e) {
-                return e.trim();
-              }).filter(function(e) {
-                return e.length > 0
-              });
-              var name = actions.reduce(function(v, e) { 
-                return (v.length == 0 ? "" : v + ", ") + e;
-              }, "");
-
-              btn.name(name); // Re-assign
-*/        
         
-        self.onKeyboardTouch = function() {
+        self.__doOnKeyboardTouch = function(btn) {
+          if(self.configurationMode()) {
+            bootbox.prompt({
+              title: i18n.t('configureKeyboardTouchModal.title'),
+              value: btn.name(),
+              callback: function(result) {
+                if (result != null) {
+                  btn.actions = self.__splitNameToActions(result);
+                  btn.name(self.__buildNameFromActions(btn.actions));
+                } // Cancel clicked
+              }
+            });
+          }
+        }
+        
+        self.__splitNameToActions = function(name) {
+          return name.trim().split(",")
+            .map(function(e) { return e.trim(); })
+            .filter(function(e) { return e.length > 0 });
+        }
+        
+        self.__buildNameFromActions = function(actions) {
+          return actions.reduce(function(val, elt) { 
+                    return (val.length == 0 ? val : val + ", ") + elt;
+                  }, "");
+        }
+        
+        self.__doNotifyStateChanged = function() {
+          if(self.configurationMode() == false) {
+            // Notify the list of actions triggered
+            var xValue = [];
+            self.buttons.forEach(function(e0) {
+              e0.forEach(function(e1) {
+                if(e1.isPressed) {
+                  Array.prototype.push.apply(xValue, e1.actions);
+                }
+              })
+            });
+            self.context.myServer.sendXSensorValue("Keyboard", xValue);
+          }
         }
                 
         self.onResetKeyboard = function() {
@@ -479,6 +521,7 @@
               e1.name("");
               e1.actions = [];
               e1.isDisabled(false);
+              e1.isPressed = false;
             });
           });
         }
@@ -744,18 +787,29 @@
             self.context.messageLogVM.addMessage(true, i18n.t("errors.cantStopScriptEV3ConnectionNok"));
           }
         }
+        
+        self.sendXSensorValue = function(sensorName, sensorValue) {
+          if(self.ws != undefined) {
+            var jsonMsg = JSON.stringify({
+                act: "setXSnsValue",
+                xSnsName: sensorName,
+                xSnsVal: sensorValue
+            });
+            console.log("xSensorValue - " + jsonMsg);
+            self.ws.send(jsonMsg);
+          } // Ignore error in this case, error should have been notified by the star/stop script
+        }
 		  }
 
 
-      ///////////////////////////
-      // Knockout 'configuration'
+      /////////////////////////////
+      // Knockout speciifc bingings
 
       // Binding used for enabling/disabling the bootstrap buttons
       ko.bindingHandlers.disabled = {
         update: function (element, valueAccessor) {
-          var v = valueAccessor();
-          console.log("disabled binding: " + valueAccessor + " - " + v + " - " + v());
-          if(valueAccessor()) { // Function that should return true / false
+          var valueUnwrapped = ko.unwrap(valueAccessor());
+          if(valueUnwrapped) {
             $(element).attr("disabled", "true");
           } else {
             $(element).removeAttr("disabled");

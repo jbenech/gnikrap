@@ -25,7 +25,7 @@ public class SetXSensorValue implements ActionMessageProcessor {
 
   @Override
   public String getName() {
-    return "setXSnsValue";
+    return JsonMessageFields.ACTION_SET_XSENSOR_VALUE;
   }
 
   @Override

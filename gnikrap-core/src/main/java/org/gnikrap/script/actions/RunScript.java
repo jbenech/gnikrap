@@ -39,7 +39,7 @@ public class RunScript implements ActionMessageProcessor {
 
   @Override
   public String getName() {
-    return "runScript";
+    return JsonMessageFields.ACTION_RUN_SCRIPT;
   }
 
   @Override

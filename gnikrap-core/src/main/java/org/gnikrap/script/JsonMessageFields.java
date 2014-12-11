@@ -82,6 +82,6 @@ public interface JsonMessageFields {
   String SCRIPT_FORCE_STOP = "sFStop"; // Force stop script while running a script and a script is already running
 
   /** External sensor fields */
-  String EXTERNAL_SENSOR_NAME = "XSnsName";
-  String EXTERNAL_SENSOR_VALUE = "XSnsVal";
+  String EXTERNAL_SENSOR_NAME = "xSnsName";
+  String EXTERNAL_SENSOR_VALUE = "xSnsVal";
 }
