@@ -105,6 +105,7 @@ public class Main {
     String webContentFolder = configuration.getValueAsString("WebContent");
     boolean fakeEV3 = configuration.getValueAsBoolean("FakeEV3", false);
     String scriptsFolder = configuration.getValueAsString("ScriptsFolder");
+    String keyboardFolder = configuration.getValueAsString("xKeyboardFolder");
     int httpPort = configuration.getValueAsInt("HttpPort", 8080);
 
     // Init business stuff
@@ -118,7 +119,8 @@ public class Main {
         path() //
             // ////////////////////////////////////
             .addPrefixPath("/ws/gnikrap/script", websocket(myWsCC)) //
-            .addPrefixPath("/rest/scriptfiles", new FilesHttpHandler(scriptsFolder))
+            .addPrefixPath("/rest/scriptfiles", new FilesHttpHandler(scriptsFolder)) //
+            .addPrefixPath("/rest/xkeyboardfiles", new FilesHttpHandler(keyboardFolder))
             // ////////////////////////////////////
             .addPrefixPath("/", resource(new FileResourceManager(new File(webContentFolder), 4096)). //
                 setWelcomeFiles("index.html").setDirectoryListingEnabled(false))) //

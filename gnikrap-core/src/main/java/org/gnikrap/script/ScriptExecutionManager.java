@@ -165,7 +165,7 @@ public class ScriptExecutionManager {
 
   public void setXSensorFutureValue(String sensorName, FutureValue value) {
     if (scriptContext != null) {
-      scriptContext.getXSensor().getSensor(sensorName).setFutureValue(value);
+      scriptContext.getXSensor(sensorName).setFutureValue(value);
     }
   }
 }

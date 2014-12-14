@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
+import org.gnikrap.script.ev3api.xsensors.XSensor;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.utils.LoggerUtils;
 
@@ -104,8 +105,15 @@ public final class EV3ScriptContext {
   /**
    * Return the object that enable to read external sensors values.
    */
-  public XSensorManager getXSensor() {
+  public XSensorManager getXSensors() {
     return xsensor;
+  }
+
+  /**
+   * A shortcut to get the expected xsensor (more fluent API).
+   */
+  public XSensor getXSensor(String name) {
+    return xsensor.getSensor(name);
   }
 
   /**

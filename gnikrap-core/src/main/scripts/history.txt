@@ -1,13 +1,13 @@
 Change-log:
 
 Known defects:
- - Fix screen API - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
+ - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
 
 Features to add (no specific order):
  - Add import/export
  - Add "external" sensors
  - Add real time sensor probes
- - Add a packing simple to use (write the SD card and play)
+ - Add a packaging simple to use (write the SD card and play)
  - Add port checking (auto detection for EV3 devices)
  - Add documentation to add other scripting language
  - Exit script feature (is return work ?)
@@ -17,7 +17,7 @@ Features to add (no specific order):
  0.3.0:
     - Rework and polish on layout, navigation-bar and tool-bars
     - Add automatic EV3 brick reconnection (if connection has been lost)
-    - Add xSensors in the GUI
+    - Add xSensors in the GUI (xTouch)
 
 
  0.2.0:

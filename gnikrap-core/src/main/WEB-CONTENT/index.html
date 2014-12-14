@@ -64,7 +64,7 @@
     <!-- Main screen -->
     <div class="container-fluid">
       <!-- Navigation/Menu bar -->
-      <div id="navigationBar" class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <nav id="navigationBar" class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
           <!-- Core buttons (Start / Stop) and toggle get grouped for better mobile display -->
           <div class="navbar-header">
@@ -100,7 +100,7 @@
             </div>
           </div> <!-- div ./collapse -->
         </div>
-      </div> <!-- div ./navigationBar -->
+      </nav>
 
       <!-- The work area -->
       <div class="row-fluid">
@@ -109,20 +109,26 @@
           <div class="tab-content">
             <!-- Script editor tab -->
             <div role="tabpanel" id="scriptEditorTab" class="tab-pane active">
-              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+              <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
                 <button class="btn btn-default btn-sm" data-bind="click: onClearScript">
                   <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="scriptEditorTab.clear">CLEAR</span></button>
                 <button class="btn btn-default btn-sm" data-bind="click: onLoadScript">
                   <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="scriptEditorTab.loadAndManage">LOAD_MANAGE</span></button>
                 <button class="btn btn-default btn-sm" data-bind="click: onSaveScript">
                   <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="scriptEditorTab.save">SAVE</span></button>
-              </div>
+              </nav>
               <div id="editor" style="height: 350px">// Loading script...</div>
             </div>
             
             <!-- Keyboard sensor tab -->
             <div role="tabpanel" id="keyboardSensorTab" class="tab-pane">
-              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+              <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+                <form class="navbar-left" style="margin-right: 5px" role="form">
+                  <div class="input-group input-group-sm">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input> <!-- enable: configurationMode -->
+                  </div>
+                </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: configurationMode}, click: onConfigureKeyboard">
                   <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="keyboardSensorTab.configure">CONFIGURE</span></button>
                 <button class="btn btn-default btn-sm" data-bind="click: onResetKeyboard">
@@ -131,7 +137,7 @@
                   <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="keyboardSensorTab.loadAndManage">LOAD_MANAGE</span></button>
                 <button class="btn btn-default btn-sm" disabled="true" data-bind="click: onSaveKeyboard">
                   <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="keyboardSensorTab.save">SAVE</span></button>
-              </div>
+              </nav>
               <!-- Nest a bootstrap grid inside <=> 12 columns available -->
               <div data-bind="foreach: buttons">
                 <div class="row" data-bind="foreach: $data">
@@ -144,8 +150,14 @@
             <!-- Gyro sensor tab -->
             <div role="tabpanel" id="gyroSensorTab" class="tab-pane">
               <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <button class="btn btn-default btn-sm disabled" data-bind="click: onCalibrate">
-                  <span class="i18n" data-i18n="gyroSensorTab.calibrate">CALIBRATE</span></button>
+                <form class="navbar-left" style="margin-right: 5px" role="form">
+                  <div class="input-group input-group-sm">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input>
+                  </div>
+                </form>
+                <button class="btn btn-default btn-sm" data-bind="click: onCalibrate">
+                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="gyroSensorTab.calibrate">CALIBRATE</span></button>
               </div>
               <p>This is a Gyroscopic xSensor test</p>
               <table>
@@ -167,12 +179,12 @@
 
         <!-- Event notification part -->
         <div id="messageLog" class="col-sm-4">
-          <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+          <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
             <button class="btn btn-default btn-sm" data-bind="click: onResetMessages">
               <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="messageLog.clear">CLEAR</span></button>
             <button class="btn btn-default btn-sm" data-bind="css: {active: keepOnlyLastMessage}, click: onKeepOnlyLastMessage">
               <span class="i18n" data-i18n="messageLog.keepLast">KEEP_LAST</span></button>
-          </div>
+          </nav>
           <ul class="list-group" data-bind="foreach: messages" style="font-size:11px">
             <li class="list-group-item" data-bind="css: cssClazz">
               <small data-bind="text: time">00:00:00</small> - <span data-bind="text: text">Message</span><span class="badge" data-bind="visible: count > 1, text: count">0</span>
@@ -206,11 +218,11 @@
                   <td data-bind="text: name">nameOfTheFile</td><td>Unknown</td>
                   <td>
                     <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onLoadScript">
-                      <!-- span class="glyphicon glyphicon-open"></span --><span class="i18n" data-i18n="manageScriptFilesModal.load">LOAD</span></button>
+                      <span class="i18n" data-i18n="manageScriptFilesModal.load">LOAD</span></button>
                     <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onDeleteScript, visible: isReadWrite">
-                      <!-- span class="glyphicon glyphicon glyphicon-trash"></span --><span class="i18n" data-i18n="manageScriptFilesModal.delete">DELETE</span></button>
+                      <span class="i18n" data-i18n="manageScriptFilesModal.delete">DELETE</span></button>
                   </td>
-                </tr> <!-- $index $parent -->
+                </tr>
               </tbody>
             </table>
             <!-- TODO: Manage paging: https://blog.safaribooksonline.com/2014/02/03/creating-basic-re-usable-component-knockout-3-0/ -->
@@ -422,8 +434,12 @@
       function KeyboardSensorTabViewModel(appContext) {
         var self = this;
         self.context = appContext; // The application context
-        self.buttons = [];
-        self.configurationMode = ko.observable(false);
+        // Data for the View
+        {
+          self.buttons = [];
+          self.configurationMode = ko.observable(false);
+          self.sensorName = ko.observable("xTouch");
+        }
         
         // Init
         {
@@ -431,7 +447,7 @@
             self.buttons[i] = [];
             for(var j = 0; j < 6; j++) {
               self.buttons[i].push({
-                name: ko.observable(""), // "" + i + "-" + j),
+                name: ko.observable(""),
                 actions: [],
                 isDisabled: ko.observable(true),
                 isPressed: false,
@@ -456,7 +472,7 @@
         self.onConfigureKeyboard = function() {
           self.configurationMode(!self.configurationMode());
           
-          // Switch the touch status according to the mode
+          // Switch the button status according to the mode & button content
           self.buttons.forEach(function(e0) {
             e0.forEach(function(e1) {
               e1.isDisabled(!self.configurationMode() && (e1.name().length == 0));
@@ -468,7 +484,7 @@
         self.__doOnKeyboardTouch = function(btn) {
           if(self.configurationMode()) {
             bootbox.prompt({
-              title: i18n.t('configureKeyboardTouchModal.title'),
+              title: i18n.t('configureKeyboardButtonModal.title'),
               value: btn.name(),
               callback: function(result) {
                 if (result != null) {
@@ -495,15 +511,21 @@
         self.__doNotifyStateChanged = function() {
           if(self.configurationMode() == false) {
             // Notify the list of actions triggered
-            var xValue = [];
+            var xValue = {
+              buttons: {}
+            };
             self.buttons.forEach(function(e0) {
               e0.forEach(function(e1) {
                 if(e1.isPressed) {
-                  Array.prototype.push.apply(xValue, e1.actions);
+                  e1.actions.forEach(function (a) {
+                    var btn = xValue.buttons[a];
+                    xValue.buttons[a] = (btn == undefined ? 1 : btn + 1);
+                  });
+                  // Array.prototype.push.apply(xValue.buttons, e1.actions);
                 }
               })
             });
-            self.context.myServer.sendXSensorValue("Keyboard", xValue);
+            self.context.myServer.sendXSensorValue(self.sensorName(), xValue);
           }
         }
                 
@@ -527,11 +549,13 @@
         }
         
         self.onLoadKeyboard = function() {
-          console.log("onLoadKeyboard");
+          // TODO: Reuse the dialog for the script ?
+          console.log("TODO: onLoadKeyboard");
         }
         
         self.onSaveKeyboard = function() {
-          console.log("onLoadKeyboard");
+          // TODO: Save subset of buttons as a json
+          console.log("TODO: onSaveKeyboard");
         }
         
         self.doResize = function() {
@@ -544,6 +568,7 @@
       function GyroscopeSensorTabViewModel(appContext) {
         var self = this;
         self.context = appContext; // The application context
+        self.sensorName = ko.observable("xGyro");
 
         // Init
         {
@@ -797,7 +822,9 @@
             });
             console.log("xSensorValue - " + jsonMsg);
             self.ws.send(jsonMsg);
-          } // Ignore error in this case, error should have been notified by the star/stop script
+          } else {
+            // TODO error management
+          }
         }
 		  }
 

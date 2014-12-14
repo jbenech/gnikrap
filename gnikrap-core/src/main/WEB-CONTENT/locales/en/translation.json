@@ -27,6 +27,18 @@
     "loadAndManage": "Load/Manage",
     "save": "Save"
   },
+
+  "keyboardSensorTab": {
+    "sensorName": "Name",
+    "configure": "Configure",
+    "clear": "Clear",
+    "loadAndManage": "Load/Manage",
+    "save": "Save"
+  },
+  
+  "gyroSensorTab": {
+    "calibrate": "Calibrate"
+  },
   
   "manageScriptFilesModal": {
     "@comment": "The manage scripts modal",
@@ -50,6 +62,14 @@
   "clearScriptModal": {
     "@comment": "The clear script 'Dialog'",
     "title": "Are you sure to clear the current script ?"
+  },
+  
+  "configureKeyboardButtonModal": {
+    "title": "Enter the name(s) of the button (use the comma to separate several names)"
+  },
+  
+  "resetKeyboardModal": {
+    "title": "Are you sure to clear the current xTouch configuration ?"
   },
   
   "aboutModal": {
