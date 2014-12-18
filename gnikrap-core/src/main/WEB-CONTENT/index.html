@@ -35,20 +35,7 @@
     <!-- /!\ To be defined after the css import in order to overwrite it (see http://getbootstrap.com/components/#navbar-fixed-bottom) -->
     <style type="text/css" media="screen">
       /* Needed for the fixed nav-bar */
-      body { padding-top: 60px; }
-      
-      /* Used for xKeybord touch.
-         Note: "flex" isn't supported only by recent browser but it's the simplest way to center both horizontally and vertically. */
-      /*
-      .xkeyboard-touch-inactive,
-      .xkeyboard-touch-configure,
-      .xkeyboard-touch { 
-        border-style: solid; border-color: #ffffff; border-radius: 5px;
-        color: #ffffff; font-weight: bold;
-        display: flex; justify-content: center; align-items: center; }
-      .xkeyboard-touch { background-color: #666666; }
-      .xkeyboard-touch-inactive { background-color: #ffffff; }
-      .xkeyboard-touch-configure { background-color: #6666A3; } */
+      body { padding-top: 60px; }      
     </style>
 
     <!-- Load libraries (Updated SEP2014) -->
@@ -141,6 +128,7 @@
               <!-- Nest a bootstrap grid inside <=> 12 columns available -->
               <div data-bind="foreach: buttons">
                 <div class="row" data-bind="foreach: $data">
+                  <!-- TODO: touch events for mobile devices ? -->
                   <button class="col-sm-2 btn btn-default btn-lg xkeyboard-touch" role="button" 
                     data-bind="disabled: isDisabled, text: name, click: onKeyboardTouch, event: {mousedown: onPressed, mouseup: onRelease, mouseout: onRelease}">BUTTON</button>
                 </div>
@@ -156,23 +144,81 @@
                     <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input>
                   </div>
                 </form>
-                <button class="btn btn-default btn-sm" data-bind="click: onCalibrate">
+                <button class="btn btn-default btn-sm" data-bind="css: {active: calibrationMode}, click: onCalibrate">
                   <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="gyroSensorTab.calibrate">CALIBRATE</span></button>
+                <button class="btn btn-default btn-sm" data-bind="css: {active: runningMode}, click: onRun">
+                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="gyroSensorTab.run">RUN</span></button>
               </div>
               <p>This is a Gyroscopic xSensor test</p>
               <table>
                 <tr>
-                  <td>Event supported</td>
+                  <td>Event Supported</td>
                   <td id="doEvent"></td>
                 </tr>
                 <tr>
-                  <td>Tilt left-right [Gamma]</td>
-                  <td id="toTiltLR"></td>
+                  <td>Tilt Left/Right [gamma]</td>
+                  <td id="doTiltLR"></td>
+                </tr>
+                <tr>
+                  <td>Tilt Front/Back [beta]</td>
+                  <td id="doTiltFB"></td>
+                </tr>
+                <tr>
+                  <td>Direction [alpha]</td>
+                  <td id="doDirection"></td>
                 </tr>
               </table>
+              <h2>Device Motion</h2>
+              <table>
+                <tr>
+                  <td>Event Supported</td>
+                  <td id="dmEvent"></td>
+                </tr>
+                <tr>
+                  <td>acceleration</td>
+                  <td id="moAccel"></td>
+                </tr>
+                <tr>
+                  <td>accelerationIncludingGravity</td>
+                  <td id="moAccelGrav"></td>
+                </tr>
+                <tr>
+                  <td>rotationRate</td>
+                  <td id="moRotation"></td>
+                </tr>
+                <tr>
+                  <td>interval</td>
+                  <td id="moInterval"></td>
+                </tr>
+              </table>
+
+                <div class="container" style="perspective: 300;">
+                  <img src="http://www.html5rocks.com/en/tutorials/device/orientation/html5_logo.png" id="imgLogo" class="logo">
+                </div>
             </div>
+
+            <!-- Video sensor tab -->
             <div role="tabpanel" id="videoSensorTab" class="tab-pane">
-              <p>This is a Video xSensor test</p>
+              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+                <form class="navbar-left" style="margin-right: 5px" role="form">
+                  <div class="input-group input-group-sm">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input>
+                  </div>
+                </form>
+                <button class="btn btn-default btn-sm"> <!-- data-bind="click: onCalibrate"> -->
+                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="videoSensorTab.calibrate">CALIBRATE</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onStart">
+                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="videoSensorTab.start">START</span></button>
+              </div>
+
+              <p>Before video</p>
+              <div class="embed-responsive embed-responsive-4by3">
+                <video class="embed-responsive-item" width=320 height=240 autoplay="true" id="xVideoSensorElement">
+                  Your browser does not support Video Tag. Please consider using browser supporting HTML5.
+                </video>
+              </div>
+              <p>After video</p>
             </div>
           </div>
         </div>
@@ -437,7 +483,7 @@
         // Data for the View
         {
           self.buttons = [];
-          self.configurationMode = ko.observable(false);
+          self.configurationMode = ko.observable(true);
           self.sensorName = ko.observable("xTouch");
         }
         
@@ -449,7 +495,7 @@
               self.buttons[i].push({
                 name: ko.observable(""),
                 actions: [],
-                isDisabled: ko.observable(true),
+                isDisabled: ko.observable(false),
                 isPressed: false,
                 onKeyboardTouch: function(btn) {
                   self.__doOnKeyboardTouch(btn);
@@ -569,43 +615,163 @@
         var self = this;
         self.context = appContext; // The application context
         self.sensorName = ko.observable("xGyro");
-
+        self.calibrationMode = ko.observable(true);
+        self.runningMode = ko.observable(false);
+        
         // Init
         {
           // Is device orientation supported
           if(window.DeviceOrientationEvent) {
             // TODO
+            document.getElementById("doEvent").innerHTML = "DeviceOrientation";
           } else {
-            // It should have already been checked while adding tabs, so only debug
+            // Should not be possible to be here if not allowed (should have already been checked while adding tabs)
             console.log("Device orientation not supported !");
+          }
+        }
+
+        self.__resetXValue = function() {
+          // EV3 sensor values: angle ° and rate in °/s
+          self.xValue = {
+            x: { angle: 0, rate: 0},
+            y: { angle: 0, rate: 0},
+            z: { angle: 0, rate: 0}
           }
         }
         
         self.onCalibrate = function() {
+          // TODO: Set position for the "zero" ?
           console.log("onCalibrate");
         }
         
-        // 3 axis: x, y, z
-        //   x: side-to-side (device in front ?portrait?), positive to right
-        //   y: back-to-font (device in front ?portrait?), positive away from user
-        //   z: straight-up, positive when move up
-        //
-        // Rotation (# of degrees different from normal):
-        //   beta: tilted fromt-back (x axis don't move ?)
-        //   gamma: tilted side-to-side (y axis don't move ?)
-        //   alpha (option, not always): rotated around z axis (z axis don't move) - on most devices, compass heading (not always, eg. safarai which is the 1st call that make the reference)
-        //
-        // Acceleration (m/s^2)
-        //   Value returned for x, y and z axis.
+        self.deviceOrientationHandler = function(eventData) {
+          self.xValue.x.angle = eventData.beta;
+          self.xValue.y.angle = eventData.gamma;
+          self.xValue.z.angle = eventData.alpha;
+
+          {
+            console.log("deviceOrientationHandler...");
+            // gamma is the left-to-right tilt in degrees, where right is positive
+            var tiltLR = eventData.gamma;
+            // beta is the front-to-back tilt in degrees, where front is positive
+            var tiltFB = eventData.beta;
+            // alpha is the compass direction the device is facing in degrees
+            var dir = eventData.alpha
+            
+            // call our orientation event handler
+            document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+            document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+            document.getElementById("doDirection").innerHTML = Math.round(dir);
+
+            // Apply the transform to the image
+            var logo = document.getElementById("imgLogo");
+            logo.style.webkitTransform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
+            logo.style.MozTransform = "rotate("+ tiltLR +"deg)";
+            logo.style.transform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
+          }
+        }
+
+        function deviceMotionHandler(eventData) {
+          var acceleration = eventData.acceleration; // can be undefined with some hardware
+          if(acceleration == undefined) {
+            acceleration = eventData.accelerationIncludingGravity;
+          }
+          self.xValue.x.rate = acceleration.x;
+          self.xValue.y.rate = acceleration.y;
+          self.xValue.z.rate = acceleration.z;
+
+          {
+            var info, xyz = "[X, Y, Z]";
+
+            // Grab the acceleration from the results
+            info = xyz.replace("X", acceleration.x);
+            info = info.replace("Y", acceleration.y);
+            info = info.replace("Z", acceleration.z);
+            document.getElementById("moAccel").innerHTML = info;
+
+            // Grab the acceleration including gravity from the results
+            acceleration = eventData.accelerationIncludingGravity;
+            info = xyz.replace("X", acceleration.x);
+            info = info.replace("Y", acceleration.y);
+            info = info.replace("Z", acceleration.z);
+            document.getElementById("moAccelGrav").innerHTML = info;
+
+            // Grab the rotation rate from the results
+            var rotation = eventData.rotationRate;
+            info = xyz.replace("X", rotation.alpha);
+            info = info.replace("Y", rotation.beta);
+            info = info.replace("Z", rotation.gamma);
+            document.getElementById("moRotation").innerHTML = info;
+
+            // // Grab the refresh interval from the results
+            info = eventData.interval;
+            document.getElementById("moInterval").innerHTML = info;       
+          }
+        }
+
+        self.__sendXValue = function() {
+          self.context.myServer.sendXSensorValue(self.sensorName(), self.xValue);
+          if(self.runningMode()) {
+            // TODO: Don't send if value not changed
+            setTimeout(self.__sendXValue, 40); // Maximum of 25 times by second
+          }
+        }
         
+        self.onRun = function() {
+          self.runningMode(!self.runningMode());
+          if(self.runningMode()) {
+            if (window.DeviceOrientationEvent) {
+              console.log("Register events...");
+              self.__resetXValue();
+              window.addEventListener('deviceorientation', self.deviceOrientationHandler, false);
+              window.addEventListener('devicemotion', self.deviceMotionHandler, false);
+              self.__sendXValue();
+            }
+          } else {
+            console.log("Remove event listeners...");
+            window.removeEventListener('deviceorientation', self.deviceOrientationHandler, false);
+            window.removeEventListener('devicemotion', self.deviceMotionHandler, false);
+            // Send a "blank" value - TODO: Improve in order to notify that the sensor is no more working
+            self.__resetXValue();
+            self.__sendXValue();
+          }
+        }
       }
       
       // Model to manage the Video x-Sensor
       function VideoSensorTabViewModel(appContext) {
         var self = this;
         self.context = appContext; // The application context
+        self.sensorName = ko.observable("xVideo");
+
+  // <!-- http://techslides.com/object-detection-with-html5-getusermedia/ -->
+  // <!-- https://github.com/inspirit/jsfeat#readme -->
+  // <!-- http://trackingjs.com/ -->
+  // http://coding-robin.de/2013/07/22/train-your-own-opencv-haar-classifier.html
         
-        // TODO !
+        // Init
+        {
+          navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+        }
+        
+        self.onStart = function() {
+          if (navigator.getUserMedia) {
+            // Request to the navigator the access to the Video
+            navigator.getUserMedia({video: true}, self.handleVideo, self.videoAccessRefused);
+          }
+        }
+        
+        self.handleVideo = function(localMediaStream) {
+          //console.log("handleVideo... (" + localMediaStream + ")");
+          var video = document.querySelector("#xVideoSensorElement");
+          video.src = window.URL.createObjectURL(localMediaStream);
+          //console.log("... success");
+        }
+        
+        self.videoAccessRefused = function(err) {
+          console.log("Error: " + err);
+          alert(i18n.t("errors.videoSensorOffBecauseVideAccessRefused"));
+        }
       }
       
       // Model that manage the message log view
@@ -732,7 +898,7 @@
               self.ws.onmessage = function(evt) { self.__onWSMessage(evt); }
               self.ws.onerror = function(evt) { self.__onWSError(evt); };
             } catch(ex) {
-              console.log("Fail to open websocket to: '" + wsURI + "'");
+              console.log("Fail to create websocket for: '" + wsURI + "'");
               self.context.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
               self.__doWSReconnection();
             }
@@ -782,8 +948,37 @@
         }
         
         self.__doWSReconnection = function() {
-          self.ws = undefined;
+          self.__doWSClose();
+          //self.ws = undefined;
           setTimeout(self.initialize, 15000); // Run once in 15s
+        }
+ 
+        /** Close the websocket (if initialized) */
+        self.__doWSClose = function() {
+          if(self.ws != undefined) {
+            if(self.ws.readyState == 0 || self.ws.readyState == 1) { // CONNECTING or OPEN - See https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants
+              try {
+                self.ws.close();
+              } catch(ex) {
+                console.log("Fail to close the websocket - " + ex);
+              }
+            } // else: CLOSED or CLOSING => No need to close again
+            self.ws = undefined;
+          }
+        }
+
+        /** Send a message to the websocket (if opened) */
+        self.__doWSSend = function(message) {
+          if((self.ws != undefined) && (self.ws.readyState == 1)) { // OPEN
+            try {
+              self.ws.send(message);
+            } catch(ex) {
+              console.log("Fail to send a message - " + ex);
+              self.__doWSReconnection();
+            }
+          } else {
+            console.log("Can't send a message because the ws isn't initialized or isn't opened - " + message);
+          }
         }
 
 			  self.runScript = function(scriptCode, stopRunningScript) {
@@ -795,7 +990,7 @@
                 sFStop: stopRunningScript
             });
             // console.log("run - " + jsonMsg);
-            self.ws.send(jsonMsg);
+            self.__doWSSend(jsonMsg);
           } else {
             self.context.messageLogVM.addMessage(true, i18n.t("errors.cantRunScriptEV3ConnectionNok"));
           }
@@ -807,7 +1002,7 @@
                 act: "stopScript"
             });
             // console.log("stop - " + jsonMsg);
-            self.ws.send(jsonMsg);
+            self.__doWSSend(jsonMsg);
           } else {
             self.context.messageLogVM.addMessage(true, i18n.t("errors.cantStopScriptEV3ConnectionNok"));
           }
@@ -821,7 +1016,7 @@
                 xSnsVal: sensorValue
             });
             console.log("xSensorValue - " + jsonMsg);
-            self.ws.send(jsonMsg);
+            self.__doWSSend(jsonMsg);
           } else {
             // TODO error management
           }
