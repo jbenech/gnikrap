@@ -19,6 +19,7 @@
 -->
 <html>
   <head>
+    <meta charset="ISO-8859-1">
     <!-- Only for mobiles devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Other meta -->
@@ -39,12 +40,18 @@
     </style>
 
     <!-- Load libraries (Updated SEP2014) -->
-    <script src="lib/jquery-2.1.1/jquery.min.js"></script> <!-- JQuery used by bootstrap, bootbox, knockout (optional) and i18next -->
-    <script src="lib/bootstrap-3.2.0/js/bootstrap.js"></script> <!-- Bootstrap used by bootbox -->
-    <script src="lib/bootbox-4.3.0/bootbox.js"></script>
-    <script src="lib/knockout-3.2.0/knockout.min.js"></script>
-    <script src="lib/i18next-1.7.4/i18next.min.js"></script>
-    <script src="lib/ace-1.1.6.min/ace.js" type="text/javascript" charset="utf-8"></script>
+    <!-- TBD: Consider using AMD tools, eg. require.js (Drawback: don't work without http server (local dev mode) ?) -->
+    <script src="lib/miscellaneous/profiler.js" type="text/javascript"></script> <!-- No dependencies -->
+    <script src="lib/jsfeat-20140902/jsfeat-min.js" type="text/javascript"></script> <!-- No dependencies -->
+    <script src="lib/ace-1.1.6.min/ace.js" type="text/javascript" charset="utf-8"></script> <!-- No dependencies -->
+    <script src="lib/jquery-2.1.1/jquery.min.js"></script> <!-- No dependencies -->
+    
+    <script src="lib/bootstrap-3.2.0/js/bootstrap.js"></script> <!-- Depends on jQuery -->
+    <script src="lib/bootbox-4.3.0/bootbox.min.js"></script> <!-- Depends on bootstrap and jQuery -->
+    <script src="lib/knockout-3.2.0/knockout.min.js"></script> <!-- Depends on jQuery (optional, not mandatory) -->
+    <script src="lib/i18next-1.7.4/i18next.min.js"></script> <!-- Depends on jQuery -->
+    
+    <script src="app/main.js" type="text/javascript"></script> <!-- Depend on all the scripts before -->
   </head>
   <body>
     <!-- ############################################################ -->
@@ -80,6 +87,7 @@
               <div class="btn-group" role="group">
                 <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/></button>
                   <ul class="dropdown-menu" role="menu">
+                    <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li>
                     <li class="divider"></li>
                     <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.about">ABOUT</span></a></li>
                   </ul>
@@ -116,8 +124,8 @@
                     <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input> <!-- enable: configurationMode -->
                   </div>
                 </form>
-                <button class="btn btn-default btn-sm" data-bind="css: {active: configurationMode}, click: onConfigureKeyboard">
-                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="keyboardSensorTab.configure">CONFIGURE</span></button>
+                <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
+                  <!-- span class=" glyphicon glyphicon-th"></span --> <span class="i18n" data-i18n="keyboardSensorTab.start">START</span></button>
                 <button class="btn btn-default btn-sm" data-bind="click: onResetKeyboard">
                   <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="keyboardSensorTab.clear">CLEAR</span></button>
                 <button class="btn btn-default btn-sm" disabled="yes" data-bind="click: onLoadKeyboard">
@@ -144,10 +152,10 @@
                     <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input>
                   </div>
                 </form>
-                <button class="btn btn-default btn-sm" data-bind="css: {active: calibrationMode}, click: onCalibrate">
-                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="gyroSensorTab.calibrate">CALIBRATE</span></button>
-                <button class="btn btn-default btn-sm" data-bind="css: {active: runningMode}, click: onRun">
-                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="gyroSensorTab.run">RUN</span></button>
+                <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
+                  <!-- span class="glyphicon glyphicon-refresh"></span --> <span class="i18n" data-i18n="gyroSensorTab.start">START</span></button>
+                <button class="btn btn-default btn-sm" data-bind="click: onReset">
+                  <!-- span class="glyphicon glyphicon-cog"></span --> <span class="i18n" data-i18n="gyroSensorTab.reset">RESET</span></button>
               </div>
               <p>This is a Gyroscopic xSensor test</p>
               <table>
@@ -206,19 +214,20 @@
                     <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input>
                   </div>
                 </form>
-                <button class="btn btn-default btn-sm"> <!-- data-bind="click: onCalibrate"> -->
-                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="videoSensorTab.calibrate">CALIBRATE</span></button>
-                <button class="btn btn-default btn-sm" data-bind="click: onStart">
-                  <span class="glyphicon glyphicon-cog"></span> <span class="i18n" data-i18n="videoSensorTab.start">START</span></button>
+                <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
+                  <!-- span class="glyphicon glyphicon-facetime-video"></span --> <span class="i18n" data-i18n="videoSensorTab.start">START</span></button>
+                <div class="pull-right">
+                  <p class="navbar-text" data-bind="visible: isStarted" class="i18n" data-i18n="videoSensorTab.addPoints">CLICK_VIDEO_TO_ADD_POINTS</p>
+                  <p id="xVideoSensorPerf" class="navbar-text" data-bind="visible: isStarted, text: perfSummary"></p>
+                </div>
               </div>
 
-              <p>Before video</p>
-              <div class="embed-responsive embed-responsive-4by3">
-                <video class="embed-responsive-item" width=320 height=240 autoplay="true" id="xVideoSensorElement">
-                  Your browser does not support Video Tag. Please consider using browser supporting HTML5.
-                </video>
+              <div style="width: 640px; height: 480px; margin: 1px auto;">
+                <canvas id="xVideoSensorCanvas" width="640" height="480" data-bind="click: onCanvasClick"></canvas>
               </div>
-              <p>After video</p>
+              <p>After canvas</p>
+              <!-- Webcam isn't displayed - Used only for acquisition -->
+              <video id="xVideoSensorWebcam" width="640" height="480" style="display:none;"></video>
             </div>
           </div>
         </div>
@@ -287,7 +296,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title"><img src="/images/gnikrap.png"/> <strong>Gnikrap 0.3.0</strong></h3>
+            <h3 class="modal-title"><img src="images/gnikrap.png"/> <strong>Gnikrap 0.3.0</strong></h3>
           </div>
           <div class="modal-body">
             <p class="i18n" data-i18n="[html]aboutModal.gnikrapShortDescription">GNIKRAP_SHORT_DESCRIPTION</p>
@@ -315,780 +324,5 @@
         </div>
       </div>
     </div>
-
-
-    <!-- ############################################################ -->
-    <!-- ############################################################ -->
-		<script>
-		  // Model to manage the navigation bar actions
-		  function NavigationBarViewModel(appContext) {
-			  var self = this;
-        self.context = appContext; // The application context
-        self.workAreaItems = ko.observableArray();
-        
-        // Init
-        {
-          self.workAreaItems.push({
-            name: i18n.t("workArea.scriptEditorTab"),
-            tabId: "scriptEditorTab",
-            active: ko.observable(true)
-          });
-          self.workAreaItems.push({
-            name: i18n.t("workArea.keyboardSensorTab"),
-            tabId: "keyboardSensorTab",
-            active: ko.observable(false)
-          });
-          if(window.DeviceOrientationEvent) {
-            self.workAreaItems.push({
-              name: i18n.t("workArea.gyroSensorTab"),
-              tabId: "gyroSensorTab",
-              active: ko.observable(false)
-            });
-          } // else: Don't show Gyro, not supported by the browser
-          self.workAreaItems.push({
-            name: i18n.t("workArea.videoSensorTab"),
-            tabId: "videoSensorTab",
-            active: ko.observable(false)
-          });
-        }
-
-			  self.onRunScript = function() {
-          self.doRunScript(false);
-			  }
-
-        self.doRunScript = function(stopRunningScript) {
-				  var value = (self.context.scriptEditorTabVM != undefined ? self.context.scriptEditorTabVM.getValue() : null);
-
-          // Execute the script
-				  self.context.myServer.runScript(value, stopRunningScript);
-        }
-
-			  self.onStopScript = function() {
-				  self.context.myServer.stopScript();
-			  }
-
-        self.onDisplayAbout = function() {
-          $('#aboutModal').modal("show");
-        }
-
-        self.onShowWorkAreaItem = function(workAreaItem) {
-          // Set the active item in the model and on screen
-          var items = self.workAreaItems(); // return a regular array
-          for(var i = 0; i < items.length; i++) {
-            items[i].active(items[i].tabId == workAreaItem.tabId);
-            $("#" + items[i].tabId).toggleClass("active", items[i].active());
-          }
-        }
-		  }
-
-      // Model to manage the script editor tab
-      function ScriptEditorTabViewModel(appContext) {
-        var self = this;
-        self.context = appContext; // The application context
-			  self.editor = undefined;
-        self.scriptFilename = undefined;
-        
-			  // Init
-			  {
-				  self.editor = ace.edit("editor")
-			    self.editor.setTheme("ace/theme/chrome");
-			    self.editor.getSession().setMode("ace/mode/javascript");
-			  }
-
-			  self.onClearScript = function() {
-          bootbox.confirm(i18n.t("clearScriptModal.title"), function(result) {
-            if(result) {
-              self.__doClearScript();
-            }
-          });
-			  }
-
-        self.onLoadScript = function() {
-          self.context.manageScriptFilesVM.display();
-        }
-
-        self.loadScriptFile = function(filename) {
-          self.__setValue(i18n.t("miscellaneous.loadingScripWait", { "filename": filename }));
-          self.scriptFilename = undefined;
-          $.ajax({
-            url: "/rest/scriptfiles/" + filename,
-            success: function(data, status) {
-              var scriptFile = JSON.parse(data);
-              self.__setValue(scriptFile.content);
-              if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
-                self.scriptFilename = filename;
-              }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-              // XMLHttpRequest.status: HTTP response code
-              self.context.messageLogVM.addMessage(true, i18n.t("errors.cantLoadScriptFile",
-                { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
-            }
-          });
-        }
-
-        self.onSaveScript = function() {
-          bootbox.prompt({
-            title: i18n.t('saveScriptModal.title'),
-            value: (self.scriptFilename == undefined ? "" : self.scriptFilename),
-            callback: function(result) {
-              if ((result != null) && (result.trim().lenght != 0)) {
-                var filename = result.trim();
-                console.log("Save script: '" + filename + "'");
-                $.ajax({
-                  url: "/rest/scriptfiles/" + filename,
-                  content: "application/json",
-                  data:  JSON.stringify({
-                    name: filename,
-                    content: self.editor.getValue()
-                  }),
-                  type: "PUT",
-                  success: function(data, status) {
-                    self.scriptFilename = filename;
-                    self.context.messageLogVM.addMessage(false, i18n.t("miscellaneous.scriptSuccessfullySaved", {"filename": filename }));
-                  },
-                  error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    self.context.messageLogVM.addMessage(true, i18n.t("errors.cantSaveScriptFile",
-                      { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
-                  }
-                });
-              } // else: cancel clicked
-            }
-          });
-        }
-        
-			  this.getValue = function() {
-				  return self.editor.getValue();
-			  }
-
-        this.doResize = function() {
-          var h = window.innerHeight;
-          $('#editor').css('height', Math.max(350, h - (100 + 10)).toString() + 'px'); // 100 should be synchronized with body.padding-top and buttonbar
-        };
-        
-        this.__doClearScript = function() {
-          self.__setValue("");
-        }
-        
-        this.__setValue = function(value) {
-          self.editor.setValue(value);
-          self.editor.moveCursorTo(0, 0);
-        }
-      }
-
-      // Model to manage the keyboard x-Sensor
-      function KeyboardSensorTabViewModel(appContext) {
-        var self = this;
-        self.context = appContext; // The application context
-        // Data for the View
-        {
-          self.buttons = [];
-          self.configurationMode = ko.observable(true);
-          self.sensorName = ko.observable("xTouch");
-        }
-        
-        // Init
-        {
-          for(var i = 0; i < 4; i++) {
-            self.buttons[i] = [];
-            for(var j = 0; j < 6; j++) {
-              self.buttons[i].push({
-                name: ko.observable(""),
-                actions: [],
-                isDisabled: ko.observable(false),
-                isPressed: false,
-                onKeyboardTouch: function(btn) {
-                  self.__doOnKeyboardTouch(btn);
-                },
-                onPressed: function(btn) {
-                  btn.isPressed = true;
-                  self.__doNotifyStateChanged(btn);
-                },
-                onRelease: function(btn) {
-                  if(btn.isPressed) {
-                    btn.isPressed = false;
-                    self.__doNotifyStateChanged(btn);
-                  } // else, useless event
-                }
-              });
-            }
-          }
-        }
-
-        self.onConfigureKeyboard = function() {
-          self.configurationMode(!self.configurationMode());
-          
-          // Switch the button status according to the mode & button content
-          self.buttons.forEach(function(e0) {
-            e0.forEach(function(e1) {
-              e1.isDisabled(!self.configurationMode() && (e1.name().length == 0));
-              e1.isPressed = false;
-            })
-          });
-        }
-        
-        self.__doOnKeyboardTouch = function(btn) {
-          if(self.configurationMode()) {
-            bootbox.prompt({
-              title: i18n.t('configureKeyboardButtonModal.title'),
-              value: btn.name(),
-              callback: function(result) {
-                if (result != null) {
-                  btn.actions = self.__splitNameToActions(result);
-                  btn.name(self.__buildNameFromActions(btn.actions));
-                } // Cancel clicked
-              }
-            });
-          }
-        }
-        
-        self.__splitNameToActions = function(name) {
-          return name.trim().split(",")
-            .map(function(e) { return e.trim(); })
-            .filter(function(e) { return e.length > 0 });
-        }
-        
-        self.__buildNameFromActions = function(actions) {
-          return actions.reduce(function(val, elt) { 
-                    return (val.length == 0 ? val : val + ", ") + elt;
-                  }, "");
-        }
-        
-        self.__doNotifyStateChanged = function() {
-          if(self.configurationMode() == false) {
-            // Notify the list of actions triggered
-            var xValue = {
-              buttons: {}
-            };
-            self.buttons.forEach(function(e0) {
-              e0.forEach(function(e1) {
-                if(e1.isPressed) {
-                  e1.actions.forEach(function (a) {
-                    var btn = xValue.buttons[a];
-                    xValue.buttons[a] = (btn == undefined ? 1 : btn + 1);
-                  });
-                  // Array.prototype.push.apply(xValue.buttons, e1.actions);
-                }
-              })
-            });
-            self.context.myServer.sendXSensorValue(self.sensorName(), xValue);
-          }
-        }
-                
-        self.onResetKeyboard = function() {
-          bootbox.confirm(i18n.t("resetKeyboardModal.title"), function(result) {
-            if(result) {
-              self.__doResetKeyboard();
-            }
-          });
-        }
-
-        self.__doResetKeyboard = function() {
-          self.buttons.forEach(function(e0) {
-            e0.forEach(function(e1) {
-              e1.name("");
-              e1.actions = [];
-              e1.isDisabled(false);
-              e1.isPressed = false;
-            });
-          });
-        }
-        
-        self.onLoadKeyboard = function() {
-          // TODO: Reuse the dialog for the script ?
-          console.log("TODO: onLoadKeyboard");
-        }
-        
-        self.onSaveKeyboard = function() {
-          // TODO: Save subset of buttons as a json
-          console.log("TODO: onSaveKeyboard");
-        }
-        
-        self.doResize = function() {
-          var h = window.innerHeight;
-          $('.xkeyboard-touch').css('height', Math.round(Math.max(30, h - 100) / 4).toString() + 'px');
-        }
-      }
-      
-      // Model to manage the Gyroscope x-Sensor
-      function GyroscopeSensorTabViewModel(appContext) {
-        var self = this;
-        self.context = appContext; // The application context
-        self.sensorName = ko.observable("xGyro");
-        self.calibrationMode = ko.observable(true);
-        self.runningMode = ko.observable(false);
-        
-        // Init
-        {
-          // Is device orientation supported
-          if(window.DeviceOrientationEvent) {
-            // TODO
-            document.getElementById("doEvent").innerHTML = "DeviceOrientation";
-          } else {
-            // Should not be possible to be here if not allowed (should have already been checked while adding tabs)
-            console.log("Device orientation not supported !");
-          }
-        }
-
-        self.__resetXValue = function() {
-          // EV3 sensor values: angle ° and rate in °/s
-          self.xValue = {
-            x: { angle: 0, rate: 0},
-            y: { angle: 0, rate: 0},
-            z: { angle: 0, rate: 0}
-          }
-        }
-        
-        self.onCalibrate = function() {
-          // TODO: Set position for the "zero" ?
-          console.log("onCalibrate");
-        }
-        
-        self.deviceOrientationHandler = function(eventData) {
-          self.xValue.x.angle = eventData.beta;
-          self.xValue.y.angle = eventData.gamma;
-          self.xValue.z.angle = eventData.alpha;
-
-          {
-            console.log("deviceOrientationHandler...");
-            // gamma is the left-to-right tilt in degrees, where right is positive
-            var tiltLR = eventData.gamma;
-            // beta is the front-to-back tilt in degrees, where front is positive
-            var tiltFB = eventData.beta;
-            // alpha is the compass direction the device is facing in degrees
-            var dir = eventData.alpha
-            
-            // call our orientation event handler
-            document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
-            document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
-            document.getElementById("doDirection").innerHTML = Math.round(dir);
-
-            // Apply the transform to the image
-            var logo = document.getElementById("imgLogo");
-            logo.style.webkitTransform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
-            logo.style.MozTransform = "rotate("+ tiltLR +"deg)";
-            logo.style.transform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
-          }
-        }
-
-        function deviceMotionHandler(eventData) {
-          var acceleration = eventData.acceleration; // can be undefined with some hardware
-          if(acceleration == undefined) {
-            acceleration = eventData.accelerationIncludingGravity;
-          }
-          self.xValue.x.rate = acceleration.x;
-          self.xValue.y.rate = acceleration.y;
-          self.xValue.z.rate = acceleration.z;
-
-          {
-            var info, xyz = "[X, Y, Z]";
-
-            // Grab the acceleration from the results
-            info = xyz.replace("X", acceleration.x);
-            info = info.replace("Y", acceleration.y);
-            info = info.replace("Z", acceleration.z);
-            document.getElementById("moAccel").innerHTML = info;
-
-            // Grab the acceleration including gravity from the results
-            acceleration = eventData.accelerationIncludingGravity;
-            info = xyz.replace("X", acceleration.x);
-            info = info.replace("Y", acceleration.y);
-            info = info.replace("Z", acceleration.z);
-            document.getElementById("moAccelGrav").innerHTML = info;
-
-            // Grab the rotation rate from the results
-            var rotation = eventData.rotationRate;
-            info = xyz.replace("X", rotation.alpha);
-            info = info.replace("Y", rotation.beta);
-            info = info.replace("Z", rotation.gamma);
-            document.getElementById("moRotation").innerHTML = info;
-
-            // // Grab the refresh interval from the results
-            info = eventData.interval;
-            document.getElementById("moInterval").innerHTML = info;       
-          }
-        }
-
-        self.__sendXValue = function() {
-          self.context.myServer.sendXSensorValue(self.sensorName(), self.xValue);
-          if(self.runningMode()) {
-            // TODO: Don't send if value not changed
-            setTimeout(self.__sendXValue, 40); // Maximum of 25 times by second
-          }
-        }
-        
-        self.onRun = function() {
-          self.runningMode(!self.runningMode());
-          if(self.runningMode()) {
-            if (window.DeviceOrientationEvent) {
-              console.log("Register events...");
-              self.__resetXValue();
-              window.addEventListener('deviceorientation', self.deviceOrientationHandler, false);
-              window.addEventListener('devicemotion', self.deviceMotionHandler, false);
-              self.__sendXValue();
-            }
-          } else {
-            console.log("Remove event listeners...");
-            window.removeEventListener('deviceorientation', self.deviceOrientationHandler, false);
-            window.removeEventListener('devicemotion', self.deviceMotionHandler, false);
-            // Send a "blank" value - TODO: Improve in order to notify that the sensor is no more working
-            self.__resetXValue();
-            self.__sendXValue();
-          }
-        }
-      }
-      
-      // Model to manage the Video x-Sensor
-      function VideoSensorTabViewModel(appContext) {
-        var self = this;
-        self.context = appContext; // The application context
-        self.sensorName = ko.observable("xVideo");
-
-  // <!-- http://techslides.com/object-detection-with-html5-getusermedia/ -->
-  // <!-- https://github.com/inspirit/jsfeat#readme -->
-  // <!-- http://trackingjs.com/ -->
-  // http://coding-robin.de/2013/07/22/train-your-own-opencv-haar-classifier.html
-        
-        // Init
-        {
-          navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
-        }
-        
-        self.onStart = function() {
-          if (navigator.getUserMedia) {
-            // Request to the navigator the access to the Video
-            navigator.getUserMedia({video: true}, self.handleVideo, self.videoAccessRefused);
-          }
-        }
-        
-        self.handleVideo = function(localMediaStream) {
-          //console.log("handleVideo... (" + localMediaStream + ")");
-          var video = document.querySelector("#xVideoSensorElement");
-          video.src = window.URL.createObjectURL(localMediaStream);
-          //console.log("... success");
-        }
-        
-        self.videoAccessRefused = function(err) {
-          console.log("Error: " + err);
-          alert(i18n.t("errors.videoSensorOffBecauseVideAccessRefused"));
-        }
-      }
-      
-      // Model that manage the message log view
-      function MessageLogViewModel(appContext) { // appContext not used for MessageLog
-        var self = this;
-        self.messages = ko.observableArray();
-        self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
-        self.keepOnlyLastMessage = ko.observable(true);
-        
-        self.addMessage = function(isError, message) {
-          //console.log("new message: " + isError + " / " + message);
-          function doAddMessage(isError, message, count) {
-            self.messages.unshift({
-              "time": new Date().toLocaleTimeString(),
-              "isError": isError,
-              "cssClazz":  (isError ? "list-group-item-danger" : "list-group-item-info"),
-              "text": message,
-              "count": count
-            });
-
-            if(self.keepOnlyLastMessage()) {
-              self.messages.splice(15); // Keep the first n messages
-            }
-          }
-
-          // Manage the message count
-          var m0 = (self.messages().length > 0 ? self.messages()[0] : undefined);
-          if((m0 != undefined) && (m0.isError == isError) && (m0.text == message)) {
-            self.messages.shift();
-            doAddMessage(isError, message, m0.count + 1);
-          } else {
-            doAddMessage(isError, message, 1);
-          }
-        }
-
-        self.onResetMessages = function() {
-          self.messages.removeAll();
-        }
-
-        self.onKeepOnlyLastMessage = function() {
-          self.keepOnlyLastMessage(!self.keepOnlyLastMessage());
-        }
-      }
-      
-      // Model that manage the "load/manage scripts" dialog
-      function ManageScriptFilesViewModel(appContext) {
-        var self = this;
-        self.context = appContext; // The application context
-        self.files = ko.observableArray();
-
-        self.display = function() {
-          self.doRefreshFileList();
-          $('#manageScriptFilesModal').modal('show');
-        }
-
-        self.hide = function() {
-          $('#manageScriptFilesModal').modal('hide');
-        }
-
-        self.doRefreshFileList = function() {
-          // Retrieve the list from the server
-          self.files.removeAll();
-          $.ajax({
-            url: "/rest/scriptfiles/",
-            success: function(data, status) {
-              var scriptFiles = JSON.parse(data);
-              for(var i = 0; i < scriptFiles.length; i++) {
-                //console.log("Adding: " + scriptFiles[i]);
-                scriptFiles[i].isReadWrite = (scriptFiles[i].name.indexOf("__") != 0);
-                self.files.push(scriptFiles[i]);
-              }
-              $("#manageScriptFilesModal .i18n").i18n(); // DOM generated by Knockout isn't i18n => Need to re-translate the modal
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-              // XMLHttpRequest.status: HTTP response code
-              self.context.messageLogVM.addMessage(true, i18n.t("errors.cantRetrieveListOfScriptFiles",
-                { causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
-              self.hide();
-            }
-          });
-        }
-
-        self.onLoadScript = function(file) {
-          self.hide();
-          self.context.scriptEditorTabVM.loadScriptFile(file.name);
-        }
-
-        self.onDeleteScript = function(file) {
-          bootbox.confirm(i18n.t("miscellaneous.confirmScriptFileDeletion", { filename: file.name }), function(result) {
-            if(result) {
-              self.files.remove(file);
-              $.ajax({
-                url: "/rest/scriptfiles/" + file.name,
-                type: "DELETE",
-                success: function(data, status) {
-                  console.log("Script file: '" + file.name + "' successfully deleted");
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                  // XMLHttpRequest.status: HTTP response code
-                  alert(i18n.t("errors.cantDeleteScriptFile",
-                      { filename: result, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
-                  self.doRefreshList();
-                }
-              });
-            } // else cancel
-          });
-        }
-      }
-
-      // Manage the interaction with the server on the EV3 brick
-		  function MyServer(appContext) {
-			  var self = this;
-        self.context = appContext; // The application context
-        self.ws = undefined; // undefined <=> no connection with the EV3 brick
-
-			  // Init
-			  self.initialize = function() {
-				  if ("WebSocket" in window) {
-            var wsURI = "ws://" + location.host + "/ws/gnikrap/script";
-            try {
-              self.ws = new WebSocket(wsURI);
-              self.ws.onopen = function(evt) { self.__onWSOpen(evt) };
-              self.ws.onclose = function(evt) { self.__onWSClose(evt) };
-              self.ws.onmessage = function(evt) { self.__onWSMessage(evt); }
-              self.ws.onerror = function(evt) { self.__onWSError(evt); };
-            } catch(ex) {
-              console.log("Fail to create websocket for: '" + wsURI + "'");
-              self.context.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionFailed", {cansedBy: ex}));
-              self.__doWSReconnection();
-            }
-				  }
-				  else {
-            self.context.messageLogVM.addMessage(true, i18n.t("errors.websocketNotSupported"));
-				  }
-			  }
-
-			  self.__onWSOpen = function(evt) {
-          self.context.messageLogVM.addMessage(false, i18n.t("miscellaneous.ev3ConnectionOk"));
-        }
-
-			  self.__onWSMessage = function(evt) {
-	        var received_msg = evt.data;
-          var received_data = JSON.parse(received_msg);
-          var msgType = received_data.msgTyp;
-	        console.log("Message received: " + received_msg);
-
-          if(msgType == "ScriptException" || msgType == "Exception") {
-            if(received_data.code == "SCRIPT_ALREADY_RUNNING") {
-              // Ask confirmation in order to stop the script
-              bootbox.confirm(i18n.t("miscellaneous.confirmStopScriptAlreadyRunning"), function(result) {
-                if(result) {
-                  self.context.navigationBarVM.doRunScript(true);
-                } // else cancel
-              });
-            }
-            else {
-              self.context.messageLogVM.addMessage(true, i18n.t("server.errors." + received_data.code, received_data.params));
-            }
-          } else if(msgType == "InfoCoded") {
-            self.context.messageLogVM.addMessage(false, i18n.t("server.messages." + received_data.code, received_data.params));
-          } else {
-            // Default: Assume this is a text message
-            self.context.messageLogVM.addMessage(false, received_data.txt);
-          }
-			  }
-
-			  self.__onWSClose = function(evt) {
-          self.context.messageLogVM.addMessage(true, i18n.t("errors.ev3ConnectionNok"));
-          self.__doWSReconnection();
-        }
-        
-        self.__onWSError = function(evt) {
-          // Does nothing, onError seems redundant with onClose, see http://www.w3.org/TR/websockets/#feedback-from-the-protocol
-        }
-        
-        self.__doWSReconnection = function() {
-          self.__doWSClose();
-          //self.ws = undefined;
-          setTimeout(self.initialize, 15000); // Run once in 15s
-        }
- 
-        /** Close the websocket (if initialized) */
-        self.__doWSClose = function() {
-          if(self.ws != undefined) {
-            if(self.ws.readyState == 0 || self.ws.readyState == 1) { // CONNECTING or OPEN - See https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants
-              try {
-                self.ws.close();
-              } catch(ex) {
-                console.log("Fail to close the websocket - " + ex);
-              }
-            } // else: CLOSED or CLOSING => No need to close again
-            self.ws = undefined;
-          }
-        }
-
-        /** Send a message to the websocket (if opened) */
-        self.__doWSSend = function(message) {
-          if((self.ws != undefined) && (self.ws.readyState == 1)) { // OPEN
-            try {
-              self.ws.send(message);
-            } catch(ex) {
-              console.log("Fail to send a message - " + ex);
-              self.__doWSReconnection();
-            }
-          } else {
-            console.log("Can't send a message because the ws isn't initialized or isn't opened - " + message);
-          }
-        }
-
-			  self.runScript = function(scriptCode, stopRunningScript) {
-          if(self.ws != undefined) {
-            var jsonMsg = JSON.stringify({
-                act: "runScript",
-                sLang: "javascript",
-                sText: scriptCode,
-                sFStop: stopRunningScript
-            });
-            // console.log("run - " + jsonMsg);
-            self.__doWSSend(jsonMsg);
-          } else {
-            self.context.messageLogVM.addMessage(true, i18n.t("errors.cantRunScriptEV3ConnectionNok"));
-          }
-			  }
-
-        self.stopScript = function() {
-          if(self.ws != undefined) {
-            var jsonMsg = JSON.stringify({
-                act: "stopScript"
-            });
-            // console.log("stop - " + jsonMsg);
-            self.__doWSSend(jsonMsg);
-          } else {
-            self.context.messageLogVM.addMessage(true, i18n.t("errors.cantStopScriptEV3ConnectionNok"));
-          }
-        }
-        
-        self.sendXSensorValue = function(sensorName, sensorValue) {
-          if(self.ws != undefined) {
-            var jsonMsg = JSON.stringify({
-                act: "setXSnsValue",
-                xSnsName: sensorName,
-                xSnsVal: sensorValue
-            });
-            console.log("xSensorValue - " + jsonMsg);
-            self.__doWSSend(jsonMsg);
-          } else {
-            // TODO error management
-          }
-        }
-		  }
-
-
-      /////////////////////////////
-      // Knockout speciifc bingings
-
-      // Binding used for enabling/disabling the bootstrap buttons
-      ko.bindingHandlers.disabled = {
-        update: function (element, valueAccessor) {
-          var valueUnwrapped = ko.unwrap(valueAccessor());
-          if(valueUnwrapped) {
-            $(element).attr("disabled", "true");
-          } else {
-            $(element).removeAttr("disabled");
-          }
-        }
-      }
-
-
-      /////////////////////////////////////////
-		  // Initialization while document is ready
-      var context = {}; // The application context - used for sort of basic dependency-injection
-      
-      $(document).ready(function() {
-        // Translation
-        var language_complete = navigator.language.split("-");
-        var language = (language_complete[0]);
-
-        i18n.init({ fallbackLng: 'en', lng: language }, function() {
-          $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
-          //console.log("Current language used: " + i18n.lng());
-
-          // Objects and 'ViewModel/VM' instantiation
-          context.myServer = new MyServer(context);
-          context.navigationBarVM = new NavigationBarViewModel(context);
-          context.messageLogVM = new MessageLogViewModel(context);
-          // Tabs
-          context.scriptEditorTabVM = new ScriptEditorTabViewModel(context);
-          context.keyboardSensorTabVM = new KeyboardSensorTabViewModel(context);
-          context.gyroscopeSensorTabVM = new GyroscopeSensorTabViewModel(context);
-          context.videoSensorTabVM = new VideoSensorTabViewModel(context);
-          // Dialogs
-          context.manageScriptFilesVM = new ManageScriptFilesViewModel(context);
-
-          // Knockout bindings
-          ko.applyBindings(context.navigationBarVM, $("#navigationBar")[0]);
-          ko.applyBindings(context.messageLogVM, $("#messageLog")[0]);
-          // Tabs
-          ko.applyBindings(context.scriptEditorTabVM, $("#scriptEditorTab")[0]);
-          ko.applyBindings(context.keyboardSensorTabVM, $("#keyboardSensorTab")[0]);
-          ko.applyBindings(context.gyroscopeSensorTabVM, $("#gyroSensorTab")[0]);
-          ko.applyBindings(context.videoSensorTabVM, $("#videoSensorTab")[0]);
-          // Dialogs
-          ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
-          
-          // Other initialization
-          context.myServer.initialize(); // WS connexion with the server
-          context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
-          
-          // Register windows events for editor auto-resize
-          $(window).on('resize', function () {
-              context.scriptEditorTabVM.doResize();
-              context.keyboardSensorTabVM.doResize();
-          });
-          $(window).resize();
-        });
-        // i18n.setLng('en-US', function(t) { /* loading done */ });
-      });
-		</script>
   </body>
 </html>

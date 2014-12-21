@@ -19,7 +19,7 @@
 
   "messageLog": {
     "clear": "Clear",
-    "keepLast": "Last messages only"
+    "keepLast": "Keep last messages only"
   },
   
   "scriptEditorTab": {
@@ -30,18 +30,23 @@
 
   "keyboardSensorTab": {
     "sensorName": "Name",
-    "configure": "Configure",
+    "start": "Start",
     "clear": "Clear",
     "loadAndManage": "Load/Manage",
     "save": "Save"
   },
   
   "gyroSensorTab": {
-    "calibrate": "Calibrate"
+    "start": "Start",
+    "reset": "Reset origin"
+  },
+  
+  "videoSensorTab": {
+    "start": "Start",
+    "addPoints": "Click on the video to add points to track"
   },
   
   "manageScriptFilesModal": {
-    "@comment": "The manage scripts modal",
     "title": "Manage script files",
     "c1": {
       "title": "Filename"
@@ -55,12 +60,10 @@
   },
   
   "saveScriptModal": {
-    "@comment": "The save script 'Dialog'",
     "title": "Save the script with the following name:"
   },
   
   "clearScriptModal": {
-    "@comment": "The clear script 'Dialog'",
     "title": "Are you sure to clear the current script ?"
   },
   
@@ -72,8 +75,11 @@
     "title": "Are you sure to clear the current xTouch configuration ?"
   },
   
+  "configureTrackedPointNameModal": {
+    "title": "Enter the name of the point to track"
+  },
+  
   "aboutModal": {
-    "@comment": "The about modal",
     "gnikrapShortDescription": "<a href=\"https://github.com/jbenech/gnikrap\" target=\"_blank\">Gnikrap</a> is a simple scripting environment for the <a href=\"http://www.lego.com/mindstorms/\" target=\"_blank\">Lego Mindstrom EV3</a>.",
     "softwareUsed": "This software has been made possible by using several open-source software:",
     "gnikrapLicence": "Licence (full text of the <a href=\"licence-lgpl-3.0.txt\" target=\"_blank\">GPL v3</a> licence):",
@@ -101,13 +107,14 @@
     "@comment": "All the error messages",
     "cantSaveScriptFile": "Can't save '__filename__' script file. [__causedBy__]",
     "cantLoadScriptFile": "Can't load '__filename__' script file. [__causedBy__]",
-    "cantRetrieveListOfScriptFiles": "Can't retrieve the list of files. [__cansedBy__]",
+    "cantRetrieveListOfScriptFiles": "Can't retrieve the list of files. [__causedBy__]",
     "cantDeleteScriptFile": "Can't delete '__filename__' script file. [__causedBy__]",
     "webSocketNotSupported": "WebSocket not supported by your Browser. Please try with a recent version of your browser. If not possible, please consider installing Firefox.",
     "ev3ConnectionFailed": "EV3 Brick connection failed. Connection will be retried in a few seconds. [__causedBy__]",
     "ev3ConnectionNok": "EV3 Brick connection closed by the EV3 brick. Connection will be retried in a few seconds.",
     "cantRunScriptEV3ConnectionNok": "Can't execute the script, the connection with the EV3 brick is down",
-    "cantStopScriptEV3ConnectionNok": "Can't stop the script, the connection with the EV3 brick is down"
+    "cantStopScriptEV3ConnectionNok": "Can't stop the script, the connection with the EV3 brick is down",
+    "maximumTrackedPointsReached": "The maximum number of point to track (__number__) has been reached"
   },
   
   "miscellaneous": {
