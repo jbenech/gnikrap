@@ -217,7 +217,7 @@
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
                   <!-- span class="glyphicon glyphicon-facetime-video"></span --> <span class="i18n" data-i18n="videoSensorTab.start">START</span></button>
                 <div class="pull-right">
-                  <p class="navbar-text" data-bind="visible: isStarted" class="i18n" data-i18n="videoSensorTab.addPoints">CLICK_VIDEO_TO_ADD_POINTS</p>
+                  <p class="navbar-text" data-bind="visible: isStarted"><span class="i18n" data-i18n="videoSensorTab.addPoints">CLICK_VIDEO_TO_ADD_POINTS</span></p>
                   <p id="xVideoSensorPerf" class="navbar-text" data-bind="visible: isStarted, text: perfSummary"></p>
                 </div>
               </div>
@@ -225,7 +225,6 @@
               <div style="width: 640px; height: 480px; margin: 1px auto;">
                 <canvas id="xVideoSensorCanvas" width="640" height="480" data-bind="click: onCanvasClick"></canvas>
               </div>
-              <p>After canvas</p>
               <!-- Webcam isn't displayed - Used only for acquisition -->
               <video id="xVideoSensorWebcam" width="640" height="480" style="display:none;"></video>
             </div>
