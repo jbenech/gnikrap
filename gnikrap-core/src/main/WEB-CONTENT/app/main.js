@@ -161,9 +161,8 @@ function ScriptEditorTabViewModel(appContext) {
     return self.editor.getValue();
   }
 
-  this.doResize = function() {
-    var h = window.innerHeight;
-    $('#editor').css('height', Math.max(350, h - (100 + 10)).toString() + 'px'); // 100 should be synchronized with body.padding-top and buttonbar
+  this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
+    $('#editor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
   };
 
   this.__doClearScript = function() {
@@ -310,9 +309,8 @@ function KeyboardSensorTabViewModel(appContext) {
     console.log("TODO: onSaveKeyboard");
   }
 
-  self.doResize = function() {
-    var h = window.innerHeight;
-    $('.xkeyboard-touch').css('height', Math.round(Math.max(30, h - 100) / 4).toString() + 'px');
+  self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
+    $('.xkeyboard-touch').css('height', Math.round(Math.max(30, usefullWorkAreaHeight - 10) / 4).toString() + 'px');
   }
 }
 
@@ -327,10 +325,16 @@ function GyroscopeSensorTabViewModel(appContext) {
 
   // Init
   {
+    self.xAxisValue = ko.observable("");
+    self.yAxisValue = ko.observable("");
+    self.zAxisValue = ko.observable("");
+    self.xAxisValue.extend({ rateLimit: 200 }); // Accept lower refresh rate
+    self.yAxisValue.extend({ rateLimit: 200 }); // Accept lower refresh rate
+    self.zAxisValue.extend({ rateLimit: 200 }); // Accept lower refresh rate
+
     // Is device orientation supported
     if(window.DeviceOrientationEvent) {
-      // TODO
-      document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+      // TODO ?
     } else {
       // Should not be possible to be here if not allowed (should have already been checked while adding tabs)
       console.log("Device orientation not supported !");
@@ -364,13 +368,6 @@ function GyroscopeSensorTabViewModel(appContext) {
       var tiltLR = eventData.gamma;
       // beta is the front-to-back tilt in degrees, where front is positive
       var tiltFB = eventData.beta;
-      // alpha is the compass direction the device is facing in degrees
-      var dir = eventData.alpha
-
-      // call our orientation event handler
-      document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
-      document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
-      document.getElementById("doDirection").innerHTML = Math.round(dir);
 
       // Apply the transform to the image
       var logo = document.getElementById("imgLogo");
@@ -385,43 +382,21 @@ function GyroscopeSensorTabViewModel(appContext) {
     if(acceleration == undefined) {
       acceleration = eventData.accelerationIncludingGravity;
     }
-    self.xValue.x.rate = acceleration.x;
-    self.xValue.y.rate = acceleration.y;
-    self.xValue.z.rate = acceleration.z;
-    self.__sendXValue();
-
-    {
-      var info, xyz = "[X, Y, Z]";
-
-      // Grab the acceleration from the results
-      info = xyz.replace("X", acceleration.x);
-      info = info.replace("Y", acceleration.y);
-      info = info.replace("Z", acceleration.z);
-      document.getElementById("moAccel").innerHTML = info;
-
-      // Grab the acceleration including gravity from the results
-      acceleration = eventData.accelerationIncludingGravity;
-      info = xyz.replace("X", acceleration.x);
-      info = info.replace("Y", acceleration.y);
-      info = info.replace("Z", acceleration.z);
-      document.getElementById("moAccelGrav").innerHTML = info;
-
-      // Grab the rotation rate from the results
-      var rotation = eventData.rotationRate;
-      info = xyz.replace("X", rotation.alpha);
-      info = info.replace("Y", rotation.beta);
-      info = info.replace("Z", rotation.gamma);
-      document.getElementById("moRotation").innerHTML = info;
-
-      // // Grab the refresh interval from the results
-      info = eventData.interval;
-      document.getElementById("moInterval").innerHTML = info;
+    if(acceleration != undefined) {
+      self.xValue.x.rate = acceleration.x;
+      self.xValue.y.rate = acceleration.y;
+      self.xValue.z.rate = acceleration.z;
+      self.__sendXValue();
     }
   }
 
   self.__sendXValue = function() {
     self.xValue.isStarted = self.isStarted();
     self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), self.xValue);
+    // Also 'send' value to GUI
+    self.xAxisValue(JSON.stringify(self.xValue.x));
+    self.yAxisValue(JSON.stringify(self.xValue.y));
+    self.zAxisValue(JSON.stringify(self.xValue.z));
   }
 
   self.onStart = function() {
@@ -504,10 +479,15 @@ function PointTrackingComputationEngine(appContext) {
                               // pixels in a window; if this value is less than min_eigen_threshold, then a corresponding feature is filtered out and its flow is not
                               // processed, it allows to remove bad points and get a performance boost (default: 0.0001)
 
-    // Remove points no more found
+    self.__removeLostPoints();
+  }
+  
+  self.__removeLostPoints = function() {
     var n = self.points.number;
     var name = self.points.name;
     var status = self.points.status;
+    var curXY = self.points.currentXY;
+    var name = self.points.name;
     var j = 0; // New number of points
     for (var i = 0; i < n; i++) {
       if (status[i] == 1) { // Keep the point
@@ -518,7 +498,7 @@ function PointTrackingComputationEngine(appContext) {
         }
         j++;
       } else {
-        self.context.messageLogVM.addMessage(false, i18n.t("videoSensorTab.pointsNoMoreTracked", {"name": name[i] }));
+        self.context.messageLogVM.addMessage(true, i18n.t("videoSensorTab.pointsNoMoreTracked", {"name": name[i] }));
       }
     }
     self.points.number = j;
@@ -616,6 +596,7 @@ function VideoSensorTabViewModel(appContext) {
     self.canvasCtx.fillStyle = "rgb(0,255,127)";
     self.canvasCtx.strokeStyle = "rgb(0,255,127)";
     self.canvasCtx.textBaseline = "bottom";
+    self.canvasCtx.font = "bold 14px sans-serif";
     self.canvasCtx.lineWidth = 2;
   }
 
@@ -708,7 +689,8 @@ function MessageLogViewModel(appContext) { // appContext not used for MessageLog
   var self = this;
   self.messages = ko.observableArray();
   self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
-  self.keepOnlyLastMessage = ko.observable(true);
+  self.keepOnlyLastMessages = ko.observable(true);
+  self.MESSAGES_TO_KEEP = 15;
 
   self.addMessage = function(isError, message) {
     //console.log("new message: " + isError + " / " + message);
@@ -720,10 +702,7 @@ function MessageLogViewModel(appContext) { // appContext not used for MessageLog
         "text": message,
         "count": count
       });
-
-      if(self.keepOnlyLastMessage()) {
-        self.messages.splice(15); // Keep the first n messages
-      }
+      self.__doKeepOnlyLastMessages();
     }
 
     // Manage the message count
@@ -740,8 +719,20 @@ function MessageLogViewModel(appContext) { // appContext not used for MessageLog
     self.messages.removeAll();
   }
 
-  self.onKeepOnlyLastMessage = function() {
-    self.keepOnlyLastMessage(!self.keepOnlyLastMessage());
+  self.onKeepOnlyLastMessages = function() {
+    self.keepOnlyLastMessages(!self.keepOnlyLastMessages());
+    self.__doKeepOnlyLastMessages();
+  }
+  
+  self.__doKeepOnlyLastMessages = function() {
+    if(self.keepOnlyLastMessages()) {
+      self.messages.splice(self.MESSAGES_TO_KEEP); // Keep the first n messages
+    }
+  }
+  
+  self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
+    self.MESSAGES_TO_KEEP = Math.max(15, Math.round(usefullWorkAreaHeight/40)); // 40 is a bit more than the height of a single line message
+    self.__doKeepOnlyLastMessages();
   }
 }
 
@@ -967,6 +958,7 @@ function EV3BrickServer(appContext) {
     var jsonMsg = self.__buildXSensorMessage(sensorName, sensorValue);
     if(sensor == undefined) {
       self.xSensorStream.sensors[sensorName] = {
+        streamLifetime: 1, // Will be initiliazed at the right value in __doStreamXSensorValue
         lastJsonSent: undefined,
         currentJson: jsonMsg
       };
@@ -979,7 +971,7 @@ function EV3BrickServer(appContext) {
     }
     
     if((jsonMsg != undefined) && (self.xSensorStream.timeoutID == undefined)) {
-      self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, 30); // Maximum of 33/s
+      self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, 20); // No send planned => send rather quickly. Real "message rate" is done in __doStreamXSensorValue.
     }
   }
   
@@ -987,15 +979,27 @@ function EV3BrickServer(appContext) {
   self.__doStreamXSensorValue = function() {
     self.xSensorStream.timeoutID = undefined;
     if(self.ws != undefined) {
+      var messageSent = false;
       Object.keys(self.xSensorStream.sensors).forEach(function(sensorName) {
-          var sensor = self.xSensorStream.sensors[sensorName];
-          if(sensor.currentJson != undefined) {
-            console.log("send xSensorValue - " + sensor.currentJson);
-            self.__doWSSend(sensor.currentJson);
-            sensor.lastJsonSent = sensor.currentJson;
-            sensor.currentJson = undefined;
+        var sensor = self.xSensorStream.sensors[sensorName];
+        if(sensor.currentJson != undefined) {
+          console.log("send xSensorValue - " + sensor.currentJson);
+          messageSent = true;
+          self.__doWSSend(sensor.currentJson);
+          sensor.lastJsonSent = sensor.currentJson;
+          sensor.currentJson = undefined;
+          sensor.streamLifetime = 6000; // At least 4 minutes of lifetime (6000/60/25)
+        } else {
+          if(sensor.streamLifetime-- < 0) { // Stream no more used: remove it
+            console.log("Remove useless stream for sensor '" + sensorName + "'");
+            delete self.xSensorStream.sensors[sensorName];
           }
-        });
+        }
+      });
+      
+      if(messageSent) {
+        self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, 40); // About 25/sensor/s
+      }
     } else {
       // TODO error management - Reset the sensors ?
       //self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, 1000); // Retry later
@@ -1085,6 +1089,14 @@ ko.bindingHandlers.disabled = {
   }
 }
 
+// Needed because Knockout don't use addEventHandler, so the bootstrap lnf is disabled on button pressed
+ko.bindingHandlers.xTouch = {
+  update: function (element, valueAccessor) {
+    // TODO - See knockout events binding
+    // Bind: mousedown, mouseup, mouseout... maybe 'touch' event also
+  }
+}
+
 
 /////////////////////////
 // Check browser version
@@ -1137,8 +1149,11 @@ $(document).ready(function() {
 
     // Register windows events for editor auto-resize
     $(window).on('resize', function () {
-        context.scriptEditorTabVM.doResize();
-        context.keyboardSensorTabVM.doResize();
+      var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
+      var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
+      context.scriptEditorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);
+      context.keyboardSensorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);
+      context.messageLogVM.doResize(workAreaHeight, usefullWorkAreaHeight);
     });
     $(window).resize();
   });

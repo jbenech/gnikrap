@@ -118,10 +118,10 @@
             <!-- Keyboard sensor tab -->
             <div role="tabpanel" id="keyboardSensorTab" class="tab-pane">
               <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <form class="navbar-left" style="margin-right: 5px" role="form">
+                <form class="navbar-left" style="margin-right: 5px" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
-                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input> <!-- enable: configurationMode -->
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
@@ -142,76 +142,81 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Gyro sensor tab -->
             <div role="tabpanel" id="gyroSensorTab" class="tab-pane">
-              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <form class="navbar-left" style="margin-right: 5px" role="form">
+              <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
+                <form class="navbar-left" style="margin-right: 5px" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
-                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
                   <!-- span class="glyphicon glyphicon-refresh"></span --> <span class="i18n" data-i18n="gyroSensorTab.start">START</span></button>
                 <button class="btn btn-default btn-sm" data-bind="click: onReset">
                   <!-- span class="glyphicon glyphicon-cog"></span --> <span class="i18n" data-i18n="gyroSensorTab.reset">RESET</span></button>
-              </div>
-              <p>This is a Gyroscopic xSensor test</p>
-              <table>
-                <tr>
-                  <td>Event Supported</td>
-                  <td id="doEvent"></td>
-                </tr>
-                <tr>
-                  <td>Tilt Left/Right [gamma]</td>
-                  <td id="doTiltLR"></td>
-                </tr>
-                <tr>
-                  <td>Tilt Front/Back [beta]</td>
-                  <td id="doTiltFB"></td>
-                </tr>
-                <tr>
-                  <td>Direction [alpha]</td>
-                  <td id="doDirection"></td>
-                </tr>
-              </table>
-              <h2>Device Motion</h2>
-              <table>
-                <tr>
-                  <td>Event Supported</td>
-                  <td id="dmEvent"></td>
-                </tr>
-                <tr>
-                  <td>acceleration</td>
-                  <td id="moAccel"></td>
-                </tr>
-                <tr>
-                  <td>accelerationIncludingGravity</td>
-                  <td id="moAccelGrav"></td>
-                </tr>
-                <tr>
-                  <td>rotationRate</td>
-                  <td id="moRotation"></td>
-                </tr>
-                <tr>
-                  <td>interval</td>
-                  <td id="moInterval"></td>
-                </tr>
-              </table>
+              </nav>
 
-                <div class="container" style="perspective: 300;">
-                  <img src="http://www.html5rocks.com/en/tutorials/device/orientation/html5_logo.png" id="imgLogo" class="logo">
+              <div> <!-- Nest a bootstrap grid inside <=> 12 columns available -->
+                <div class="row">
+                  <div class="col-sm-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="170" height="110">
+                      <polyline points="70,50 140,50 120,65 50,65" style="fill: #aaaaaa;"></polyline>
+                      <polyline points="60,40 130,40 110,90 40,90" style="fill: #103BE7; fill-opacity: 0.9;"></polyline>
+                      <polyline points="50,65 120,65 100,80 30,80" style="fill: #aaaaaa; fill-opacity: 0.6;"></polyline>
+                      <line x1="0" y1="65" x2="170" y2="65" style="stroke:#FF0000; stroke-width: 3;""></line>
+                    <svg>
+                  </div>
+                  <div class="col-sm-9">
+                    <span class="i18n" data-i18n="gyroSensorTab.xAxis">X</span>
+                    <b><span data-bind="visible: isStarted, text: xAxisValue">{}</span></b>
+                  </div>
                 </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="170" height="110">
+                      <polyline points="110,50 145,60 95,90 60,80" style="fill: #aaaaaa;"></polyline>
+                      <polyline points="70,50 150,50 100,80 20,80" style="fill: #103BE7; fill-opacity: 0.9;"></polyline>
+                      <polyline points="75,40 110,50 60,80 25,70" style="fill: #aaaaaa; fill-opacity: 0.6;"></polyline>
+                      <line x1="145" y1="29" x2="30" y2="98" style="stroke:#FF0000; stroke-width: 4;"></line>
+                    <svg>
+                  </div>
+                  <div class="col-sm-9">
+                    <span class="i18n" data-i18n="gyroSensorTab.yAxis">Y</span></br>
+                    <b><span data-bind="visible: isStarted, text: yAxisValue">{}</span></b>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="170" height="110">
+                      <polyline points="70,50 150,50 100,80 20,80" style="fill: #103BE7; fill-opacity: 0.9;"></polyline>
+                      <polyline points="85,45 155,55 80,85 15,75" style="fill: #aaaaaa; fill-opacity: 0.6;"></polyline>
+                      <line x1="87.5" y1="29" x2="87.5" y2="98" style="stroke:#FF0000; stroke-width: 4;"></line>
+                    <svg>
+                  </div>
+                  <div class="col-sm-9">
+                    <p>
+                      <span class="i18n" data-i18n="gyroSensorTab.zAxis">Z</span></br>
+                      <b><span data-bind="visible: isStarted, text: zAxisValue">{}</span></b>
+                    </p>
+                    <p><i><span class="i18n text-small" data-i18n="gyroSensorTab.zAxisNote">NOT_ALL_DEVICES_SUPPORT_Z</span></i></p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="container" style="perspective: 300;">
+                <img src="http://www.html5rocks.com/en/tutorials/device/orientation/html5_logo.png" id="imgLogo" class="logo">
+              </div>
             </div>
 
             <!-- Video sensor tab -->
             <div role="tabpanel" id="videoSensorTab" class="tab-pane">
               <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <form class="navbar-left" style="margin-right: 5px" role="form">
+                <form class="navbar-left" style="margin-right: 5px" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
-                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName"></input>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
@@ -236,7 +241,7 @@
           <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
             <button class="btn btn-default btn-sm" data-bind="click: onResetMessages">
               <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="messageLog.clear">CLEAR</span></button>
-            <button class="btn btn-default btn-sm" data-bind="css: {active: keepOnlyLastMessage}, click: onKeepOnlyLastMessage">
+            <button class="btn btn-default btn-sm" data-bind="css: {active: keepOnlyLastMessages}, click: onKeepOnlyLastMessages">
               <span class="i18n" data-i18n="messageLog.keepLast">KEEP_LAST</span></button>
           </nav>
           <ul class="list-group" data-bind="foreach: messages" style="font-size:11px">
@@ -257,7 +262,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">CrossCloseButton</span></button>
-            <h4 class="modal-title" id="myModalLabel"><span class="i18n" data-i18n="manageScriptFilesModal.title">MANAGE_SCRIPTS</span></h4>
+            <h4 class="modal-title"><span class="i18n" data-i18n="manageScriptFilesModal.title">MANAGE_SCRIPTS</span></h4>
           </div>
           <div class="modal-body">
             <table class="table table-striped">
@@ -283,12 +288,31 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">
-              <span class="i18n" data-i18n="manageScriptFilesModal.cancel">CANCEL</span></button>
+              <span class="i18n" data-i18n="manageScriptFilesModal.close">CLOSE</span></button>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- ############################################################ -->
+    <!-- Settings modal -->
+    <div id="settingsModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">CrossCloseButton</span></button>
+            <h4 class="modal-title"><span class="i18n" data-i18n="settingsModal.title">SETTINGS</span></h4>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              <span class="i18n" data-i18n="settingsModal.cancel">CANCEL</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <!-- ############################################################ -->
     <!-- About modal -->
     <div id="aboutModal" class="modal fade">
@@ -307,6 +331,7 @@
               <li><a href="http://getbootstrap.com/" target="_blank" title="A sleek, intuitive, and powerful mobile first front-end framework for faster and easier web development - MIT License">Bootsrap</a></li>
               <li><a href="http://i18next.com/" target="_blank" title="A full-featured i18n javascript library for translating your webapplication - MIT license">i18next</a></li>
               <li><a href="http://jquery.com/" target="_blank" title="A fast, small, and feature-rich JavaScript library - MIT license">jQuery</a></li>
+              <li><a href="https://github.com/inspirit/jsfeat" target="_blank" title="A JavaScript Computer Vision library - MIT license">jsfeat</a></li>
               <li><a href="http://knockoutjs.com/" target="_blank" title="Simplify dynamic JavaScript UIs with the Model-View-View-Model (MVVM) pattern - MIT license">Knockout.</a></li>
               <li><a href="http://www.lejos.org/" target="_blank" title="Java for Lego Mindstorm - MPL? (not sure of the licence)">Lejos</a></li>
               <li><a href="https://github.com/ralfstx/minimal-json" target="_blank" title="A minimal, but complete JSON parser and writer for Java - Eclipse Public License">minimal-json</a></li>

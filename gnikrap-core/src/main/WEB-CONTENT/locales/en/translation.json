@@ -68,7 +68,11 @@
 
   "gyroSensorTab": {
     "start": "Start",
-    "reset": "Reset origin"
+    "reset": "Reset origin",
+    "xAxis": "x is the front-to-back tilt in degrees where front is positive (also known as 'beta')",
+    "yAxis": "y is the left-to-right tilt in degrees, where right is positive (also known as 'gamma')",
+    "zAxis": "z is is the compass direction the device is facing in degrees (also known as 'alpha')",
+    "zAxisNote": "Note: Some devices don't support compass. Some device don't returns the angle with the north, but a relative angle"
   },
 
 
@@ -100,7 +104,7 @@
     },
     "load": "Load",
     "delete": "Delete",
-    "cancel": "Cancel",
+    "close": "Close",
 
     "confirmScriptFileDeletion": "Confirm you really want to delete '__filename__' ?",
 
