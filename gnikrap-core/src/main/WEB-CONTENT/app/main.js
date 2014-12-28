@@ -69,6 +69,10 @@ function NavigationBarViewModel(appContext) {
   self.onDisplayAbout = function() {
     $('#aboutModal').modal("show");
   }
+  
+  self.onDisplaySettings = function() {
+    self.context.settingsVM.display();
+  }
 
   self.onShowWorkAreaItem = function(workAreaItem) {
     // Set the active item in the model and on screen
@@ -394,9 +398,9 @@ function GyroscopeSensorTabViewModel(appContext) {
     self.xValue.isStarted = self.isStarted();
     self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), self.xValue);
     // Also 'send' value to GUI
-    self.xAxisValue(JSON.stringify(self.xValue.x));
-    self.yAxisValue(JSON.stringify(self.xValue.y));
-    self.zAxisValue(JSON.stringify(self.xValue.z));
+    self.xAxisValue("x: " + JSON.stringify(self.xValue.x));
+    self.yAxisValue("y :" + JSON.stringify(self.xValue.y));
+    self.zAxisValue("z: " + JSON.stringify(self.xValue.z));
   }
 
   self.onStart = function() {
@@ -512,7 +516,7 @@ function PointTrackingComputationEngine(appContext) {
 
     for (var i = self.points.number - 1; i >= 0; i--) {
       var x = Math.round(curXY[i << 1]), y = Math.round(curXY[(i << 1) + 1]);
-      var txt = name[i] + " - {x: " + x + ", y: " + y + "}";
+      var txt = name[i] + ": {x: " + x + ", y: " + y + "}";
       var txtWidthOn2 = ctx.measureText(txt).width / 2;
 
       ctx.beginPath();
@@ -800,6 +804,33 @@ function ManageScriptFilesViewModel(appContext) {
       } // else cancel
     });
   }
+}
+
+
+// Model that manage the "Settings" dialog
+function SettingsViewModel(appContext) {
+  var self = this;
+  self.context = appContext; // The application context
+  self.language = ko.observable("");
+  
+  self.display = function() {
+    // Initialize the values
+    self.language(self.context.settings.language);
+
+    $('#settingsModal').modal('show');
+  }
+  
+  self.hide = function() {
+    $('#settingsModal').modal('hide');
+  }
+
+  self.onSave = function() {
+    self.hide();
+    
+    // TODO use events/signal to change settings
+    self.context.settings.language = self.language();
+    i18n.setLng(self.context.settings.language, function(t) { $(".i18n").i18n() });
+  }  
 }
 
 
@@ -1106,7 +1137,11 @@ ko.bindingHandlers.xTouch = {
 
 /////////////////////////////////////////
 // Initialization while document is ready
-var context = {}; // The application context - used for sort of basic dependency-injection
+var context = { // The application context - used for sort of basic dependency-injection
+  settings: {
+    language: undefined
+  }
+};
 
 $(document).ready(function() {
   // Translation
@@ -1115,7 +1150,7 @@ $(document).ready(function() {
 
   i18n.init({ fallbackLng: 'en', lng: language }, function() {
     $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
-    //console.log("Current language used: " + i18n.lng());
+    context.settings.language = i18n.lng(); // Language really used
 
     // Technical objects
     context.video4html5 = video4html5;
@@ -1131,6 +1166,7 @@ $(document).ready(function() {
     context.videoSensorTabVM = new VideoSensorTabViewModel(context);
     // Dialogs
     context.manageScriptFilesVM = new ManageScriptFilesViewModel(context);
+    context.settingsVM = new SettingsViewModel(context);
 
     // Knockout bindings
     ko.applyBindings(context.navigationBarVM, $("#navigationBar")[0]);
@@ -1142,12 +1178,14 @@ $(document).ready(function() {
     ko.applyBindings(context.videoSensorTabVM, $("#videoSensorTab")[0]);
     // Dialogs
     ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
+    ko.applyBindings(context.settingsVM, $("#settingsModal")[0]);
 
     // Other initialization
     context.ev3BrickServer.initialize(); // WS connexion with the server
     context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
 
     // Register windows events for editor auto-resize
+    // TODO consider using events
     $(window).on('resize', function () {
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar

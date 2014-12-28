@@ -6,7 +6,8 @@
     "stop": "Stop",
     "gnikrap": {
       "about": "About...",
-      "settings": "Settings..."
+      "settings": "Settings...",
+      "documentation": "Documentation.."
     }
   },
 
@@ -72,7 +73,7 @@
     "xAxis": "x is the front-to-back tilt in degrees where front is positive (also known as 'beta')",
     "yAxis": "y is the left-to-right tilt in degrees, where right is positive (also known as 'gamma')",
     "zAxis": "z is is the compass direction the device is facing in degrees (also known as 'alpha')",
-    "zAxisNote": "Note: Some devices don't support compass. Some device don't returns the angle with the north, but a relative angle"
+    "zAxisNote": "Note: Some devices don't support compass (the z value will always be 0). Some device don't returns the angle with the north, but a relative angle"
   },
 
 
@@ -112,6 +113,14 @@
       "cantRetrieveListOfScriptFiles": "Can't retrieve the list of files. [__causedBy__]",
       "cantDeleteScriptFile": "Can't delete '__filename__' script file. [__causedBy__]"
     }
+  },
+
+
+  "settingsModal": {
+    "title": "Settings",
+    "language": "Language",
+    "save": "Save",
+    "cancel": "Cancel"
   },
 
 

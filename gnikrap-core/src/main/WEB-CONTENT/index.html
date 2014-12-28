@@ -87,7 +87,8 @@
               <div class="btn-group" role="group">
                 <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/></button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li>
+                    <li><a data-bind="click: onDisplaySettings"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li>
+                    <li><a href="documentation/index.html" target="_blank" ><span class="i18n" data-i18n="navigationBar.gnikrap.documentation">DOCUMENTATION</span></a></li>
                     <li class="divider"></li>
                     <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.about">ABOUT</span></a></li>
                   </ul>
@@ -169,8 +170,8 @@
                     <svg>
                   </div>
                   <div class="col-sm-9">
-                    <span class="i18n" data-i18n="gyroSensorTab.xAxis">X</span>
-                    <b><span data-bind="visible: isStarted, text: xAxisValue">{}</span></b>
+                    <span class="i18n text-info" data-i18n="gyroSensorTab.xAxis">X</span><br/>
+                    <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: xAxisValue">{}</span></strong>
                   </div>
                 </div>
                 <div class="row">
@@ -183,8 +184,8 @@
                     <svg>
                   </div>
                   <div class="col-sm-9">
-                    <span class="i18n" data-i18n="gyroSensorTab.yAxis">Y</span></br>
-                    <b><span data-bind="visible: isStarted, text: yAxisValue">{}</span></b>
+                    <span class="i18n text-info" data-i18n="gyroSensorTab.yAxis">Y</span><br/>
+                    <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: yAxisValue">{}</span></strong>
                   </div>
                 </div>
                 <div class="row">
@@ -197,10 +198,10 @@
                   </div>
                   <div class="col-sm-9">
                     <p>
-                      <span class="i18n" data-i18n="gyroSensorTab.zAxis">Z</span></br>
-                      <b><span data-bind="visible: isStarted, text: zAxisValue">{}</span></b>
+                      <span class="i18n text-info" data-i18n="gyroSensorTab.zAxis">Z</span><br/>
+                      <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: zAxisValue">{}</span></strong>
                     </p>
-                    <p><i><span class="i18n text-small" data-i18n="gyroSensorTab.zAxisNote">NOT_ALL_DEVICES_SUPPORT_Z</span></i></p>
+                    <p><small><em><span class="i18n text-small text-muted" data-i18n="gyroSensorTab.zAxisNote">NOT_ALL_DEVICES_SUPPORT_Z</span></em></small></p>
                   </div>
                 </div>
               </div>
@@ -222,8 +223,8 @@
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
                   <!-- span class="glyphicon glyphicon-facetime-video"></span --> <span class="i18n" data-i18n="videoSensorTab.start">START</span></button>
                 <div class="pull-right">
-                  <p class="navbar-text" data-bind="visible: isStarted"><span class="i18n" data-i18n="videoSensorTab.addPoints">CLICK_VIDEO_TO_ADD_POINTS</span></p>
-                  <p id="xVideoSensorPerf" class="navbar-text" data-bind="visible: isStarted, text: perfSummary"></p>
+                  <p class="navbar-text" data-bind="visible: isStarted"><span class="i18n text-info" data-i18n="videoSensorTab.addPoints">CLICK_VIDEO_TO_ADD_POINTS</span></p>
+                  <p id="xVideoSensorPerf" class="navbar-text text-info" data-bind="visible: isStarted, text: perfSummary"></p>
                 </div>
               </div>
 
@@ -257,7 +258,7 @@
 
     <!-- ############################################################ -->
     <!-- Scrip file management modal -->
-    <div id="manageScriptFilesModal" class="modal fade" tabindex="-1"> <!-- role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+    <div id="manageScriptFilesModal" class="modal fade" tabindex="-1" role="dialog"> <!-- aria-labelledby="myModalLabel" aria-hidden="true"> -->
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -296,7 +297,7 @@
 
     <!-- ############################################################ -->
     <!-- Settings modal -->
-    <div id="settingsModal" class="modal fade">
+    <div id="settingsModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -304,8 +305,20 @@
             <h4 class="modal-title"><span class="i18n" data-i18n="settingsModal.title">SETTINGS</span></h4>
           </div>
           <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="language" class="col-sm-3 control-label i18n" data-i18n="settingsModal.language">LANGUAGE</label>
+                <div class="col-sm-9">
+                  <select class="form-control" id="language" data-bind="value: language">
+                    <option>en</option><option>fr</option>
+                  </select>
+                </div>
+              </div>
+            </form>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-default" type="submit" data-bind="click: onSave">
+              <span class="i18n" data-i18n="settingsModal.save">SAVE</span></button>
             <button type="button" class="btn btn-default" data-dismiss="modal">
               <span class="i18n" data-i18n="settingsModal.cancel">CANCEL</span></button>
           </div>
@@ -315,7 +328,7 @@
     
     <!-- ############################################################ -->
     <!-- About modal -->
-    <div id="aboutModal" class="modal fade">
+    <div id="aboutModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
