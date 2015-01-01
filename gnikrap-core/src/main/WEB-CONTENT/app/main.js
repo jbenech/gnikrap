@@ -51,8 +51,16 @@ function NavigationBarViewModel(appContext) {
     } // else: Video/WebCam not supported by the browser
   }
 
+  // Auto collapse navbar while collapse feature is enabled (screen width is < 768)
+  self.__collapseNavbar = function() {
+    if($("#bs-navbar-collapse-1-button").css("display") != "none") {
+      $("#bs-navbar-collapse-1-button").click()
+    }
+  }
+  
   self.onRunScript = function() {
     self.doRunScript(false);
+    self.__collapseNavbar();
   }
 
   self.doRunScript = function(stopRunningScript) {
@@ -64,14 +72,17 @@ function NavigationBarViewModel(appContext) {
 
   self.onStopScript = function() {
     self.context.ev3BrickServer.stopScript();
+    self.__collapseNavbar();
   }
 
   self.onDisplayAbout = function() {
     $('#aboutModal').modal("show");
+    self.__collapseNavbar();
   }
   
   self.onDisplaySettings = function() {
     self.context.settingsVM.display();
+    self.__collapseNavbar();
   }
 
   self.onShowWorkAreaItem = function(workAreaItem) {
@@ -81,6 +92,7 @@ function NavigationBarViewModel(appContext) {
       items[i].active(items[i].tabId == workAreaItem.tabId);
       $("#" + items[i].tabId).toggleClass("active", items[i].active());
     }
+    self.__collapseNavbar();
   }
 }
 
@@ -190,7 +202,7 @@ function KeyboardSensorTabViewModel(appContext) {
     self.isStarted = ko.observable(false);
     self.sensorName = ko.observable("xTouch");
   }
-
+  
   // Init
   {
     for(var i = 0; i < 4; i++) {
@@ -207,12 +219,19 @@ function KeyboardSensorTabViewModel(appContext) {
           onPressed: function(btn) {
             btn.isPressed = true;
             self.__doNotifyStateChanged(false);
+            return true; // Allow default action - See http://knockoutjs.com/documentation/event-binding.html "Note 3: Allowing the default action"
           },
           onRelease: function(btn) {
             if(btn.isPressed) {
               btn.isPressed = false;
               self.__doNotifyStateChanged(false);
             } // else, useless event
+            return true; // See onPressed comment
+          },
+          onTouch: function(btn, event) {
+            console.log("event: " + Object.keys(event));
+            console.log("event: " + event.touches);
+            console.log("event: " + JSON.stringify(event.targetTouches));
           }
         });
       }
@@ -265,17 +284,17 @@ function KeyboardSensorTabViewModel(appContext) {
       // Notify the list of actions triggered
       var xValue = {
         isStarted: self.isStarted(),
-        buttons: {}
+        touchs: {}
       };
       if(self.isStarted()) {
         self.buttons.forEach(function(e0) {
           e0.forEach(function(e1) {
             if(e1.isPressed) {
               e1.actions.forEach(function (a) {
-                var btn = xValue.buttons[a];
-                xValue.buttons[a] = (btn == undefined ? 1 : btn + 1);
+                var btn = xValue.touchs[a];
+                xValue.touchs[a] = (btn == undefined ? 1 : btn + 1);
               });
-              // Array.prototype.push.apply(xValue.buttons, e1.actions);
+              // Array.prototype.push.apply(xValue.touchs, e1.actions);
             }
           })
         });
@@ -314,7 +333,9 @@ function KeyboardSensorTabViewModel(appContext) {
   }
 
   self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
-    $('.xkeyboard-touch').css('height', Math.round(Math.max(30, usefullWorkAreaHeight - 10) / 4).toString() + 'px');
+    $('.xkeyboard-touch').css('height', Math.round(
+      Math.max(45, Math.min(window.innerWidth / 6, // Max height for better display for devices in portrait mode 
+          (usefullWorkAreaHeight - 10) / 4))).toString() + 'px');
   }
 }
 
@@ -326,20 +347,19 @@ function GyroscopeSensorTabViewModel(appContext) {
   self.sensorName = ko.observable("xGyro");
   self.calibrationMode = ko.observable(true);
   self.isStarted = ko.observable(false);
+  self.axisOrientation = 0;
 
   // Init
   {
     self.xAxisValue = ko.observable("");
     self.yAxisValue = ko.observable("");
     self.zAxisValue = ko.observable("");
-    self.xAxisValue.extend({ rateLimit: 200 }); // Accept lower refresh rate
-    self.yAxisValue.extend({ rateLimit: 200 }); // Accept lower refresh rate
-    self.zAxisValue.extend({ rateLimit: 200 }); // Accept lower refresh rate
+    self.xAxisValue.extend({ rateLimit: 100 }); // Accept lower refresh rate
+    self.yAxisValue.extend({ rateLimit: 100 }); // Accept lower refresh rate
+    self.zAxisValue.extend({ rateLimit: 100 }); // Accept lower refresh rate
 
     // Is device orientation supported
-    if(window.DeviceOrientationEvent) {
-      // TODO ?
-    } else {
+    if(!window.DeviceOrientationEvent) {
       // Should not be possible to be here if not allowed (should have already been checked while adding tabs)
       console.log("Device orientation not supported !");
     }
@@ -349,50 +369,53 @@ function GyroscopeSensorTabViewModel(appContext) {
     // EV3 sensor values: angle ° and rate in °/s
     self.xValue = {
       isStarted: undefined, // will be defined just before sending
-      x: { angle: 0, rate: 0},
-      y: { angle: 0, rate: 0},
-      z: { angle: 0, rate: 0}
+      x: { angle: 0.0 }, //, rate: 0.0},
+      y: { angle: 0.0 }, //, rate: 0.0},
+      z: { angle: 0.0 } //, rate: 0.0}
     }
-  }
-
-  self.onReset = function() {
-    // TODO: Set position for the "zero" ?
-    console.log("onReset");
   }
 
   self.deviceOrientationHandler = function(eventData) {
-    self.xValue.x.angle = eventData.beta;
-    self.xValue.y.angle = eventData.gamma;
-    self.xValue.z.angle = eventData.alpha;
-    self.__sendXValue();
-
-    {
-      console.log("deviceOrientationHandler...");
-      // gamma is the left-to-right tilt in degrees, where right is positive
-      var tiltLR = eventData.gamma;
-      // beta is the front-to-back tilt in degrees, where front is positive
-      var tiltFB = eventData.beta;
-
-      // Apply the transform to the image
-      var logo = document.getElementById("imgLogo");
-      logo.style.webkitTransform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
-      logo.style.MozTransform = "rotate("+ tiltLR +"deg)";
-      logo.style.transform = "rotate("+ tiltLR +"deg) rotate3d(1,0,0, "+ (tiltFB*-1)+"deg)";
+    var xv = self.xValue
+    xv.x.angle = round2dec(eventData.beta);
+    xv.y.angle = round2dec(eventData.gamma);
+    xv.z.angle = round2dec(eventData.alpha);
+    
+    if ((self.axisOrientation == 90) || (self.axisOrientation == -90)) { // Invert X and Y
+      var t = xv.y.angle;
+      xv.y.angle = xv.x.angle;
+      xv.x.angle = t;
     }
+    
+    if ((self.axisOrientation == 180) || (self.axisOrientation == -90)) {
+      xv.y.angle *= -1;
+    }
+    if((self.axisOrientation == 180) || (self.axisOrientation == 90)) {
+      xv.x.angle *= -1;
+    }    
+
+    self.__sendXValue();
   }
 
+  /*
   function deviceMotionHandler(eventData) {
-    var acceleration = eventData.acceleration; // can be undefined with some hardware
-    if(acceleration == undefined) {
-      acceleration = eventData.accelerationIncludingGravity;
-    }
+    var acceleration = eventData.acceleration || // can acceleration be undefined on some hardware
+                        eventData.accelerationIncludingGravity;
     if(acceleration != undefined) {
-      self.xValue.x.rate = acceleration.x;
-      self.xValue.y.rate = acceleration.y;
-      self.xValue.z.rate = acceleration.z;
+      if (Math.abs(self.axisOrientation) == 90) {
+        // Invert X and Y
+        self.xValue.y.rate = round2dec(acceleration.x);
+        self.xValue.x.rate = round2dec(acceleration.y);
+      } else {
+        // Use device default
+        self.xValue.x.rate = round2dec(acceleration.x);
+        self.xValue.y.rate = round2dec(acceleration.y);
+      }
+      // TODO: Does we need to change the sign for acceleration ?
+      self.xValue.z.rate = round2dec(acceleration.z);
       self.__sendXValue();
     }
-  }
+  }*/
 
   self.__sendXValue = function() {
     self.xValue.isStarted = self.isStarted();
@@ -403,6 +426,92 @@ function GyroscopeSensorTabViewModel(appContext) {
     self.zAxisValue("z: " + JSON.stringify(self.xValue.z));
   }
 
+  self.__setAxisOrientation = function(orientation) {
+    self.axisOrientation = orientation;
+  }
+  
+  self.__askAxisOrientationFull = function() {
+    bootbox.dialog({
+      message: i18n.t("gyroSensorTab.setAxisDialogFull.message"),
+      title: i18n.t("gyroSensorTab.setAxisDialogFull.title"),
+      buttons: {
+        cancel: {
+          label: i18n.t("gyroSensorTab.setAxisDialogFull.cancel"),
+          className: "btn-default",
+          callback: function() { /* Cancel */ },
+        },
+        landscapeLeft: {
+          label: i18n.t("gyroSensorTab.setAxisDialogFull.landscapeLeft"),
+          className: "btn-primary",
+          callback: function() {
+            self.__setAxisOrientation(90);
+          }
+        },
+        landscapeRight: {
+          label: i18n.t("gyroSensorTab.setAxisDialogFull.landscapeRight"),
+          className: "btn-primary",
+          callback: function() {
+            self.__setAxisOrientation(-90);
+          }
+        },
+        portrait: {
+          label: i18n.t("gyroSensorTab.setAxisDialogFull.portrait"),
+          className: "btn-primary",
+          callback: function() {
+            self.__setAxisOrientation(0);
+          }
+        },
+        reversePortrait: {
+          label: i18n.t("gyroSensorTab.setAxisDialogFull.reversePortrait"),
+          className: "btn-primary",
+          callback: function() {
+            self.__setAxisOrientation(180);
+          }
+        }
+      }
+    });
+  }
+  
+  self.onSetAxis = function() {
+    var wo = window.orientation;
+    
+    if(wo == undefined) { // Browser don't support orientation
+      self.__askAxisOrientationFull();
+    } else {
+      if(wo == -180) {
+        wo = 180;
+      };
+      
+      var woLabel = i18n.t("gyroSensorTab.axisOrientation.o" + wo);
+      
+      bootbox.dialog({
+        message: i18n.t("gyroSensorTab.setAxisDialogLight.message", {"axisOrientation": woLabel }),
+        title: i18n.t("gyroSensorTab.setAxisDialogLight.title"),
+        buttons: {
+          cancel: {
+            label: i18n.t("gyroSensorTab.setAxisDialogLight.cancel"),
+            className: "btn-default",
+            callback: function() { /* Cancel */ },
+          },
+          ok: {
+            label: i18n.t("gyroSensorTab.setAxisDialogLight.ok"),
+            className: "btn-primary",
+            callback: function() {
+              self.__setAxisOrientation(wo);
+            }
+          },
+          fullChoice: {
+            label: i18n.t("gyroSensorTab.setAxisDialogLight.fullChoice"),
+            className: "btn-primary",
+            callback: function() {
+              self.__askAxisOrientationFull();
+            }
+          }
+        }
+      });
+    }
+  }
+  
   self.onStart = function() {
     self.isStarted(!self.isStarted());
     if(self.isStarted()) {
@@ -410,13 +519,13 @@ function GyroscopeSensorTabViewModel(appContext) {
         console.log("Register events...");
         self.__resetXValue();
         window.addEventListener('deviceorientation', self.deviceOrientationHandler, false);
-        window.addEventListener('devicemotion', self.deviceMotionHandler, false);
+        //window.addEventListener('devicemotion', self.deviceMotionHandler, false);
         self.__sendXValue();
       }
     } else {
       console.log("Remove event listeners...");
       window.removeEventListener('deviceorientation', self.deviceOrientationHandler, false);
-      window.removeEventListener('devicemotion', self.deviceMotionHandler, false);
+      //window.removeEventListener('devicemotion', self.deviceMotionHandler, false);
       self.__resetXValue();
       self.__sendXValue();
     }
@@ -1039,8 +1148,8 @@ function EV3BrickServer(appContext) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// Other stuff found over the internet without copyright and slightly reworked to feet the need
+////////////////////////////////////////////////////////////////////////////////////
+// Other stuff reworked from things found on the internet without explicit copyright
 
 // Manage compatibility for accessing to the webcam (getUserMedia) and video rendering (requestAnimationFrame)
 var video4html5 = (function() {
@@ -1104,12 +1213,32 @@ var video4html5 = (function() {
   };
 })();
 
+// Round by keeping only 2 decimal
+function round2dec(n) {
+  // return Number(n.toFixed(2));
+  return Math.round(n * 100) / 100;
+}
+
+function toggleFullScreen() {
+  var doc = window.document;
+  var docEl = doc.documentElement;
+
+  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+    requestFullScreen.call(docEl);
+  }
+  else {
+    cancelFullScreen.call(doc);
+  }
+}
 
 /////////////////////////////
 // Knockout specific bindings
 
 // Binding used for enabling/disabling the bootstrap buttons
-ko.bindingHandlers.disabled = {
+ko.bindingHandlers['disabled'] = {
   update: function (element, valueAccessor) {
     var valueUnwrapped = ko.unwrap(valueAccessor());
     if(valueUnwrapped) {
@@ -1117,14 +1246,6 @@ ko.bindingHandlers.disabled = {
     } else {
       $(element).removeAttr("disabled");
     }
-  }
-}
-
-// Needed because Knockout don't use addEventHandler, so the bootstrap lnf is disabled on button pressed
-ko.bindingHandlers.xTouch = {
-  update: function (element, valueAccessor) {
-    // TODO - See knockout events binding
-    // Bind: mousedown, mouseup, mouseout... maybe 'touch' event also
   }
 }
 
@@ -1184,9 +1305,13 @@ $(document).ready(function() {
     context.ev3BrickServer.initialize(); // WS connexion with the server
     context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
 
+    // TODO: See https://github.com/sindresorhus/screenfull.js
+    //toggleFullScreen(); 
+    
     // Register windows events for editor auto-resize
     // TODO consider using events
     $(window).on('resize', function () {
+// alert("" + window.innerHeight + " / " + window.innerWidth);
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
       context.scriptEditorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);

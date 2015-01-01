@@ -21,7 +21,7 @@
   <head>
     <meta charset="ISO-8859-1">
     <!-- Only for mobiles devices -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!-- Other meta -->
     <meta name="description" content="Gnikrap application">
     <meta name="author" content="Jean BENECH">
@@ -36,7 +36,17 @@
     <!-- /!\ To be defined after the css import in order to overwrite it (see http://getbootstrap.com/components/#navbar-fixed-bottom) -->
     <style type="text/css" media="screen">
       /* Needed for the fixed nav-bar */
-      body { padding-top: 60px; }      
+      body { padding-top: 60px; }
+      
+      .xkeyboard-touch {} /* Used to change the touch dynamically */
+      
+      .debug { background-color: green; }
+      
+      @media (max-width: 767px) { 
+        .navOnOneLine {
+          display: flex; 
+        }
+      }
     </style>
 
     <!-- Load libraries (Updated SEP2014) -->
@@ -62,7 +72,7 @@
         <div class="container-fluid">
           <!-- Core buttons (Start / Stop) and toggle get grouped for better mobile display -->
           <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+            <button type="button" class="navbar-toggle collapsed" id="bs-navbar-collapse-1-button" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
@@ -83,9 +93,9 @@
                 <span data-bind="text: name">nameOfTheWorkAreaElement</span></button>
             <!-- /ko -->
             
-            <div class="navbar-right" >
-              <div class="btn-group" role="group">
-                <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/></button>
+            <div class="nav navbar-nav navbar-right">
+              <div class="btn-group dropdown" role="group">
+                <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/> <span class="caret"></span></button>
                   <ul class="dropdown-menu" role="menu">
                     <li><a data-bind="click: onDisplaySettings"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li>
                     <li><a href="documentation/index.html" target="_blank" ><span class="i18n" data-i18n="navigationBar.gnikrap.documentation">DOCUMENTATION</span></a></li>
@@ -118,19 +128,23 @@
             
             <!-- Keyboard sensor tab -->
             <div role="tabpanel" id="keyboardSensorTab" class="tab-pane">
-              <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <form class="navbar-left" style="margin-right: 5px" role="form" onsubmit="return false;">
+              <nav class="nav navOnOneLine" style="margin-bottom: 5px;"> <!-- Button bar -->
+                <!-- navbar-form navbar-input-group -->
+                <form class="navbar-left" style="margin-right: 5px; max-width: 200px;" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
                     <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
-                  <!-- span class=" glyphicon glyphicon-th"></span --> <span class="i18n" data-i18n="keyboardSensorTab.start">START</span></button>
+                  <span class="i18n" data-i18n="keyboardSensorTab.start">START</span></button>
+                <span class="visible-xs-block">&nbsp;</span>
                 <button class="btn btn-default btn-sm" data-bind="click: onResetKeyboard">
                   <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="keyboardSensorTab.clear">CLEAR</span></button>
+                <span class="visible-xs-block">&nbsp;</span>
                 <button class="btn btn-default btn-sm" disabled="yes" data-bind="click: onLoadKeyboard">
                   <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="keyboardSensorTab.loadAndManage">LOAD_MANAGE</span></button>
+                <span class="visible-xs-block">&nbsp;</span>
                 <button class="btn btn-default btn-sm" disabled="true" data-bind="click: onSaveKeyboard">
                   <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="keyboardSensorTab.save">SAVE</span></button>
               </nav>
@@ -138,25 +152,27 @@
               <div data-bind="foreach: buttons">
                 <div class="row" data-bind="foreach: $data">
                   <!-- TODO: touch events for mobile devices ? -->
-                  <button class="col-sm-2 btn btn-default btn-lg xkeyboard-touch" role="button" 
-                    data-bind="disabled: isDisabled, text: name, click: onKeyboardTouch, event: {mousedown: onPressed, mouseup: onRelease, mouseout: onRelease}">BUTTON</button>
+                  <button class="col-xs-2 col-sm-2 btn btn-default btn-lg xkeyboard-touch" role="button" 
+                    data-bind="disabled: isDisabled, text: name, click: onKeyboardTouch, event: {mousedown: onPressed, mouseup: onRelease, mouseout: onRelease, touchstart: onTouch, touchmove: onTouch, touchend: onTouch}">BUTTON</button>
                 </div>
               </div>
+              <p>&nbsp;</p>
             </div>
 
             <!-- Gyro sensor tab -->
             <div role="tabpanel" id="gyroSensorTab" class="tab-pane">
-              <nav class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <form class="navbar-left" style="margin-right: 5px" role="form" onsubmit="return false;">
+              <nav class="nav navOnOneLine" style="margin-bottom: 5px"> <!-- Button bar -->
+                <form class="navbar-left" style="margin-right: 5px; max-width: 200px;" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
                     <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
-                  <!-- span class="glyphicon glyphicon-refresh"></span --> <span class="i18n" data-i18n="gyroSensorTab.start">START</span></button>
-                <button class="btn btn-default btn-sm" data-bind="click: onReset">
-                  <!-- span class="glyphicon glyphicon-cog"></span --> <span class="i18n" data-i18n="gyroSensorTab.reset">RESET</span></button>
+                  <span class="i18n" data-i18n="gyroSensorTab.start">START</span></button>
+                <span class="visible-xs-block">&nbsp;</span>
+                <button class="btn btn-default btn-sm" data-bind="click: onSetAxis">
+                  <span class="glyphicon glyphicon-refresh"></span> <span class="i18n" data-i18n="gyroSensorTab.setAxis">SET_AXIS</span></button>
               </nav>
 
               <div> <!-- Nest a bootstrap grid inside <=> 12 columns available -->
@@ -205,23 +221,19 @@
                   </div>
                 </div>
               </div>
-              
-              <div class="container" style="perspective: 300;">
-                <img src="http://www.html5rocks.com/en/tutorials/device/orientation/html5_logo.png" id="imgLogo" class="logo">
-              </div>
             </div>
 
             <!-- Video sensor tab -->
             <div role="tabpanel" id="videoSensorTab" class="tab-pane">
-              <div class="nav" style="margin-bottom: 5px"> <!-- Button bar -->
-                <form class="navbar-left" style="margin-right: 5px" role="form" onsubmit="return false;">
+              <div class="nav navOnOneLine" style="margin-bottom: 5px"> <!-- Button bar -->
+                <form class="navbar-left" style="margin-right: 5px; max-width: 200px;" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
                     <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
-                  <!-- span class="glyphicon glyphicon-facetime-video"></span --> <span class="i18n" data-i18n="videoSensorTab.start">START</span></button>
+                  <span class="i18n" data-i18n="videoSensorTab.start">START</span></button>
                 <div class="pull-right">
                   <p class="navbar-text" data-bind="visible: isStarted"><span class="i18n text-info" data-i18n="videoSensorTab.addPoints">CLICK_VIDEO_TO_ADD_POINTS</span></p>
                   <p id="xVideoSensorPerf" class="navbar-text text-info" data-bind="visible: isStarted, text: perfSummary"></p>
@@ -317,10 +329,10 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" type="submit" data-bind="click: onSave">
-              <span class="i18n" data-i18n="settingsModal.save">SAVE</span></button>
             <button type="button" class="btn btn-default" data-dismiss="modal">
               <span class="i18n" data-i18n="settingsModal.cancel">CANCEL</span></button>
+            <button type="button" class="btn btn-primary" type="submit" data-bind="click: onSave">
+              <span class="i18n" data-i18n="settingsModal.save">SAVE</span></button>
           </div>
         </div>
       </div>

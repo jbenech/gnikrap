@@ -9,10 +9,12 @@ The key points of Gnikrap are:
    http://en.wikipedia.org/wiki/List_of_JVM_languages[script language supported by the JVM].
    
 * *Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked 
-  to the EV3 device*. The list of sensors planned is:
-** Gyroscope: Be able to react to the 3D gyroscope available in the tablet
-** Tactile screen: Be able to remotely control the EV3 without the limitation of the 5 buttons of the IR beacon
-** Webcam: Be able to use video in order to react to, for example, object location, motion, etc.
+  to the EV3 device*. The list of sensors available is:
+** xTouch: A 24 touch tactile screen is available and can be used to remotely pilot a robot in a simple way 
+  (see <<The XTouch XSensor>> for more details).
+** XGyro: Use the gyroscope available in the tablet can be used in order to for example pilot a robot 
+  (see <<The XTouch XGyro>> for more details).
+** xVideo: Use the webcam of any device in order to track objects (see <<The xTouch XVideo>> for more details).
 
 * Off course there is *some limitations compared to other EV3 programming environment and tools*:
 ** Compared to full featured framework like http://www.lejos.org/[leJOS] or http://www.monobrick.dk/[MonoBrick]
@@ -27,6 +29,3 @@ The key points of Gnikrap are:
 ** Compared to graphical programming software like the EV3 software provided by Lego:
 *** No software development learning is needed to use this tools. This tool is efficient to have really simple programs works quickly. 
     When your program become a bit more complex it is difficult to have something clear and "redeable" on a standard screen (I don't have a 4K screen :-) ). 
-
-    
-_Note:_ Using the mobile device sensors is currently not available in the version 0.2.0 of the project

@@ -2,7 +2,7 @@
 
 [NOTE]
 ====
-Current release is 0.2.0
+Current release is 0.3.0
 ====
 
 // Not optimal to include source code here, but avoid duplicating things

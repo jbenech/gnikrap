@@ -96,11 +96,11 @@ final public class SimpleEV3ColorSensor implements EV3Device {
       this.value = value;
     }
 
-    public int value() {
+    public int getValue() {
       return value;
     }
 
-    public boolean noColor() {
+    public boolean isNoColor() {
       return value == Color.NONE;
     }
 
@@ -152,7 +152,7 @@ final public class SimpleEV3ColorSensor implements EV3Device {
 
     @Override
     public String toString() {
-      return "Color[" + value() + " - " + getColorAsText() + "]";
+      return "Color[" + getValue() + " - " + getColorAsText() + "]";
     }
   }
 }

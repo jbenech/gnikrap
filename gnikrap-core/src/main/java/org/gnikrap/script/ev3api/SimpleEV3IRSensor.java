@@ -103,7 +103,7 @@ final public class SimpleEV3IRSensor implements EV3Device {
       this.value = value;
     }
 
-    public int value() {
+    public int getValue() {
       return value;
     }
 
@@ -127,13 +127,13 @@ final public class SimpleEV3IRSensor implements EV3Device {
       return value == 9;
     }
 
-    public boolean nothingEnabled() {
+    public boolean isNothingEnabled() {
       return value == 0;
     }
 
     @Override
     public String toString() {
-      return "RemoteCommand[" + value + " - TopLeft: " + isTopLeftEnabled() + ", TopRight: " + isTopRightEnabled() + ", BottomLeft: " + isBottomLeftEnabled() + ", BottomRight: "
+      return "RemoteCommand[" + getValue() + " - TopLeft: " + isTopLeftEnabled() + ", TopRight: " + isTopRightEnabled() + ", BottomLeft: " + isBottomLeftEnabled() + ", BottomRight: "
           + isBottomRightEnabled() + ", Beacon: " + isBeaconEnabled() + "]";
     }
   }

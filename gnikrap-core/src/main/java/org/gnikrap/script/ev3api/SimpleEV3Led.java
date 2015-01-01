@@ -54,21 +54,21 @@ final public class SimpleEV3Led {
     doLight();
   }
 
-  public SimpleEV3Led green() {
+  public SimpleEV3Led lightGreen() {
     color = BUTTON_LED_GREEN;
     blink = 0;
     doLight();
     return this;
   }
 
-  public SimpleEV3Led red() {
+  public SimpleEV3Led lightRed() {
     color = BUTTON_LED_RED;
     blink = 0;
     doLight();
     return this;
   }
 
-  public SimpleEV3Led orange() {
+  public SimpleEV3Led lightOrange() {
     color = BUTTON_LED_ORANGE;
     blink = 0;
     doLight();

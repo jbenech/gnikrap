@@ -8,7 +8,7 @@
 Gnikrap 
 =======
 Jean Bénech <jbenech at free dot fr>
-v0.2.0, 2014-12
+v0.3.0, 2014-12
 
 A simple scripting environment for http://mindstroms.lego.com[Lego Mindstrom EV3]
 

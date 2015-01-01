@@ -68,7 +68,7 @@ public final class EV3ScriptContext {
     running = false;
   }
 
-  public void message(String message) {
+  public void notify(String message) {
     try {
       ctx.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
     } catch (IOException ioe) { // Should never happens
@@ -155,7 +155,7 @@ public final class EV3ScriptContext {
       return this;
     }
 
-    public int isRunningWait() {
+    public int getIsRunningWait() {
       return confIsRunningWait;
     }
 
@@ -165,7 +165,7 @@ public final class EV3ScriptContext {
       return this;
     }
 
-    public boolean isRunningCheckEscapeKey() {
+    public boolean isIsRunningCheckEscapeKey() {
       return confIsRunningCheckEscapeKey;
     }
 

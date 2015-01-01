@@ -121,7 +121,7 @@ final public class SimpleEV3Keyboard implements EV3Device {
     }
 
     public void waitForPressAndRelease() {
-      boolean wait = sc.getConfiguration().isRunningWait() < IS_RUNNING_WAIT_THRESHOLD;
+      boolean wait = sc.getConfiguration().getIsRunningWait() < IS_RUNNING_WAIT_THRESHOLD;
       waitForPress();
       while (sc.isRunning() && isDown()) {
         if (wait) {
@@ -131,7 +131,7 @@ final public class SimpleEV3Keyboard implements EV3Device {
     }
 
     public void waitForPress() {
-      boolean wait = sc.getConfiguration().isRunningWait() < IS_RUNNING_WAIT_THRESHOLD;
+      boolean wait = sc.getConfiguration().getIsRunningWait() < IS_RUNNING_WAIT_THRESHOLD;
       while (sc.isRunning() && isUp()) {
         if (wait) {
           sc.sleep(WAIT_TIME_FOR_KEY_EVENTS);

@@ -1,6 +1,23 @@
 == Script API
 
-All the API can be retrieved from the object named `ev3`.
+// ///////////////////////////////////////////////////////////////////////////
+=== General principles
+// ///////////////////////////////////////////////////////////////////////////
+
+The API has been designed to be simple to use. Here are some explanation that will help you to use
+the API in a more efficient way:
+
+* Single entry point: All the API can be accessed from the a single object: `ev3` (see <<The ev3 object>> for more details).
+** All the stuff physically linked to the EV3 brick can be accessed from the object: `ev3.getBrick()` (see <<The ev3 object>> for more details).
+* Method naming convention (don't be afraid, there is nothing exotic here) : 
+** All the methods names starts with an verb.
+** All the methods starting by `is` always returns a boolean (i.e. `true`or `false`).
+** All the methods starting with `get` are 'getters' and will return a value.
+** All the methods starting with `set` are 'setters' and will set a value.
+** The API is English based (However, if requested API translation could be done).
+* All the times are expressed in milliseconds (1 second is equals to 1000 milliseconds).
+* All the angles are expressed in degrees (in general negative and positive degrees are accepted).
+
 
 
 // ///////////////////////////////////////////////////////////////////////////
@@ -12,29 +29,37 @@ isRunning():: Enable to known is the script can safely run or not. Returns `true
 
 getBrick():: Returns <<The Brick object>>.
 
-message(text):: Display a message on the Gnikrap interface. +
-                `text` the text of the mesasge to display.
+notify(text):: Display a message on the Gnikrap interface. +
+              `text` the text of the message to display.
 
 sleep(timeInMs):: Make the script sleeping for the given number of milliseconds. +
-                    `timeInMs` the sleeping time (in milliseconds).
+                  `timeInMs` the sleeping time (in milliseconds).
 
 getConfiguration():: Returns a <<Configuration object>>. Enable to configure some behaviour of the scripting environment.
+
+getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with the given name. (The name is configured within the GUI)
+                         `XSensorName` the name of the sensor.
 ****
 
 
 ==== Configuration object
+
+[NOTE]
+====
+Configuration object is for advanced use only. If you don't uderstand what it means, don't use this object.
+====
 
 ****
 setIsRunningCheckEscapeKey(checkEscapeKey)::  Enable the check of the kbd:[Escape] Mindstrom brick key when
                                               `isRunning()` is called. *Default is `true`*. +
                                               `checkEscapeKey` if `true` check the kbd:[Escape] key, if `false` don't check nothing.
 
-isRunningCheckEscapeKey(checkEscapeKey):: Returns `true` if kbd:[Escape] key check on `isRunning()` is enabled, `false` otherwise (don't check).
+isIsRunningCheckEscapeKey(checkEscapeKey):: Returns `true` if kbd:[Escape] key check on `isRunning()` is enabled, `false` otherwise (don't check).
 
-setIsRunningWait(timeInMs):: Set a waiting time when `isRunning()` is called. *Default is `0` (no waiting time)*. +
-                            `timeInMs` the waiting time, `0` means no waiting time.
+setIsRunningWait(timeInMs):: Set the time to wait when `isRunning()` is called. *Default is `0` (no waiting time)*. +
+                            `timeInMs` the time to wait, `0` means no wait.
 
-isRunningWait():: Returns the waiting time used when `isRunning()` is called.
+getIsRunningWait():: Returns the time to wait when `isRunning()` is called.
 
 setWaitingTimeBeforeHardKill(timeInMs)::  Set a maximum time to wait before hard killing the script (eg. infinite loop).
                                           *Default is 5000 (5 seconds)*. +
@@ -85,7 +110,7 @@ See the others objects in order to have sample usage of the brick object.
 [NOTE]
 ====
 On the motor API, some call wait that the operation is ended on the motor (so when the
-function returns the motor has ended the expected job) while other immediately returns (so
+function returns the motor has ended the expected move) while other immediately returns (so
 the motor is still operating/moving while the function returns). The behaviour is specified for each function.
 ====
 
@@ -145,17 +170,17 @@ largeMotor.rotate(-360);
 
 // Retrieve tacho
 largeMotor.rotate(60);
-ev3.message("TachoA: " + largeMotor.getTachoCount());
+ev3.notify("TachoA: " + largeMotor.getTachoCount());
 largeMotor.rotate(-60);
-ev3.message("TachoB: " + largeMotor.getTachoCount());
+ev3.notify("TachoB: " + largeMotor.getTachoCount());
 largeMotor.resetTachoCount();
-ev3.message("TachoC: " + largeMotor.getTachoCount());
+ev3.notify("TachoC: " + largeMotor.getTachoCount());
 
 // Rotate and don't wait
 var tacho;
 largeMotor.rotate(360 * 3, true);
 while((tacho = largeMotor.getTachoCount()) < 1000) {
-  ev3.message("Tacho: " + tacho);
+  ev3.notify("Tacho: " + tacho);
   ev3.sleep(200);
 }
 ----
@@ -176,9 +201,9 @@ getColor():: Returns a <<Color object>>.
 ==== Color object
 
 ****
-value():: Returns the color values as a number.
+getValue():: Returns the color values as a number.
 
-noColor():: Returns `true` if no color was detected, `false` otherwise.
+isNoColor():: Returns `true` if no color was detected, `false` otherwise.
 
 isBlack():: Returns `true` if the black color was detected, `false` otherwise.
 
@@ -202,7 +227,7 @@ Sample code for the color sensor:
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
 while(ev3.isRunning()) {
-  ev3.message("Reflected light: " + colorSensor.getReflectedLight());
+  ev3.notify("Reflected light: " + colorSensor.getReflectedLight());
   ev3.sleep(200);
 }
 ----
@@ -212,7 +237,7 @@ while(ev3.isRunning()) {
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
 while(ev3.isRunning()) {
-  ev3.message("Ambiant light: " + colorSensor.getAmbientLight());
+  ev3.notify("Ambiant light: " + colorSensor.getAmbientLight());
   ev3.sleep(200);
 }
 ----
@@ -222,7 +247,7 @@ while(ev3.isRunning()) {
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
 while(enterKey.isUp() && ev3.isRunning()) {
-  ev3.message("Color: " + colorSensor.getColor());
+  ev3.notify("Color: " + colorSensor.getColor());
   ev3.sleep(200);
 }
 ----
@@ -249,7 +274,7 @@ seekBeacon():: Look for the beacon and returns a <<SeekBeaconResult object>>.
 ==== RemoteCommandResult object
 
 ****
-value():: Returns integer value of the remote beacon.
+getValue():: Returns integer value of the remote beacon.
 
 isTopLeftEnabled():: Returns `true` if the top left button was pressed, `false` otherwise.
 
@@ -261,7 +286,7 @@ isBottomRightEnabled():: Returns `true` if the bottom right button was pressed, 
 
 isBeaconEnabled():: Returns `true` if beacon mode was enabled, `false` otherwise.
 
-nothingEnabled():: Returns `true` nothing was enabled, `false` otherwise.
+isNothingEnabled():: Returns `true` nothing was enabled, `false` otherwise.
 ****
 
 ==== SeekBeaconResult object
@@ -289,7 +314,7 @@ Sample code for the IR sensor object:
 ----
 var irSensor = ev3.getBrick().getIRSensor("S1");
 while(ev3.isRunning()) {
-  ev3.message("Distance: " + irSensor.getDistance());
+  ev3.notify("Distance: " + irSensor.getDistance());
   ev3.sleep(200);
 }
 ----
@@ -300,7 +325,7 @@ while(ev3.isRunning()) {
 var irSensor = ev3.getBrick().getIRSensor("S1");
 while(ev3.isRunning()) {
   var x = irSensor.seekBeacon();
-  ev3.message("Beacon found: " + x.isBeaconFound() + ", bearing: " + x.getBearing() + ", distance: " + x.getDistance());
+  ev3.notify("Beacon found: " + x.isBeaconFound() + ", bearing: " + x.getBearing() + ", distance: " + x.getDistance());
   ev3.sleep(200);
 }
 ----
@@ -311,7 +336,10 @@ while(ev3.isRunning()) {
 var irSensor = ev3.getBrick().getIRSensor("S1");
 while(ev3.isRunning()) {
   var x = irSensor.getRemoteCommand();
-  ev3.message("value: " + x.value() + ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() + ", bl: " + x.isBottomLeftEnabled() + ", br: " + x.isBottomRightEnabled() + ", bea: " + x.isBeaconEnabled() + " nothing: " + x.noButtonPressed());
+  ev3.notify("value: " + x.getValue() + 
+             ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() + 
+             ", bl: " + x.isBottomLeftEnabled() + ", br: " + x.isBottomRightEnabled() + 
+             ", bea: " + x.isBeaconEnabled() + " nothing: " + x.noButtonPressed());
   ev3.sleep(200);
 }
 ----
@@ -331,7 +359,7 @@ Sample code for the Touch sensor object
 // Touch sensor API
 var touchSensor = ev3.getBrick().getTouchSensor("S2");
 while(ev3.isRunning()) {
-  ev3.message("Push button: " + touchSensor.isPushed());
+  ev3.notify("Push button: " + touchSensor.isPushed());
   ev3.sleep(200);
 }
 ----
@@ -381,11 +409,11 @@ Sample code for the Keyboard object:
 ----
 // Keyboard API
 var enterKey = ev3.getBrick().getKeyboard().getEnter();
-ev3.message("Press enter to continue");
+ev3.notify("Press enter to continue");
 while(enterKey.isUp() && ev3.isRunning()) {
   ev3.sleep(200);
 }
-ev3.message("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
+ev3.notify("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
 ----
 
 
@@ -396,11 +424,11 @@ ev3.message("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
 ****
 off():: Disable the LED.
 
-green():: Enable the green LED.
+lightGreen():: Enable the green LED.
 
-red():: Enable the red LED.
+lightRed():: Enable the red LED.
 
-orange():: Enable the orange LED.
+lightOrange():: Enable the orange LED.
 
 blink():: Set the LED blinking. Note calling once blink set the 1st mode, calling twice, set the 2nd mode and calling 3 time don't blink anymore.
 ****
@@ -411,11 +439,11 @@ Sample code for the Led object:
 ----
 // Led API
 var leds = ev3.getBrick().getLed();
-leds.green();
+leds.lightGreen();
 ev3.sleep(2000);
-leds.orange().blink();
+leds.lightOrange().blink();
 ev3.sleep(2000);
-leds.red().blink().blink();
+leds.lightRed().blink().blink();
 ev3.sleep(2000);
 leds.off();
 ----
@@ -492,7 +520,73 @@ Sample script with Battery object:
 ----
 // Battery API
 var battery = ev3.getBrick().getBattery();
-ev3.message("Battery current: " + battery.getBatteryCurrent());
-ev3.message("Motor current: " + battery.getMotorCurrent());
-ev3.message("Voltage: " + battery.getVoltageMilliVolt());
+ev3.notify("Battery current: " + battery.getBatteryCurrent());
+ev3.notify("Motor current: " + battery.getMotorCurrent());
+ev3.notify("Voltage: " + battery.getVoltageMilliVolt());
 ----
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The XSensor object
+// ///////////////////////////////////////////////////////////////////////////
+
+There is API common to all XSensors:
+
+****
+getName():: Returns the name of the XSensor.
+
+getValue():: Returns the *current* value of the XSensor. It is *IMPORTANT* to note that two successive calls to `getValue()` can 
+             return different value if the sensor has been modified meantime.
+****
+
+
+[NOTE]
+====
+It is important to note that within the value of an XSensor, the data was retrieved directly from the fields: There is no use of getters 
+(`getXxxx()`) but direct field access (`Xxxx` without parenthesis as this is not a function call).
+====
+
+
+[TIP]
+====
+You can see all the fields available for a XSensor by notifying it's value. For example for an xTouch sensor, a call to 
+`ev3.notify(ev3.getXSensor("xTouch").getValue())` will display something like: `{touchs={TestTouch4=1, TestTouch8=1}, isStarted=true}`.
+
+_In this example, we can see that the XSensor is started and that the TestTouch4 and TestTouch8 are enabled._
+
+Note: The fields available for each sensor are documented in the following chapters.
+====
+
+==== The xTouch XSensor
+
+image::xsensor/xTouch_001_configure.png[xTouch - configuration mode]
+
+In the screen, you can:
+
+* Set the sensor name (in our example: "joystick")
+* Configure the xTouch sensor: Set the buttons 'names': While not started, click on a button and set the list of names (comma separated) for the given button.
+* Start the xTouch sensor: configured Once started, each time a button was clicked the sensor value was updated.
++
+Note: While started, only the buttons with a name will remains active. 
+
+
+Here are the fields available on the XTouch XSensor
+
+****
+isStarted:: Returns `true` if the XSensor is started, `false` otherwise.
+****
+
+
+Sample script with xTouch XSensor object:
+[source,javascript]
+----
+// xTouch XSensor
+----
+
+
+==== The XTouch XGyro
+
+
+
+
+==== The XTouch XVideo
+

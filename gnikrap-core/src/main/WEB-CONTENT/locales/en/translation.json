@@ -69,11 +69,36 @@
 
   "gyroSensorTab": {
     "start": "Start",
-    "reset": "Reset origin",
-    "xAxis": "x is the front-to-back tilt in degrees where front is positive (also known as 'beta')",
-    "yAxis": "y is the left-to-right tilt in degrees, where right is positive (also known as 'gamma')",
-    "zAxis": "z is is the compass direction the device is facing in degrees (also known as 'alpha')",
-    "zAxisNote": "Note: Some devices don't support compass (the z value will always be 0). Some device don't returns the angle with the north, but a relative angle"
+    "setAxis": "Device orientation",
+    "xAxis": "x is the front-back tilt in degrees where front is positive (also known as 'beta' with 'Portrait' orientation)",
+    "yAxis": "y is the left-right tilt in degrees, where right is positive (also known as 'gamma' with 'Portrait' orientation)",
+    "zAxis": "z is is the compass direction of the device in degrees (also known as 'alpha')",
+    "zAxisNote": "Note: Some devices don't support compass (the z value will always be 0). For some devices, the compass don't returns the angle with the north.",
+    
+    "axisOrientation": {
+      "o0": "Portrait (default)",
+      "o90": "Landscape left",
+      "o-90": "Landscape right",
+      "o180": "Reverse portrait"
+    },
+    
+    "setAxisDialogLight": {
+      "title": "Set device orientation",
+      "message": "Orientation has been detected to: '__axisOrientation__'",
+      "cancel": "Cancel",
+      "ok": "Accept",
+      "fullChoice": "Other orientation..."
+    },
+    
+    "setAxisDialogFull": {
+      "title": "Set device orientation",
+      "message": "Select the orientation of your device in order to have expected values. The default orientation is 'Portrait', in general it's when the power cord is at the bottom of your device.",
+      "cancel": "Cancel",
+      "landscapeLeft": "Landscape left",
+      "landscapeRight": "Landscape right",
+      "portrait": "Portrait",
+      "reversePortrait": "Reverse portrait"
+    }
   },
 
 

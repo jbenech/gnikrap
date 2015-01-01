@@ -2,15 +2,14 @@ Known defects:
  - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
 
 Features to add (no specific order):
- - Add import/export
- - Add "external" sensors
+ - Add import/export feature (save all the data on the ev3 in one operation)
  - Add real time sensor probes
  - Add a packaging simple to use (write the SD card and play)
  - Add port checking (auto detection for EV3 devices)
  - Add documentation to add other scripting language
  - Exit script feature (is return work ?)
  - Feature to shutdown the brick from the browser
- - Add GRAFSET editing (sample editor: http://www.gojs.net/beta/samples/grafcet.html)
+ - Add visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html)
 
 
 Change-log:
@@ -18,7 +17,8 @@ Change-log:
     - Fix some bugs and improve error management in the GUI
     - Rework and polish GUI layout, navigation-bar and tool-bars
     - Add automatic EV3 brick reconnection in case of connection lost
-    - Add xSensors (eXternal Sensors) feature: xTouch, ...
+    - Add xSensors (eXternal Sensors) feature: xTouch (24 touch on screen keyboard), xVideo (video object tracking), xGyro (gyroscope)
+    - Rework some script API
 
 
  0.2.0:
