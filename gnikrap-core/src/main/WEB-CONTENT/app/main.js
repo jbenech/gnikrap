@@ -60,7 +60,6 @@ function NavigationBarViewModel(appContext) {
   
   self.onRunScript = function() {
     self.doRunScript(false);
-    self.__collapseNavbar();
   }
 
   self.doRunScript = function(stopRunningScript) {
@@ -72,7 +71,6 @@ function NavigationBarViewModel(appContext) {
 
   self.onStopScript = function() {
     self.context.ev3BrickServer.stopScript();
-    self.__collapseNavbar();
   }
 
   self.onDisplayAbout = function() {
@@ -952,6 +950,7 @@ function EV3BrickServer(appContext) {
       sensors: {},
       timeoutID: undefined
     }; 
+  self.XSENSOR_STREAM_FREQUENCY = 50; // in ms => Maximum of 20 message by second by xSensor
 
   // Init
   self.initialize = function() {
@@ -1111,7 +1110,7 @@ function EV3BrickServer(appContext) {
     }
     
     if((jsonMsg != undefined) && (self.xSensorStream.timeoutID == undefined)) {
-      self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, 20); // No send planned => send rather quickly. Real "message rate" is done in __doStreamXSensorValue.
+      self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, self.XSENSOR_STREAM_FREQUENCY / 2); // No send planned => send rather quickly. Real "message rate" is done in __doStreamXSensorValue.
     }
   }
   
@@ -1138,7 +1137,7 @@ function EV3BrickServer(appContext) {
       });
       
       if(messageSent) {
-        self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, 40); // About 25/sensor/s
+        self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, self.XSENSOR_STREAM_FREQUENCY);
       }
     } else {
       // TODO error management - Reset the sensors ?
@@ -1219,6 +1218,7 @@ function round2dec(n) {
   return Math.round(n * 100) / 100;
 }
 
+/*
 function toggleFullScreen() {
   var doc = window.document;
   var docEl = doc.documentElement;
@@ -1233,6 +1233,8 @@ function toggleFullScreen() {
     cancelFullScreen.call(doc);
   }
 }
+*/
+
 
 /////////////////////////////
 // Knockout specific bindings
@@ -1311,7 +1313,6 @@ $(document).ready(function() {
     // Register windows events for editor auto-resize
     // TODO consider using events
     $(window).on('resize', function () {
-// alert("" + window.innerHeight + " / " + window.innerWidth);
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
       context.scriptEditorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);
@@ -1320,5 +1321,4 @@ $(document).ready(function() {
     });
     $(window).resize();
   });
-  // i18n.setLng('en-US', function(t) { /* loading done */ });
 });

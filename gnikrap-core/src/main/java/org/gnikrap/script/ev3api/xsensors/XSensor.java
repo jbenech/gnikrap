@@ -1,5 +1,9 @@
 package org.gnikrap.script.ev3api.xsensors;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The data for one sensor.
  * 
@@ -10,6 +14,14 @@ public class XSensor {
   private final String name;
 
   private FutureValue value;
+
+  private static final Map<String, Object> DEFAULT_XSENSOR_VALUE;
+
+  static {
+    HashMap<String, Object> temp = new HashMap<String, Object>();
+    temp.put("isStarted", Boolean.FALSE);
+    DEFAULT_XSENSOR_VALUE = Collections.unmodifiableMap(temp);
+  }
 
   XSensor(String name) {
     this.name = name;
@@ -24,6 +36,6 @@ public class XSensor {
   }
 
   public Object getValue() {
-    return (value == null ? null : value.getValue());
+    return (value == null ? DEFAULT_XSENSOR_VALUE : value.getValue());
   }
 }

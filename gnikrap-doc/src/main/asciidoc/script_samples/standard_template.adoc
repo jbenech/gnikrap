@@ -23,7 +23,7 @@ script that is loaded while you start Gnikrap.
 
 
 // Main loop - This is the main program
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   // ... // <4>
 }
 
@@ -40,8 +40,8 @@ while(ev3.isRunning()) {
 <3> Here you can perform calibration, Typically, these calibration (eg. default light sensor level 
     calibration, etc.)  have to be done only once at the beginning of the script.
 
-<4> Here is the main loop of your program. It is important to have `ev3.isRunning()` in the 
-    while condition in order to be able to stop gently the script while using the "Stop" button (in fact, `ev3.isRunning()`
+<4> Here is the main loop of your program. It is important to have `ev3.isOk()` in the 
+    while condition in order to be able to stop gently the script while using the "Stop" button (in fact, `ev3.isOk()`
     will returns `false` one the Stop button was clicked => The main loop will exit in a clean way). If you don't
     put this condition, the script will be force-closed (stop abruptly).
     

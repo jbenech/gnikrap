@@ -25,7 +25,7 @@ the API in a more efficient way:
 // ///////////////////////////////////////////////////////////////////////////
 
 ****
-isRunning():: Enable to known is the script can safely run or not. Returns `true` if the script is running, `false` if the script should stop.
+isOk():: Enable to known is everything is ok and the script can conitnue running not. Returns `true` if the script can continue running, `false` if the script should stop.
 
 getBrick():: Returns <<The Brick object>>.
 
@@ -50,16 +50,16 @@ Configuration object is for advanced use only. If you don't uderstand what it me
 ====
 
 ****
-setIsRunningCheckEscapeKey(checkEscapeKey)::  Enable the check of the kbd:[Escape] Mindstrom brick key when
-                                              `isRunning()` is called. *Default is `true`*. +
-                                              `checkEscapeKey` if `true` check the kbd:[Escape] key, if `false` don't check nothing.
+setIsOkCheckEscapeKey(checkEscapeKey)::  Enable the check of the kbd:[Escape] Mindstrom brick key when
+                                         `isOk()` is called. *Default is `true`*. +
+                                         `checkEscapeKey` if `true` check the kbd:[Escape] key, if `false` don't check nothing.
 
-isIsRunningCheckEscapeKey(checkEscapeKey):: Returns `true` if kbd:[Escape] key check on `isRunning()` is enabled, `false` otherwise (don't check).
+isIsOkCheckEscapeKey(checkEscapeKey):: Returns `true` if kbd:[Escape] key check on `isOk()` is enabled, `false` otherwise (don't check).
 
-setIsRunningWait(timeInMs):: Set the time to wait when `isRunning()` is called. *Default is `0` (no waiting time)*. +
-                            `timeInMs` the time to wait, `0` means no wait.
+setIsOkWait(timeInMs):: Set the time to wait when `isOk()` is called. *Default is `0` (no waiting time)*. +
+                        `timeInMs` the time to wait, `0` means no wait.
 
-getIsRunningWait():: Returns the time to wait when `isRunning()` is called.
+getIsOkWait():: Returns the time to wait when `isOk()` is called.
 
 setWaitingTimeBeforeHardKill(timeInMs)::  Set a maximum time to wait before hard killing the script (eg. infinite loop).
                                           *Default is 5000 (5 seconds)*. +
@@ -226,7 +226,7 @@ Sample code for the color sensor:
 .Reflected light API:
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   ev3.notify("Reflected light: " + colorSensor.getReflectedLight());
   ev3.sleep(200);
 }
@@ -236,7 +236,7 @@ while(ev3.isRunning()) {
 .Ambiant light API:
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   ev3.notify("Ambiant light: " + colorSensor.getAmbientLight());
   ev3.sleep(200);
 }
@@ -246,7 +246,7 @@ while(ev3.isRunning()) {
 .Color API:
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
-while(enterKey.isUp() && ev3.isRunning()) {
+while(enterKey.isUp() && ev3.isOk()) {
   ev3.notify("Color: " + colorSensor.getColor());
   ev3.sleep(200);
 }
@@ -313,7 +313,7 @@ Sample code for the IR sensor object:
 .Distance API:
 ----
 var irSensor = ev3.getBrick().getIRSensor("S1");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   ev3.notify("Distance: " + irSensor.getDistance());
   ev3.sleep(200);
 }
@@ -323,7 +323,7 @@ while(ev3.isRunning()) {
 .Seek beacon API:
 ----
 var irSensor = ev3.getBrick().getIRSensor("S1");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   var x = irSensor.seekBeacon();
   ev3.notify("Beacon found: " + x.isBeaconFound() + ", bearing: " + x.getBearing() + ", distance: " + x.getDistance());
   ev3.sleep(200);
@@ -334,7 +334,7 @@ while(ev3.isRunning()) {
 .Remote command API:
 ----
 var irSensor = ev3.getBrick().getIRSensor("S1");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   var x = irSensor.getRemoteCommand();
   ev3.notify("value: " + x.getValue() + 
              ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() + 
@@ -358,7 +358,7 @@ Sample code for the Touch sensor object
 ----
 // Touch sensor API
 var touchSensor = ev3.getBrick().getTouchSensor("S2");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   ev3.notify("Push button: " + touchSensor.isPushed());
   ev3.sleep(200);
 }
@@ -375,7 +375,7 @@ getDown():: Returns a <<Button object>> for the kbd:[Down] button.
 getEnter():: Returns a <<Button object>> for the kbd:[Enter] button.
 
 getEscape():: Returns a <<Button object>> for the kbd:[Escape] button. +
-              _Note:_ The kbd:[Escape] button can also be checked by the `isRunning()` function.
+              _Note:_ The kbd:[Escape] button can also be checked by the `isOk()` function.
 
 getLeft():: Returns a <<Button object>> for the kbd:[Left] button.
 
@@ -410,7 +410,7 @@ Sample code for the Keyboard object:
 // Keyboard API
 var enterKey = ev3.getBrick().getKeyboard().getEnter();
 ev3.notify("Press enter to continue");
-while(enterKey.isUp() && ev3.isRunning()) {
+while(enterKey.isUp() && ev3.isOk()) {
   ev3.sleep(200);
 }
 ev3.notify("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());

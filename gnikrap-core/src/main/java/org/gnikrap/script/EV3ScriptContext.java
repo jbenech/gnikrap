@@ -77,9 +77,9 @@ public final class EV3ScriptContext {
   }
 
   /**
-   * @return true if the script is running, false if the script should stop.
+   * @return true if all is ok and the script can continue running, false if the script should stop.
    */
-  public boolean isRunning() {
+  public boolean isOk() {
     if (running) {
       // Thread friendly
       if (confIsRunningWait == 0) {
@@ -145,7 +145,7 @@ public final class EV3ScriptContext {
     /**
      * @param waitTime the waiting time in seconds, 0 means no wait.
      */
-    public Configuration setIsRunningWait(int timeInMs) {
+    public Configuration setIsOkWait(int timeInMs) {
       if (timeInMs < 1) { // Avoid negative numbers
         confIsRunningWait = 0;
       } else {
@@ -155,17 +155,17 @@ public final class EV3ScriptContext {
       return this;
     }
 
-    public int getIsRunningWait() {
+    public int getIsOkWait() {
       return confIsRunningWait;
     }
 
-    public Configuration setIsRunningCheckEscapeKey(boolean checkEscapeKey) {
+    public Configuration setIsOkCheckEscapeKey(boolean checkEscapeKey) {
       confIsRunningCheckEscapeKey = checkEscapeKey;
 
       return this;
     }
 
-    public boolean isIsRunningCheckEscapeKey() {
+    public boolean isIsOkCheckEscapeKey() {
       return confIsRunningCheckEscapeKey;
     }
 

@@ -21,7 +21,7 @@ var irSensor = ev3.getBrick().getIRSensor("4");
 
 
 // Main loop // <2>
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   var rc = irSensor.getRemoteCommand(); // // <3>
   // Left motor // <4>
   if(rc.isTopLeftEnabled()) {
