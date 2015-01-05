@@ -1,5 +1,4 @@
-Known defects:
- - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
+------------------------------------------------------------------------------
 
 Features to add (no specific order):
  - Add import/export feature (save all the data on the ev3 in one operation)
@@ -11,9 +10,11 @@ Features to add (no specific order):
  - Feature to shutdown the brick from the browser
  - Add visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html)
 
+ 
+------------------------------------------------------------------------------
 
 Change-log:
- 0.3.0:
+ 0.3.0 (not yet released - work in progress):
     - Fix some bugs and improve error management in the GUI
     - Rework and polish GUI layout, navigation-bar and tool-bars
     - Add automatic EV3 brick reconnection in case of connection lost
@@ -21,7 +22,7 @@ Change-log:
     - Rework some script API
 
 
- 0.2.0:
+ 0.2.0 (last official release):
     - Load/Delete/Save script added
     - About box added
     - GUI Internationalization (English and French are available)
@@ -41,3 +42,10 @@ Change-log:
       - Color Sensor: reflected, ambiant, color
       - IR Sensor: distance, seek beacon, remote command
       - Motors: speed, rotate, tacho "sensor", forward, backward
+
+      
+      
+------------------------------------------------------------------------------
+
+Known defects:
+ - (all versions) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
