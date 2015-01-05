@@ -92,7 +92,9 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
       @Override
       protected void onFullTextMessage(WebSocketChannel channel, BufferedTextMessage message) throws IOException {
         String textMsg = message.getData(); // /!\ getData has to be called only once.
-        LOGGER.info("FullTextMessage receive: " + textMsg);
+        if (LOGGER.isLoggable(Level.INFO)) {
+          LOGGER.info("FullTextMessage receive: " + textMsg);
+        }
         ev3ActionProcessor.processMessage(textMsg);
         // channel.getIoThread();
         // channel.getWorker();
@@ -100,7 +102,7 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
 
       @Override
       protected void onClose(WebSocketChannel webSocketChannel, StreamSourceFrameChannel ssfchannel) throws IOException {
-        LOGGER.info("Close: " + this);
+        LOGGER.info("onClose: " + this);
         myChannel.getReceiveSetter().set(null);
         unregisterSession(WebSocketSession.this);
         super.onClose(webSocketChannel, ssfchannel);
@@ -108,7 +110,7 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
 
       @Override
       protected void onError(WebSocketChannel webSocketChannel, Throwable error) {
-        LOGGER.info("OnErrror: " + this + " / " + error);
+        // Log performed in doOnError
         doOnError(webSocketChannel, error);
       }
     };

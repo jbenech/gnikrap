@@ -107,6 +107,10 @@ public class Main {
     String scriptsFolder = configuration.getValueAsString("ScriptsFolder");
     String keyboardFolder = configuration.getValueAsString("xKeyboardFolder");
     int httpPort = configuration.getValueAsInt("HttpPort", 8080);
+    String logLevel = configuration.getValueAsString("DefaultLogLevel");
+
+    // Tech initialization
+    LoggerUtils.setDefaultLogLevel(logLevel);
 
     // Init business stuff
     EV3ActionProcessor actionProcessor = buildActionProcessor(fakeEV3);

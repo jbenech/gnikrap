@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -43,6 +44,14 @@ public class LoggerUtils {
     for (Handler h : Logger.getLogger("").getHandlers()) {
       h.setFormatter(new OneLineFormatter());
     }
+  }
+
+  /**
+   * 
+   */
+  public static void setDefaultLogLevel(String level) {
+    Level l = Level.parse(level);
+    Logger.getLogger("").setLevel(l);
   }
 
   /**
