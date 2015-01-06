@@ -1,0 +1,94 @@
+=== A robot controlled with the xGyro sensor
+
+[NOTE]
+====
+You need a device (computer, tablet or smartphone) with a 2 axis gyroscopic sensor (z/compass is not used in this sample)
+and that can connect to the EV3 (with wifi or bluetooth).
+====
+
+[source,javascript]
+----
+///////////////////////////////////////////////////////////////////////////////
+// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
+//
+// Note: Please adjust the port to what is physically connected on your brick.
+///////////////////////////////////////////////////////////////////////////////
+
+// Initialization // <1>
+var left = ev3.getBrick().getLargeMotor("D");
+var right = ev3.getBrick().getLargeMotor("A");
+var xGyro = ev3.getXSensor("xGyro");
+
+
+// Define a function that activate (or not) one motor with the given percentage (positive or negative) // <2>
+function activateMotor(motor, powerInPercent) {
+    if(Math.abs(powerInPercent) < 10) { // // <3>
+        motor.stop();
+    } else if(powerInPercent > 10) {
+        motor.setSpeedPercent(powerInPercent);
+        motor.forward();
+    } else if(powerInPercent < 10) {
+        motor.setSpeedPercent(-powerInPercent);
+        motor.backward();
+    }
+}
+
+
+// Main loop - This is the main program // <4>
+while(ev3.isOk()) {
+    var gyro = xGyro.getValue();
+
+    if(gyro.get("isStarted") == true) { // // <5>
+        var y = gyro.get("y").get("angle");
+        var x = gyro.get("x").get("angle");
+        
+        var leftPower = 0;
+        if(x > 10) {
+            leftPower = -(Math.min(Math.round(2*x), 100)); // Back (-) => Forward (+)
+        } else if(x < -10) {
+            leftPower = Math.min(Math.round(2*-x), 100);
+        }
+        var rightPower = leftPower;
+        
+        if(y > 10) {
+            if(leftPower >= 0) {
+                leftPower += Math.min(Math.round(y), 50);
+                if(rightPower == 0) {
+                    rightPower = - leftPower;
+                }
+            } else {
+                leftPower -= Math.min(Math.round(y), 50);
+            }
+        } else if(y < -10) {
+            if(rightPower >= 0) {
+                rightPower += Math.min(Math.round(-y), 50);
+                if(leftPower == 0) {
+                    leftPower = -rightPower;
+                }
+            } else {
+                rightPower -= Math.min(Math.round(-y), 50);
+            }
+        }
+        
+        activateMotor(left, leftPower);
+        activateMotor(right, rightPower);
+    } else { // // <6>
+        activateMotor(left, 0);
+        activateMotor(right, 0);
+    }
+
+    ev3.sleep(50); // // <7>
+}
+
+// Finalization
+// None (motors will be automatically stopped)
+----
+<1> Here we retrieve all ev3 objects needed in the main loop. Caution: The port has to match with what is physically 
+    connected on the brick
+<2> We define a function that enable to make a motor, go forward, go backward or stop according to a power value 
+    (between -100 and 100)
+<3> We have access to the standard Javascript `Math` object (See http://www.w3schools.com/js/js_math.asp)
+<4> The "program" itself. Two main cases: 
+<5> 1st case: xSensor is on, so we compute the left motor and right motor power according to the x and y angle returned by the xGyro sensor.
+<6> 2nd case: xSensor is off, we ensure that tht motor are stopped.
+<7> Finally wait a bit before processing the next loop (not mandatory, but recommended while using xSensors)

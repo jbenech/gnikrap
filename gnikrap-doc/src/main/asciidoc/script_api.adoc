@@ -541,8 +541,8 @@ getValue():: Returns the *current* value of the XSensor. It is *IMPORTANT* to no
 
 [NOTE]
 ====
-It is important to note that within the value of an XSensor, the data was retrieved directly from the fields: There is no use of getters 
-(`getXxxx()`) but direct field access (`Xxxx` without parenthesis as this is not a function call).
+It is important to note that within the value of an XSensor, the data was retrieved by using a method that get 
+the name of the field as parameter: In other words, `getXxxx()` will be written `get("xxxx")`.
 ====
 
 
@@ -562,31 +562,73 @@ image::xsensor/xTouch_001_configure.png[xTouch - configuration mode]
 
 In the screen, you can:
 
-* Set the sensor name (in our example: "joystick")
+* Set the sensor name (in our example: "joystick").
 * Configure the xTouch sensor: Set the buttons 'names': While not started, click on a button and set the list of names (comma separated) for the given button.
 * Start the xTouch sensor: configured Once started, each time a button was clicked the sensor value was updated.
 +
 Note: While started, only the buttons with a name will remains active. 
 
 
-Here are the fields available on the XTouch XSensor
+Here are the fields available on the XTouch XSensor:
 
 ****
 isStarted:: Returns `true` if the XSensor is started, `false` otherwise.
 ****
 
 
-Sample script with xTouch XSensor object:
+Sample script with xTouch XSensor:
 [source,javascript]
 ----
 // xTouch XSensor
 ----
 
 
-==== The XTouch XGyro
+==== The xGyro XSensor
+
+image::xsensor/xGyro_001_running.png[xGyro]
+
+In the screen, you can:
+
+* Set the sensor name (in our example: "xGyro")
+* Set the orientation of the device (portrait/landscape) in order to have the right values.
+* Start the xGyro sensor.
+
+Here are the fields available on the xGyro XSensor:
+
+****
+isStarted:: Returns `true` if the XSensor is started, `false` otherwise.
+
+x:: The front-back tilt in degrees where front is positive (also known as 'beta' with 'Portrait' orientation).
+    Returns an object that contains only one field: `angle`. This field contains the angle of the device on this axis.
+
+y:: The left-right tilt in degrees, where right is positive (also known as 'gamma' with 'Portrait' orientation)
+    Same return value as x.
+
+z:: The compass direction of the device in degrees (also known as 'alpha'). 
+    Note: Some devices don't support compass (the z value will always be 0). For some devices, the compass don't returns the angle with the north.
+    Same return value as x.
+****
+
+Sample script with xGyro XSensor:
+[source,javascript]
+----
+// xTouch XSensor
+var xGyro = ev3.getXSensor("xGyro");
+
+while(ev3.isOk()) {
+  var value = xGyro.getValue();
+  if(value.get("isStarted")) {
+    var y = value.get("y").get("angle");
+    var x = value.get("x").get("angle");
+    
+    ev3.notify("XGyro - x: " + x + ", y: " + y);
+  }
+  
+  ev3.sleep(100);
+}
+----
 
 
+==== The xVideo XSensor
 
-
-==== The XTouch XVideo
-
+TODO

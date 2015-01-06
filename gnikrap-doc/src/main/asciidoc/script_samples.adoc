@@ -4,4 +4,6 @@ include::script_samples/standard_template.adoc[]
 
 include::script_samples/beacon_remote_control.adoc[]
 
+include::script_samples/xGyro_remote_control.adoc[]
+
 include::script_samples/advanced_usages.adoc[]
