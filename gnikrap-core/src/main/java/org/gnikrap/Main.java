@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import io.undertow.server.handlers.resource.FileResourceManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.gnikrap.httphandler.FilesHttpHandler;
 import org.gnikrap.script.EV3ActionProcessor;
@@ -95,6 +96,7 @@ import org.gnikrap.utils.LoggerUtils;
  * </p>
  */
 public class Main {
+  private static final Logger LOGGER = LoggerUtils.getLogger(Main.class);
 
   public static void main(String[] args) throws IOException {
     // Tech initialization
@@ -107,10 +109,12 @@ public class Main {
     String scriptsFolder = configuration.getValueAsString("ScriptsFolder");
     String keyboardFolder = configuration.getValueAsString("xKeyboardFolder");
     int httpPort = configuration.getValueAsInt("HttpPort", 8080);
-    String logLevel = configuration.getValueAsString("DefaultLogLevel");
+    String defaultLogLevel = configuration.getValueAsString("DefaultLogLevel");
 
     // Tech initialization
-    LoggerUtils.setDefaultLogLevel(logLevel);
+    LoggerUtils.setDefaultLogLevel(defaultLogLevel);
+    LOGGER.config("Configuration used: [WebContentFolder: " + webContentFolder + ", fakeEV3: " + fakeEV3 + ", scriptsFolder: " + scriptsFolder + ", keyboardFolder: " + keyboardFolder + ", httpPort: "
+        + httpPort + ", defaultLogLevel: " + defaultLogLevel + "]");
 
     // Init business stuff
     EV3ActionProcessor actionProcessor = buildActionProcessor(fakeEV3);

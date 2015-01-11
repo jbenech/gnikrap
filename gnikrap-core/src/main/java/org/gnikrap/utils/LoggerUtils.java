@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -40,9 +41,13 @@ public class LoggerUtils {
    * Default initialization of the Logging fwk - Replace default formatter.
    */
   public static void initializeLogging() {
-    LogManager.getLogManager();
-    for (Handler h : Logger.getLogger("").getHandlers()) {
-      h.setFormatter(new OneLineFormatter());
+    Logger.getLogger("");
+
+    for (Enumeration<String> e = LogManager.getLogManager().getLoggerNames(); e.hasMoreElements();) {
+      for (Handler h : Logger.getLogger(e.nextElement()).getHandlers()) {
+        h.setFormatter(new OneLineFormatter());
+        h.setLevel(Level.ALL); // Only filter Logger level
+      }
     }
   }
 
@@ -51,7 +56,11 @@ public class LoggerUtils {
    */
   public static void setDefaultLogLevel(String level) {
     Level l = Level.parse(level);
-    Logger.getLogger("").setLevel(l);
+    initializeLogging();
+
+    for (Enumeration<String> e = LogManager.getLogManager().getLoggerNames(); e.hasMoreElements();) {
+      Logger.getLogger(e.nextElement()).setLevel(l);
+    }
   }
 
   /**

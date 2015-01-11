@@ -246,7 +246,7 @@ while(ev3.isOk()) {
 .Color API:
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
-while(enterKey.isUp() && ev3.isOk()) {
+while(ev3.isOk()) {
   ev3.notify("Color: " + colorSensor.getColor());
   ev3.sleep(200);
 }
@@ -337,9 +337,9 @@ var irSensor = ev3.getBrick().getIRSensor("S1");
 while(ev3.isOk()) {
   var x = irSensor.getRemoteCommand();
   ev3.notify("value: " + x.getValue() + 
-             ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() + 
-             ", bl: " + x.isBottomLeftEnabled() + ", br: " + x.isBottomRightEnabled() + 
-             ", bea: " + x.isBeaconEnabled() + " nothing: " + x.noButtonPressed());
+            ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() + 
+            ", bl: " + x.isBottomLeftEnabled() + ", br: " + x.isBottomRightEnabled() + 
+            ", bea: " + x.isBeaconEnabled() + " nothing: " + x.isNothingEnabled());
   ev3.sleep(200);
 }
 ----
@@ -357,7 +357,7 @@ Sample code for the Touch sensor object
 [source,javascript]
 ----
 // Touch sensor API
-var touchSensor = ev3.getBrick().getTouchSensor("S2");
+var touchSensor = ev3.getBrick().getTouchSensor("S1");
 while(ev3.isOk()) {
   ev3.notify("Push button: " + touchSensor.isPushed());
   ev3.sleep(200);
@@ -612,7 +612,7 @@ z:: The compass direction of the device in degrees (also known as 'alpha').
 Sample script with xGyro XSensor:
 [source,javascript]
 ----
-// xTouch XSensor
+// xGyro XSensor
 var xGyro = ev3.getXSensor("xGyro");
 
 while(ev3.isOk()) {

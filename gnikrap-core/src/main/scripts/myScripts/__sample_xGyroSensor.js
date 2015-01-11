@@ -1,3 +1,9 @@
+///////////////////////////////////////////////////////////////////////////////
+// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
+//
+// Note: Please adjust the port to what is physically connected on your brick.
+///////////////////////////////////////////////////////////////////////////////
+
 // Initialization
 var left = ev3.getBrick().getLargeMotor("D");
 var right = ev3.getBrick().getLargeMotor("A");

@@ -72,7 +72,7 @@
     "setAxis": "Device orientation",
     "xAxis": "x is the front-back tilt in degrees where front is positive (also known as 'beta' with 'Portrait' orientation)",
     "yAxis": "y is the left-right tilt in degrees, where right is positive (also known as 'gamma' with 'Portrait' orientation)",
-    "zAxis": "z is is the compass direction of the device in degrees (also known as 'alpha')",
+    "zAxis": "z is the compass direction of the device in degrees (also known as 'alpha')",
     "zAxisNote": "Note: Some devices don't support compass (the z value will always be 0). For some devices, the compass don't returns the angle with the north.",
     
     "axisOrientation": {
@@ -177,7 +177,7 @@
       "INVALID_CHANNEL_VALUE": "Invalid channel value: '__channel__', valid values in [1, 2, 3, 4]",
       "INVALID_NOTE": "Invalid note: '__note__', should be in [C1-B7, # allowed on C, D, F, G, A] or [Do-Si, # allowed on Do, Re, Fa, Sol, La]",
       "UNEXPECTED_ERROR": "Unexpected error: '__error__'",
-      "SCRIPT_STOP_FORCED": "Script forced to stop, please use \"ev3.isRunning()\""
+      "SCRIPT_STOP_FORCED": "Script forced to stop, please use \"ev3.isOk()\""
     },
     "messages": {
       "SCRIPT_STARTING": "Script starting",

@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ public class ScriptExecutionManager {
     if ((scriptResult != null) && (scriptResult.isDone() == false)) {
       // Script is running => Force stop or not
       if (stopRunningScriptIfNeeded) {
-        LOGGER.warning("Submiting a new script while a first one is already running => Stoping the runing script");
+        LOGGER.warning("Submiting a new script while a first one is already running => Stoping the running script");
         stopScript();
       } else {
         throw new EV3ScriptException(EV3ScriptException.SCRIPT_ALREADY_RUNNING, Collections.<String, String> emptyMap());

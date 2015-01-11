@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,8 +92,8 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
       @Override
       protected void onFullTextMessage(WebSocketChannel channel, BufferedTextMessage message) throws IOException {
         String textMsg = message.getData(); // /!\ getData has to be called only once.
-        if (LOGGER.isLoggable(Level.INFO)) {
-          LOGGER.info("FullTextMessage receive: " + textMsg);
+        if (LOGGER.isLoggable(Level.FINE)) {
+          LOGGER.fine("FullTextMessage receive: " + textMsg);
         }
         ev3ActionProcessor.processMessage(textMsg);
         // channel.getIoThread();
@@ -118,7 +118,7 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
     private final WebSocketCallback<Void> sendCallback = new WebSocketCallback<Void>() {
       @Override
       public void onError(WebSocketChannel channel, Void context, Throwable throwable) {
-        // WebSocket should be down
+        // WebSocket should be down - log performed in doOnError
         doOnError(channel, throwable);
       }
 
