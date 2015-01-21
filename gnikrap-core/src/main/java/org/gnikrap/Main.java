@@ -25,6 +25,7 @@ import io.undertow.server.handlers.resource.FileResourceManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.gnikrap.httphandler.FilesHttpHandler;
@@ -137,7 +138,12 @@ public class Main {
         // .setSocketOption(Options.BALANCING_TOKENS, 0) //
         .build();
 
-    server.start();
+    try {
+      server.start();
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Can't launch server", ex);
+      System.exit(0);
+    }
   }
 
   private static EV3ActionProcessor buildActionProcessor(final boolean fakeEV3) {

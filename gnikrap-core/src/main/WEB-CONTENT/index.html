@@ -97,8 +97,9 @@
               <div class="btn-group dropdown" role="group">
                 <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/> <span class="caret"></span></button>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a data-bind="click: onDisplaySettings"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li>
-                    <li><a href="documentation/index.html" target="_blank" ><span class="i18n" data-i18n="navigationBar.gnikrap.documentation">DOCUMENTATION</span></a></li>
+                    <li class="hidden-lg"><a data-bind="click: onFullScreen"><span class="i18n" data-i18n="navigationBar.gnikrap.fullScreen">FULL_SCREEN</span></a></li>
+                    <!-- li><a data-bind="click: onDisplaySettings"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li -->
+                    <li><a href="http://jbenech.github.io/gnikrap/gnikrap-doc/index.html" target="_blank" ><span class="i18n" data-i18n="navigationBar.gnikrap.documentation">DOCUMENTATION</span></a></li>
                     <li class="divider"></li>
                     <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.about">ABOUT</span></a></li>
                   </ul>
@@ -127,6 +128,7 @@
             </div>
             
             <!-- Keyboard sensor tab -->
+            <!-- TOSEE: Is some gesture lib can be useful ? http://hammerjs.github.io/ -->
             <div role="tabpanel" id="keyboardSensorTab" class="tab-pane">
               <nav class="nav navOnOneLine" style="margin-bottom: 5px;"> <!-- Button bar -->
                 <!-- navbar-form navbar-input-group -->
@@ -142,21 +144,19 @@
                 <button class="btn btn-default btn-sm" data-bind="click: onResetKeyboard">
                   <span class="glyphicon glyphicon-file"></span> <span class="i18n" data-i18n="keyboardSensorTab.clear">CLEAR</span></button>
                 <span class="visible-xs-block">&nbsp;</span>
-                <button class="btn btn-default btn-sm" disabled="yes" data-bind="click: onLoadKeyboard">
+                <!-- button class="btn btn-default btn-sm" disabled="yes" data-bind="click: onLoadKeyboard">
                   <span class="glyphicon glyphicon-open"></span> <span class="i18n" data-i18n="keyboardSensorTab.loadAndManage">LOAD_MANAGE</span></button>
                 <span class="visible-xs-block">&nbsp;</span>
                 <button class="btn btn-default btn-sm" disabled="true" data-bind="click: onSaveKeyboard">
-                  <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="keyboardSensorTab.save">SAVE</span></button>
+                  <span class="glyphicon glyphicon-save"></span> <span class="i18n" data-i18n="keyboardSensorTab.save">SAVE</span></button -->
               </nav>
               <!-- Nest a bootstrap grid inside <=> 12 columns available -->
-              <div data-bind="foreach: buttons">
+              <div id="xTouchButtons" data-bind="foreach: buttons">
                 <div class="row" data-bind="foreach: $data">
-                  <!-- TODO: touch events for mobile devices ? -->
                   <button class="col-xs-2 col-sm-2 btn btn-default btn-lg xkeyboard-touch" role="button" 
-                    data-bind="disabled: isDisabled, text: name, click: onKeyboardTouch, event: {mousedown: onPressed, mouseup: onRelease, mouseout: onRelease, touchstart: onTouch, touchmove: onTouch, touchend: onTouch}">BUTTON</button>
+                    data-bind="disabled: isDisabled, text: name">BUTTON</button>
                 </div>
               </div>
-              <p>&nbsp;</p>
             </div>
 
             <!-- Gyro sensor tab -->

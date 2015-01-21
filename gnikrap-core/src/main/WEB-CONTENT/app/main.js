@@ -20,11 +20,10 @@
 // Model to manage the navigation bar actions
 function NavigationBarViewModel(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.workAreaItems = ko.observableArray();
-
-  // Init
-  {
+  { // Init
+    self.context = appContext; // The application context
+    self.workAreaItems = ko.observableArray();
+    
     self.workAreaItems.push({
       name: i18n.t("workArea.scriptEditorTab"),
       tabId: "scriptEditorTab",
@@ -42,7 +41,7 @@ function NavigationBarViewModel(appContext) {
         active: ko.observable(false)
       });
     } // else: Don't show Gyro, not supported by the browser
-    if(self.context.video4html5.isSupported()) {
+    if(self.context.compatibility.isUserMediaSupported()) {
       self.workAreaItems.push({
         name: i18n.t("workArea.videoSensorTab"),
         tabId: "videoSensorTab",
@@ -78,6 +77,11 @@ function NavigationBarViewModel(appContext) {
     self.__collapseNavbar();
   }
   
+  self.onFullScreen = function() {
+    self.context.compatibility.toggleFullScreen();
+    self.__collapseNavbar();
+  }
+  
   self.onDisplaySettings = function() {
     self.context.settingsVM.display();
     self.__collapseNavbar();
@@ -98,12 +102,11 @@ function NavigationBarViewModel(appContext) {
 // Model to manage the script editor tab
 function ScriptEditorTabViewModel(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.editor = undefined;
-  self.scriptFilename = undefined;
-
-  // Init
-  {
+  { // Init
+    self.context = appContext; // The application context
+    self.editor = undefined;
+    self.scriptFilename = undefined;
+  
     self.editor = ace.edit("editor")
     self.editor.setTheme("ace/theme/chrome");
     self.editor.getSession().setMode("ace/mode/javascript");
@@ -193,49 +196,44 @@ function ScriptEditorTabViewModel(appContext) {
 // Model to manage the keyboard x-Sensor
 function KeyboardSensorTabViewModel(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  // Data for the View
-  {
+  { // Init
+    self.context = appContext; // The application context
+    // Data for the View
     self.buttons = [];
     self.isStarted = ko.observable(false);
     self.sensorName = ko.observable("xTouch");
-  }
-  
-  // Init
-  {
+
     for(var i = 0; i < 4; i++) {
       self.buttons[i] = [];
       for(var j = 0; j < 6; j++) {
         self.buttons[i].push({
+          //row: i, col: j,
           name: ko.observable(""),
           actions: [],
           isDisabled: ko.observable(false),
-          isPressed: false,
-          onKeyboardTouch: function(btn) {
-            self.__doOnKeyboardTouch(btn);
-          },
-          onPressed: function(btn) {
-            btn.isPressed = true;
-            self.__doNotifyStateChanged(false);
-            return true; // Allow default action - See http://knockoutjs.com/documentation/event-binding.html "Note 3: Allowing the default action"
-          },
-          onRelease: function(btn) {
-            if(btn.isPressed) {
-              btn.isPressed = false;
-              self.__doNotifyStateChanged(false);
-            } // else, useless event
-            return true; // See onPressed comment
-          },
-          onTouch: function(btn, event) {
-            console.log("event: " + Object.keys(event));
-            console.log("event: " + event.touches);
-            console.log("event: " + JSON.stringify(event.targetTouches));
-          }
+          isPressed: false
         });
       }
     }
-  }
 
+    // In order to be able to manage multi-touch, bind events on the top level keyboard element, with jQuery delegate
+    // (Don't find a better way to do it with 'standard' button )
+    $("#xTouchButtons").on("mousedown touchstart", "button", function(event) {
+      var btn = ko.dataFor(this);
+      self.__doOnButtonPressed(btn);
+      $(this).addClass("active");
+      this.style.color="red";
+      return false;
+    });
+    $("#xTouchButtons").on("mouseup mouseout touchend", "button", function(event) {
+      var btn = ko.dataFor(this);
+      self.__doOnButtonRelease(btn);
+      $(this).removeClass("active");
+      this.style.removeProperty("color");
+      return false;
+    });
+  }
+  
   self.onStart = function() {
     self.isStarted(!self.isStarted());
 
@@ -250,8 +248,11 @@ function KeyboardSensorTabViewModel(appContext) {
     self.__doNotifyStateChanged(true);
   }
 
-  self.__doOnKeyboardTouch = function(btn) {
-    if(!self.isStarted()) {
+  self.__doOnButtonPressed = function(btn) {
+    if(self.isStarted()) {
+      btn.isPressed = true;
+      self.__doNotifyStateChanged(false);
+    } else {
       bootbox.prompt({
         title: i18n.t('keyboardSensorTab.configureKeyboardButtonModal.title'),
         value: btn.name(),
@@ -259,10 +260,17 @@ function KeyboardSensorTabViewModel(appContext) {
           if (result != null) {
             btn.actions = self.__splitNameToActions(result);
             btn.name(self.__buildNameFromActions(btn.actions));
-          } // Cancel clicked
+          } // else, cancel clicked
         }
       });
     }
+  }
+  
+  self.__doOnButtonRelease = function(btn) {
+    if(btn.isPressed) {
+      btn.isPressed = false;
+      self.__doNotifyStateChanged(false);
+    } // else, useless event
   }
 
   self.__splitNameToActions = function(name) {
@@ -333,22 +341,22 @@ function KeyboardSensorTabViewModel(appContext) {
   self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
     $('.xkeyboard-touch').css('height', Math.round(
       Math.max(45, Math.min(window.innerWidth / 6, // Max height for better display for devices in portrait mode 
-          (usefullWorkAreaHeight - 10) / 4))).toString() + 'px');
+          (usefullWorkAreaHeight - 10) / 4))).toString() + 'px');          
   }
 }
+
 
 
 // Model to manage the Gyroscope x-Sensor
 function GyroscopeSensorTabViewModel(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.sensorName = ko.observable("xGyro");
-  self.calibrationMode = ko.observable(true);
-  self.isStarted = ko.observable(false);
-  self.axisOrientation = 0;
+  { // Init
+    self.context = appContext; // The application context
+    self.sensorName = ko.observable("xGyro");
+    self.calibrationMode = ko.observable(true);
+    self.isStarted = ko.observable(false);
+    self.axisOrientation = 0;
 
-  // Init
-  {
     self.xAxisValue = ko.observable("");
     self.yAxisValue = ko.observable("");
     self.zAxisValue = ko.observable("");
@@ -535,14 +543,13 @@ function GyroscopeSensorTabViewModel(appContext) {
 // Current implements is largely inspired from the jsfeast "Lukas Kanade optical flow" sample
 function PointTrackingComputationEngine(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.MAX_POINTS = 20;
+  { // init
+    self.context = appContext; // The application context
+    self.MAX_POINTS = 20;
 
-  self.currentImagePyramid = undefined;
-  self.previousImagePyramid = undefined;
-
-  // init
-  {
+    self.currentImagePyramid = undefined;
+    self.previousImagePyramid = undefined;
+    
     self.points = {
       number: 0,
       idx: 0, // idx is used to generate a unique point name
@@ -685,21 +692,21 @@ function PointTrackingComputationEngine(appContext) {
 // Model to manage the Video x-Sensor.
 function VideoSensorTabViewModel(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.sensorName = ko.observable("xVideo");
-  self.isStarted = ko.observable(false);
+  { // Init
+    self.context = appContext; // The application context
+    self.sensorName = ko.observable("xVideo");
+    self.isStarted = ko.observable(false);
 
-  self.webcam = document.getElementById("xVideoSensorWebcam"); // Video webcam HTML widget
-  self.canvas = document.getElementById("xVideoSensorCanvas"); // Video canvas HTML widget
-  self.WIDTH = 640;
-  self.HEIGHT = 480;
+    self.webcam = document.getElementById("xVideoSensorWebcam"); // Video webcam HTML widget
+    self.canvas = document.getElementById("xVideoSensorCanvas"); // Video canvas HTML widget
+    self.webcamMediaStream = undefined; // The camera
+    self.WIDTH = 640;
+    self.HEIGHT = 480;
 
-  // The computation data
-  self.perf = undefined;
-  self.ptce = new PointTrackingComputationEngine(appContext);
+    // The computation data
+    self.perf = undefined;
+    self.ptce = new PointTrackingComputationEngine(appContext);
 
-  // Init
-  {
     self.perfSummary = ko.observable("");
     self.perfSummary.extend({ rateLimit: 200 }); // Accept lower refresh rate
 
@@ -715,9 +722,9 @@ function VideoSensorTabViewModel(appContext) {
     self.isStarted(!self.isStarted());
 
     if(self.isStarted()) {
-      if (self.context.video4html5.isSupported) {
+      if (self.context.compatibility.isUserMediaSupported()) {
         // Request to access to the Webcam
-        self.context.video4html5.getUserMedia({video: true}, self.handleVideo, self.videoAccessRefused);
+        self.context.compatibility.getUserMedia({video: true}, self.handleVideo, self.videoAccessRefused);
       }
     } else {
       // Stop acquiring video
@@ -725,6 +732,11 @@ function VideoSensorTabViewModel(appContext) {
       self.webcam.src = null;
       self.perfSummary("");
       self.__clearCanvas();
+      
+      if(self.webcamMediaStream) { // Defined
+        self.webcamMediaStream.stop();
+        self.webcamMediaStream = undefined;
+      }
 
       // Send an not started value
       self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), { isStarted: self.isStarted() });
@@ -732,16 +744,17 @@ function VideoSensorTabViewModel(appContext) {
   }
 
   // Start acquisition: Ensure that all the stuff is correctly initialized
-  self.handleVideo = function(mediaStream) {
+  self.handleVideo = function(webcamMediaStream) {
     // Init webcam
-    self.webcam.src = self.context.video4html5.URL.createObjectURL(mediaStream);
+    self.webcam.src = self.context.compatibility.URL.createObjectURL(webcamMediaStream);
+    self.webcamMediaStream = webcamMediaStream;
     // Init computation stuff
     self.ptce.reset();
     self.prof = new profiler();
     // Launch the show
     setTimeout(function() { // Not sure if it's useful to delay this call ?!
         self.webcam.play();
-        self.context.video4html5.requestAnimationFrame(self.onAnimationFrame);
+        self.context.compatibility.requestAnimationFrame(self.onAnimationFrame);
       }, 500);
   }
 
@@ -771,7 +784,7 @@ function VideoSensorTabViewModel(appContext) {
           });
       }
 
-      self.context.video4html5.requestAnimationFrame(self.onAnimationFrame); // Call for each frame - See note on: https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame
+      self.context.compatibility.requestAnimationFrame(self.onAnimationFrame); // Call for each frame - See note on: https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame
     } else {
       self.__clearCanvas();
     }
@@ -798,10 +811,12 @@ function VideoSensorTabViewModel(appContext) {
 // Model that manage the message log view
 function MessageLogViewModel(appContext) { // appContext not used for MessageLog
   var self = this;
-  self.messages = ko.observableArray();
-  self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
-  self.keepOnlyLastMessages = ko.observable(true);
-  self.MESSAGES_TO_KEEP = 15;
+  { // Init
+    self.messages = ko.observableArray();
+    self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
+    self.keepOnlyLastMessages = ko.observable(true);
+    self.MESSAGES_TO_KEEP = 15;
+  }
 
   self.addMessage = function(isError, message) {
     //console.log("new message: " + isError + " / " + message);
@@ -851,8 +866,10 @@ function MessageLogViewModel(appContext) { // appContext not used for MessageLog
 // Model that manage the "load/manage scripts" dialog
 function ManageScriptFilesViewModel(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.files = ko.observableArray();
+  { // Init
+    self.context = appContext; // The application context
+    self.files = ko.observableArray();
+  }
 
   self.display = function() {
     self.doRefreshFileList();
@@ -917,8 +934,10 @@ function ManageScriptFilesViewModel(appContext) {
 // Model that manage the "Settings" dialog
 function SettingsViewModel(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.language = ko.observable("");
+  { // Init
+    self.context = appContext; // The application context
+    self.language = ko.observable("");
+  }
   
   self.display = function() {
     // Initialize the values
@@ -944,15 +963,16 @@ function SettingsViewModel(appContext) {
 // Manage the interaction with the server on the EV3 brick
 function EV3BrickServer(appContext) {
   var self = this;
-  self.context = appContext; // The application context
-  self.ws = undefined; // undefined <=> no connection with the EV3 brick
-  self.xSensorStream = { // Manage the xSensor stream
-      sensors: {},
-      timeoutID: undefined
-    }; 
-  self.XSENSOR_STREAM_FREQUENCY = 50; // in ms => Maximum of 20 message by second by xSensor
+  { // Init
+    self.context = appContext; // The application context
+    self.ws = undefined; // undefined <=> no connection with the EV3 brick
+    self.xSensorStream = { // Manage the xSensor stream
+        sensors: {},
+        timeoutID: undefined
+      }; 
+    self.XSENSOR_STREAM_FREQUENCY = 50; // in ms => Maximum of 20 message by second by xSensor
+  }
 
-  // Init
   self.initialize = function() {
     if ("WebSocket" in window) {
       var wsURI = "ws://" + location.host + "/ws/gnikrap/script";
@@ -963,7 +983,7 @@ function EV3BrickServer(appContext) {
         self.ws.onmessage = function(evt) { self.__onWSMessage(evt); }
         self.ws.onerror = function(evt) { self.__onWSError(evt); };
       } catch(ex) {
-        console.log("Fail to create websocket for: '" + wsURI + "'");
+        console.warn("Fail to create websocket for: '" + wsURI + "'");
         self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.ev3ConnectionFailed", {cansedBy: ex}));
         self.__doWSReconnection();
       }
@@ -1024,7 +1044,7 @@ function EV3BrickServer(appContext) {
         try {
           self.ws.close();
         } catch(ex) {
-          console.log("Fail to close the websocket - " + JSON.stringify(ex));
+          console.warn("Fail to close the websocket - " + JSON.stringify(ex));
         }
       } // else: CLOSED or CLOSING => No need to close again
       self.ws = undefined;
@@ -1151,17 +1171,17 @@ function EV3BrickServer(appContext) {
 // Other stuff reworked from things found on the internet without explicit copyright
 
 // Manage compatibility for accessing to the webcam (getUserMedia) and video rendering (requestAnimationFrame)
-var video4html5 = (function() {
+var compatibility = (function() {
   var lastTime = 0,
-  URL = window.URL || window.webkitURL;
+  URL = window.URL || window.webkitURL,
 
   requestAnimationFrame = function(callback, element) {
-    var temp =
-//      window.requestAnimationFrame        ||
-//      window.webkitRequestAnimationFrame  ||
-//      window.mozRequestAnimationFrame     ||
-//      window.oRequestAnimationFrame       ||
-//      window.msRequestAnimationFrame      ||
+    var requestAnimationFrame =
+      window.requestAnimationFrame        ||
+      window.webkitRequestAnimationFrame  ||
+      window.mozRequestAnimationFrame     ||
+      window.oRequestAnimationFrame       ||
+      window.msRequestAnimationFrame      ||
       function(callback, element) {
         var currTime = new Date().getTime();
         var timeToCall = Math.max(0, 16 - (currTime - lastTime));
@@ -1172,11 +1192,11 @@ var video4html5 = (function() {
         return id;
       };
 
-    return temp.call(window, callback, element);
+    return requestAnimationFrame.call(window, callback, element);
   },
 
   cancelAnimationFrame = function(id) {
-    var cancelAnimationFrame =
+    var cancelAnimationFrame = window.cancelAnimationFrame ||
       function(id) {
         clearTimeout(id);
       };
@@ -1196,19 +1216,57 @@ var video4html5 = (function() {
     return getUserMedia.call(window.navigator, options, success, error);
   },
 
-  isSupported = function() {
+  isUserMediaSupported = function() {
     return (window.navigator.getUserMedia ||
       window.navigator.mozGetUserMedia ||
       window.navigator.webkitGetUserMedia ||
       window.navigator.msGetUserMedia) != undefined;
   };
 
+  // Adapted from: https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode
+  // Note: Currently MUST be triggered by the user and can't be done automatically (eg. based on screen size)
+  toggleFullScreen = function() {
+    var elem = document.body;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    }
+  }
+
   return {
     requestAnimationFrame: requestAnimationFrame,
     cancelAnimationFrame: cancelAnimationFrame,
     getUserMedia: getUserMedia,
-    isSupported: isSupported,
+    isUserMediaSupported: isUserMediaSupported,
+    toggleFullScreen: toggleFullScreen,
     URL: URL
+  };
+})();
+
+var CanvasUtils = (function() {
+  var roundedRect = function (ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + radius);
+    ctx.lineTo(x, y + height - radius);
+    ctx.quadraticCurveTo(x, y + height, x + radius, y + height);
+    ctx.lineTo(x + width - radius, y + height);
+    ctx.quadraticCurveTo(x + width, y + height, x + width, y + height - radius);
+    ctx.lineTo(x + width, y + radius);
+    ctx.quadraticCurveTo(x + width, y, x + width - radius, y);
+    ctx.lineTo(x + radius, y);
+    ctx.quadraticCurveTo(x, y, x, y + radius);
+    ctx.closePath();
+    return ctx;
+    // ctx.stroke();
+  };
+
+  return {
+    roundedRect: roundedRect
   };
 })();
 
@@ -1217,23 +1275,6 @@ function round2dec(n) {
   // return Number(n.toFixed(2));
   return Math.round(n * 100) / 100;
 }
-
-/*
-function toggleFullScreen() {
-  var doc = window.document;
-  var docEl = doc.documentElement;
-
-  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-    requestFullScreen.call(docEl);
-  }
-  else {
-    cancelFullScreen.call(doc);
-  }
-}
-*/
 
 
 /////////////////////////////
@@ -1252,12 +1293,6 @@ ko.bindingHandlers['disabled'] = {
 }
 
 
-/////////////////////////
-// Check browser version
-// TODO: Add some sort of feature detection in order to have "correct"/right app
-//console.log($.browser); // Removed - A plugin exists: https://github.com/gabceb/jquery-browser-plugin
-//alert(JSON.stringify($.support, null, "  "));
-
 /////////////////////////////////////////
 // Initialization while document is ready
 var context = { // The application context - used for sort of basic dependency-injection
@@ -1265,6 +1300,16 @@ var context = { // The application context - used for sort of basic dependency-i
     language: undefined
   }
 };
+
+
+// Check sort of "browser compatibility"
+if(!('WebSocket' in window
+     && 'matchMedia' in window)) { // A minimal level of css for bootstrap
+  // i18n don't work on some old browser (eg. IE8) => No translation here
+  alert("Gnikrap can't run in this browser, consider using a more recent browser.\nThe page will be automatically closed.");
+  window.close();
+}
+
 
 $(document).ready(function() {
   // Translation
@@ -1274,9 +1319,9 @@ $(document).ready(function() {
   i18n.init({ fallbackLng: 'en', lng: language }, function() {
     $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
     context.settings.language = i18n.lng(); // Language really used
-
+    
     // Technical objects
-    context.video4html5 = video4html5;
+    context.compatibility = compatibility;
 
     // Objects and 'ViewModel/VM' instantiation
     context.ev3BrickServer = new EV3BrickServer(context);
@@ -1306,19 +1351,33 @@ $(document).ready(function() {
     // Other initialization
     context.ev3BrickServer.initialize(); // WS connexion with the server
     context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
-
-    // TODO: See https://github.com/sindresorhus/screenfull.js
-    //toggleFullScreen(); 
     
     // Register windows events for editor auto-resize
     // TODO consider using events
-    $(window).on('resize', function () {
+    window.onresize = function() {
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
       context.scriptEditorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);
       context.keyboardSensorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);
       context.messageLogVM.doResize(workAreaHeight, usefullWorkAreaHeight);
-    });
+    };
     $(window).resize();
+    
+    // Register windows events for keyboard shortcuts
+    document.onkeydown = function(e) {
+      if(e.ctrlKey) {
+        if(e.keyCode == 83) { // Ctrl+S
+          e.preventDefault();
+          e.stopPropagation();
+          context.scriptEditorTabVM.onSaveScript();
+          return false;
+        }
+      }
+    };
+
+    // Register windows event to ask confirmation while the user leave the page (avoid loosing scripts)
+    window.onbeforeunload = function () {
+      //return "";
+    };
   });
 });

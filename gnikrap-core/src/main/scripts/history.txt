@@ -16,13 +16,14 @@ Features to add (no specific order):
 Change-log:
  0.3.0 (not yet released - work in progress):
     - Fix some bugs and improve error management in the GUI
-    - Rework and polish GUI layout, navigation-bar and tool-bars
+    - Rework and polish GUI layout, navigation-bar and tool-bars (now works fine on an Android tablet)
     - Add automatic EV3 brick reconnection in case of connection lost
     - Add xSensors (eXternal Sensors) feature: xTouch (24 touch on screen keyboard), xVideo (video object tracking), xGyro (gyroscope)
     - Rework some script API
+    - Documentation has been updated.
 
 
- 0.2.0 (last official release):
+ 0.2.0 (official release):
     - Load/Delete/Save script added
     - About box added
     - GUI Internationalization (English and French are available)
@@ -43,8 +44,7 @@ Change-log:
       - IR Sensor: distance, seek beacon, remote command
       - Motors: speed, rotate, tacho "sensor", forward, backward
 
-      
-      
+
 ------------------------------------------------------------------------------
 
 Known defects:

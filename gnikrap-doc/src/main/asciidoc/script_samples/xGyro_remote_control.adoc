@@ -87,8 +87,12 @@ while(ev3.isOk()) {
     connected on the brick
 <2> We define a function that enable to make a motor, go forward, go backward or stop according to a power value 
     (between -100 and 100)
-<3> We have access to the standard Javascript `Math` object (See http://www.w3schools.com/js/js_math.asp)
+<3> We use the standard Javascript `Math` object in order to make our computations (See http://www.w3schools.com/js/js_math.asp)
 <4> The "program" itself. Two main cases: 
-<5> 1st case: xSensor is on, so we compute the left motor and right motor power according to the x and y angle returned by the xGyro sensor.
+<5> 1st case: xSensor is on, so we compute the left motor and right motor power according to the x and y angle returned by the xGyro sensor 
+    (see below for more details on the motor power computation).
 <6> 2nd case: xSensor is off, we ensure that tht motor are stopped.
 <7> Finally wait a bit before processing the next loop (not mandatory, but recommended while using xSensors)
+
+Motor power computation
+TODO - explain a bit the computation
