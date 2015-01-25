@@ -2,14 +2,27 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<formats>
 		<format>dir</format>
-    <!-- format>tar</format -->
-    <format>zip</format>
+    <format>tar.gz</format>
 	</formats>
+  
 	<fileSets>
 		<fileSet>
 			<directory>src/main/scripts</directory>
 			<outputDirectory>/bin</outputDirectory>
+      <excludes>
+        <exclude>*.sh</exclude>
+      </excludes>
 		</fileSet>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory>/bin</outputDirectory>
+      <includes>
+        <include>*.sh</include>
+      </includes>
+      <fileMode>0755</fileMode>
+      <lineEnding>unix</lineEnding>
+		</fileSet>
+    
 		<fileSet>
 			<directory>src/main/WEB-CONTENT</directory>
 			<outputDirectory>/WEB-CONTENT</outputDirectory>

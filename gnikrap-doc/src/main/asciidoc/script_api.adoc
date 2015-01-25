@@ -25,7 +25,7 @@ the API in a more efficient way:
 // ///////////////////////////////////////////////////////////////////////////
 
 ****
-isOk():: Enable to known is everything is ok and the script can conitnue running not. Returns `true` if the script can continue running, `false` if the script should stop.
+isOk():: Enable to known is everything is ok and the script can continue running not. Returns `true` if the script can continue running, `false` if the script should stop.
 
 getBrick():: Returns <<The Brick object>>.
 
@@ -44,7 +44,7 @@ getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with th
 
 ==== Configuration object
 
-[NOTE]
+[WARNING]
 ====
 Configuration object is for advanced use only. If you don't uderstand what it means, don't use this object.
 ====
@@ -107,7 +107,7 @@ See the others objects in order to have sample usage of the brick object.
 === The Motor object
 // ///////////////////////////////////////////////////////////////////////////
 
-[NOTE]
+[TIP]
 ====
 On the motor API, some call wait that the operation is ended on the motor (so when the
 function returns the motor has ended the expected move) while other immediately returns (so
@@ -459,7 +459,7 @@ setVolume(vol):: Set the sound volume. +
 
 getVolume():: Returns the sound volume.
 
-beep()::Play a beep.
+beep():: Play a beep.
 
 playTone(frequency, durationInMs):: Play a tone of the given frequency for the given duration. +
                                     `frequency` the frequency of the tone in Hertz (Hz). Note: In order to be audible, use values between 50 and 2000. +
@@ -539,40 +539,52 @@ getValue():: Returns the *current* value of the XSensor. It is *IMPORTANT* to no
 ****
 
 
-[NOTE]
-====
-It is important to note that within the value of an XSensor, the data was retrieved by using a method that get 
-the name of the field as parameter: In other words, `getXxxx()` will be written `get("xxxx")`.
-====
-
-
 [TIP]
 ====
-You can see all the fields available for a XSensor by notifying it's value. For example for an xTouch sensor, a call to 
-`ev3.notify(ev3.getXSensor("xTouch").getValue())` will display something like: `{touchs={TestTouch4=1, TestTouch8=1}, isStarted=true}`.
-
-_In this example, we can see that the XSensor is started and that the TestTouch4 and TestTouch8 are enabled._
-
-Note: The fields available for each sensor are documented in the following chapters.
+For all XSensor values you will have a function `isStarted()` that will returns `true` if started or `false` if not. *If the XSensor
+isn't started (i.e. `isStarted` returns `false`), all the other methods on the value object will not be available. If you even try to call
+these methods, the script will be stopped.*
 ====
+
 
 ==== The xTouch XSensor
 
-image::xsensor/xTouch_001_configure.png[xTouch - configuration mode]
+image::xsensor/xTouch_001_configure.png[xTouch - configuration mode, align="center"]
 
 In the screen, you can:
 
 * Set the sensor name (in our example: "joystick").
-* Configure the xTouch sensor: Set the buttons 'names': While not started, click on a button and set the list of names (comma separated) for the given button.
-* Start the xTouch sensor: configured Once started, each time a button was clicked the sensor value was updated.
+* Configure the xTouch sensor: Set the buttons 'actions': While not started, click on a button and set the list of actions (comma separated) for the button.
+* Start the xTouch sensor: While a button was clicked, the value of the sensor was updated. On multi-touch devices, you can click several buttons at the same time.
 +
-Note: While started, only the buttons with a name will remains active. 
+Note: While started, the buttons not configured (without associated actions) will be disabled. 
 
 
 Here are the fields available on the XTouch XSensor:
 
+[NOTE]
+====
+Only the *active* touches are available within the XSensor values.
+====
+
 ****
-isStarted:: Returns `true` if the XSensor is started, `false` otherwise.
+isStarted():: Returns `true` if the XSensor is started, `false` otherwise.
+
+containsTouch(name):: Returns `true` if the touch is available, that is to say active, `false` otherwise. +
+                      `name` the name of the touch to look for.
+
+getTouch(name):: Returns a <<Touch object>> for the given touch. +
+                 `name` the name of the touch to look for.
+
+getTouches():: Returns an array of all the <<Touch object>>s available.
+****
+
+===== Touch object
+
+****
+getName():: Returns the name of the touch.
+
+getHits():: Returns the number of simultaneous hits for the touch (several touch can have the same name).
 ****
 
 
@@ -580,33 +592,53 @@ Sample script with xTouch XSensor:
 [source,javascript]
 ----
 // xTouch XSensor
+// Configure the xTouch sensor with at least one touch "up"
+var xTouch = ev3.getXSensor("xTouch");
+while(ev3.isOk()) {
+  var value = xTouch.getValue();
+  if(value.isStarted()) {
+    if(value.containsTouch("up")) {
+      ev3.notify("You have clicked the 'up' touch !");
+    } else {
+      ev3.notify("Click on 'up'");
+    }
+  }
+  
+  ev3.sleep(100);
+}
 ----
 
 
 ==== The xGyro XSensor
 
-image::xsensor/xGyro_001_running.png[xGyro]
+image::xsensor/xGyro_001_running.png[xGyro, align="center"]
 
 In the screen, you can:
 
-* Set the sensor name (in our example: "xGyro")
-* Set the orientation of the device (portrait/landscape) in order to have the right values.
+* Set the sensor name (in our example: "xGyro").
+* Set the orientation of the device (portrait/left landscape/right landscape, reverse portrait) in order to have the right values.
 * Start the xGyro sensor.
 
-Here are the fields available on the xGyro XSensor:
 
 ****
-isStarted:: Returns `true` if the XSensor is started, `false` otherwise.
+isStarted():: Returns `true` if the XSensor is started, `false` otherwise.
 
-x:: The front-back tilt in degrees where front is positive (also known as 'beta' with 'Portrait' orientation).
-    Returns an object that contains only one field: `angle`. This field contains the angle of the device on this axis.
+getX():: Returns an <<Axis object>>. +
+         X is the front-back tilt in degrees where front is positive (also known as 'beta' with 'Portrait' orientation).
 
-y:: The left-right tilt in degrees, where right is positive (also known as 'gamma' with 'Portrait' orientation)
-    Same return value as x.
+getY():: Returns an <<Axis object>>. +
+         Y is the left-right tilt in degrees, where right is positive (also known as 'gamma' with 'Portrait' orientation)
 
-z:: The compass direction of the device in degrees (also known as 'alpha'). 
-    Note: Some devices don't support compass (the z value will always be 0). For some devices, the compass don't returns the angle with the north.
-    Same return value as x.
+getZ():: Returns an <<Axis object>>. +
+         The compass direction of the device in degrees (also known as 'alpha').  +
+         _Note_: Some devices don't support compass (the z value will always be 0). For some devices, the compass don't returns the angle with the north.
+****
+
+
+===== Axis object
+
+****
+getAngle():: Returns the angle in degrees
 ****
 
 Sample script with xGyro XSensor:
@@ -617,9 +649,9 @@ var xGyro = ev3.getXSensor("xGyro");
 
 while(ev3.isOk()) {
   var value = xGyro.getValue();
-  if(value.get("isStarted")) {
-    var y = value.get("y").get("angle");
-    var x = value.get("x").get("angle");
+  if(value.isStarted()) {
+    var y = value.getY().getAngle();
+    var x = value.getX().getAngle();
     
     ev3.notify("XGyro - x: " + x + ", y: " + y);
   }
@@ -631,4 +663,90 @@ while(ev3.isOk()) {
 
 ==== The xVideo XSensor
 
-TODO
+In the screen, you can:
+
+* Start the xVideo sensor. Once started the browser will certainly ask you to select the webcam to use (and to give the authorization to
+  use this webcam).
+* Select objects to track: Once started, click on the video to select the objects to track. You can give the name you want to the object.
+  You can also change the name by clicking again on the object.
+
+[TIP]
+====
+.There is several important point to note about the tracking algorithm used:
+- Under 20 FPS (frame per seconds), the object will be often loosed (_The number of FPS is displayed above the video_).
+- Tracking objects with an important black/white contrast is the best option (i.e. objects with with and black surface that are visible from the camera).
+  On the opposite, tracking object with uniform colour don't work very well.
+- If there is something (even for a very short time) between the camera and the tracked object, the object will be loosed.
+- You can move the camera (not too quickly) without any problem.
+- Your object can move/rotate/etc. without any problem.
+
+
+Note: The algorithm used was the Lucas-Kanade method (See http://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method[wikipedia] for more details).
+====
+
+
+****
+isStarted():: Returns `true` if the XSensor is started, `false` otherwise.
+
+containsObject(name):: Returns `true` if the object is available, that is to say tracked, `false` otherwise. +
+                      `name` the name of the object to look for.
+
+getObject(name):: Returns a <<VisibleObject object>> for the given object. +
+                 `name` the name of the object to look for.
+
+getObjects():: Returns an array of all the <<VisibleObject object>>s available.
+****
+
+===== VisibleObject object
+
+****
+getName():: Returns the name of the object.
+
+getX():: Returns the x value for this object (x goes from 0 to 640).
+
+getY():: Returns the y value for this object (y goes from 0 to 480).
+****
+
+Sample script with xVideo XSensor:
+[source,javascript]
+----
+// xVideo XSensor
+// Configure the xVideo sensor to track one object called "myTarget"
+var xVideo = ev3.getXSensor("xVideo");
+while(ev3.isOk()) {
+  var value = xVideo.getValue();
+  if(value.isStarted()) {
+    if(value.containsObject("myTarget")) {
+      var t = value.getObject("myTarget");
+      ev3.notify("Target found: [" + t.getX() + ", " + t.getY() + "]");
+    } else {
+      ev3.notify("Hey, select a target called 'myTarget'");
+    }
+  }
+  
+  ev3.sleep(100);
+}
+----
+
+
+==== Advanced usage
+
+You can use several xSensor at the same time. Theses sensors can be on the same device or on several devices.
+For example, you can run on the same device the xGyro sensor and the xTouch sensor. Another example could be 
+to run the xGyro sensor on one device and the xVideo sensor on another device.
+
+[IMPORTANT]
+====
+.However it is recommended to limit to:
+- 4 active XSensor at the same time _(xGyro and xVideo sensor always generate new values => 
+  Sending the values of more than 4 sensors at the same time can flood the EV3 brick)_.
+- 2 devices connected to the EV3 at the same time _(The network bandwidth available on
+  the EV3 brick is quite limited, especially with bluetooth, so 2 is ok, more can be challenging).
+
+====
+
+
+A note on the behaviour of the function `ev3.ìsOk()` while using XSensors: Even if not configured (see <<Configuration object>>)
+this method will automatically wait a bit while one or several XSensors are actively sending data to the brick. This waiting time
+will be automatically reset while there is no more active XSensors. +
+_Note_: The aim of this small waiting time is to let the EV3 CPU process the XSensors incoming events in a proper way.

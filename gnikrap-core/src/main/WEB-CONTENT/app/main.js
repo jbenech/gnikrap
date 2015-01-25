@@ -1221,23 +1221,40 @@ var compatibility = (function() {
       window.navigator.mozGetUserMedia ||
       window.navigator.webkitGetUserMedia ||
       window.navigator.msGetUserMedia) != undefined;
-  };
+  },
 
   // Adapted from: https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode
   // Note: Currently MUST be triggered by the user and can't be done automatically (eg. based on screen size)
   toggleFullScreen = function() {
     var elem = document.body;
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
-    } else if (elem.mozRequestFullScreen) {
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen();
-    }
-  }
+    var isFullScreen = (document.fullscreenElement || 
+                        document.mozFullScreenElement || 
+                        document.webkitFullscreenElement || 
+                        document.msFullscreenElement);
 
+    if(isFullScreen) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen(); // Element.ALLOW_KEYBOARD_INPUT
+      }
+    } else {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+  };
+  
   return {
     requestAnimationFrame: requestAnimationFrame,
     cancelAnimationFrame: cancelAnimationFrame,
@@ -1293,19 +1310,19 @@ ko.bindingHandlers['disabled'] = {
 }
 
 
-/////////////////////////////////////////
-// Initialization while document is ready
-var context = { // The application context - used for sort of basic dependency-injection
+////////////////////////////////////
+// Initialization of the application
+var context = { // The application context - used as a basic dependency-injection mechanism
   settings: {
     language: undefined
   }
 };
 
 
-// Check sort of "browser compatibility"
+// Basic checks for "browser compatibility"
 if(!('WebSocket' in window
      && 'matchMedia' in window)) { // A minimal level of css for bootstrap
-  // i18n don't work on some old browser (eg. IE8) => No translation here
+  // i18n don't work on some old browser (eg. IE8) => Don't use translation here
   alert("Gnikrap can't run in this browser, consider using a more recent browser.\nThe page will be automatically closed.");
   window.close();
 }
@@ -1377,7 +1394,7 @@ $(document).ready(function() {
 
     // Register windows event to ask confirmation while the user leave the page (avoid loosing scripts)
     window.onbeforeunload = function () {
-      //return "";
+      return "";
     };
   });
 });

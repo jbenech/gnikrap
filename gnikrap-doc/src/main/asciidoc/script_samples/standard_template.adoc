@@ -1,11 +1,9 @@
 === The standard template
 
-Here is the "standard" template for a script within Gnikrap:
-
 [NOTE]
 ====
-We present here the "standard" template for a script within Gnikrap. This template is the default 
-script that is loaded while you start Gnikrap.
+We present here the "standard" template for a script within Gnikrap. This template is automatically loaded
+while you start Gnikrap.
 ====
 
 [source,javascript]
@@ -42,8 +40,8 @@ while(ev3.isOk()) {
 
 <4> Here is the main loop of your program. It is important to have `ev3.isOk()` in the 
     while condition in order to be able to stop gently the script while using the "Stop" button (in fact, `ev3.isOk()`
-    will returns `false` one the Stop button was clicked => The main loop will exit in a clean way). If you don't
-    put this condition, the script will be force-closed (stop abruptly).
+    will returns `false` once the Stop button was clicked => The main loop will exit in a clean way). If you don't
+    put this condition, the script will be stopped abruptly (force-closed).
     
 <5> You can perform some finalization here. However theses finalization should be very quick otherwise the script will be force-closed. +
     _Note:_ You can increase the time before the script was force-closed with the `ev3.getConfiguration()` object.

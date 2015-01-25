@@ -1,6 +1,12 @@
 === A robot controlled with the remote beacon
 
-Here is a full working sample. This script enable to remote control a crawler robot.
+The aim of the sample is to pilot with the EV3 beacon a crawler made of:
+
+* 1 motor for a left wheel (or caterpillar) 
+* 1 motor for the right wheel (or caterpillar) 
+* 1 infrared sensor for the receiving remote beacon 'data'
+* (option) 1 motor to launch ball (like in standard EV3 sample)
+
 
 [source,javascript]
 ----

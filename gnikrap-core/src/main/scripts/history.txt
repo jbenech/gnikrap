@@ -1,35 +1,30 @@
 ------------------------------------------------------------------------------
 
-Features to add (no specific order):
- - Add import/export feature (save all the data on the ev3 in one operation)
- - Add real time sensor probes
- - Add a packaging simple to use (write the SD card and play)
- - Add port checking (auto detection for EV3 devices)
- - Add documentation to add other scripting language
- - Exit script feature (is return work ?)
- - Feature to shutdown the brick from the browser
- - Add visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html)
+Current stable release is: 0.3.0
 
- 
+
 ------------------------------------------------------------------------------
 
-Change-log:
- 0.3.0 (not yet released - work in progress):
-    - Fix some bugs and improve error management in the GUI
-    - Rework and polish GUI layout, navigation-bar and tool-bars (now works fine on an Android tablet)
+Version history:
+ 0.3.0 (official release):
+    - Add xSensors (eXternal Sensors) feature: 
+      - xTouch (24 multi-touch on screen keyboard), 
+      - xVideo (video object tracking), 
+      - xGyro (gyroscope)
+    - Rework and improve the GUI (works fine on an Android tablet)
+    - Improve the script API
+    - Documentation updated, new samples added
     - Add automatic EV3 brick reconnection in case of connection lost
-    - Add xSensors (eXternal Sensors) feature: xTouch (24 touch on screen keyboard), xVideo (video object tracking), xGyro (gyroscope)
-    - Rework some script API
-    - Documentation has been updated.
+    - Fix some bugs and improve error management in the GUI
 
 
- 0.2.0 (official release):
+ 0.2.0 (first public release):
     - Load/Delete/Save script added
     - About box added
     - GUI Internationalization (English and French are available)
     - Jackson JSON parser replaced by 'minimal-json' which is faster on the EV3 hardware
     - Documentation added
-    - Polish on the API to manipulate the EV3 brick
+    - Improve the script API to manipulate the EV3 brick
 
 
  0.1.0 (private release):
@@ -47,5 +42,19 @@ Change-log:
 
 ------------------------------------------------------------------------------
 
+Features to add (no specific order):
+ - Add import/export feature (save all the data on the ev3 in one operation)
+ - Add real time sensor probes
+ - Add a packaging simple to use (eg. write the SD card and play)
+ - Add port checking (auto detection for EV3 devices)
+ - Add documentation to add other scripting language
+ - Add exit script feature/function
+ - Add a feature to shutdown the brick from the browser (Gnikrap user-interface)
+ - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html)
+
+ 
+------------------------------------------------------------------------------
+
 Known defects:
- - (all versions) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
+ - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
+ - (0.3.0) - Firefox on android, a cosmetic display problem on the xTouch xSensor

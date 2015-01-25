@@ -10,18 +10,18 @@ The key points of Gnikrap are:
    
 * *Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked 
   to the EV3 device*. The list of sensors available is:
-** xTouch: A 24 touch tactile screen is available and can be used to remotely pilot a robot in a simple way 
+** xTouch: A 24 touch tactile screen that enable to remotely pilot a robot in a simple way 
   (see <<The XTouch XSensor>> for more details).
-** XGyro: Use the gyroscope available in the tablet can be used in order to for example pilot a robot 
+** XGyro: Use the gyroscope of your mobile device (eg. tablet) in order to control a robot 
   (see <<The XTouch XGyro>> for more details).
-** xVideo: Use the webcam of any device in order to track objects (see <<The xTouch XVideo>> for more details).
+** xVideo: Use the webcam of any device (tablet, computer) in order to track objects (see <<The xTouch XVideo>> for more details) and make 
+  your robot react to the environment.
 
 * Off course there is *some limitations compared to other EV3 programming environment and tools*:
 ** Compared to full featured framework like http://www.lejos.org/[leJOS] or http://www.monobrick.dk/[MonoBrick]
 *** No access to a full featured API (access to third parties sensors, location API, etc.). So if your plan is to write a 
     really complex program, consider using another tool. +
     _Note:_ Gnikrap is internally based on leJOS, so all the feature provided by leJOS are "available" within Gnikrap by using the leJOS API. 
-    However some back-door have to be written in the current API in order to be able to use in a quite simple way theses features.
 
 *** Script language are slower to execute than compiled code. So if speed is one of your key choice criteria, consider using
     another tool

@@ -1,9 +1,15 @@
 === A robot controlled with the xGyro sensor
 
-[NOTE]
+The aim of this sample is to pilot with the gyroscope of a device.
+
+The crawler has to be made of:
+
+* 1 motor for a left wheel (or caterpillar) 
+* 1 motor for the right wheel (or caterpillar) 
+
+[IMPORTANT]
 ====
-You need a device (computer, tablet or smartphone) with a 2 axis gyroscopic sensor (z/compass is not used in this sample)
-and that can connect to the EV3 (with wifi or bluetooth).
+You also need a device (computer, tablet or smartphone) with a 2 axis gyroscopic sensor that connect to the EV3 and run Gnikrap.
 ====
 
 [source,javascript]
@@ -96,3 +102,5 @@ while(ev3.isOk()) {
 
 Motor power computation
 TODO - explain a bit the computation
+
+NOTE: Hello world !

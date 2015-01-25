@@ -6,7 +6,7 @@
     "stop": "Stop",
     "gnikrap": {
       "about": "About...",
-      "fullScreen": "Full screen display",
+      "fullScreen": "Full screen (on/off)",
       "settings": "Settings...",
       "documentation": "Documentation..."
     }

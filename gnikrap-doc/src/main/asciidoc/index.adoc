@@ -4,13 +4,14 @@
 :experimental:
 :source-highlighter: highlightjs
 :numbered:
+:icons: font
 
-Gnikrap 
-=======
+Gnikrap documentation
+=====================
 Jean Bénech <jbenech at free dot fr>
-v0.3.0, 2014-12
+v0.3.0 (c) 2014-2015
 
-A simple scripting environment for http://mindstroms.lego.com[Lego Mindstrom EV3]
+A scripting environment simple to use for http://mindstroms.lego.com[Lego Mindstrom EV3]
 
 // Paragraphs
 
