@@ -305,7 +305,7 @@ function KeyboardSensorTabViewModel(appContext) {
           })
         });
       }
-      self.context.ev3BrickServer.sendXSensorValue(self.sensorName(), xValue);
+      self.context.ev3BrickServer.sendXSensorValue(self.sensorName(), "Tch1", xValue);
     }
   }
 
@@ -425,8 +425,8 @@ function GyroscopeSensorTabViewModel(appContext) {
 
   self.__sendXValue = function() {
     self.xValue.isStarted = self.isStarted();
-    self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), self.xValue);
-    // Also 'send' value to GUI
+    self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "Gyr1", self.xValue);
+    // Also display value to GUI
     self.xAxisValue("x: " + JSON.stringify(self.xValue.x));
     self.yAxisValue("y :" + JSON.stringify(self.xValue.y));
     self.zAxisValue("z: " + JSON.stringify(self.xValue.z));
@@ -739,8 +739,12 @@ function VideoSensorTabViewModel(appContext) {
       }
 
       // Send an not started value
-      self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), { isStarted: self.isStarted() });
+      self.__doSendSensorValue({ isStarted: self.isStarted() });
     }
+  }
+  
+  self.__doSendSensorValue = function(value) {
+    self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "Vid1", value);
   }
 
   // Start acquisition: Ensure that all the stuff is correctly initialized
@@ -778,10 +782,7 @@ function VideoSensorTabViewModel(appContext) {
         self.perfSummary("FPS: " + Math.round(self.prof.fps));
 
         // Send JSON event
-        self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), {
-            isStarted: self.isStarted(),
-            objects: ceJson
-          });
+        self.__doSendSensorValue({isStarted: self.isStarted(), objects: ceJson});
       }
 
       self.context.compatibility.requestAnimationFrame(self.onAnimationFrame); // Call for each frame - See note on: https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame
@@ -1092,18 +1093,19 @@ function EV3BrickServer(appContext) {
     }
   }
 
-  self.__buildXSensorMessage = function(sensorName, sensorValue) {
+  self.__buildXSensorMessage = function(sensorName, sensorType, sensorValue) {
     return JSON.stringify({
         act: "setXSnsValue",
-        xSnsName: sensorName,
+        xSnsNam: sensorName,
+        xSnsTyp: sensorType,
         xSnsVal: sensorValue
       });
   }
   
   // Instantaneously send the sensor value
-  self.sendXSensorValue = function(sensorName, sensorValue) {
+  self.sendXSensorValue = function(sensorName, sensorType, sensorValue) {
     if(self.ws != undefined) {
-      var jsonMsg = self.__buildXSensorMessage(sensorName, sensorValue);
+      var jsonMsg = self.__buildXSensorMessage(sensorName, sensorType, sensorValue);
       console.log("send xSensorValue - " + jsonMsg);
       self.__doWSSend(jsonMsg);
     } else {
@@ -1112,12 +1114,12 @@ function EV3BrickServer(appContext) {
   }
   
   // Stream the xSensor values in order to avoid flood the EV3 brick
-  self.streamXSensorValue = function(sensorName, sensorValue) {
+  self.streamXSensorValue = function(sensorName, sensorType, sensorValue) {
     var sensor = self.xSensorStream.sensors[sensorName];
-    var jsonMsg = self.__buildXSensorMessage(sensorName, sensorValue);
+    var jsonMsg = self.__buildXSensorMessage(sensorName, sensorType, sensorValue);
     if(sensor == undefined) {
       self.xSensorStream.sensors[sensorName] = {
-        streamLifetime: 1, // Will be initiliazed at the right value in __doStreamXSensorValue
+        streamLifetime: 1, // Will be initialized at the right value in __doStreamXSensorValue
         lastJsonSent: undefined,
         currentJson: jsonMsg
       };

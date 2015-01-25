@@ -1,12 +1,18 @@
 package org.gnikrap.script.actions;
 
+import java.util.concurrent.Future;
+
 import org.gnikrap.ActionMessageProcessor;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;
 import org.gnikrap.script.JsonMessageFields;
-import org.gnikrap.script.ev3api.xsensors.FutureValue;
-import org.gnikrap.utils.JsonUtils;
+import org.gnikrap.script.ev3api.xsensors.JSonXSensorMessageFields;
+import org.gnikrap.script.ev3api.xsensors.FutureJsonToMapValue;
+import org.gnikrap.script.ev3api.xsensors.FutureJsonToXGyroValue;
+import org.gnikrap.script.ev3api.xsensors.FutureJsonToXTouchValue;
+import org.gnikrap.script.ev3api.xsensors.FutureJsonToXVideoValue;
+import org.gnikrap.script.ev3api.xsensors.XSensorValue;
 
 import com.eclipsesource.json.JsonValue;
 
@@ -18,9 +24,21 @@ public class SetXSensorValue implements ActionMessageProcessor {
   @Override
   public void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception {
     String sensorName = msg.getFieldAsText(JsonMessageFields.EXTERNAL_SENSOR_NAME);
+    String sensorType = msg.getFieldAsText(JsonMessageFields.EXTERNAL_SENSOR_TYPE);
     JsonValue rawSensorValue = msg.getField(JsonMessageFields.EXTERNAL_SENSOR_VALUE);
 
-    context.getContext().setXSensorFutureValue(sensorName, new JsonFutureSensorValue(rawSensorValue));
+    Future<XSensorValue> futureValue;
+    if (JSonXSensorMessageFields.XSENSOR_TYPE_XGYRO.equals(sensorType)) {
+      futureValue = new FutureJsonToXGyroValue(rawSensorValue);
+    } else if (JSonXSensorMessageFields.XSENSOR_TYPE_XVIDEO.equals(sensorType)) {
+      futureValue = new FutureJsonToXVideoValue(rawSensorValue);
+    } else if (JSonXSensorMessageFields.XSENSOR_TYPE_XTOUCH.equals(sensorType)) {
+      futureValue = new FutureJsonToXTouchValue(rawSensorValue);
+    } else {
+      futureValue = new FutureJsonToMapValue(rawSensorValue);
+    }
+
+    context.getContext().setXSensorFutureValue(sensorName, futureValue);
   }
 
   @Override
@@ -31,30 +49,5 @@ public class SetXSensorValue implements ActionMessageProcessor {
   @Override
   public boolean isAsyncNeeded() {
     return false;
-  }
-
-  static class JsonFutureSensorValue implements FutureValue {
-    private JsonValue rawValue;
-    private Object value;
-
-    public JsonFutureSensorValue(JsonValue rawValue) {
-      this.rawValue = rawValue;
-    }
-
-    /**
-     * Construct the value only when needed
-     */
-    @Override
-    public Object getValue() {
-      if (value == null) { // Avoid synchronization cost if possible
-        synchronized (this) {
-          if (value == null) {
-            value = JsonUtils.toObject(rawValue);
-            rawValue = null;
-          }
-        }
-      }
-      return value;
-    }
   }
 }

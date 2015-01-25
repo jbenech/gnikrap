@@ -28,9 +28,9 @@ function activateMotor(motor, powerInPercent) {
 while(ev3.isOk()) {
     var gyro = xGyro.getValue();
 
-    if(gyro.get("isStarted") == true) {
-        var y = gyro.get("y").get("angle");
-        var x = gyro.get("x").get("angle");
+    if(gyro.isStarted()) {
+        var y = gyro.getX().getAngle();
+        var x = gyro.getY().getAngle();
         
         var leftPower = 0;
         if(x > 10) {
@@ -66,8 +66,6 @@ while(ev3.isOk()) {
         activateMotor(left, 0);
         activateMotor(right, 0);
     }
-
-    ev3.sleep(50);
 }
 
 // Finalization

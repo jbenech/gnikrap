@@ -43,15 +43,13 @@ image::install/0100_Putty_Session.png[]
 Login with "root" as user and no password: image:install/0110_Putty_Login.png[]
 
 . Uncompress the Gnikrap software:
-** Create a folder for Gnikrap with the command `mkdir gnikrap`
-+
-** Unzip the files with the command TODO `unzip gnikrap-core-0.2.0.zip -d gnikrap-0.2.0
+** Uncompress the files with the command `tar -xz -f gnikrap-core-0.3.0.tar.gz`
 
 Launch Gnikrap::
-. If needed, connect to the EV3 brick with a teclnet client (see putty section above)
+. If needed, connect to the EV3 brick with a telnet client (see putty section above)
 
 . Launch Gnikrap:
-** Go to the bin folder: `cd gnikrap/bin`
+** Go to the bin folder: `cd gnikrap-core-0.3.0/bin`
 ** Start Gnikrap: `./start.sh`
 
 . Finally open a browser on your computer and connect to Gnikrap with the following URL: `http://10.0.1.1`

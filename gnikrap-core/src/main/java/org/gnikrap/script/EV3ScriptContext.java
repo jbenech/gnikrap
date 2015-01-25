@@ -18,6 +18,7 @@
 package org.gnikrap.script;
 
 import java.io.IOException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,6 +26,7 @@ import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
 import org.gnikrap.script.ev3api.xsensors.XSensor;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
+import org.gnikrap.script.ev3api.xsensors.XSensorValue;
 import org.gnikrap.utils.LoggerUtils;
 
 /**
@@ -36,7 +38,10 @@ public final class EV3ScriptContext {
   private boolean running;
   private final SimpleEV3Button escape;
   private final SimpleEV3Brick ev3;
+
+  // XSensors
   private final XSensorManager xsensor;
+  private int xSensorActive = 0;
 
   // Configuration
   private final Configuration configuration = new Configuration();
@@ -77,13 +82,21 @@ public final class EV3ScriptContext {
   }
 
   /**
-   * @return true if all is ok and the script can continue running, false if the script should stop.
+   * This method manage the script stop and also make the script thread friendly with the other threads.
+   * 
+   * @return true if the script can continue running, false if the script should stop.
    */
   public boolean isOk() {
     if (running) {
       // Thread friendly
       if (confIsRunningWait == 0) {
-        Thread.yield();
+        if (xSensorActive == 0) {
+          Thread.yield();
+        } else {
+          // Wait a bit in order to give time to the XSensor message processing
+          xSensorActive--;
+          sleep(10);
+        }
       } else {
         sleep(confIsRunningWait);
       }
@@ -102,18 +115,28 @@ public final class EV3ScriptContext {
     return ev3;
   }
 
-  /**
-   * Return the object that enable to read external sensors values.
-   */
-  public XSensorManager getXSensors() {
-    return xsensor;
-  }
+  // /**
+  // * Return the object that enable to read external sensors values.
+  // */
+  // public XSensorManager getXSensors() {
+  // return xsensor;
+  // }
 
   /**
-   * A shortcut to get the expected xsensor (more fluent API).
+   * @return the XSensor with the given name.
    */
   public XSensor getXSensor(String name) {
     return xsensor.getSensor(name);
+  }
+
+  /**
+   * Set the value and change the settings in order to allocate a minimum of time for the XSensors events processing
+   */
+  void setXSensorFutureValue(String name, Future<XSensorValue> value) {
+    if (xSensorActive < 5) { // Maximum wait 10 * 10ms (browser send a message each 50ms for 1 sensor)
+      xSensorActive += 6;
+    }
+    getXSensor(name).setFutureValue(value);
   }
 
   /**

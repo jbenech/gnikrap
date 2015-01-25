@@ -6,7 +6,7 @@
     "stop": "Stop",
     "gnikrap": {
       "about": "About...",
-      "fullScreen": "Full screen (on/off)",
+      "fullScreen": "Toggle full screen",
       "settings": "Settings...",
       "documentation": "Documentation..."
     }
@@ -182,7 +182,7 @@
     },
     "messages": {
       "SCRIPT_STARTING": "Script starting",
-      "SCRIPT_ENDED": "Script gently ended"
+      "SCRIPT_ENDED": "Script ended"
     }
   },
 

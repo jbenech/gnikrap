@@ -1,8 +1,27 @@
+/*
+ * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
+ * Copyright (C) 2014-2015 Jean BENECH
+ * 
+ * Gnikrap is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Gnikrap is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.gnikrap.script.ev3api.xsensors;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.gnikrap.utils.LoggerUtils;
 
 /**
  * The data for one sensor.
@@ -11,17 +30,13 @@ import java.util.Map;
  * Subsequent call to {@link #getValue()} could return a different value graph.
  */
 public class XSensor {
+  private static final Logger LOGGER = LoggerUtils.getLogger(XSensor.class);
+
   private final String name;
 
-  private FutureValue value;
+  private Future<XSensorValue> value;
 
-  private static final Map<String, Object> DEFAULT_XSENSOR_VALUE;
-
-  static {
-    HashMap<String, Object> temp = new HashMap<String, Object>();
-    temp.put("isStarted", Boolean.FALSE);
-    DEFAULT_XSENSOR_VALUE = Collections.unmodifiableMap(temp);
-  }
+  private static final XSensorValue DEFAULT_XSENSOR_VALUE = new XSensorValue(false);
 
   XSensor(String name) {
     this.name = name;
@@ -31,11 +46,21 @@ public class XSensor {
     return name;
   }
 
-  public void setFutureValue(FutureValue futureSensorValue) {
+  public void setFutureValue(Future<XSensorValue> futureSensorValue) {
     this.value = futureSensorValue;
   }
 
-  public Object getValue() {
-    return (value == null ? DEFAULT_XSENSOR_VALUE : value.getValue());
+  public XSensorValue getValue() {
+    try {
+      return (value == null ? DEFAULT_XSENSOR_VALUE : value.get());
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "Error while retrieving value for XSensor: \"" + getName() + "\"", ex);
+      return DEFAULT_XSENSOR_VALUE;
+    }
+  }
+
+  @Override
+  public String toString() {
+    return "{name: " + getName() + ", value: " + getValue() + "}";
   }
 }

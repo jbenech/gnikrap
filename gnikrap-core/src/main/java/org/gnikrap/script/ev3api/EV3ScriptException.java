@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,11 +54,6 @@ public class EV3ScriptException extends EV3Exception {
   public static final String INVALID_NOTE = "INVALID_NOTE";
 
   /**
-   * "Unexpected error: '{error}'"
-   */
-  public static final String UNEXPECTED_ERROR = "UNEXPECTED_ERROR";
-
-  /**
    * "Script forced to stop, please use \"ev3.isRunning()\""
    */
   public static final String SCRIPT_STOP_FORCED = "SCRIPT_STOP_FORCED";
@@ -67,6 +62,11 @@ public class EV3ScriptException extends EV3Exception {
    * "Script already running while trying to launch another script"
    */
   public static final String SCRIPT_ALREADY_RUNNING = "SCRIPT_ALREADY_RUNNING";
+
+  /**
+   * "Unexpected error: '{error}'"
+   */
+  public static final String UNEXPECTED_ERROR = "UNEXPECTED_ERROR";
 
   public EV3ScriptException(String code, Map<String, String> params) {
     super(code, params);

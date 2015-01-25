@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import org.gnikrap.ActionMessageProcessor;
 import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
+import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 
@@ -106,7 +107,9 @@ public final class EV3ActionProcessor {
             try {
               processor.process(message, EV3ActionProcessor.this);
             } catch (EV3Exception ev3e) {
-              sendBackException(ev3e);
+              sendBackEV3Exception(ev3e);
+            } catch (Exception ex) {
+              logAndSendBackException(ex);
             }
           }
         });
@@ -114,7 +117,9 @@ public final class EV3ActionProcessor {
         processor.process(message, EV3ActionProcessor.this);
       }
     } catch (EV3Exception ev3e) {
-      sendBackException(ev3e);
+      sendBackEV3Exception(ev3e);
+    } catch (Exception ex) {
+      logAndSendBackException(ex);
     }
   }
 
@@ -125,12 +130,17 @@ public final class EV3ActionProcessor {
     remoteControlService.sendMessage(message);
   }
 
-  void sendBackException(EV3Exception ex) {
-    LOGGER.info("sendBackException(" + ex + ")");
+  void logAndSendBackException(Exception ex) {
+    LOGGER.log(Level.SEVERE, "Error while processing a message from the browser", ex);
+    sendBackEV3Exception(new EV3ScriptException(EV3ScriptException.UNEXPECTED_ERROR, MapBuilder.buildHashMap("error", ex.toString()).build()));
+  }
+
+  void sendBackEV3Exception(EV3Exception ex) {
+    LOGGER.fine("sendBackException(" + ex + ")");
     try {
       sendBackMessage(EV3MessageBuilder.buildEV3ExceptionMessage(ex));
     } catch (IOException ignore) {
-      LOGGER.log(Level.WARNING, "Error send back exception to the browser", ignore);
+      LOGGER.log(Level.WARNING, "Error while sending an exception message to the browser", ignore);
     }
   }
 

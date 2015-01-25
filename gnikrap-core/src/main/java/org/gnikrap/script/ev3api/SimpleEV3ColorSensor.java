@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ final public class SimpleEV3ColorSensor implements EV3Device {
 
     @Override
     public String toString() {
-      return "Color[" + getValue() + " - " + getColorAsText() + "]";
+      return "{colorAsText: \"" + getColorAsText() + "\"}";
     }
   }
 }

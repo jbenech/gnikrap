@@ -41,10 +41,10 @@ while(ev3.isOk()) {
 */
 
 /*
-// Ambiant light API
+// Ambient light API
 var colorSensor = ev3.getBrick().getColorSensor("S1");
 while(ev3.isOk()) {
-  ev3.notify("Ambiant light: " + colorSensor.getAmbientLight());
+  ev3.notify("Ambient light: " + colorSensor.getAmbientLight());
   ev3.sleep(200);
 }
 */
@@ -181,6 +181,29 @@ ev3.notify("Voltage: " + battery.getVoltageMilliVolt());
 
 
 // ////////////////////////////////////////////////////////////////////////////
+// xTouch XSensor
+
+/*
+// xTouch XSensor
+// Configure the xTouch sensor with at least one touch "up"
+var xTouch = ev3.getXSensor("xTouch");
+while(ev3.isOk()) {
+  var value = xTouch.getValue();
+  if(value.isStarted()) {
+    if(value.containsTouch("up")) {
+      ev3.notify("You have clicked the 'up' touch !");
+    } else {
+      ev3.notify("Click on 'up'");
+    }
+  }
+  
+  ev3.sleep(100);
+}
+*/
+
+
+
+// ////////////////////////////////////////////////////////////////////////////
 // xGyro XSensor
 
 /*
@@ -189,13 +212,37 @@ var xGyro = ev3.getXSensor("xGyro");
 
 while(ev3.isOk()) {
   var value = xGyro.getValue();
-  if(value.get("isStarted")) {
-    var y = value.get("y").get("angle");
-    var x = value.get("x").get("angle");
+  if(value.isStarted()) {
+    var y = value.getY().getAngle();
+    var x = value.getX().getAngle();
     
     ev3.notify("XGyro - x: " + x + ", y: " + y);
   }
   
-  ev3.sleep(50);
+  ev3.sleep(100);
+}
+*/
+
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// xVideo XSensor
+
+/*
+// xVideo XSensor
+// Configure the xVideo sensor to track one object called "myTarget"
+var xVideo = ev3.getXSensor("xVideo");
+while(ev3.isOk()) {
+  var value = xVideo.getValue();
+  if(value.isStarted()) {
+    if(value.containsObject("myTarget")) {
+      var t = value.getObject("myTarget");
+      ev3.notify("Target found: [" + t.getX() + ", " + t.getY() + "]");
+    } else {
+      ev3.notify("Hey, select a target called 'myTarget'");
+    }
+  }
+  
+  ev3.sleep(100);
 }
 */

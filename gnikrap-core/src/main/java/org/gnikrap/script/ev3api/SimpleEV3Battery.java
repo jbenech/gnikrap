@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,5 +65,12 @@ public final class SimpleEV3Battery implements EV3Device {
     int result = power.getVoltageMilliVolt();
     logger.log(EV3Constants.BATTERY_VOLTAGE_MV, result);
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return "{batteryCurrent: " + getBatteryCurrent() + //
+        ", motorCurrent: " + getMotorCurrent() + //
+        ", voltageMilliVolt: " + getVoltageMilliVolt() + "}";
   }
 }

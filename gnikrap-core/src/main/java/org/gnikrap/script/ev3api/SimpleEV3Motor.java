@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -149,5 +149,10 @@ public class SimpleEV3Motor implements EV3Device {
    */
   final public void rotate(int angle, boolean immediateReturn) {
     delegate.rotate(angle, immediateReturn);
+  }
+
+  @Override
+  public String toString() {
+    return "{speed: " + getSpeed() + ", tachoCount: " + getTachoCount() + ", isMoving: " + isMoving() + "}";
   }
 }

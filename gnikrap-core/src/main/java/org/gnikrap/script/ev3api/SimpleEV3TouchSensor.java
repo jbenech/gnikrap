@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,5 +52,10 @@ final public class SimpleEV3TouchSensor implements EV3Device {
     float result = touchSample[0];
     logger.log(result);
     return (result > 0.99);
+  }
+
+  @Override
+  public String toString() {
+    return "{isPushed: " + isPushed() + "}";
   }
 }

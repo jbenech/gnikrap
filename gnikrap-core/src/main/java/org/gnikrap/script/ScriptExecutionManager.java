@@ -29,8 +29,8 @@ import javax.script.ScriptEngineManager;
 import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
 import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
-import org.gnikrap.script.ev3api.xsensors.FutureValue;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
+import org.gnikrap.script.ev3api.xsensors.XSensorValue;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 import org.gnikrap.utils.StopableExecutor;
@@ -112,7 +112,7 @@ public class ScriptExecutionManager {
             }
           }
         } catch (EV3Exception ev3ex) {
-          actionProcessor.sendBackException(ev3ex);
+          actionProcessor.sendBackEV3Exception(ev3ex);
         }
       }
     };
@@ -163,9 +163,9 @@ public class ScriptExecutionManager {
     reset();
   }
 
-  public void setXSensorFutureValue(String sensorName, FutureValue value) {
+  public void setXSensorFutureValue(String sensorName, Future<XSensorValue> value) {
     if (scriptContext != null) {
-      scriptContext.getXSensor(sensorName).setFutureValue(value);
+      scriptContext.setXSensorFutureValue(sensorName, value);
     }
   }
 }

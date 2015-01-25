@@ -7,9 +7,9 @@ The crawler has to be made of:
 * 1 motor for a left wheel (or caterpillar) 
 * 1 motor for the right wheel (or caterpillar) 
 
-[IMPORTANT]
+[NOTE]
 ====
-You also need a device (computer, tablet or smartphone) with a 2 axis gyroscopic sensor that connect to the EV3 and run Gnikrap.
+You also need a device (computer, tablet or smartphone) connected to the EV3 (and running Gnikrap) with a 2 axis gyroscopic sensor.
 ====
 
 [source,javascript]
@@ -44,9 +44,9 @@ function activateMotor(motor, powerInPercent) {
 while(ev3.isOk()) {
     var gyro = xGyro.getValue();
 
-    if(gyro.get("isStarted") == true) { // // <5>
-        var y = gyro.get("y").get("angle");
-        var x = gyro.get("x").get("angle");
+    if(gyro.isStarted()) { // // <5>
+        var y = gyro.getX().getAngle();
+        var x = gyro.getY().getAngle();
         
         var leftPower = 0;
         if(x > 10) {
@@ -82,8 +82,6 @@ while(ev3.isOk()) {
         activateMotor(left, 0);
         activateMotor(right, 0);
     }
-
-    ev3.sleep(50); // // <7>
 }
 
 // Finalization
@@ -95,12 +93,25 @@ while(ev3.isOk()) {
     (between -100 and 100)
 <3> We use the standard Javascript `Math` object in order to make our computations (See http://www.w3schools.com/js/js_math.asp)
 <4> The "program" itself. Two main cases: 
-<5> 1st case: xSensor is on, so we compute the left motor and right motor power according to the x and y angle returned by the xGyro sensor 
+<5> 1st case: xSensor is on, we compute the left motor and right motor power according to the x and y angle returned by the xGyro sensor 
     (see below for more details on the motor power computation).
-<6> 2nd case: xSensor is off, we ensure that tht motor are stopped.
-<7> Finally wait a bit before processing the next loop (not mandatory, but recommended while using xSensors)
+<6> 2nd case: xSensor is off, we ensure that the motor are stopped.
 
-Motor power computation
-TODO - explain a bit the computation
 
-NOTE: Hello world !
+// Workaround - Comment otherwise only the table was displayed ?!
+
+
+Motor power computation::
+* The x axis is used to control the forward/backward direction.
+* The y axis is used to control the left/right direction.
+* The motor speed is proportional to the angle. The variation is computed from 10° and 50° (which is the maximum).
+
+
+[cols="^h,^,^,^", options="header"]
+|===
+|                | x < -10° | -10° < x < 10° | x > 10°
+| y < -10°       | Go forward and left. | Move left in place, _i.e._ motor with opposite speed. | Go backward and left.
+| -10° < y < 10° | Go forward (no turn). | Don't move. | Go backward (no turn).
+| y > 10°        | Go forward and right. | Move right in place, _i.e._(otor with opposite speed. | Go backward and right.
+|===
+ 

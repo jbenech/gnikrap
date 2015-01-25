@@ -11,10 +11,10 @@ the API in a more efficient way:
 ** All the stuff physically linked to the EV3 brick can be accessed from the object: `ev3.getBrick()` (see <<The ev3 object>> for more details).
 * Method naming convention (don't be afraid, there is nothing exotic here) : 
 ** All the methods names starts with an verb.
-** All the methods starting by `is` always returns a boolean (i.e. `true`or `false`).
+** All the methods starting by `is` always returns a boolean (i.e. `true` or `false`).
 ** All the methods starting with `get` are 'getters' and will return a value.
 ** All the methods starting with `set` are 'setters' and will set a value.
-** The API is English based (However, if requested API translation could be done).
+** The API is English based.
 * All the times are expressed in milliseconds (1 second is equals to 1000 milliseconds).
 * All the angles are expressed in degrees (in general negative and positive degrees are accepted).
 
@@ -46,7 +46,7 @@ getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with th
 
 [WARNING]
 ====
-Configuration object is for advanced use only. If you don't uderstand what it means, don't use this object.
+Configuration object is for advanced use only. If you don't understand what it means, don't use this object.
 ====
 
 ****
@@ -72,6 +72,8 @@ getWaitingTimeBeforeHardKill()::  Returns the time to wait before hard killing t
 // ///////////////////////////////////////////////////////////////////////////
 === The Brick object
 // ///////////////////////////////////////////////////////////////////////////
+
+image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
 
 ****
 getMediumMotor(port):: Return a <<The Motor object,medium Motor>> object for the given port. +
@@ -106,6 +108,9 @@ See the others objects in order to have sample usage of the brick object.
 // ///////////////////////////////////////////////////////////////////////////
 === The Motor object
 // ///////////////////////////////////////////////////////////////////////////
+
+image::ev3/MotorMedium.png[Medium motor, 300, 200, float="right"]
+image::ev3/MotorLarge.png[Large motor, 300, 200, align="left"]
 
 [TIP]
 ====
@@ -190,6 +195,8 @@ while((tacho = largeMotor.getTachoCount()) < 1000) {
 === The Color sensor object
 // ///////////////////////////////////////////////////////////////////////////
 
+image::ev3/ColorSensor.png[Color sensor, 300, 200, align="center"]
+
 ****
 getReflectedLight():: Returns the reflected light: a value between 0 and 100.
 
@@ -233,11 +240,11 @@ while(ev3.isOk()) {
 ----
 
 [source,javascript]
-.Ambiant light API:
+.Ambient light API:
 ----
 var colorSensor = ev3.getBrick().getColorSensor("S1");
 while(ev3.isOk()) {
-  ev3.notify("Ambiant light: " + colorSensor.getAmbientLight());
+  ev3.notify("Ambient light: " + colorSensor.getAmbientLight());
   ev3.sleep(200);
 }
 ----
@@ -257,6 +264,8 @@ while(ev3.isOk()) {
 === The IR (Infra-Red) sensor object
 // ///////////////////////////////////////////////////////////////////////////
 
+image::ev3/IRSensor.png[IR sensor, 300, 200, align="center"]
+
 ****
 setChannel(channel):: Set the channel to use with the IR sensor. +
                       `channel` the channel number, value should be in [1, 2, 3, 4].
@@ -272,6 +281,8 @@ seekBeacon():: Look for the beacon and returns a <<SeekBeaconResult object>>.
 
 
 ==== RemoteCommandResult object
+
+image::ev3/IRBeacon.png[IR Beacon, 300, 200, align="center"]
 
 ****
 getValue():: Returns integer value of the remote beacon.
@@ -290,6 +301,8 @@ isNothingEnabled():: Returns `true` nothing was enabled, `false` otherwise.
 ****
 
 ==== SeekBeaconResult object
+
+image::ev3/IRBeacon.png[IR Beacon, 300, 200, align="center"]
 
 ****
 isBeaconFound():: Returns `true` if the beacon was detected, `false` otherwise.
@@ -349,6 +362,8 @@ while(ev3.isOk()) {
 === The Touch sensor object
 // ///////////////////////////////////////////////////////////////////////////
 
+image::ev3/TouchSensor.png[Touch sensor, 300, 200, align="center"]
+
 ****
 isPushed():: Returns `true` if the sensor was pushed, `false` otherwise.
 ****
@@ -368,6 +383,8 @@ while(ev3.isOk()) {
 // ///////////////////////////////////////////////////////////////////////////
 === The Keyboard object
 // ///////////////////////////////////////////////////////////////////////////
+
+image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
 
 ****
 getDown():: Returns a <<Button object>> for the kbd:[Down] button.
@@ -421,6 +438,8 @@ ev3.notify("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
 === The Led object
 // ///////////////////////////////////////////////////////////////////////////
 
+image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
+
 ****
 off():: Disable the LED.
 
@@ -453,9 +472,11 @@ leds.off();
 === The Sound object
 // ///////////////////////////////////////////////////////////////////////////
 
+image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
+
 ****
 setVolume(vol):: Set the sound volume. +
-                 `vol` the volumne, valid values are betwwen 0 and 100.
+                 `vol` the volume, valid values are between 0 and 100.
 
 getVolume():: Returns the sound volume.
 
@@ -495,6 +516,8 @@ sound.playNote("Si", 500);
 === The Screen object
 // ///////////////////////////////////////////////////////////////////////////
 
+image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
+
 ****
 clear():: Clear the LCD screen.
 
@@ -505,6 +528,8 @@ TODO - other methods currently not working.
 // ///////////////////////////////////////////////////////////////////////////
 === The Battery object
 // ///////////////////////////////////////////////////////////////////////////
+
+image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
 
 ****
 getBatteryCurrent():: Returns current draw from the battery (in Amps).
@@ -541,15 +566,15 @@ getValue():: Returns the *current* value of the XSensor. It is *IMPORTANT* to no
 
 [TIP]
 ====
-For all XSensor values you will have a function `isStarted()` that will returns `true` if started or `false` if not. *If the XSensor
-isn't started (i.e. `isStarted` returns `false`), all the other methods on the value object will not be available. If you even try to call
-these methods, the script will be stopped.*
+For all XSensor values there is function `isStarted()` that returns `true` if started or `false` if not. *If the XSensor
+isn't started (i.e. `isStarted` returns `false`), all the other methods on the value object will not be available: If you even try to call
+these methods, the script could be stopped (by an exception).*
 ====
 
 
 ==== The xTouch XSensor
 
-image::xsensor/xTouch_001_configure.png[xTouch - configuration mode, align="center"]
+image::xsensor/xTouch_001_configure.png[xTouch, 640, 400, align="center"]
 
 In the screen, you can:
 
@@ -611,13 +636,18 @@ while(ev3.isOk()) {
 
 ==== The xGyro XSensor
 
-image::xsensor/xGyro_001_running.png[xGyro, align="center"]
+image::xsensor/xGyro_001_running.png[xGyro, 640, 400, align="center"]
 
 In the screen, you can:
 
 * Set the sensor name (in our example: "xGyro").
 * Set the orientation of the device (portrait/left landscape/right landscape, reverse portrait) in order to have the right values.
 * Start the xGyro sensor.
+
+[TIP]
+====
+In order to avoid annoying screen rotation, think to disabled the 'auto rotate' on your device while using the xGyro sensor.
+====
 
 
 ****
