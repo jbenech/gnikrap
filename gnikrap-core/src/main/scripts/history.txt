@@ -11,14 +11,13 @@ Version history:
       - xTouch (24 multi-touch on screen keyboard), 
       - xVideo (video object tracking), 
       - xGyro (gyroscope)
-    - Rework and improve the GUI (works fine on an Android tablet)
+    - Rework and improve the GUI (now works fine on Android)
     - Improve the script API
     - Documentation updated, new samples added
-    - Add automatic EV3 brick reconnection in case of connection lost
-    - Fix some bugs and improve error management in the GUI
+    - Add automatic EV3 brick reconnection (in case of connection lost)
 
 
- 0.2.0 (first public release):
+ 0.2.0 (30NOV2014 - First public release):
     - Load/Delete/Save script added
     - About box added
     - GUI Internationalization (English and French are available)
@@ -51,6 +50,7 @@ Features to add (no specific order):
  - Add exit script feature/function
  - Add a feature to shutdown the brick from the browser (Gnikrap user-interface)
  - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html)
+ - Add API for other LEGO sensors (Gyro sensor, Ultrasonic sensor)
 
  
 ------------------------------------------------------------------------------

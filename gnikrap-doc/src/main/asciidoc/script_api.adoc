@@ -30,15 +30,15 @@ isOk():: Enable to known is everything is ok and the script can continue running
 getBrick():: Returns <<The Brick object>>.
 
 notify(text):: Display a message on the Gnikrap interface. +
-              `text` the text of the message to display.
+               *text*: the text of the message to display.
 
 sleep(timeInMs):: Make the script sleeping for the given number of milliseconds. +
-                  `timeInMs` the sleeping time (in milliseconds).
+                  *timeInMs*: the sleeping time (in milliseconds).
 
 getConfiguration():: Returns a <<Configuration object>>. Enable to configure some behaviour of the scripting environment.
 
 getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with the given name. (The name is configured within the GUI)
-                         `XSensorName` the name of the sensor.
+                         *XSensorName*: the name of the sensor.
 ****
 
 
@@ -52,18 +52,18 @@ Configuration object is for advanced use only. If you don't understand what it m
 ****
 setIsOkCheckEscapeKey(checkEscapeKey)::  Enable the check of the kbd:[Escape] Mindstrom brick key when
                                          `isOk()` is called. *Default is `true`*. +
-                                         `checkEscapeKey` if `true` check the kbd:[Escape] key, if `false` don't check nothing.
+                                         *checkEscapeKey*: if `true` check the kbd:[Escape] key, if `false` don't check nothing.
 
-isIsOkCheckEscapeKey(checkEscapeKey):: Returns `true` if kbd:[Escape] key check on `isOk()` is enabled, `false` otherwise (don't check).
+isIsOkCheckEscapeKey():: Returns `true` if kbd:[Escape] key check on `isOk()` is enabled, `false` otherwise (don't check).
 
 setIsOkWait(timeInMs):: Set the time to wait when `isOk()` is called. *Default is `0` (no waiting time)*. +
-                        `timeInMs` the time to wait, `0` means no wait.
+                        *timeInMs*: the time to wait, `0` means no wait.
 
 getIsOkWait():: Returns the time to wait when `isOk()` is called.
 
 setWaitingTimeBeforeHardKill(timeInMs)::  Set a maximum time to wait before hard killing the script (eg. infinite loop).
                                           *Default is 5000 (5 seconds)*. +
-                                          `timeInMs` the time to wait before hard killing the script. Valid values between 500 and 30000.
+                                          *timeInMs*: the time to wait before hard killing the script. Valid values between 500 and 30000.
 
 getWaitingTimeBeforeHardKill()::  Returns the time to wait before hard killing the script.
 ****
@@ -73,23 +73,25 @@ getWaitingTimeBeforeHardKill()::  Returns the time to wait before hard killing t
 === The Brick object
 // ///////////////////////////////////////////////////////////////////////////
 
-image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
+[[img-ev3-brick]]
+.45500 Intelligent Brick - image from http://education.lego.com
+image::ev3/Brick.png[EV3 Brick, 300, 200]
 
 ****
 getMediumMotor(port):: Return a <<The Motor object,medium Motor>> object for the given port. +
-                       `port` value should be in [`"A"`, `"B"`, `"C"`, `"D"`].
+                       *port*: value should be in [`"A"`, `"B"`, `"C"`, `"D"`].
 
 getLargeMotor(port):: Return a <<The Motor object,large Motor>> object for the given port. +
-                      `port` value should be in [`"A"`, `"B"`, `"C"`, `"D"`].
+                      *port*: value should be in [`"A"`, `"B"`, `"C"`, `"D"`].
 
 getColorSensor(port):: Return a <<The Color sensor object,Color sensor object>> for the given port. +
-                       `port` value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+                       *port*: value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
 
 getIRSensor(port):: Return an <<The IR (Infra-Red) sensor object,Infra-Red sensor>> object for the given port. +
-                    `port` value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+                    *port*: value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
 
 getTouchSensor(port):: Return a <<The Touch sensor object,Touch sensor>> object for the given port. +
-                       `port` value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+                       *port*: value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
 
 getKeyboard():: Return <<The Keyboard object, Keyboard object>>.
 
@@ -110,6 +112,8 @@ See the others objects in order to have sample usage of the brick object.
 // ///////////////////////////////////////////////////////////////////////////
 
 image::ev3/MotorMedium.png[Medium motor, 300, 200, float="right"]
+[[img-ev3-motors]]
+.45502 Large Servo Motor / 45503 Medium Servo Motor - image from http://education.lego.com
 image::ev3/MotorLarge.png[Large motor, 300, 200, align="left"]
 
 [TIP]
@@ -127,19 +131,19 @@ backward():: Motor rotate backward until `stop()`. This call immediately return.
 stop():: Stop and lock the motor. This call immediately return.
 
 stop(lock):: Stop and lock or not the motor. This call immediately return. +
-             `lock` is the motor locked ? Value should be in [`true`, `false`]
+             *lock*: is the motor locked ? Value should be in [`true`, `false`]
 
 stop(lock, immediateReturn):: Stop and lock or not the motor. +
-                              `lock` should be in [`true`, `false`] +
-                              `immediateReturn` Is the function returns immediately or wait that the motor was locked ?
+                              *lock*: should be in [`true`, `false`] +
+                              *immediateReturn*: Is the function returns immediately or wait that the motor was locked ?
                               Values should be in [`true`, `false`]
 
 rotate(angle):: Rotate the given number of degree. This call wait the end of the motor move. +
-                `angle` the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
+                *angle*: the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
 
 rotate(angle, immediateReturn):: Rotate the given number of degree. This call wait the end of the motor move. +
-                                 `angle` the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
-                                 `immediateReturn` Is the function returns immediately or wait that the motor rotation was ended ?
+                                 *angle*: the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
+                                 *immediateReturn*: Is the function returns immediately or wait that the motor rotation was ended ?
                                  Values should be in [`true`, `false`]
 
 isMoving():: Returns `true` if the motors is currently moving, `false` otherwise.
@@ -149,12 +153,12 @@ getTachoCount():: Returns the tacho count in degree of the motor (_i.e._ the deg
 resetTachoCount():: Reset the tacho count to `0`.
 
 setSpeedPercent(percent):: Set the speed in percent of the maximum speed. +
-                           `percent` the speed in percent of the maximum speed, 100 is full speed, 1 is minimum speed.
+                           *percent*: the speed in percent of the maximum speed, 100 is full speed, 1 is minimum speed.
 
 getSpeedPercent():: Get the speed in percent of the maximum speed.
 
 setSpeed(degreePerSecond):: Set the speed in degrees per second. +
-                            `degreePerSecond` the number of degrees per second that the motor should target ; one motor rotation is 360 degrees.
+                            *degreePerSecond*: the number of degrees per second that the motor should target ; one motor rotation is 360 degrees.
                              According to the LEGO documentation, the maximum sustainable speed is 960° per second for the large motor (i.e. 160 rotation per minute as claimed in the documentation)
                              and 1440° per second for the medium motor (i.e. 240 rotation per minute as claimed in the documentation).
                              In all cases, it seems that the maximum sustainable speed is 100 * battery voltage (which is lower than 900)
@@ -195,7 +199,9 @@ while((tacho = largeMotor.getTachoCount()) < 1000) {
 === The Color sensor object
 // ///////////////////////////////////////////////////////////////////////////
 
-image::ev3/ColorSensor.png[Color sensor, 300, 200, align="center"]
+[[img-ev3-color-sensor]]
+.45506 Color Sensor - image from http://education.lego.com
+image::ev3/ColorSensor.png[Color sensor, 300, 200]
 
 ****
 getReflectedLight():: Returns the reflected light: a value between 0 and 100.
@@ -264,11 +270,13 @@ while(ev3.isOk()) {
 === The IR (Infra-Red) sensor object
 // ///////////////////////////////////////////////////////////////////////////
 
-image::ev3/IRSensor.png[IR sensor, 300, 200, align="center"]
+[[img-ev3-ir-sensor]]
+.45509 IR Sensor - image from http://education.lego.com
+image::ev3/IRSensor.png[IR sensor, 300, 200]
 
 ****
 setChannel(channel):: Set the channel to use with the IR sensor. +
-                      `channel` the channel number, value should be in [1, 2, 3, 4].
+                      *channel*: the channel number, value should be in [1, 2, 3, 4].
 
 getChannel():: Return the channel currently used.
 
@@ -282,7 +290,9 @@ seekBeacon():: Look for the beacon and returns a <<SeekBeaconResult object>>.
 
 ==== RemoteCommandResult object
 
-image::ev3/IRBeacon.png[IR Beacon, 300, 200, align="center"]
+[[img-ev3-ir-beacon]]
+.45508 IR Beacon - image from http://education.lego.com
+image::ev3/IRBeacon.png[IR Beacon, 300, 200]
 
 ****
 getValue():: Returns integer value of the remote beacon.
@@ -301,8 +311,6 @@ isNothingEnabled():: Returns `true` nothing was enabled, `false` otherwise.
 ****
 
 ==== SeekBeaconResult object
-
-image::ev3/IRBeacon.png[IR Beacon, 300, 200, align="center"]
 
 ****
 isBeaconFound():: Returns `true` if the beacon was detected, `false` otherwise.
@@ -362,7 +370,9 @@ while(ev3.isOk()) {
 === The Touch sensor object
 // ///////////////////////////////////////////////////////////////////////////
 
-image::ev3/TouchSensor.png[Touch sensor, 300, 200, align="center"]
+[[img-ev3-touch-sensor]]
+.45507 Touch Sensor - image from http://education.lego.com
+image::ev3/TouchSensor.png[Touch sensor, 300, 200]
 
 ****
 isPushed():: Returns `true` if the sensor was pushed, `false` otherwise.
@@ -383,8 +393,6 @@ while(ev3.isOk()) {
 // ///////////////////////////////////////////////////////////////////////////
 === The Keyboard object
 // ///////////////////////////////////////////////////////////////////////////
-
-image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
 
 ****
 getDown():: Returns a <<Button object>> for the kbd:[Down] button.
@@ -438,8 +446,6 @@ ev3.notify("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
 === The Led object
 // ///////////////////////////////////////////////////////////////////////////
 
-image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
-
 ****
 off():: Disable the LED.
 
@@ -472,23 +478,21 @@ leds.off();
 === The Sound object
 // ///////////////////////////////////////////////////////////////////////////
 
-image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
-
 ****
 setVolume(vol):: Set the sound volume. +
-                 `vol` the volume, valid values are between 0 and 100.
+                 *vol*: the volume, valid values are between 0 and 100.
 
 getVolume():: Returns the sound volume.
 
 beep():: Play a beep.
 
 playTone(frequency, durationInMs):: Play a tone of the given frequency for the given duration. +
-                                    `frequency` the frequency of the tone in Hertz (Hz). Note: In order to be audible, use values between 50 and 2000. +
-                                    `durationInMs` the duration in milliseconds.
+                                    *frequency*: the frequency of the tone in Hertz (Hz). Note: In order to be audible, use values between 50 and 2000. +
+                                    *durationInMs*: the duration in milliseconds.
 
 playNote(note, durationInMs):: Play the given note for the given duration. +
-                               `note` the note to play. Notes should be in ["C1"-"B7", # allowed on C, D, F, G, A] or ["Do"-"Si", # allowed on Do, Re, Fa, Sol, La]. +
-                               `durationInMs` the duration in milliseconds.
+                               *note*: the note to play. Notes should be in ["C1"-"B7", # allowed on C, D, F, G, A] or ["Do"-"Si", # allowed on Do, Re, Fa, Sol, La]. +
+                               *durationInMs*: the duration in milliseconds.
 ****
 
 
@@ -516,8 +520,6 @@ sound.playNote("Si", 500);
 === The Screen object
 // ///////////////////////////////////////////////////////////////////////////
 
-image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
-
 ****
 clear():: Clear the LCD screen.
 
@@ -528,8 +530,6 @@ TODO - other methods currently not working.
 // ///////////////////////////////////////////////////////////////////////////
 === The Battery object
 // ///////////////////////////////////////////////////////////////////////////
-
-image::ev3/Brick.png[EV3 Brick, 300, 200, align="center"]
 
 ****
 getBatteryCurrent():: Returns current draw from the battery (in Amps).
@@ -567,14 +567,14 @@ getValue():: Returns the *current* value of the XSensor. It is *IMPORTANT* to no
 [TIP]
 ====
 For all XSensor values there is function `isStarted()` that returns `true` if started or `false` if not. *If the XSensor
-isn't started (i.e. `isStarted` returns `false`), all the other methods on the value object will not be available: If you even try to call
+isn't started (i.e. `isStarted` returns `false`), all the other methods on the value object will not be available: If you try to call
 these methods, the script could be stopped (by an exception).*
 ====
 
 
 ==== The xTouch XSensor
 
-image::xsensor/xTouch_001_configure.png[xTouch, 640, 400, align="center"]
+image::xsensor/xTouch_001_configure.png[xTouch, 640, 400]
 
 In the screen, you can:
 
@@ -596,10 +596,10 @@ Only the *active* touches are available within the XSensor values.
 isStarted():: Returns `true` if the XSensor is started, `false` otherwise.
 
 containsTouch(name):: Returns `true` if the touch is available, that is to say active, `false` otherwise. +
-                      `name` the name of the touch to look for.
+                      *name*: the name of the touch to look for.
 
 getTouch(name):: Returns a <<Touch object>> for the given touch. +
-                 `name` the name of the touch to look for.
+                 *name*: the name of the touch to look for.
 
 getTouches():: Returns an array of all the <<Touch object>>s available.
 ****
@@ -653,13 +653,13 @@ In order to avoid annoying screen rotation, think to disabled the 'auto rotate' 
 ****
 isStarted():: Returns `true` if the XSensor is started, `false` otherwise.
 
-getX():: Returns an <<Axis object>>. +
+getX():: Returns an <<Axis object>>. The angle is between -90° and 90°. +
          X is the front-back tilt in degrees where front is positive (also known as 'beta' with 'Portrait' orientation).
 
-getY():: Returns an <<Axis object>>. +
+getY():: Returns an <<Axis object>>. The angle is between -90° and 90°. +
          Y is the left-right tilt in degrees, where right is positive (also known as 'gamma' with 'Portrait' orientation)
 
-getZ():: Returns an <<Axis object>>. +
+getZ():: Returns an <<Axis object>>. The angle is between 0° (north) and 360° (Maybe not on all devices ?? Make some trials with your device). +
          The compass direction of the device in degrees (also known as 'alpha').  +
          _Note_: Some devices don't support compass (the z value will always be 0). For some devices, the compass don't returns the angle with the north.
 ****
@@ -668,7 +668,7 @@ getZ():: Returns an <<Axis object>>. +
 ===== Axis object
 
 ****
-getAngle():: Returns the angle in degrees
+getAngle():: Returns the angle in degrees.
 ****
 
 Sample script with xGyro XSensor:
@@ -693,6 +693,8 @@ while(ev3.isOk()) {
 
 ==== The xVideo XSensor
 
+image::xsensor/xVideo_001_running.png[xVideo, 640, 400, align="center"]
+
 In the screen, you can:
 
 * Start the xVideo sensor. Once started the browser will certainly ask you to select the webcam to use (and to give the authorization to
@@ -703,9 +705,13 @@ In the screen, you can:
 [TIP]
 ====
 .There is several important point to note about the tracking algorithm used:
-- Under 20 FPS (frame per seconds), the object will be often loosed (_The number of FPS is displayed above the video_).
+- Under 20 FPS (frame per seconds), the object will be often loosed (_The number of FPS is displayed above the video_). +
+  The FPS will vary according to the browser and the energy-saving policy of the device (in all cases, a maximum seems to be 60 FPS).
 - Tracking objects with an important black/white contrast is the best option (i.e. objects with with and black surface that are visible from the camera).
-  On the opposite, tracking object with uniform colour don't work very well.
+  On the opposite, tracking object with uniform colour don't work very well. +
+  Here are two sample of '"targets"' that works quite fine: image:xsensor/xVideo_pattern_001.png[Pattern001, 60, 60] and image:xsensor/xVideo_pattern_002.png[Pattern002, 60, 60].
+  
+  
 - If there is something (even for a very short time) between the camera and the tracked object, the object will be loosed.
 - You can move the camera (not too quickly) without any problem.
 - Your object can move/rotate/etc. without any problem.
@@ -719,10 +725,10 @@ Note: The algorithm used was the Lucas-Kanade method (See http://en.wikipedia.or
 isStarted():: Returns `true` if the XSensor is started, `false` otherwise.
 
 containsObject(name):: Returns `true` if the object is available, that is to say tracked, `false` otherwise. +
-                      `name` the name of the object to look for.
+                      *name*: the name of the object to look for.
 
 getObject(name):: Returns a <<VisibleObject object>> for the given object. +
-                 `name` the name of the object to look for.
+                 *name*: the name of the object to look for.
 
 getObjects():: Returns an array of all the <<VisibleObject object>>s available.
 ****
@@ -750,7 +756,7 @@ while(ev3.isOk()) {
       var t = value.getObject("myTarget");
       ev3.notify("Target found: [" + t.getX() + ", " + t.getY() + "]");
     } else {
-      ev3.notify("Hey, select a target called 'myTarget'");
+      ev3.notify("Hey, select a target and call it 'myTarget'");
     }
   }
   
@@ -776,7 +782,7 @@ to run the xGyro sensor on one device and the xVideo sensor on another device.
 ====
 
 
-A note on the behaviour of the function `ev3.ìsOk()` while using XSensors: Even if not configured (see <<Configuration object>>)
+A note on the behaviour of the function `ev3.isOk()` while using XSensors: Even if not configured (see <<Configuration object>>)
 this method will automatically wait a bit while one or several XSensors are actively sending data to the brick. This waiting time
 will be automatically reset while there is no more active XSensors. +
 _Note_: The aim of this small waiting time is to let the EV3 CPU process the XSensors incoming events in a proper way.

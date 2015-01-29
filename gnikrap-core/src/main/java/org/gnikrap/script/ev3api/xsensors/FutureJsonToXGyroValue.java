@@ -35,6 +35,8 @@ public class FutureJsonToXGyroValue extends AbstractFutureJsonToXSensorValue {
   }
 
   public static final class XGyroValue extends XSensorValue {
+    static final XAxis DEFAULT_VALUE = new XAxis();
+
     private final XAxis x;
     private final XAxis y;
     private final XAxis z;
@@ -46,9 +48,9 @@ public class FutureJsonToXGyroValue extends AbstractFutureJsonToXSensorValue {
         y = new XAxis(raw.get(JSonXSensorMessageFields.XGYRO_Y_AXIS).asObject());
         z = new XAxis(raw.get(JSonXSensorMessageFields.XGYRO_Z_AXIS).asObject());
       } else {
-        x = new XAxis();
-        y = new XAxis();
-        z = new XAxis();
+        x = DEFAULT_VALUE;
+        y = DEFAULT_VALUE;
+        z = DEFAULT_VALUE;
       }
     }
 

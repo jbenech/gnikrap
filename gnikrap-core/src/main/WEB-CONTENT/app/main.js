@@ -375,17 +375,17 @@ function GyroscopeSensorTabViewModel(appContext) {
     // EV3 sensor values: angle ° and rate in °/s
     self.xValue = {
       isStarted: undefined, // will be defined just before sending
-      x: { angle: 0.0 }, //, rate: 0.0},
-      y: { angle: 0.0 }, //, rate: 0.0},
-      z: { angle: 0.0 } //, rate: 0.0}
+      x: { angle: 0 }, //, rate: 0.0},
+      y: { angle: 0 }, //, rate: 0.0},
+      z: { angle: 0 } //, rate: 0.0}
     }
   }
 
   self.deviceOrientationHandler = function(eventData) {
     var xv = self.xValue
-    xv.x.angle = round2dec(eventData.beta);
-    xv.y.angle = round2dec(eventData.gamma);
-    xv.z.angle = round2dec(eventData.alpha);
+    xv.x.angle = Math.round(eventData.beta);
+    xv.y.angle = Math.round(eventData.gamma);
+    xv.z.angle = Math.round(eventData.alpha);
     
     if ((self.axisOrientation == 90) || (self.axisOrientation == -90)) { // Invert X and Y
       var t = xv.y.angle;
@@ -428,7 +428,7 @@ function GyroscopeSensorTabViewModel(appContext) {
     self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "Gyr1", self.xValue);
     // Also display value to GUI
     self.xAxisValue("x: " + JSON.stringify(self.xValue.x));
-    self.yAxisValue("y :" + JSON.stringify(self.xValue.y));
+    self.yAxisValue("y: " + JSON.stringify(self.xValue.y));
     self.zAxisValue("z: " + JSON.stringify(self.xValue.z));
   }
 
@@ -1322,9 +1322,11 @@ var context = { // The application context - used as a basic dependency-injectio
 
 
 // Basic checks for "browser compatibility"
+//
+// Note: Don't perform this check in jQuery .ready() callback as version 2.x of jQuery don't have compatibility with some 'old' browser.
+//       Don't use i18n as it doesn't work on some old browser (eg. IE8)
 if(!('WebSocket' in window
      && 'matchMedia' in window)) { // A minimal level of css for bootstrap
-  // i18n don't work on some old browser (eg. IE8) => Don't use translation here
   alert("Gnikrap can't run in this browser, consider using a more recent browser.\nThe page will be automatically closed.");
   window.close();
 }

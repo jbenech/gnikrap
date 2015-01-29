@@ -1,8 +1,8 @@
-=== A robot controlled with the xGyro sensor
+==== A robot controlled with the xGyro sensor
 
-The aim of this sample is to pilot with the gyroscope of a device.
+The aim of this sample is to pilot a robot with the gyroscope of a device.
 
-The crawler has to be made of:
+The robot is to be made of:
 
 * 1 motor for a left wheel (or caterpillar) 
 * 1 motor for the right wheel (or caterpillar) 
@@ -15,8 +15,6 @@ You also need a device (computer, tablet or smartphone) connected to the EV3 (an
 [source,javascript]
 ----
 ///////////////////////////////////////////////////////////////////////////////
-// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
-//
 // Note: Please adjust the port to what is physically connected on your brick.
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -87,8 +85,8 @@ while(ev3.isOk()) {
 // Finalization
 // None (motors will be automatically stopped)
 ----
-<1> Here we retrieve all ev3 objects needed in the main loop. Caution: The port has to match with what is physically 
-    connected on the brick
+<1> Here we retrieve all ev3 objects needed in the main loop. +
+    *Caution*: The port has to match with what is physically connected on the brick
 <2> We define a function that enable to make a motor, go forward, go backward or stop according to a power value 
     (between -100 and 100)
 <3> We use the standard Javascript `Math` object in order to make our computations (See http://www.w3schools.com/js/js_math.asp)

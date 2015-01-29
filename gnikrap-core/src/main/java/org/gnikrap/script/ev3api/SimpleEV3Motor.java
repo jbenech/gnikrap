@@ -122,7 +122,7 @@ public class SimpleEV3Motor implements EV3Device {
   }
 
   /**
-   * @returns The speed in degress by second
+   * @returns The speed in degrees by second
    */
   final public float getSpeed() {
     return delegate.getSpeed();

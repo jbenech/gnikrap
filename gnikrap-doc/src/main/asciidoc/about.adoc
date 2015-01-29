@@ -1,31 +1,53 @@
 == About
 
-The key points of Gnikrap are:
+=== Scripting on the EV3
 
-* *Provide a simple way to make script based programming on the EV3*. The main advantages are:
-** Simple to use.
-** Can be used on a computer or a tablet, in fact any device that have a modern browser (HTML5 compatible).
-** Can use the scripting language of your choice. Javascript is the default, but you can use any 
-   http://en.wikipedia.org/wiki/List_of_JVM_languages[script language supported by the JVM].
-   
-* *Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked 
-  to the EV3 device*. The list of sensors available is:
-** xTouch: A 24 touch tactile screen that enable to remotely pilot a robot in a simple way 
+*Provide a simple and powerful way to make script based programming on the EV3*.
+
+* The tool is *straightforward to use*.
+* Can be *used on a computer or a tablet*, in fact any device that have a modern browser (HTML5 compatible).
+* *Javascript*, the scripting language available by default is currently one of the more popular scripting language)
+
+[NOTE]
+====
+It is also feasible to use other scripting language available on the JVM. A list of some scripting 
+language available on the JVM can be found http://en.wikipedia.org/wiki/List_of_JVM_languages[here].
+====
+
+
+=== Empower the device' sensors
+
+*Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked to the EV3 device*. 
+The list of XSensors (for eXternal Sensors) available right now is:
+
+* xTouch: A *24 touch tactile screen* that enable to remotely pilot a robot in a simple way 
   (see <<The XTouch XSensor>> for more details).
-** XGyro: Use the gyroscope of your mobile device (eg. tablet) in order to control a robot 
+* XGyro: *Use the gyroscope of your mobile device* (eg. tablet) in order to control a robot 
   (see <<The XTouch XGyro>> for more details).
-** xVideo: Use the webcam of any device (tablet, computer) in order to track objects (see <<The xTouch XVideo>> for more details) and make 
+* xVideo: Use the *webcam* of any device (tablet, computer) in order *to track objects* (see <<The xTouch XVideo>> for more details) and make 
   your robot react to the environment.
 
-* Off course there is *some limitations compared to other EV3 programming environment and tools*:
-** Compared to full featured framework like http://www.lejos.org/[leJOS] or http://www.monobrick.dk/[MonoBrick]
-*** No access to a full featured API (access to third parties sensors, location API, etc.). So if your plan is to write a 
-    really complex program, consider using another tool. +
-    _Note:_ Gnikrap is internally based on leJOS, so all the feature provided by leJOS are "available" within Gnikrap by using the leJOS API. 
+[NOTE]
+====
+Other XSensors that could be envisaged in the future: 
 
-*** Script language are slower to execute than compiled code. So if speed is one of your key choice criteria, consider using
-    another tool
+- xGPS sensor, 
+- xSound sensor, 
+- other video algorithms for the xVideo sensor, 
+- other modes for the xTouch sensor
+====
 
-** Compared to graphical programming software like the EV3 software provided by Lego:
-*** No software development learning is needed to use this tools. This tool is efficient to have really simple programs works quickly. 
-    When your program become a bit more complex it is difficult to have something clear and "redeable" on a standard screen (I don't have a 4K screen :-) ). 
+
+=== Full documentation available
+
+You are at the right place to evaluate it ! Just have look to see if it's ok for you :-)
+
+
+=== Why don't use Gnikrap
+
+Gnikrap is nice, but you're not sure... Here are some element that can make you use another tool to program with the EV3 :
+
+* If you need a full featured API (*access to non-Lego sensors*, location API, etc.) or if *speed 
+execution* is one of you key criteria, consider using a more complete framework like http://www.lejos.org/[leJOS] 
+or http://www.monobrick.dk/[MonoBrick]
+* If you need *graphical programming* tools, conider using the software provided by Lego

@@ -133,9 +133,7 @@ public final class EV3ScriptContext {
    * Set the value and change the settings in order to allocate a minimum of time for the XSensors events processing
    */
   void setXSensorFutureValue(String name, Future<XSensorValue> value) {
-    if (xSensorActive < 5) { // Maximum wait 10 * 10ms (browser send a message each 50ms for 1 sensor)
-      xSensorActive += 6;
-    }
+    xSensorActive = 10; // Maximum wait 10 * 10ms (xSensor streaming is one message/sensor each 50ms <=> 20 msgs/s => Were should be ok the 2 next messages)
     getXSensor(name).setFutureValue(value);
   }
 

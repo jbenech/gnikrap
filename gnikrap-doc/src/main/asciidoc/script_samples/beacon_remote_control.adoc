@@ -1,6 +1,6 @@
-=== A robot controlled with the remote beacon
+==== A robot controlled with the remote beacon
 
-The aim of the sample is to pilot with the EV3 beacon a crawler made of:
+The aim of the sample is to pilot with the EV3 beacon a robot made of:
 
 * 1 motor for a left wheel (or caterpillar) 
 * 1 motor for the right wheel (or caterpillar) 
@@ -11,8 +11,6 @@ The aim of the sample is to pilot with the EV3 beacon a crawler made of:
 [source,javascript]
 ----
 ///////////////////////////////////////////////////////////////////////////////
-// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
-//
 // Note: Please adjust the port to what is physically connected on your brick.
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -58,8 +56,8 @@ while(ev3.isOk()) {
 // Finalization
 // None (motors will be automatically stopped)
 ----
-<1> Here we retrieve all ev3 objects needed in the main loop. Caution: The port has to match with what is physically 
-    connected on the brick
+<1> Here we retrieve all ev3 objects needed in the main loop. +
+    *Caution*: The port has to match with what is physically connected on the brick
 
 <2> The "program" itself. We have 4 main parts:
 <3> We retrieve the value of the remote beacon. This value has to be retrieve at each loop because the value 
@@ -72,3 +70,14 @@ while(ev3.isOk()) {
 
 <6> While the beacon button was pressed: Fire a ball (3 turn of the mid-sized motor). While it's done,
     we wait that the beacon button was no more enabled before return to the main loop (this is to avoid multi-fire).
+
+// Workaround - Comment otherwise only the table was displayed ?!
+
+In this sample, two buttons are associated to one motor, so we have something like that with our 4 buttons:
+
+[cols="^,^"]
+|===
+2+| 'Beacon button': Special action (fire in out sample)
+| 'Top left button': Left motor forward | 'Top right button': Right motor forward
+| 'Bottom left button': Left motor backward | 'Bottom right button': Right motor backward
+|===

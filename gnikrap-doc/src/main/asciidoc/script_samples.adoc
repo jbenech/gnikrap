@@ -2,8 +2,21 @@
 
 include::script_samples/standard_template.adoc[]
 
+=== Remote control a robot
+
+[NOTE]
+====
+In the following example we will control a robot (it can be always the same robot) in different ways.
+====
+
 include::script_samples/beacon_remote_control.adoc[]
 
 include::script_samples/xGyro_remote_control.adoc[]
+
+include::script_samples/xTouch_remote_control.adoc[]
+
+// End of 'Control a robot'
+
+include::script_samples/xVideo_stay_in_video.adoc[]
 
 include::script_samples/advanced_usages.adoc[]

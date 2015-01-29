@@ -52,8 +52,8 @@ Launch Gnikrap::
 ** Go to the bin folder: `cd gnikrap-core-0.3.0/bin`
 ** Start Gnikrap: `./start.sh`
 
-. Finally open a browser on your computer and connect to Gnikrap with the following URL: `http://10.0.1.1`
-  You should have (it will take several seconds to download) the Gnikrap main screen:
+. Finally open a browser on your computer and connect to Gnikrap with the following URL: `http://<IP of the EV3>`
+  You should have the Gnikrap main screen (it take a few seconds to load) :
 +
 image::install/0200_Gnikrap_MainScreen.png[]
 +

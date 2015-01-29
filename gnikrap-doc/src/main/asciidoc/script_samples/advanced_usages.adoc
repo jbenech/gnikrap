@@ -1,10 +1,62 @@
 === Advanced usage
 
-* Defining/Using script library file of utility/standard functions. It is possible to do it, 
-  however the syntax can change in future version of Gnikrap (the Javascript engine currently enbedded in Java7 
-  is https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino[Rhino],
-  while the Javascript engine embedded in Java8 is http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html[Nashorm]). +
-  Knowing that point, if you still want to import script, the current syntax (for Java7) is TODO (TODO-LINK).
+[WARNING]
+====
+The syntax for some advanced feature can change in future versions of Gnikrap. This is not directly linked to Gnikrap but to
+the version of Java used:
 
-* Using Java library. Another question could be how to use Java library (eg. Lejos) directly for the script engine. 
-  Here again, it is possible, but part of the syntax can change in future versions.
+- the Javascript engine currently enbedded in Java7 is https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino[Rhino],
+- while the Javascript engine embedded in Java8 is http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html[Nashorm].
+====
+
+==== Import scripts
+
+TODO
+
+
+==== Using existing Java API
+
+You can use any java library that is in the classpath within the javascript script. 
+
+[WARNING]
+====
+If you use leJOS directly it is important to don't use the Gnikrap API `ev3.getBrick()`. Indeed, it can generate 
+conflicts on the underlying resources, that is to say the EV3 hardware.
+====
+
+Here is an example where we use the leJOS API directly:
+
+[source,javascript]
+----
+// WARNING: Don't use the ev3.getBrick() function if you make direct call to leJOS
+
+importPackage(Packages.lejos.hardware); // For Button // <1>
+importPackage(Packages.lejos.hardware.motor); // For EV3LargeRegulatedMotor
+importPackage(Packages.lejos.hardware.port); // For MotorPort
+
+// Make the keyboard led green and blink
+Button.LEDPattern(4); // 1 (green) + 3 (blink) // <2>
+
+
+// Use a motor
+var motor = new EV3LargeRegulatedMotor(MotorPort.A); // // <2>
+motor.rotate(360);
+
+while(ev3.isOk()) { // Can still use ev3 function // <3>
+    ev3.sleep(100);
+}
+----
+<1> You can import Java packages (don't forget to prefix your package with `Packages`) in order to use the classes belonging to theses packages. +
+    *Caution*: The `importPackage` syntax can change in future version of Gnikrap.
+<2> You can then use and instantiate Java object directly within the script.
+<3> You can also use ev3 function while needed.
+
+[TIP]
+====
+You can also use '"your"' jar libraries (found on the internet or home-made). Simply put the library within the 
+gnikrap `lib` folder (this is the folder that already contains the other libs), and restart Gnikrap in order to 
+have the libraries available.
+
+You can now use the libs as described below.
+====
+

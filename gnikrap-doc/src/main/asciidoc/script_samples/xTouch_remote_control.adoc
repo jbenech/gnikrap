@@ -1,0 +1,92 @@
+==== A robot controlled with the xTouch sensor
+
+The aim of this sample is to pilot a robot with the keyboard on the screen of a device (can be with the mouse or with a tactile screen).
+
+The robot is to be made of:
+
+* 1 motor for a left wheel (or caterpillar) 
+* 1 motor for the right wheel (or caterpillar) 
+
+[NOTE]
+====
+You also need a xTouch configured with 4 touches: *'up'*, *'down'*, *'left'* and *'right'* (see snapshot in <<The xTouch XSensor>> for a configuration sample).
+====
+
+[source,javascript]
+----
+///////////////////////////////////////////////////////////////////////////////
+// Note: Please adjust the port to what is physically connected on your brick.
+///////////////////////////////////////////////////////////////////////////////
+
+// Initialization  // <1>
+var leftMotor = ev3.getBrick().getLargeMotor("D");
+var rightMotor = ev3.getBrick().getLargeMotor("A");
+var xTouch = ev3.getXSensor("xTouch");
+
+function activateMotor(motor, powerInPercent) {  // // <2>
+    if(powerInPercent < 0) {
+        motor.setSpeedPercent(-powerInPercent);
+        motor.backward();
+    } else if(powerInPercent > 0) {
+        motor.setSpeedPercent(powerInPercent);
+        motor.forward();
+    } else {
+        motor.stop();
+    }
+}
+
+function activateLeftAndRightMotor(leftPowerInPercent, rightPowerInPercent) { // // <3>
+    activateMotor(leftMotor, leftPowerInPercent);
+    activateMotor(rightMotor, rightPowerInPercent);
+}
+
+// Main loop - This is the main program // <4>
+while(ev3.isOk()) {
+    var val = xTouch.getValue();
+
+    if(val.isStarted()) { // // <5>
+        var up = val.containsTouch("up") && !val.containsTouch("down");
+        var down = val.containsTouch("down") && !val.containsTouch("up");
+        var left = val.containsTouch("left") && !val.containsTouch("right");
+        var right = val.containsTouch("right") && !val.containsTouch("left");
+        
+        if(up) {
+            if(left) {
+                activateLeftAndRightMotor(50, 90);
+            } else if(right) {
+                activateLeftAndRightMotor(90, 50);
+            } else {
+                activateLeftAndRightMotor(90, 90);
+            } 
+        } else if(down) {
+            if(left) {
+                activateLeftAndRightMotor(-50, -90);
+            } else if(right) {
+                activateLeftAndRightMotor(-90, -50);
+            } else {
+                activateLeftAndRightMotor(-90, -90);
+            } 
+        } else {
+            if(left) {
+                activateLeftAndRightMotor(-50, 50);
+            } else if(right) {
+                activateLeftAndRightMotor(50, -50);
+            } else {
+                activateLeftAndRightMotor(0, 0);
+            }
+        }
+    } else { // // <6>
+        activateLeftAndRightMotor(0, 0);
+    }
+}
+
+// Finalization
+// None (motors will be automatically stopped)
+----
+<1> Here we retrieve all ev3 objects needed in the main loop. +
+    *Caution*: The port has to match with what is physically connected on the brick
+<2> We define a function that enable to make a motor, go forward, go backward or stop according to a power value (between -100 and 100)
+<3> We define another function that enable to control both motors with one function call.
+<4> The "program" itself. Two main cases: 
+<5> 1st case: xSensor is on, we compute the left motor and right motor power according to touches enabled.
+<6> 2nd case: xSensor is off, we ensure that the motor are stopped.

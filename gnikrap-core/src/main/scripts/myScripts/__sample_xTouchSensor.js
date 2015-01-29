@@ -1,61 +1,69 @@
 ///////////////////////////////////////////////////////////////////////////////
-// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
-//
 // Note: Please adjust the port to what is physically connected on your brick.
+//
+// For more details on this sample, please see 'A robot controlled with the 
+// xTouch sensor' in the documentation
 ///////////////////////////////////////////////////////////////////////////////
 
 // Initialization
-var left = ev3.getBrick().getLargeMotor("D");
-var right = ev3.getBrick().getLargeMotor("A");
+var leftMotor = ev3.getBrick().getLargeMotor("D");
+var rightMotor = ev3.getBrick().getLargeMotor("A");
 var xTouch = ev3.getXSensor("xTouch");
 
+function activateMotor(motor, powerInPercent) {
+    if(powerInPercent < 0) {
+        motor.setSpeedPercent(-powerInPercent);
+        motor.backward();
+    } else if(powerInPercent > 0) {
+        motor.setSpeedPercent(powerInPercent);
+        motor.forward();
+    } else {
+        motor.stop();
+    }
+}
+
+function activateLeftAndRightMotor(leftPowerInPercent, rightPowerInPercent) {
+    activateMotor(leftMotor, leftPowerInPercent);
+    activateMotor(rightMotor, rightPowerInPercent);
+}
 
 // Main loop - This is the main program
 while(ev3.isOk()) {
     var val = xTouch.getValue();
 
     if(val.isStarted()) {
+        var up = val.containsTouch("up") && !val.containsTouch("down");
+        var down = val.containsTouch("down") && !val.containsTouch("up");
         var left = val.containsTouch("left") && !val.containsTouch("right");
         var right = val.containsTouch("right") && !val.containsTouch("left");
         
-        // Left motor
-        if(val.containsTouch("up")) {
+        if(up) {
             if(left) {
-                leftMotor.stop();
-                rightMotor.forward();
+                activateLeftAndRightMotor(50, 90);
             } else if(right) {
-                leftMotor.forward();
-                rightMotor.stop();
+                activateLeftAndRightMotor(90, 50);
             } else {
-                leftMotor.forward();
-                rightMotor.forward();
+                activateLeftAndRightMotor(90, 90);
             } 
-        } else if(val.containsTouch("down")) {
+        } else if(down) {
             if(left) {
-                leftMotor.backward();
-                rightMotor.stop();
+                activateLeftAndRightMotor(-50, -90);
             } else if(right) {
-                leftMotor.stop();
-                rightMotor.backward();
+                activateLeftAndRightMotor(-90, -50);
             } else {
-                leftMotor.backward();
-                rightMotor.backward();
+                activateLeftAndRightMotor(-90, -90);
             } 
         } else {
             if(left) {
-                leftMotor.forward();
-                rightMotor.backward();
+                activateLeftAndRightMotor(-50, 50);
             } else if(right) {
-                leftMotor.backward();
-                rightMotor.forward();
+                activateLeftAndRightMotor(50, -50);
             } else {
-                leftMotor.stop();
-                rightMotor.stop();
+                activateLeftAndRightMotor(0, 0);
             }
         }
     } else {
-        leftMotor.stop();
-        rightMotor.stop();
+        activateLeftAndRightMotor(0, 0);
     }
 }
 

@@ -239,7 +239,7 @@ while(ev3.isOk()) {
       var t = value.getObject("myTarget");
       ev3.notify("Target found: [" + t.getX() + ", " + t.getY() + "]");
     } else {
-      ev3.notify("Hey, select a target called 'myTarget'");
+      ev3.notify("Hey, select a target and call it 'myTarget'");
     }
   }
   

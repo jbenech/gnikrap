@@ -1,7 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
-//
 // Note: Please adjust the port to what is physically connected on your brick.
+//
+// For more details on this sample, please see 'A robot controlled with the 
+// xGyro sensor' in the documentation
 ///////////////////////////////////////////////////////////////////////////////
 
 // Initialization
