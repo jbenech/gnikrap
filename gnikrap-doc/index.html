@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.0">
+<meta name="generator" content="Asciidoctor 1.5.2">
 <meta name="author" content="Jean Bénech">
-<title>Gnikrap</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
+<title>Gnikrap documentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove the comments around the @import statement below when using this as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";*/
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
@@ -275,8 +275,8 @@ dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
 ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
 ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
-ul.checklist li>p:first-child>.fa-check-square-o:first-child,ul.checklist li>p:first-child>input[type="checkbox"]:first-child{margin-right:.25em}
-ul.checklist li>p:first-child>input[type="checkbox"]:first-child{position:relative;top:1px}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
 ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
 ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
 ul.inline>li>*{display:block}
@@ -381,7 +381,7 @@ p{margin-bottom:1.25rem}
 *{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
 a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after,a[href^="mailto:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
 pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
@@ -409,61 +409,101 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad()</script>
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>Gnikrap</h1>
+<h1>Gnikrap documentation</h1>
 <div class="details">
 <span id="author" class="author">Jean Bénech</span><br>
 <span id="email" class="email">jbenech at free dot fr</span><br>
-<span id="revnumber">version 0.2.0,</span>
-<span id="revdate">2014-12</span>
+<span id="revdate">v0.3.0 (c) 2014-2015</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_about">1. About</a></li>
+<li><a href="#_about">1. About</a>
+<ul class="sectlevel2">
+<li><a href="#_scripting_on_the_ev3">1.1. Scripting on the EV3</a></li>
+<li><a href="#_empower_the_device_sensors">1.2. Empower the device' sensors</a></li>
+<li><a href="#_full_documentation_available">1.3. Full documentation available</a></li>
+<li><a href="#_why_don_t_use_gnikrap">1.4. Why don&#8217;t use Gnikrap</a></li>
+</ul>
+</li>
 <li><a href="#_how_to_install">2. How to install</a></li>
 <li><a href="#_script_api">3. Script API</a>
 <ul class="sectlevel2">
-<li><a href="#_the_ev3_object">3.1. The ev3 object</a>
+<li><a href="#_general_principles">3.1. General principles</a></li>
+<li><a href="#_the_ev3_object">3.2. The ev3 object</a>
 <ul class="sectlevel3">
-<li><a href="#_configuration_object">3.1.1. Configuration object</a></li>
+<li><a href="#_configuration_object">3.2.1. Configuration object</a></li>
 </ul>
 </li>
-<li><a href="#_the_brick_object">3.2. The Brick object</a></li>
-<li><a href="#_the_motor_object">3.3. The Motor object</a></li>
-<li><a href="#_the_color_sensor_object">3.4. The Color sensor object</a>
+<li><a href="#_the_brick_object">3.3. The Brick object</a></li>
+<li><a href="#_the_motor_object">3.4. The Motor object</a></li>
+<li><a href="#_the_color_sensor_object">3.5. The Color sensor object</a>
 <ul class="sectlevel3">
-<li><a href="#_color_object">3.4.1. Color object</a></li>
+<li><a href="#_color_object">3.5.1. Color object</a></li>
 </ul>
 </li>
-<li><a href="#_the_ir_infra_red_sensor_object">3.5. The IR (Infra-Red) sensor object</a>
+<li><a href="#_the_ir_infra_red_sensor_object">3.6. The IR (Infra-Red) sensor object</a>
 <ul class="sectlevel3">
-<li><a href="#_remotecommandresult_object">3.5.1. RemoteCommandResult object</a></li>
-<li><a href="#_seekbeaconresult_object">3.5.2. SeekBeaconResult object</a></li>
+<li><a href="#_remotecommandresult_object">3.6.1. RemoteCommandResult object</a></li>
+<li><a href="#_seekbeaconresult_object">3.6.2. SeekBeaconResult object</a></li>
 </ul>
 </li>
-<li><a href="#_the_touch_sensor_object">3.6. The Touch sensor object</a></li>
-<li><a href="#_the_keyboard_object">3.7. The Keyboard object</a>
+<li><a href="#_the_touch_sensor_object">3.7. The Touch sensor object</a></li>
+<li><a href="#_the_keyboard_object">3.8. The Keyboard object</a>
 <ul class="sectlevel3">
-<li><a href="#_button_object">3.7.1. Button object</a></li>
+<li><a href="#_button_object">3.8.1. Button object</a></li>
 </ul>
 </li>
-<li><a href="#_the_led_object">3.8. The Led object</a></li>
-<li><a href="#_the_sound_object">3.9. The Sound object</a></li>
-<li><a href="#_the_screen_object">3.10. The Screen object</a></li>
-<li><a href="#_the_battery_object">3.11. The Battery object</a></li>
+<li><a href="#_the_led_object">3.9. The Led object</a></li>
+<li><a href="#_the_sound_object">3.10. The Sound object</a></li>
+<li><a href="#_the_screen_object">3.11. The Screen object</a></li>
+<li><a href="#_the_battery_object">3.12. The Battery object</a></li>
+<li><a href="#_the_xsensor_object">3.13. The XSensor object</a>
+<ul class="sectlevel3">
+<li><a href="#_the_xtouch_xsensor">3.13.1. The xTouch XSensor</a>
+<ul class="sectlevel4">
+<li><a href="#_touch_object">Touch object</a></li>
+</ul>
+</li>
+<li><a href="#_the_xgyro_xsensor">3.13.2. The xGyro XSensor</a>
+<ul class="sectlevel4">
+<li><a href="#_axis_object">Axis object</a></li>
+</ul>
+</li>
+<li><a href="#_the_xvideo_xsensor">3.13.3. The xVideo XSensor</a>
+<ul class="sectlevel4">
+<li><a href="#_visibleobject_object">VisibleObject object</a></li>
+</ul>
+</li>
+<li><a href="#_advanced_usage">3.13.4. Advanced usage</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_script_samples">4. Script samples</a>
 <ul class="sectlevel2">
 <li><a href="#_the_standard_template">4.1. The standard template</a></li>
-<li><a href="#_a_robot_controlled_with_the_remote_beacon">4.2. A robot controlled with the remote beacon</a></li>
-<li><a href="#_advanced_usage">4.3. Advanced usage</a></li>
+<li><a href="#_remote_control_a_robot">4.2. Remote control a robot</a>
+<ul class="sectlevel3">
+<li><a href="#_a_robot_controlled_with_the_remote_beacon">4.2.1. A robot controlled with the remote beacon</a></li>
+<li><a href="#_a_robot_controlled_with_the_xgyro_sensor">4.2.2. A robot controlled with the xGyro sensor</a></li>
+<li><a href="#_a_robot_controlled_with_the_xtouch_sensor">4.2.3. A robot controlled with the xTouch sensor</a></li>
+</ul>
+</li>
+<li><a href="#_a_robot_that_stay_in_the_video">4.3. A robot that stay in the video</a></li>
+<li><a href="#_advanced_usage_2">4.4. Advanced usage</a>
+<ul class="sectlevel3">
+<li><a href="#_import_scripts">4.4.1. Import scripts</a></li>
+<li><a href="#_using_existing_java_api">4.4.2. Using existing Java API</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_changelog">5. Changelog</a></li>
@@ -474,91 +514,123 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>A simple scripting environment for <a href="http://mindstroms.lego.com">Lego Mindstrom EV3</a></p>
+<p>A scripting environment simple to use for <a href="http://mindstroms.lego.com">Lego Mindstrom EV3</a></p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_about">1. About</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_scripting_on_the_ev3">1.1. Scripting on the EV3</h3>
 <div class="paragraph">
-<p>The key points of Gnikrap are:</p>
+<p><strong>Provide a simple and powerful way to make script based programming on the EV3</strong>.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Provide a simple way to make script based programming on the EV3</strong>. The main advantages are:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Simple to use.</p>
+<p>The tool is <strong>straightforward to use</strong>.</p>
 </li>
 <li>
-<p>Can be used on a computer or a tablet, in fact any device that have a modern browser (HTML5 compatible).</p>
+<p>Can be <strong>used on a computer or a tablet</strong>, in fact any device that have a modern browser (HTML5 compatible).</p>
 </li>
 <li>
-<p>Can use the scripting language of your choice. Javascript is the default, but you can use any
-<a href="http://en.wikipedia.org/wiki/List_of_JVM_languages">script language supported by the JVM</a>.</p>
+<p><strong>Javascript</strong>, the scripting language available by default is currently one of the more popular scripting language)</p>
 </li>
 </ul>
 </div>
-</li>
-<li>
-<p><strong>Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked
-to the EV3 device</strong>. The list of sensors planned is:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Gyroscope: Be able to react to the 3D gyroscope available in the tablet</p>
-</li>
-<li>
-<p>Tactile screen: Be able to remotely control the EV3 without the limitation of the 5 buttons of the IR beacon</p>
-</li>
-<li>
-<p>Webcam: Be able to use video in order to react to, for example, object location, motion, etc.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Off course there is <strong>some limitations compared to other EV3 programming environment and tools</strong>:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Compared to full featured framework like <a href="http://www.lejos.org/">leJOS</a> or <a href="http://www.monobrick.dk/">MonoBrick</a></p>
-<div class="ulist">
-<ul>
-<li>
-<p>No access to a full featured API (access to third parties sensors, location API, etc.). So if your plan is to write a
-really complex program, consider using another tool.<br>
-<em>Note:</em> Gnikrap is internally based on leJOS, so all the feature provided by leJOS are "available" within Gnikrap by using the leJOS API.
-However some back-door have to be written in the current API in order to be able to use in a quite simple way theses features.</p>
-</li>
-<li>
-<p>Script language are slower to execute than compiled code. So if speed is one of your key choice criteria, consider using
-another tool</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Compared to graphical programming software like the EV3 software provided by Lego:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>No software development learning is needed to use this tools. This tool is efficient to have really simple programs works quickly.
-When your program become a bit more complex it is difficult to have something clear and "redeable" on a standard screen (I don&#8217;t have a 4K screen :-) ).</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p><em>Note:</em> Using the mobile device sensors is currently not available in the version 0.2.0 of the project</p>
+<p>It is also feasible to use other scripting language available on the JVM. A list of some scripting
+language available on the JVM can be found <a href="http://en.wikipedia.org/wiki/List_of_JVM_languages">here</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_empower_the_device_sensors">1.2. Empower the device' sensors</h3>
+<div class="paragraph">
+<p><strong>Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked to the EV3 device</strong>.
+The list of XSensors (for eXternal Sensors) available right now is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>xTouch: A <strong>24 touch tactile screen</strong> that enable to remotely pilot a robot in a simple way
+(see <a href="#The XTouch XSensor">[The XTouch XSensor]</a> for more details).</p>
+</li>
+<li>
+<p>XGyro: <strong>Use the gyroscope of your mobile device</strong> (eg. tablet) in order to control a robot
+(see <a href="#The XTouch XGyro">[The XTouch XGyro]</a> for more details).</p>
+</li>
+<li>
+<p>xVideo: Use the <strong>webcam</strong> of any device (tablet, computer) in order <strong>to track objects</strong> (see <a href="#The xTouch XVideo">[The xTouch XVideo]</a> for more details) and make
+your robot react to the environment.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Other XSensors that could be envisaged in the future:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>xGPS sensor,</p>
+</li>
+<li>
+<p>xSound sensor,</p>
+</li>
+<li>
+<p>other video algorithms for the xVideo sensor,</p>
+</li>
+<li>
+<p>other modes for the xTouch sensor</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_full_documentation_available">1.3. Full documentation available</h3>
+<div class="paragraph">
+<p>You are at the right place to evaluate it ! Just have look to see if it&#8217;s ok for you :-)</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_why_don_t_use_gnikrap">1.4. Why don&#8217;t use Gnikrap</h3>
+<div class="paragraph">
+<p>Gnikrap is nice, but you&#8217;re not sure&#8230;&#8203; Here are some element that can make you use another tool to program with the EV3 :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If you need a full featured API (<strong>access to non-Lego sensors</strong>, location API, etc.) or if <strong>speed
+execution</strong> is one of you key criteria, consider using a more complete framework like <a href="http://www.lejos.org/">leJOS</a>
+or <a href="http://www.monobrick.dk/">MonoBrick</a></p>
+</li>
+<li>
+<p>If you need <strong>graphical programming</strong> tools, conider using the software provided by Lego</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -566,8 +638,31 @@ When your program become a bit more complex it is difficult to have something cl
 <h2 id="_how_to_install">2. How to install</h2>
 <div class="sectionbody">
 <div class="paragraph">
+<p>The installation consist of several steps:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Install leJOS</p>
+</li>
+<li>
+<p>Download Gnikrap and tools needed for installation</p>
+</li>
+<li>
+<p>Install Gnikrap</p>
+</li>
+<li>
+<p>Launch Gnikrap (only this step has to be performed once installed)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
 <p>Here are the steps needed in order to have Gnikrap working on your EV3:</p>
 </div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Lejos installation</dt>
+<dd>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -586,12 +681,29 @@ When your program become a bit more complex it is difficult to have something cl
 </ul>
 </div>
 </li>
+</ol>
+</div>
+</dd>
+<dt class="hdlist1">Download gnikrap and other tools needed for the installation</dt>
+<dd>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Download the Gnikrap distribution <a href="https://github.com/jbenech/gnikrap/releases/download/Gnikrap-0.2.0/gnikrap-core-0.2.0.zip">here</a></p>
 </li>
 <li>
 <p>Donwload WinSCP <a href="http://winscp.net/eng/download.php">here</a> (the Portable distribution does it)</p>
 </li>
+<li>
+<p>Download Putty <a href="http://the.earth.li/~sgtatham/putty/latest/x86/putty.zip">here</a></p>
+</li>
+</ol>
+</div>
+</dd>
+<dt class="hdlist1">Copy and install Gnikrap</dt>
+<dd>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Connect by using the following settings (Host name can depend of your network settings.
 10.0.1.1 is the IP address to use while connected with bluetooth):</p>
@@ -610,7 +722,7 @@ When your program become a bit more complex it is difficult to have something cl
 </div>
 </li>
 <li>
-<p>Put the Gnikrap zip on the EV3.</p>
+<p>Put the Gnikrap distribution file on the EV3.</p>
 <div class="imageblock">
 <div class="content">
 <img src="images/install/030_WinSCP_DownloadFile.png" alt="030 WinSCP DownloadFile">
@@ -619,9 +731,6 @@ When your program become a bit more complex it is difficult to have something cl
 <div class="paragraph">
 <p><em>Note:</em> The network speed with the EV3 is quite slow.</p>
 </div>
-</li>
-<li>
-<p>Download Putty <a href="http://the.earth.li/~sgtatham/putty/latest/x86/putty.zip">here</a></p>
 </li>
 <li>
 <p>Connect to the EV3 brick with Putty</p>
@@ -634,53 +743,42 @@ When your program become a bit more complex it is difficult to have something cl
 <p>Login with "root" as user and no password: <span class="image"><img src="images/install/0110_Putty_Login.png" alt="0110_Putty_Login"></span></p>
 </div>
 </li>
-</ol>
-</div>
+<li>
+<p>Uncompress the Gnikrap software:</p>
 <div class="ulist">
-<div class="title">Unzip the Gnikrap software:</div>
 <ul>
 <li>
-<p>Create a folder for Gnikrap with the command <code>mkdir gnikrap-0.2.0</code></p>
-<div class="paragraph">
-<p>_Note: "gnikrap-0.2.0" has to be replaced by the folder name of your choice.</p>
-</div>
+<p>Uncompress the files with the command <code>tar -xz -f gnikrap-core-0.3.0.tar.gz</code></p>
 </li>
-<li>
-<p>Unzip the files with the command `unzip gnikrap-core-0.2.0.zip -d gnikrap-0.2.0</p>
-<div class="paragraph">
-<p><em>Note:</em> "gnikrap-core-0.2.0.zip" has to be replaced by the right zip filename. "gnikrap-0.2.0" has to be replaced by the folder name of your choice.</p>
+</ul>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Optionally, kill the current running lejos:</p>
 </li>
 </ol>
 </div>
-</li>
-<li>
-<p>Found, the process with the command: <code>ps | grep ejre</code>.</p>
-</li>
-<li>
-<p>Kill the process with the command: <code>kill 1527</code> where "1527" is the process Id found with the ps command</p>
+</dd>
+<dt class="hdlist1">Launch Gnikrap</dt>
+<dd>
 <div class="olist arabic">
 <ol class="arabic">
+<li>
+<p>If needed, connect to the EV3 brick with a telnet client (see putty section above)</p>
+</li>
 <li>
 <p>Launch Gnikrap:</p>
-</li>
-</ol>
-</div>
-</li>
+<div class="ulist">
+<ul>
 <li>
-<p>Go to the bin folder: <code>cd gnikrap-0.2.0/bin</code></p>
+<p>Go to the bin folder: <code>cd gnikrap-core-0.3.0/bin</code></p>
 </li>
 <li>
 <p>Start Gnikrap: <code>./start.sh</code></p>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
+</ul>
+</div>
+</li>
 <li>
-<p>Finally open a browser on your computer and connect to Gnikrap with the following URL: <code>http://10.0.1.1</code>
-You should have (it will take several seconds to download) the Gnikrap main screen:</p>
+<p>Finally open a browser on your computer and connect to Gnikrap with the following URL: <code>http://&lt;IP of the EV3&gt;</code>
+You should have the Gnikrap main screen (it take a few seconds to load) :</p>
 <div class="imageblock">
 <div class="content">
 <img src="images/install/0200_Gnikrap_MainScreen.png" alt="0200 Gnikrap MainScreen">
@@ -692,87 +790,195 @@ You should have (it will take several seconds to download) the Gnikrap main scre
 </div>
 </li>
 <li>
-<p>In order to shutdown the EV3 brick you should stop the Gnikrap application <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.
-Then you should use the command: <code>shutdown -h now</code></p>
+<p>While shutdown of the EV3 brick is needed, you can use the leJOS menu.</p>
 </li>
 </ol>
 </div>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In some cases, there is not enough memory on the EV3 brick to have 2 java process running at the same time.
+The solution is to kill the leJOS process (the menu). In order to do that you have to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Stop the Gnikrap application <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
+</li>
+<li>
+<p>Found, the process with the command: <code>ps | grep ejre</code>.</p>
+</li>
+<li>
+<p>Kill the process with the command: <code>kill 1527</code> where "1527" is the process Id found with the ps command</p>
+</li>
+<li>
+<p>Relaunch the Gnikrap application (see below).</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Note: I plan to provide an image pre-packaged (See Release note and future plan for more details)</p>
+<p>While the menu has been killed, you have to stop the brick manually:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Stop the Gnikrap application <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>C</kbd></span>.</p>
+</li>
+<li>
+<p>Shutdown the EV3 brick by using the command: <code>shutdown -h now</code></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Note: There is a plan in order to provide a packaging more simple to use (See <a href="#_changelog">Changelog</a> for more details)</p>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_script_api">3. Script API</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_general_principles">3.1. General principles</h3>
 <div class="paragraph">
-<p>All the API can be retrieved from the object named <code>ev3</code>.</p>
+<p>The API has been designed to be simple to use. Here are some explanation that will help you to use
+the API in a more efficient way:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Single entry point: All the API can be accessed from the a single object: <code>ev3</code> (see <a href="#_the_ev3_object">The ev3 object</a> for more details).</p>
+<div class="ulist">
+<ul>
+<li>
+<p>All the stuff physically linked to the EV3 brick can be accessed from the object: <code>ev3.getBrick()</code> (see <a href="#_the_ev3_object">The ev3 object</a> for more details).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Method naming convention (don&#8217;t be afraid, there is nothing exotic here) :</p>
+<div class="ulist">
+<ul>
+<li>
+<p>All the methods names starts with an verb.</p>
+</li>
+<li>
+<p>All the methods starting by <code>is</code> always returns a boolean (i.e. <code>true</code> or <code>false</code>).</p>
+</li>
+<li>
+<p>All the methods starting with <code>get</code> are <em>getters</em> and will return a value.</p>
+</li>
+<li>
+<p>All the methods starting with <code>set</code> are <em>setters</em> and will set a value.</p>
+</li>
+<li>
+<p>The API is English based.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>All the times are expressed in milliseconds (1 second is equals to 1000 milliseconds).</p>
+</li>
+<li>
+<p>All the angles are expressed in degrees (in general negative and positive degrees are accepted).</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_the_ev3_object">3.1. The ev3 object</h3>
+<h3 id="_the_ev3_object">3.2. The ev3 object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
 <dl>
-<dt class="hdlist1">isRunning()</dt>
+<dt class="hdlist1">isOk()</dt>
 <dd>
-<p>Enable to known is the script can safely run or not. Returns <code>true</code> if the script is running, <code>false</code> if the script should stop.</p>
+<p>Enable to known is everything is ok and the script can continue running not. Returns <code>true</code> if the script can continue running, <code>false</code> if the script should stop.</p>
 </dd>
 <dt class="hdlist1">getBrick()</dt>
 <dd>
 <p>Returns <a href="#_the_brick_object">The Brick object</a>.</p>
 </dd>
-<dt class="hdlist1">message(text)</dt>
+<dt class="hdlist1">notify(text)</dt>
 <dd>
 <p>Display a message on the Gnikrap interface.<br>
-<code>text</code> the text of the mesasge to display.</p>
+<strong>text</strong>: the text of the message to display.</p>
 </dd>
 <dt class="hdlist1">sleep(timeInMs)</dt>
 <dd>
 <p>Make the script sleeping for the given number of milliseconds.<br>
-<code>timeInMs</code> the sleeping time (in milliseconds).</p>
+<strong>timeInMs</strong>: the sleeping time (in milliseconds).</p>
 </dd>
 <dt class="hdlist1">getConfiguration()</dt>
 <dd>
 <p>Returns a <a href="#_configuration_object">Configuration object</a>. Enable to configure some behaviour of the scripting environment.</p>
+</dd>
+<dt class="hdlist1">getXSensor(XSensorName)</dt>
+<dd>
+<p>Returns <a href="#_the_xsensor_object">The XSensor object</a> for the XSensor with the given name. (The name is configured within the GUI)
+<strong>XSensorName</strong>: the name of the sensor.</p>
 </dd>
 </dl>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration_object">3.1.1. Configuration object</h4>
+<h4 id="_configuration_object">3.2.1. Configuration object</h4>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Configuration object is for advanced use only. If you don&#8217;t understand what it means, don&#8217;t use this object.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
 <dl>
-<dt class="hdlist1">setIsRunningCheckEscapeKey(checkEscapeKey)</dt>
+<dt class="hdlist1">setIsOkCheckEscapeKey(checkEscapeKey)</dt>
 <dd>
 <p>Enable the check of the <kbd>Escape</kbd> Mindstrom brick key when
-<code>isRunning()</code> is called. <strong>Default is <code>true</code></strong>.<br>
-<code>checkEscapeKey</code> if <code>true</code> check the <kbd>Escape</kbd> key, if <code>false</code> don&#8217;t check nothing.</p>
+<code>isOk()</code> is called. <strong>Default is <code>true</code></strong>.<br>
+<strong>checkEscapeKey</strong>: if <code>true</code> check the <kbd>Escape</kbd> key, if <code>false</code> don&#8217;t check nothing.</p>
 </dd>
-<dt class="hdlist1">isRunningCheckEscapeKey(checkEscapeKey)</dt>
+<dt class="hdlist1">isIsOkCheckEscapeKey()</dt>
 <dd>
-<p>Returns <code>true</code> if <kbd>Escape</kbd> key check on <code>isRunning()</code> is enabled, <code>false</code> otherwise (don&#8217;t check).</p>
+<p>Returns <code>true</code> if <kbd>Escape</kbd> key check on <code>isOk()</code> is enabled, <code>false</code> otherwise (don&#8217;t check).</p>
 </dd>
-<dt class="hdlist1">setIsRunningWait(timeInMs)</dt>
+<dt class="hdlist1">setIsOkWait(timeInMs)</dt>
 <dd>
-<p>Set a waiting time when <code>isRunning()</code> is called. <strong>Default is <code>0</code> (no waiting time)</strong>.<br>
-<code>timeInMs</code> the waiting time, <code>0</code> means no waiting time.</p>
+<p>Set the time to wait when <code>isOk()</code> is called. <strong>Default is <code>0</code> (no waiting time)</strong>.<br>
+<strong>timeInMs</strong>: the time to wait, <code>0</code> means no wait.</p>
 </dd>
-<dt class="hdlist1">isRunningWait()</dt>
+<dt class="hdlist1">getIsOkWait()</dt>
 <dd>
-<p>Returns the waiting time used when <code>isRunning()</code> is called.</p>
+<p>Returns the time to wait when <code>isOk()</code> is called.</p>
 </dd>
 <dt class="hdlist1">setWaitingTimeBeforeHardKill(timeInMs)</dt>
 <dd>
 <p>Set a maximum time to wait before hard killing the script (eg. infinite loop).
 <strong>Default is 5000 (5 seconds)</strong>.<br>
-<code>timeInMs</code> the time to wait before hard killing the script. Valid values between 500 and 30000.</p>
+<strong>timeInMs</strong>: the time to wait before hard killing the script. Valid values between 500 and 30000.</p>
 </dd>
 <dt class="hdlist1">getWaitingTimeBeforeHardKill()</dt>
 <dd>
@@ -785,7 +991,13 @@ Then you should use the command: <code>shutdown -h now</code></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_brick_object">3.2. The Brick object</h3>
+<h3 id="_the_brick_object">3.3. The Brick object</h3>
+<div id="img-ev3-brick" class="imageblock">
+<div class="content">
+<img src="images/ev3/Brick.png" alt="EV3 Brick" width="300" height="200">
+</div>
+<div class="title">Figure 1. 45500 Intelligent Brick - image from <a href="http://education.lego.com" class="bare">http://education.lego.com</a></div>
+</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -793,27 +1005,27 @@ Then you should use the command: <code>shutdown -h now</code></p>
 <dt class="hdlist1">getMediumMotor(port)</dt>
 <dd>
 <p>Return a <a href="#_the_motor_object">medium Motor</a> object for the given port.<br>
-<code>port</code> value should be in [<code>"A"</code>, <code>"B"</code>, <code>"C"</code>, <code>"D"</code>].</p>
+<strong>port</strong>: value should be in [<code>"A"</code>, <code>"B"</code>, <code>"C"</code>, <code>"D"</code>].</p>
 </dd>
 <dt class="hdlist1">getLargeMotor(port)</dt>
 <dd>
 <p>Return a <a href="#_the_motor_object">large Motor</a> object for the given port.<br>
-<code>port</code> value should be in [<code>"A"</code>, <code>"B"</code>, <code>"C"</code>, <code>"D"</code>].</p>
+<strong>port</strong>: value should be in [<code>"A"</code>, <code>"B"</code>, <code>"C"</code>, <code>"D"</code>].</p>
 </dd>
 <dt class="hdlist1">getColorSensor(port)</dt>
 <dd>
 <p>Return a <a href="#_the_color_sensor_object">Color sensor object</a> for the given port.<br>
-<code>port</code> value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
+<strong>port</strong>: value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
 </dd>
 <dt class="hdlist1">getIRSensor(port)</dt>
 <dd>
 <p>Return an <a href="#_the_ir_infra_red_sensor_object">Infra-Red sensor</a> object for the given port.<br>
-<code>port</code> value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
+<strong>port</strong>: value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
 </dd>
 <dt class="hdlist1">getTouchSensor(port)</dt>
 <dd>
 <p>Return a <a href="#_the_touch_sensor_object">Touch sensor</a> object for the given port.<br>
-<code>port</code> value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
+<strong>port</strong>: value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
 </dd>
 <dt class="hdlist1">getKeyboard()</dt>
 <dd>
@@ -844,17 +1056,28 @@ Then you should use the command: <code>shutdown -h now</code></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_motor_object">3.3. The Motor object</h3>
-<div class="admonitionblock note">
+<h3 id="_the_motor_object">3.4. The Motor object</h3>
+<div class="imageblock" style="float: right">
+<div class="content">
+<img src="images/ev3/MotorMedium.png" alt="Medium motor" width="300" height="200">
+</div>
+</div>
+<div id="img-ev3-motors" class="imageblock" style="text-align: left">
+<div class="content">
+<img src="images/ev3/MotorLarge.png" alt="Large motor" width="300" height="200">
+</div>
+<div class="title">Figure 2. 45502 Large Servo Motor / 45503 Medium Servo Motor - image from <a href="http://education.lego.com" class="bare">http://education.lego.com</a></div>
+</div>
+<div class="admonitionblock tip">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
 <div class="paragraph">
 <p>On the motor API, some call wait that the operation is ended on the motor (so when the
-function returns the motor has ended the expected job) while other immediately returns (so
+function returns the motor has ended the expected move) while other immediately returns (so
 the motor is still operating/moving while the function returns). The behaviour is specified for each function.</p>
 </div>
 </td>
@@ -880,25 +1103,25 @@ the motor is still operating/moving while the function returns). The behaviour i
 <dt class="hdlist1">stop(lock)</dt>
 <dd>
 <p>Stop and lock or not the motor. This call immediately return.<br>
-<code>lock</code> is the motor locked ? Value should be in [<code>true</code>, <code>false</code>]</p>
+<strong>lock</strong>: is the motor locked ? Value should be in [<code>true</code>, <code>false</code>]</p>
 </dd>
 <dt class="hdlist1">stop(lock, immediateReturn)</dt>
 <dd>
 <p>Stop and lock or not the motor.<br>
-<code>lock</code> should be in [<code>true</code>, <code>false</code>]<br>
-<code>immediateReturn</code> Is the function returns immediately or wait that the motor was locked ?
+<strong>lock</strong>: should be in [<code>true</code>, <code>false</code>]<br>
+<strong>immediateReturn</strong>: Is the function returns immediately or wait that the motor was locked ?
 Values should be in [<code>true</code>, <code>false</code>]</p>
 </dd>
 <dt class="hdlist1">rotate(angle)</dt>
 <dd>
 <p>Rotate the given number of degree. This call wait the end of the motor move.<br>
-<code>angle</code> the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.</p>
+<strong>angle</strong>: the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.</p>
 </dd>
 <dt class="hdlist1">rotate(angle, immediateReturn)</dt>
 <dd>
 <p>Rotate the given number of degree. This call wait the end of the motor move.<br>
-<code>angle</code> the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
-<code>immediateReturn</code> Is the function returns immediately or wait that the motor rotation was ended ?
+<strong>angle</strong>: the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
+<strong>immediateReturn</strong>: Is the function returns immediately or wait that the motor rotation was ended ?
 Values should be in [<code>true</code>, <code>false</code>]</p>
 </dd>
 <dt class="hdlist1">isMoving()</dt>
@@ -916,7 +1139,7 @@ Values should be in [<code>true</code>, <code>false</code>]</p>
 <dt class="hdlist1">setSpeedPercent(percent)</dt>
 <dd>
 <p>Set the speed in percent of the maximum speed.<br>
-<code>percent</code> the speed in percent of the maximum speed, 100 is full speed, 1 is minimum speed.</p>
+<strong>percent</strong>: the speed in percent of the maximum speed, 100 is full speed, 1 is minimum speed.</p>
 </dd>
 <dt class="hdlist1">getSpeedPercent()</dt>
 <dd>
@@ -925,7 +1148,7 @@ Values should be in [<code>true</code>, <code>false</code>]</p>
 <dt class="hdlist1">setSpeed(degreePerSecond)</dt>
 <dd>
 <p>Set the speed in degrees per second.<br>
-<code>degreePerSecond</code> the number of degrees per second that the motor should target ; one motor rotation is 360 degrees.
+<strong>degreePerSecond</strong>: the number of degrees per second that the motor should target ; one motor rotation is 360 degrees.
  According to the LEGO documentation, the maximum sustainable speed is 960° per second for the large motor (i.e. 160 rotation per minute as claimed in the documentation)
  and 1440° per second for the medium motor (i.e. 240 rotation per minute as claimed in the documentation).
  In all cases, it seems that the maximum sustainable speed is 100 * battery voltage (which is lower than 900)</p>
@@ -952,24 +1175,30 @@ largeMotor.rotate(-360);
 
 // Retrieve tacho
 largeMotor.rotate(60);
-ev3.message("TachoA: " + largeMotor.getTachoCount());
+ev3.notify("TachoA: " + largeMotor.getTachoCount());
 largeMotor.rotate(-60);
-ev3.message("TachoB: " + largeMotor.getTachoCount());
+ev3.notify("TachoB: " + largeMotor.getTachoCount());
 largeMotor.resetTachoCount();
-ev3.message("TachoC: " + largeMotor.getTachoCount());
+ev3.notify("TachoC: " + largeMotor.getTachoCount());
 
 // Rotate and don't wait
 var tacho;
 largeMotor.rotate(360 * 3, true);
 while((tacho = largeMotor.getTachoCount()) &lt; 1000) {
-  ev3.message("Tacho: " + tacho);
+  ev3.notify("Tacho: " + tacho);
   ev3.sleep(200);
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_color_sensor_object">3.4. The Color sensor object</h3>
+<h3 id="_the_color_sensor_object">3.5. The Color sensor object</h3>
+<div id="img-ev3-color-sensor" class="imageblock">
+<div class="content">
+<img src="images/ev3/ColorSensor.png" alt="Color sensor" width="300" height="200">
+</div>
+<div class="title">Figure 3. 45506 Color Sensor - image from <a href="http://education.lego.com" class="bare">http://education.lego.com</a></div>
+</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -991,16 +1220,16 @@ while((tacho = largeMotor.getTachoCount()) &lt; 1000) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_color_object">3.4.1. Color object</h4>
+<h4 id="_color_object">3.5.1. Color object</h4>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
 <dl>
-<dt class="hdlist1">value()</dt>
+<dt class="hdlist1">getValue()</dt>
 <dd>
 <p>Returns the color values as a number.</p>
 </dd>
-<dt class="hdlist1">noColor()</dt>
+<dt class="hdlist1">isNoColor()</dt>
 <dd>
 <p>Returns <code>true</code> if no color was detected, <code>false</code> otherwise.</p>
 </dd>
@@ -1043,18 +1272,18 @@ while((tacho = largeMotor.getTachoCount()) &lt; 1000) {
 <div class="title">Reflected light API:</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">var colorSensor = ev3.getBrick().getColorSensor("S1");
-while(ev3.isRunning()) {
-  ev3.message("Reflected light: " + colorSensor.getReflectedLight());
+while(ev3.isOk()) {
+  ev3.notify("Reflected light: " + colorSensor.getReflectedLight());
   ev3.sleep(200);
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Ambiant light API:</div>
+<div class="title">Ambient light API:</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">var colorSensor = ev3.getBrick().getColorSensor("S1");
-while(ev3.isRunning()) {
-  ev3.message("Ambiant light: " + colorSensor.getAmbientLight());
+while(ev3.isOk()) {
+  ev3.notify("Ambient light: " + colorSensor.getAmbientLight());
   ev3.sleep(200);
 }</code></pre>
 </div>
@@ -1063,8 +1292,8 @@ while(ev3.isRunning()) {
 <div class="title">Color API:</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">var colorSensor = ev3.getBrick().getColorSensor("S1");
-while(enterKey.isUp() &amp;&amp; ev3.isRunning()) {
-  ev3.message("Color: " + colorSensor.getColor());
+while(ev3.isOk()) {
+  ev3.notify("Color: " + colorSensor.getColor());
   ev3.sleep(200);
 }</code></pre>
 </div>
@@ -1072,7 +1301,13 @@ while(enterKey.isUp() &amp;&amp; ev3.isRunning()) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_ir_infra_red_sensor_object">3.5. The IR (Infra-Red) sensor object</h3>
+<h3 id="_the_ir_infra_red_sensor_object">3.6. The IR (Infra-Red) sensor object</h3>
+<div id="img-ev3-ir-sensor" class="imageblock">
+<div class="content">
+<img src="images/ev3/IRSensor.png" alt="IR sensor" width="300" height="200">
+</div>
+<div class="title">Figure 4. 45509 IR Sensor - image from <a href="http://education.lego.com" class="bare">http://education.lego.com</a></div>
+</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1080,7 +1315,7 @@ while(enterKey.isUp() &amp;&amp; ev3.isRunning()) {
 <dt class="hdlist1">setChannel(channel)</dt>
 <dd>
 <p>Set the channel to use with the IR sensor.<br>
-<code>channel</code> the channel number, value should be in [1, 2, 3, 4].</p>
+<strong>channel</strong>: the channel number, value should be in [1, 2, 3, 4].</p>
 </dd>
 <dt class="hdlist1">getChannel()</dt>
 <dd>
@@ -1103,12 +1338,18 @@ while(enterKey.isUp() &amp;&amp; ev3.isRunning()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_remotecommandresult_object">3.5.1. RemoteCommandResult object</h4>
+<h4 id="_remotecommandresult_object">3.6.1. RemoteCommandResult object</h4>
+<div id="img-ev3-ir-beacon" class="imageblock">
+<div class="content">
+<img src="images/ev3/IRBeacon.png" alt="IR Beacon" width="300" height="200">
+</div>
+<div class="title">Figure 5. 45508 IR Beacon - image from <a href="http://education.lego.com" class="bare">http://education.lego.com</a></div>
+</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
 <dl>
-<dt class="hdlist1">value()</dt>
+<dt class="hdlist1">getValue()</dt>
 <dd>
 <p>Returns integer value of the remote beacon.</p>
 </dd>
@@ -1132,7 +1373,7 @@ while(enterKey.isUp() &amp;&amp; ev3.isRunning()) {
 <dd>
 <p>Returns <code>true</code> if beacon mode was enabled, <code>false</code> otherwise.</p>
 </dd>
-<dt class="hdlist1">nothingEnabled()</dt>
+<dt class="hdlist1">isNothingEnabled()</dt>
 <dd>
 <p>Returns <code>true</code> nothing was enabled, <code>false</code> otherwise.</p>
 </dd>
@@ -1142,7 +1383,7 @@ while(enterKey.isUp() &amp;&amp; ev3.isRunning()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_seekbeaconresult_object">3.5.2. SeekBeaconResult object</h4>
+<h4 id="_seekbeaconresult_object">3.6.2. SeekBeaconResult object</h4>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1183,8 +1424,8 @@ A bearing of 0 indicates the beacon is directly in front of the sensor).</p>
 <div class="title">Distance API:</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">var irSensor = ev3.getBrick().getIRSensor("S1");
-while(ev3.isRunning()) {
-  ev3.message("Distance: " + irSensor.getDistance());
+while(ev3.isOk()) {
+  ev3.notify("Distance: " + irSensor.getDistance());
   ev3.sleep(200);
 }</code></pre>
 </div>
@@ -1193,9 +1434,9 @@ while(ev3.isRunning()) {
 <div class="title">Seek beacon API:</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">var irSensor = ev3.getBrick().getIRSensor("S1");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   var x = irSensor.seekBeacon();
-  ev3.message("Beacon found: " + x.isBeaconFound() + ", bearing: " + x.getBearing() + ", distance: " + x.getDistance());
+  ev3.notify("Beacon found: " + x.isBeaconFound() + ", bearing: " + x.getBearing() + ", distance: " + x.getDistance());
   ev3.sleep(200);
 }</code></pre>
 </div>
@@ -1204,9 +1445,12 @@ while(ev3.isRunning()) {
 <div class="title">Remote command API:</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">var irSensor = ev3.getBrick().getIRSensor("S1");
-while(ev3.isRunning()) {
+while(ev3.isOk()) {
   var x = irSensor.getRemoteCommand();
-  ev3.message("value: " + x.value() + ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() + ", bl: " + x.isBottomLeftEnabled() + ", br: " + x.isBottomRightEnabled() + ", bea: " + x.isBeaconEnabled() + " nothing: " + x.noButtonPressed());
+  ev3.notify("value: " + x.getValue() +
+            ", tl: " + x.isTopLeftEnabled() + ", tr: " + x.isTopRightEnabled() +
+            ", bl: " + x.isBottomLeftEnabled() + ", br: " + x.isBottomRightEnabled() +
+            ", bea: " + x.isBeaconEnabled() + " nothing: " + x.isNothingEnabled());
   ev3.sleep(200);
 }</code></pre>
 </div>
@@ -1214,7 +1458,13 @@ while(ev3.isRunning()) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_touch_sensor_object">3.6. The Touch sensor object</h3>
+<h3 id="_the_touch_sensor_object">3.7. The Touch sensor object</h3>
+<div id="img-ev3-touch-sensor" class="imageblock">
+<div class="content">
+<img src="images/ev3/TouchSensor.png" alt="Touch sensor" width="300" height="200">
+</div>
+<div class="title">Figure 6. 45507 Touch Sensor - image from <a href="http://education.lego.com" class="bare">http://education.lego.com</a></div>
+</div>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1233,16 +1483,16 @@ while(ev3.isRunning()) {
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// Touch sensor API
-var touchSensor = ev3.getBrick().getTouchSensor("S2");
-while(ev3.isRunning()) {
-  ev3.message("Push button: " + touchSensor.isPushed());
+var touchSensor = ev3.getBrick().getTouchSensor("S1");
+while(ev3.isOk()) {
+  ev3.notify("Push button: " + touchSensor.isPushed());
   ev3.sleep(200);
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_keyboard_object">3.7. The Keyboard object</h3>
+<h3 id="_the_keyboard_object">3.8. The Keyboard object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1258,7 +1508,7 @@ while(ev3.isRunning()) {
 <dt class="hdlist1">getEscape()</dt>
 <dd>
 <p>Returns a <a href="#_button_object">Button object</a> for the <kbd>Escape</kbd> button.<br>
-<em>Note:</em> The <kbd>Escape</kbd> button can also be checked by the <code>isRunning()</code> function.</p>
+<em>Note:</em> The <kbd>Escape</kbd> button can also be checked by the <code>isOk()</code> function.</p>
 </dd>
 <dt class="hdlist1">getLeft()</dt>
 <dd>
@@ -1285,7 +1535,7 @@ while(ev3.isRunning()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_button_object">3.7.1. Button object</h4>
+<h4 id="_button_object">3.8.1. Button object</h4>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1321,17 +1571,17 @@ while(ev3.isRunning()) {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// Keyboard API
 var enterKey = ev3.getBrick().getKeyboard().getEnter();
-ev3.message("Press enter to continue");
-while(enterKey.isUp() &amp;&amp; ev3.isRunning()) {
+ev3.notify("Press enter to continue");
+while(enterKey.isUp() &amp;&amp; ev3.isOk()) {
   ev3.sleep(200);
 }
-ev3.message("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());</code></pre>
+ev3.notify("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_led_object">3.8. The Led object</h3>
+<h3 id="_the_led_object">3.9. The Led object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1340,15 +1590,15 @@ ev3.message("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
 <dd>
 <p>Disable the LED.</p>
 </dd>
-<dt class="hdlist1">green()</dt>
+<dt class="hdlist1">lightGreen()</dt>
 <dd>
 <p>Enable the green LED.</p>
 </dd>
-<dt class="hdlist1">red()</dt>
+<dt class="hdlist1">lightRed()</dt>
 <dd>
 <p>Enable the red LED.</p>
 </dd>
-<dt class="hdlist1">orange()</dt>
+<dt class="hdlist1">lightOrange()</dt>
 <dd>
 <p>Enable the orange LED.</p>
 </dd>
@@ -1367,18 +1617,18 @@ ev3.message("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// Led API
 var leds = ev3.getBrick().getLed();
-leds.green();
+leds.lightGreen();
 ev3.sleep(2000);
-leds.orange().blink();
+leds.lightOrange().blink();
 ev3.sleep(2000);
-leds.red().blink().blink();
+leds.lightRed().blink().blink();
 ev3.sleep(2000);
 leds.off();</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_sound_object">3.9. The Sound object</h3>
+<h3 id="_the_sound_object">3.10. The Sound object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1386,30 +1636,27 @@ leds.off();</code></pre>
 <dt class="hdlist1">setVolume(vol)</dt>
 <dd>
 <p>Set the sound volume.<br>
-<code>vol</code> the volumne, valid values are betwwen 0 and 100.</p>
+<strong>vol</strong>: the volume, valid values are between 0 and 100.</p>
 </dd>
 <dt class="hdlist1">getVolume()</dt>
 <dd>
 <p>Returns the sound volume.</p>
 </dd>
-</dl>
-</div>
-<div class="paragraph">
-<p>beep()::Play a beep.</p>
-</div>
-<div class="dlist">
-<dl>
+<dt class="hdlist1">beep()</dt>
+<dd>
+<p>Play a beep.</p>
+</dd>
 <dt class="hdlist1">playTone(frequency, durationInMs)</dt>
 <dd>
 <p>Play a tone of the given frequency for the given duration.<br>
-<code>frequency</code> the frequency of the tone in Hertz (Hz). Note: In order to be audible, use values between 50 and 2000.<br>
-<code>durationInMs</code> the duration in milliseconds.</p>
+<strong>frequency</strong>: the frequency of the tone in Hertz (Hz). Note: In order to be audible, use values between 50 and 2000.<br>
+<strong>durationInMs</strong>: the duration in milliseconds.</p>
 </dd>
 <dt class="hdlist1">playNote(note, durationInMs)</dt>
 <dd>
 <p>Play the given note for the given duration.<br>
-<code>note</code> the note to play. Notes should be in ["C1"-"B7", # allowed on C, D, F, G, A] or ["Do"-"Si", # allowed on Do, Re, Fa, Sol, La].<br>
-<code>durationInMs</code> the duration in milliseconds.</p>
+<strong>note</strong>: the note to play. Notes should be in ["C1"-"B7", # allowed on C, D, F, G, A] or ["Do"-"Si", # allowed on Do, Re, Fa, Sol, La].<br>
+<strong>durationInMs</strong>: the duration in milliseconds.</p>
 </dd>
 </dl>
 </div>
@@ -1438,7 +1685,7 @@ sound.playNote("Si", 500);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_screen_object">3.10. The Screen object</h3>
+<h3 id="_the_screen_object">3.11. The Screen object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1456,7 +1703,7 @@ sound.playNote("Si", 500);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_battery_object">3.11. The Battery object</h3>
+<h3 id="_the_battery_object">3.12. The Battery object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1484,9 +1731,431 @@ sound.playNote("Si", 500);</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// Battery API
 var battery = ev3.getBrick().getBattery();
-ev3.message("Battery current: " + battery.getBatteryCurrent());
-ev3.message("Motor current: " + battery.getMotorCurrent());
-ev3.message("Voltage: " + battery.getVoltageMilliVolt());</code></pre>
+ev3.notify("Battery current: " + battery.getBatteryCurrent());
+ev3.notify("Motor current: " + battery.getMotorCurrent());
+ev3.notify("Voltage: " + battery.getVoltageMilliVolt());</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_xsensor_object">3.13. The XSensor object</h3>
+<div class="paragraph">
+<p>There is API common to all XSensors:</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">getName()</dt>
+<dd>
+<p>Returns the name of the XSensor.</p>
+</dd>
+<dt class="hdlist1">getValue()</dt>
+<dd>
+<p>Returns the <strong>current</strong> value of the XSensor. It is <strong>IMPORTANT</strong> to note that two successive calls to <code>getValue()</code> can
+return different value if the sensor has been modified meantime.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For all XSensor values there is function <code>isStarted()</code> that returns <code>true</code> if started or <code>false</code> if not. <strong>If the XSensor
+isn&#8217;t started (i.e. <code>isStarted</code> returns <code>false</code>), all the other methods on the value object will not be available: If you try to call
+these methods, the script could be stopped (by an exception).</strong></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_the_xtouch_xsensor">3.13.1. The xTouch XSensor</h4>
+<div class="imageblock">
+<div class="content">
+<img src="images/xsensor/xTouch_001_configure.png" alt="xTouch" width="640" height="400">
+</div>
+</div>
+<div class="paragraph">
+<p>In the screen, you can:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set the sensor name (in our example: "joystick").</p>
+</li>
+<li>
+<p>Configure the xTouch sensor: Set the buttons <em>actions</em>: While not started, click on a button and set the list of actions (comma separated) for the button.</p>
+</li>
+<li>
+<p>Start the xTouch sensor: While a button was clicked, the value of the sensor was updated. On multi-touch devices, you can click several buttons at the same time.</p>
+<div class="paragraph">
+<p>Note: While started, the buttons not configured (without associated actions) will be disabled.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here are the fields available on the XTouch XSensor:</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Only the <strong>active</strong> touches are available within the XSensor values.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">isStarted()</dt>
+<dd>
+<p>Returns <code>true</code> if the XSensor is started, <code>false</code> otherwise.</p>
+</dd>
+<dt class="hdlist1">containsTouch(name)</dt>
+<dd>
+<p>Returns <code>true</code> if the touch is available, that is to say active, <code>false</code> otherwise.<br>
+<strong>name</strong>: the name of the touch to look for.</p>
+</dd>
+<dt class="hdlist1">getTouch(name)</dt>
+<dd>
+<p>Returns a <a href="#_touch_object">Touch object</a> for the given touch.<br>
+<strong>name</strong>: the name of the touch to look for.</p>
+</dd>
+<dt class="hdlist1">getTouches()</dt>
+<dd>
+<p>Returns an array of all the <a href="#_touch_object">Touch object</a>s available.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_touch_object">Touch object</h5>
+<div class="sidebarblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">getName()</dt>
+<dd>
+<p>Returns the name of the touch.</p>
+</dd>
+<dt class="hdlist1">getHits()</dt>
+<dd>
+<p>Returns the number of simultaneous hits for the touch (several touch can have the same name).</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Sample script with xTouch XSensor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// xTouch XSensor
+// Configure the xTouch sensor with at least one touch "up"
+var xTouch = ev3.getXSensor("xTouch");
+while(ev3.isOk()) {
+  var value = xTouch.getValue();
+  if(value.isStarted()) {
+    if(value.containsTouch("up")) {
+      ev3.notify("You have clicked the 'up' touch !");
+    } else {
+      ev3.notify("Click on 'up'");
+    }
+  }
+
+  ev3.sleep(100);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_xgyro_xsensor">3.13.2. The xGyro XSensor</h4>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="images/xsensor/xGyro_001_running.png" alt="xGyro" width="640" height="400">
+</div>
+</div>
+<div class="paragraph">
+<p>In the screen, you can:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set the sensor name (in our example: "xGyro").</p>
+</li>
+<li>
+<p>Set the orientation of the device (portrait/left landscape/right landscape, reverse portrait) in order to have the right values.</p>
+</li>
+<li>
+<p>Start the xGyro sensor.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In order to avoid annoying screen rotation, think to disabled the <em>auto rotate</em> on your device while using the xGyro sensor.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">isStarted()</dt>
+<dd>
+<p>Returns <code>true</code> if the XSensor is started, <code>false</code> otherwise.</p>
+</dd>
+<dt class="hdlist1">getX()</dt>
+<dd>
+<p>Returns an <a href="#_axis_object">Axis object</a>. The angle is between -90° and 90°.<br>
+X is the front-back tilt in degrees where front is positive (also known as <em>beta</em> with <em>Portrait</em> orientation).</p>
+</dd>
+<dt class="hdlist1">getY()</dt>
+<dd>
+<p>Returns an <a href="#_axis_object">Axis object</a>. The angle is between -90° and 90°.<br>
+Y is the left-right tilt in degrees, where right is positive (also known as <em>gamma</em> with <em>Portrait</em> orientation)</p>
+</dd>
+<dt class="hdlist1">getZ()</dt>
+<dd>
+<p>Returns an <a href="#_axis_object">Axis object</a>. The angle is between 0° (north) and 360° (Maybe not on all devices ?? Make some trials with your device).<br>
+The compass direction of the device in degrees (also known as <em>alpha</em>). <br>
+<em>Note</em>: Some devices don&#8217;t support compass (the z value will always be 0). For some devices, the compass don&#8217;t returns the angle with the north.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_axis_object">Axis object</h5>
+<div class="sidebarblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">getAngle()</dt>
+<dd>
+<p>Returns the angle in degrees.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Sample script with xGyro XSensor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// xGyro XSensor
+var xGyro = ev3.getXSensor("xGyro");
+
+while(ev3.isOk()) {
+  var value = xGyro.getValue();
+  if(value.isStarted()) {
+    var y = value.getY().getAngle();
+    var x = value.getX().getAngle();
+
+    ev3.notify("XGyro - x: " + x + ", y: " + y);
+  }
+
+  ev3.sleep(100);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_the_xvideo_xsensor">3.13.3. The xVideo XSensor</h4>
+<div class="imageblock" style="text-align: center">
+<div class="content">
+<img src="images/xsensor/xVideo_001_running.png" alt="xVideo" width="640" height="400">
+</div>
+</div>
+<div class="paragraph">
+<p>In the screen, you can:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Start the xVideo sensor. Once started the browser will certainly ask you to select the webcam to use (and to give the authorization to
+use this webcam).</p>
+</li>
+<li>
+<p>Select objects to track: Once started, click on the video to select the objects to track. You can give the name you want to the object.
+You can also change the name by clicking again on the object.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<div class="title">There is several important point to note about the tracking algorithm used:</div>
+<ul>
+<li>
+<p>Under 20 FPS (frame per seconds), the object will be often loosed (<em>The number of FPS is displayed above the video</em>).<br>
+The FPS will vary according to the browser and the energy-saving policy of the device (in all cases, a maximum seems to be 60 FPS).</p>
+</li>
+<li>
+<p>Tracking objects with an important black/white contrast is the best option (i.e. objects with with and black surface that are visible from the camera).
+On the opposite, tracking object with uniform colour don&#8217;t work very well.<br>
+Here are two sample of <em>"targets"</em> that works quite fine: <span class="image"><img src="images/xsensor/xVideo_pattern_001.png" alt="Pattern001" width="60" height="60"></span> and <span class="image"><img src="images/xsensor/xVideo_pattern_002.png" alt="Pattern002" width="60" height="60"></span>.</p>
+</li>
+<li>
+<p>If there is something (even for a very short time) between the camera and the tracked object, the object will be loosed.</p>
+</li>
+<li>
+<p>You can move the camera (not too quickly) without any problem.</p>
+</li>
+<li>
+<p>Your object can move/rotate/etc. without any problem.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note: The algorithm used was the Lucas-Kanade method (See <a href="http://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method">wikipedia</a> for more details).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">isStarted()</dt>
+<dd>
+<p>Returns <code>true</code> if the XSensor is started, <code>false</code> otherwise.</p>
+</dd>
+<dt class="hdlist1">containsObject(name)</dt>
+<dd>
+<p>Returns <code>true</code> if the object is available, that is to say tracked, <code>false</code> otherwise.<br>
+<strong>name</strong>: the name of the object to look for.</p>
+</dd>
+<dt class="hdlist1">getObject(name)</dt>
+<dd>
+<p>Returns a <a href="#_visibleobject_object">VisibleObject object</a> for the given object.<br>
+<strong>name</strong>: the name of the object to look for.</p>
+</dd>
+<dt class="hdlist1">getObjects()</dt>
+<dd>
+<p>Returns an array of all the <a href="#_visibleobject_object">VisibleObject object</a>s available.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_visibleobject_object">VisibleObject object</h5>
+<div class="sidebarblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">getName()</dt>
+<dd>
+<p>Returns the name of the object.</p>
+</dd>
+<dt class="hdlist1">getX()</dt>
+<dd>
+<p>Returns the x value for this object (x goes from 0 to 640).</p>
+</dd>
+<dt class="hdlist1">getY()</dt>
+<dd>
+<p>Returns the y value for this object (y goes from 0 to 480).</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Sample script with xVideo XSensor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// xVideo XSensor
+// Configure the xVideo sensor to track one object called "myTarget"
+var xVideo = ev3.getXSensor("xVideo");
+while(ev3.isOk()) {
+  var value = xVideo.getValue();
+  if(value.isStarted()) {
+    if(value.containsObject("myTarget")) {
+      var t = value.getObject("myTarget");
+      ev3.notify("Target found: [" + t.getX() + ", " + t.getY() + "]");
+    } else {
+      ev3.notify("Hey, select a target and call it 'myTarget'");
+    }
+  }
+
+  ev3.sleep(100);
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_advanced_usage">3.13.4. Advanced usage</h4>
+<div class="paragraph">
+<p>You can use several xSensor at the same time. Theses sensors can be on the same device or on several devices.
+For example, you can run on the same device the xGyro sensor and the xTouch sensor. Another example could be
+to run the xGyro sensor on one device and the xVideo sensor on another device.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="ulist">
+<div class="title">However it is recommended to limit to:</div>
+<ul>
+<li>
+<p>4 active XSensor at the same time <em>(xGyro and xVideo sensor always generate new values &#8658;
+Sending the values of more than 4 sensors at the same time can flood the EV3 brick)</em>.</p>
+</li>
+<li>
+<p>2 devices connected to the EV3 at the same time _(The network bandwidth available on
+the EV3 brick is quite limited, especially with bluetooth, so 2 is ok, more can be challenging).</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A note on the behaviour of the function <code>ev3.isOk()</code> while using XSensors: Even if not configured (see <a href="#_configuration_object">Configuration object</a>)
+this method will automatically wait a bit while one or several XSensors are actively sending data to the brick. This waiting time
+will be automatically reset while there is no more active XSensors.<br>
+<em>Note</em>: The aim of this small waiting time is to let the EV3 CPU process the XSensors incoming events in a proper way.</p>
 </div>
 </div>
 </div>
@@ -1497,19 +2166,16 @@ ev3.message("Voltage: " + battery.getVoltageMilliVolt());</code></pre>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_the_standard_template">4.1. The standard template</h3>
-<div class="paragraph">
-<p>Here is the "standard" template for a script within Gnikrap:</p>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>We present here the "standard" template for a script within Gnikrap. This template is the default
-script that is loaded while you start Gnikrap.</p>
+<p>We present here the "standard" template for a script within Gnikrap. This template is automatically loaded
+while you start Gnikrap.</p>
 </div>
 </td>
 </tr>
@@ -1518,68 +2184,103 @@ script that is loaded while you start Gnikrap.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// Initialization
-// ... <b class="conum">(1)</b>
+// ... <i class="conum" data-value="1"></i><b>(1)</b>
 
 
 // You can also define functions here if needed
-// ... <b class="conum">(2)</b>
+// ... <i class="conum" data-value="2"></i><b>(2)</b>
 
 
 // Perform calibration if needed
-// ... <b class="conum">(3)</b>
+// ... <i class="conum" data-value="3"></i><b>(3)</b>
 
 
 // Main loop - This is the main program
-while(ev3.isRunning()) {
-  // ... <b class="conum">(4)</b>
+while(ev3.isOk()) {
+  // ... <i class="conum" data-value="4"></i><b>(4)</b>
 }
 
 // Finalization
 // Note: The finalization must run very fast, otherwise the script will be force-killed
-// ... <b class="conum">(5)</b></code></pre>
+// ... <i class="conum" data-value="5"></i><b>(5)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>You will typically found here all the initialisation of the ev3 objects:
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You will typically found here all the initialisation of the ev3 objects:
 Retrieve the sensors/motors objects, define and initialize "global" variables, perform other initializations
-that can take some times.</p>
-</li>
-<li>
-<p>Here you can define functions that will be used later. It can typically be some algorithm or computation function.</p>
-</li>
-<li>
-<p>Here you can perform calibration, Typically, these calibration (eg. default light sensor level
-calibration, etc.)  have to be done only once at the beginning of the script.</p>
-</li>
-<li>
-<p>Here is the main loop of your program. It is important to have <code>ev3.isRunning()</code> in the
-while condition in order to be able to stop gently the script while using the "Stop" button (in fact, <code>ev3.isRunning()</code>
-will returns <code>false</code> one the Stop button was clicked &#8658; The main loop will exit in a clean way). If you don&#8217;t
-put this condition, the script will be force-closed (stop abruptly).</p>
-</li>
-<li>
-<p>You can perform some finalization here. However theses finalization should be very quick otherwise the script will be force-closed.<br>
-<em>Note:</em> You can increase the time before the script was force-closed with the <code>ev3.getConfiguration()</code> object.</p>
-</li>
-</ol>
+that can take some times.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Here you can define functions that will be used later. It can typically be some algorithm or computation function.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Here you can perform calibration, Typically, these calibration (eg. default light sensor level
+calibration, etc.)  have to be done only once at the beginning of the script.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Here is the main loop of your program. It is important to have <code>ev3.isOk()</code> in the
+while condition in order to be able to stop gently the script while using the "Stop" button (in fact, <code>ev3.isOk()</code>
+will returns <code>false</code> once the Stop button was clicked &#8658; The main loop will exit in a clean way). If you don&#8217;t
+put this condition, the script will be stopped abruptly (force-closed).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>You can perform some finalization here. However theses finalization should be very quick otherwise the script will be force-closed.<br>
+<em>Note:</em> You can increase the time before the script was force-closed with the <code>ev3.getConfiguration()</code> object.</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_a_robot_controlled_with_the_remote_beacon">4.2. A robot controlled with the remote beacon</h3>
+<h3 id="_remote_control_a_robot">4.2. Remote control a robot</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Here is a full working sample. This script enable to remote control a crawler robot.</p>
+<p>In the following example we will control a robot (it can be always the same robot) in different ways.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_a_robot_controlled_with_the_remote_beacon">4.2.1. A robot controlled with the remote beacon</h4>
+<div class="paragraph">
+<p>The aim of the sample is to pilot with the EV3 beacon a robot made of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>1 motor for a left wheel (or caterpillar)</p>
+</li>
+<li>
+<p>1 motor for the right wheel (or caterpillar)</p>
+</li>
+<li>
+<p>1 infrared sensor for the receiving remote beacon <em>data</em></p>
+</li>
+<li>
+<p>(option) 1 motor to launch ball (like in standard EV3 sample)</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">///////////////////////////////////////////////////////////////////////////////
-// This script show how to pilot a crawler robot like the TRACK3R (mission 2)
-//
 // Note: Please adjust the port to what is physically connected on your brick.
 ///////////////////////////////////////////////////////////////////////////////
 
-// Initialization <b class="conum">(1)</b>
+// Initialization <i class="conum" data-value="1"></i><b>(1)</b>
 var leftMotor = ev3.getBrick().getLargeMotor("C");
 leftMotor.setSpeedPercent(90);
 var rightMotor = ev3.getBrick().getLargeMotor("B");
@@ -1589,10 +2290,10 @@ medMotor.setSpeedPercent(75);
 var irSensor = ev3.getBrick().getIRSensor("4");
 
 
-// Main loop <b class="conum">(2)</b>
-while(ev3.isRunning()) {
-  var rc = irSensor.getRemoteCommand(); // <b class="conum">(3)</b>
-  // Left motor <b class="conum">(4)</b>
+// Main loop <i class="conum" data-value="2"></i><b>(2)</b>
+while(ev3.isOk()) {
+  var rc = irSensor.getRemoteCommand(); // <i class="conum" data-value="3"></i><b>(3)</b>
+  // Left motor <i class="conum" data-value="4"></i><b>(4)</b>
   if(rc.isTopLeftEnabled()) {
       leftMotor.backward();
   } else if(rc.isBottomLeftEnabled()) {
@@ -1600,7 +2301,7 @@ while(ev3.isRunning()) {
   } else {
       leftMotor.stop();
   }
-  // Right motor <b class="conum">(5)</b>
+  // Right motor <i class="conum" data-value="5"></i><b>(5)</b>
   if(rc.isTopRightEnabled()) {
       rightMotor.backward();
   } else if(rc.isBottomRightEnabled()) {
@@ -1608,7 +2309,7 @@ while(ev3.isRunning()) {
   } else {
       rightMotor.stop();
   }
-  // Fire <b class="conum">(6)</b>
+  // Fire <i class="conum" data-value="6"></i><b>(6)</b>
   if(rc.isBeaconEnabled()) {
       medMotor.rotate(3* 360);
       while(irSensor.getRemoteCommand().isBeaconEnabled() &amp;&amp; ev3.isRunning()) {
@@ -1623,64 +2324,87 @@ while(ev3.isRunning()) {
 </div>
 </div>
 <div class="colist arabic">
-<ol>
-<li>
-<p>Here we retrieve all ev3 objects needed in the main loop. Caution: The port has to match with what is physically
-connected on the brick</p>
-</li>
-<li>
-<p>The "program" itself. We have 4 main parts:</p>
-</li>
-<li>
-<p>We retrieve the value of the remote beacon. This value has to be retrieve at each loop because the value
-change according to the button enabled or not.</p>
-</li>
-<li>
-<p>The motor for the left BELT which is managed, so we make the motor going forward/backward or stopped according
-to the buttons enabled.</p>
-</li>
-<li>
-<p>The same for the right BELT motor.</p>
-</li>
-<li>
-<p>While the beacon button was pressed: Fire a ball (3 turn of the mid-sized motor). While it&#8217;s done,
-we wait that the beacon button was no more enabled before return to the main loop (this is to avoid multi-fire).</p>
-</li>
-</ol>
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Here we retrieve all ev3 objects needed in the main loop.<br>
+<strong>Caution</strong>: The port has to match with what is physically connected on the brick</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The "program" itself. We have 4 main parts:</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We retrieve the value of the remote beacon. This value has to be retrieve at each loop because the value
+change according to the button enabled or not.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The motor for the left BELT which is managed, so we make the motor going forward/backward or stopped according
+to the buttons enabled.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The same for the right BELT motor.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>While the beacon button was pressed: Fire a ball (3 turn of the mid-sized motor). While it&#8217;s done,
+we wait that the beacon button was no more enabled before return to the main loop (this is to avoid multi-fire).</td>
+</tr>
+</table>
 </div>
+<div class="paragraph">
+<p>In this sample, two buttons are associated to one motor, so we have something like that with our 4 buttons:</p>
 </div>
-<div class="sect2">
-<h3 id="_advanced_usage">4.3. Advanced usage</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top" colspan="2"><p class="tableblock"><em>Beacon button</em>: Special action (fire in out sample)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><em>Top left button</em>: Left motor forward</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><em>Top right button</em>: Right motor forward</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><em>Bottom left button</em>: Left motor backward</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><em>Bottom right button</em>: Right motor backward</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_a_robot_controlled_with_the_xgyro_sensor">4.2.2. A robot controlled with the xGyro sensor</h4>
+<div class="paragraph">
+<p>The aim of this sample is to pilot a robot with the gyroscope of a device.</p>
+</div>
+<div class="paragraph">
+<p>The robot is to be made of:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Defining/Using script library file of utility/standard functions. It is possible to do it,
-however the syntax can change in future version of Gnikrap (the Javascript engine currently enbedded in Java7
-is <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino">Rhino</a>,
-while the Javascript engine embedded in Java8 is <a href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html">Nashorm</a>).<br>
-Knowing that point, if you still want to import script, the current syntax (for Java7) is TODO (TODO-LINK).</p>
+<p>1 motor for a left wheel (or caterpillar)</p>
 </li>
 <li>
-<p>Using Java library. Another question could be how to use Java library (eg. Lejos) directly for the script engine.
-Here again, it is possible, but part of the syntax can change in future versions.</p>
+<p>1 motor for the right wheel (or caterpillar)</p>
 </li>
 </ul>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_changelog">5. Changelog</h2>
-<div class="sectionbody">
 <div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<div class="title">Note</div>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Current release is 0.2.0</p>
+<p>You also need a device (computer, tablet or smartphone) connected to the EV3 (and running Gnikrap) with a 2 axis gyroscopic sensor.</p>
 </div>
 </td>
 </tr>
@@ -1688,31 +2412,592 @@ Here again, it is possible, but part of the syntax can change in future versions
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-text" data-lang="text">Change-log:
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">///////////////////////////////////////////////////////////////////////////////
+// Note: Please adjust the port to what is physically connected on your brick.
+///////////////////////////////////////////////////////////////////////////////
 
-Known defects:
- - Fix screen API - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
-
-Features to add (no specific order):
- - Add import/export
- - Add "external" sensors
- - Add real time sensor probes
- - Add a packing simple to use (write the SD card and play)
- - Add port checking (auto detection for EV3 devices)
- - Add documentation to add other scripting language
- - Exit script feature (is return work ?)
- - Feature to shutdown the brick from the browser
+// Initialization <i class="conum" data-value="1"></i><b>(1)</b>
+var left = ev3.getBrick().getLargeMotor("D");
+var right = ev3.getBrick().getLargeMotor("A");
+var xGyro = ev3.getXSensor("xGyro");
 
 
- 0.2.0:
+// Define a function that activate (or not) one motor with the given percentage (positive or negative) <i class="conum" data-value="2"></i><b>(2)</b>
+function activateMotor(motor, powerInPercent) {
+    if(Math.abs(powerInPercent) &lt; 10) { // <i class="conum" data-value="3"></i><b>(3)</b>
+        motor.stop();
+    } else if(powerInPercent &gt; 10) {
+        motor.setSpeedPercent(powerInPercent);
+        motor.forward();
+    } else if(powerInPercent &lt; 10) {
+        motor.setSpeedPercent(-powerInPercent);
+        motor.backward();
+    }
+}
+
+
+// Main loop - This is the main program <i class="conum" data-value="4"></i><b>(4)</b>
+while(ev3.isOk()) {
+    var gyro = xGyro.getValue();
+
+    if(gyro.isStarted()) { // <i class="conum" data-value="5"></i><b>(5)</b>
+        var y = gyro.getX().getAngle();
+        var x = gyro.getY().getAngle();
+
+        var leftPower = 0;
+        if(x &gt; 10) {
+            leftPower = -(Math.min(Math.round(2*x), 100)); // Back (-) =&gt; Forward (+)
+        } else if(x &lt; -10) {
+            leftPower = Math.min(Math.round(2*-x), 100);
+        }
+        var rightPower = leftPower;
+
+        if(y &gt; 10) {
+            if(leftPower &gt;= 0) {
+                leftPower += Math.min(Math.round(y), 50);
+                if(rightPower == 0) {
+                    rightPower = - leftPower;
+                }
+            } else {
+                leftPower -= Math.min(Math.round(y), 50);
+            }
+        } else if(y &lt; -10) {
+            if(rightPower &gt;= 0) {
+                rightPower += Math.min(Math.round(-y), 50);
+                if(leftPower == 0) {
+                    leftPower = -rightPower;
+                }
+            } else {
+                rightPower -= Math.min(Math.round(-y), 50);
+            }
+        }
+
+        activateMotor(left, leftPower);
+        activateMotor(right, rightPower);
+    } else { // <i class="conum" data-value="6"></i><b>(6)</b>
+        activateMotor(left, 0);
+        activateMotor(right, 0);
+    }
+}
+
+// Finalization
+// None (motors will be automatically stopped)</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Here we retrieve all ev3 objects needed in the main loop.<br>
+<strong>Caution</strong>: The port has to match with what is physically connected on the brick</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We define a function that enable to make a motor, go forward, go backward or stop according to a power value
+(between -100 and 100)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We use the standard Javascript <code>Math</code> object in order to make our computations (See <a href="http://www.w3schools.com/js/js_math.asp" class="bare">http://www.w3schools.com/js/js_math.asp</a>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The "program" itself. Two main cases:</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>1st case: xSensor is on, we compute the left motor and right motor power according to the x and y angle returned by the xGyro sensor
+(see below for more details on the motor power computation).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>2nd case: xSensor is off, we ensure that the motor are stopped.</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Motor power computation</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The x axis is used to control the forward/backward direction.</p>
+</li>
+<li>
+<p>The y axis is used to control the left/right direction.</p>
+</li>
+<li>
+<p>The motor speed is proportional to the angle. The variation is computed from 10° and 50° (which is the maximum).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-center valign-top"></th>
+<th class="tableblock halign-center valign-top">x &lt; -10°</th>
+<th class="tableblock halign-center valign-top">-10° &lt; x &lt; 10°</th>
+<th class="tableblock halign-center valign-top">x &gt; 10°</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th class="tableblock halign-center valign-top"><p class="tableblock">y &lt; -10°</p></th>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Go forward and left.</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Move left in place, <em>i.e.</em> motor with opposite speed.</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Go backward and left.</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-top"><p class="tableblock">-10° &lt; y &lt; 10°</p></th>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Go forward (no turn).</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Don&#8217;t move.</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Go backward (no turn).</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-center valign-top"><p class="tableblock">y &gt; 10°</p></th>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Go forward and right.</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Move right in place, <em>i.e.</em>(otor with opposite speed.</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Go backward and right.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_a_robot_controlled_with_the_xtouch_sensor">4.2.3. A robot controlled with the xTouch sensor</h4>
+<div class="paragraph">
+<p>The aim of this sample is to pilot a robot with the keyboard on the screen of a device (can be with the mouse or with a tactile screen).</p>
+</div>
+<div class="paragraph">
+<p>The robot is to be made of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>1 motor for a left wheel (or caterpillar)</p>
+</li>
+<li>
+<p>1 motor for the right wheel (or caterpillar)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You also need a xTouch configured with 4 touches: <strong><em>up</em></strong>, <strong><em>down</em></strong>, <strong><em>left</em></strong> and <strong><em>right</em></strong> (see snapshot in <a href="#_the_xtouch_xsensor">The xTouch XSensor</a> for a configuration sample).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">///////////////////////////////////////////////////////////////////////////////
+// Note: Please adjust the port to what is physically connected on your brick.
+///////////////////////////////////////////////////////////////////////////////
+
+// Initialization  <i class="conum" data-value="1"></i><b>(1)</b>
+var leftMotor = ev3.getBrick().getLargeMotor("D");
+var rightMotor = ev3.getBrick().getLargeMotor("A");
+var xTouch = ev3.getXSensor("xTouch");
+
+function activateMotor(motor, powerInPercent) {  // <i class="conum" data-value="2"></i><b>(2)</b>
+    if(powerInPercent &lt; 0) {
+        motor.setSpeedPercent(-powerInPercent);
+        motor.backward();
+    } else if(powerInPercent &gt; 0) {
+        motor.setSpeedPercent(powerInPercent);
+        motor.forward();
+    } else {
+        motor.stop();
+    }
+}
+
+function activateLeftAndRightMotor(leftPowerInPercent, rightPowerInPercent) { // <i class="conum" data-value="3"></i><b>(3)</b>
+    activateMotor(leftMotor, leftPowerInPercent);
+    activateMotor(rightMotor, rightPowerInPercent);
+}
+
+// Main loop - This is the main program <i class="conum" data-value="4"></i><b>(4)</b>
+while(ev3.isOk()) {
+    var val = xTouch.getValue();
+
+    if(val.isStarted()) { // <i class="conum" data-value="5"></i><b>(5)</b>
+        var up = val.containsTouch("up") &amp;&amp; !val.containsTouch("down");
+        var down = val.containsTouch("down") &amp;&amp; !val.containsTouch("up");
+        var left = val.containsTouch("left") &amp;&amp; !val.containsTouch("right");
+        var right = val.containsTouch("right") &amp;&amp; !val.containsTouch("left");
+
+        if(up) {
+            if(left) {
+                activateLeftAndRightMotor(50, 90);
+            } else if(right) {
+                activateLeftAndRightMotor(90, 50);
+            } else {
+                activateLeftAndRightMotor(90, 90);
+            }
+        } else if(down) {
+            if(left) {
+                activateLeftAndRightMotor(-50, -90);
+            } else if(right) {
+                activateLeftAndRightMotor(-90, -50);
+            } else {
+                activateLeftAndRightMotor(-90, -90);
+            }
+        } else {
+            if(left) {
+                activateLeftAndRightMotor(-50, 50);
+            } else if(right) {
+                activateLeftAndRightMotor(50, -50);
+            } else {
+                activateLeftAndRightMotor(0, 0);
+            }
+        }
+    } else { // <i class="conum" data-value="6"></i><b>(6)</b>
+        activateLeftAndRightMotor(0, 0);
+    }
+}
+
+// Finalization
+// None (motors will be automatically stopped)</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Here we retrieve all ev3 objects needed in the main loop.<br>
+<strong>Caution</strong>: The port has to match with what is physically connected on the brick</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We define a function that enable to make a motor, go forward, go backward or stop according to a power value (between -100 and 100)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We define another function that enable to control both motors with one function call.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>The "program" itself. Two main cases:</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>1st case: xSensor is on, we compute the left motor and right motor power according to touches enabled.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>2nd case: xSensor is off, we ensure that the motor are stopped.</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_a_robot_that_stay_in_the_video">4.3. A robot that stay in the video</h3>
+<div class="paragraph">
+<p>The aim of this robot is to have robot that stay in the video.</p>
+</div>
+<div class="paragraph">
+<p>The behaviour of the robot will be quite simple: go forward and while your reach the <em>border</em> of the video, go a bit backward, turn
+and&#8230;&#8203; go forward again !</p>
+</div>
+<div class="paragraph">
+<p>The robot is to be made of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>1 motor for a left wheel (or caterpillar)</p>
+</li>
+<li>
+<p>1 motor for the right wheel (or caterpillar)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You also need a device with a webcam that is able to make the xVideo sensor work at a minimun framerate of 20 FPS (frame per second,
+the value is displayed on top of the video).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">///////////////////////////////////////////////////////////////////////////////
+// Note: Please adjust the port to what is physically connected on your brick.
+///////////////////////////////////////////////////////////////////////////////
+
+// Initialization  <i class="conum" data-value="1"></i><b>(1)</b>
+var leftMotor = ev3.getBrick().getLargeMotor("D");
+var rightMotor = ev3.getBrick().getLargeMotor("A");
+var xVideo = ev3.getXSensor("xVideo");
+
+// The margin in order to consider that we reach the border
+var borderMargin = 80;
+
+// Function in order to check if the ev3 is near from the xSensor "vision" border <i class="conum" data-value="2"></i><b>(2)</b>
+function isNearToBorder(visibleObject) {
+    return (visibleObject.getX() &lt; borderMargin) || (visibleObject.getY() &lt; borderMargin)
+        || ((visibleObject.getX() + borderMargin) &gt; 640) || ((visibleObject.getY() + borderMargin) &gt; 480);
+}
+
+// Function to move backward and make a random turn <i class="conum" data-value="3"></i><b>(3)</b>
+function backwardAndTurnRandomly() {
+    leftMotor.rotate(-360, true);
+    rightMotor.rotate(-360);
+
+    var r = 180 + Math.random() * 270;
+    leftMotor.rotate(r, true);
+    rightMotor.rotate(-r);
+}
+
+function stopMotors() { // <i class="conum" data-value="4"></i><b>(4)</b>
+    leftMotor.stop();
+    rightMotor.stop();
+}
+
+// Main loop - This is the main program <i class="conum" data-value="5"></i><b>(5)</b>
+while(ev3.isOk()) {
+    var val = xVideo.getValue();
+
+    if(val.isStarted()) { <i class="conum" data-value="6"></i><b>(6)</b>
+        if(val.containsObject("ev3")) { <i class="conum" data-value="7"></i><b>(7)</b>
+            if(isNearToBorder(val.getObject("ev3"))) {
+                backwardAndTurnRandomly();
+            } else {
+                leftMotor.forward();
+                rightMotor.forward();
+            }
+        } else {
+            stopMotors();
+            ev3.notify("I don't find the 'ev3', please select it !");
+            ev3.sleep(200);
+        }
+    } else {
+        stopMotors();
+        ev3.notify("I don't see nothing, please start the xVideo sensor !");
+        ev3.sleep(200);
+    }
+}
+
+// Finalization
+// None (motors will be automatically stopped)</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Here we retrieve all ev3 objects needed in the main loop.<br>
+<strong>Caution</strong>: The port has to match with what is physically connected on the brick</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>We define a function that enable to known if a <a href="#_visibleobject_object">VisibleObject object</a> is near the border.<br>
+The function returns <code>true</code> if the VisibleObject is close to the border, false otherwise.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>We define a function that enable the robot to change direction while it is close to the border.<br>
+In this function you have to notice the two different call to <code>rotate()</code>. We want both motor to run at the same time, so we
+request an immediate return of the <code>rotate()</code> function for the 1<sup>st</sup> motor.<br>
+Another point is the use of the method <code>random</code> of the standard Javascript Math object (See <a href="http://www.w3schools.com/js/js_math.asp" class="bare">http://www.w3schools.com/js/js_math.asp</a>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Finally we define a function that stop both motors.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>The "program" itself.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>If the xSensor is on, go ahead, if off notify the user.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Then we check that an <em>ev3</em> object is currently visible, if not notify the user.<br>
+If visible, we go forward until the border of the video. While the border has been reached, the ev3 make a turn and then go forward again.</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_usage_2">4.4. Advanced usage</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The syntax for some advanced feature can change in future versions of Gnikrap. This is not directly linked to Gnikrap but to
+the version of Java used:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the Javascript engine currently enbedded in Java7 is <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino">Rhino</a>,</p>
+</li>
+<li>
+<p>while the Javascript engine embedded in Java8 is <a href="http://www.oracle.com/technetwork/articles/java/jf14-nashorn-2126515.html">Nashorm</a>.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_import_scripts">4.4.1. Import scripts</h4>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_existing_java_api">4.4.2. Using existing Java API</h4>
+<div class="paragraph">
+<p>You can use any java library that is in the classpath within the javascript script.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you use leJOS directly it is important to don&#8217;t use the Gnikrap API <code>ev3.getBrick()</code>. Indeed, it can generate
+conflicts on the underlying resources, that is to say the EV3 hardware.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is an example where we use the leJOS API directly:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-javascript" data-lang="javascript">// WARNING: Don't use the ev3.getBrick() function if you make direct call to leJOS
+
+importPackage(Packages.lejos.hardware); // For Button <i class="conum" data-value="1"></i><b>(1)</b>
+importPackage(Packages.lejos.hardware.motor); // For EV3LargeRegulatedMotor
+importPackage(Packages.lejos.hardware.port); // For MotorPort
+
+// Make the keyboard led green and blink
+Button.LEDPattern(4); // 1 (green) + 3 (blink) <i class="conum" data-value="2"></i><b>(2)</b>
+
+
+// Use a motor
+var motor = new EV3LargeRegulatedMotor(MotorPort.A); // <i class="conum" data-value="2"></i><b>(2)</b>
+motor.rotate(360);
+
+while(ev3.isOk()) { // Can still use ev3 function <i class="conum" data-value="3"></i><b>(3)</b>
+    ev3.sleep(100);
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>You can import Java packages (don&#8217;t forget to prefix your package with <code>Packages</code>) in order to use the classes belonging to theses packages.<br>
+<strong>Caution</strong>: The <code>importPackage</code> syntax can change in future version of Gnikrap.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>You can then use and instantiate Java object directly within the script.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>You can also use ev3 function while needed.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You can also use <em>"your"</em> jar libraries (found on the internet or home-made). Simply put the library within the
+gnikrap <code>lib</code> folder (this is the folder that already contains the other libs), and restart Gnikrap in order to
+have the libraries available.</p>
+</div>
+<div class="paragraph">
+<p>You can now use the libs as described below.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_changelog">5. Changelog</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>------------------------------------------------------------------------------
+
+Current stable release is: 0.3.0
+
+
+------------------------------------------------------------------------------
+
+Version history:
+ 0.3.0 (official release):
+    - Add xSensors (eXternal Sensors) feature:
+      - xTouch (24 multi-touch on screen keyboard),
+      - xVideo (video object tracking),
+      - xGyro (gyroscope)
+    - Rework and improve the GUI (now works fine on Android)
+    - Improve the script API
+    - Documentation updated, new samples added
+    - Add automatic EV3 brick reconnection (in case of connection lost)
+
+
+ 0.2.0 (30NOV2014 - First public release):
     - Load/Delete/Save script added
     - About box added
-    - Internationalization (GUI, ...)
+    - GUI Internationalization (English and French are available)
     - Jackson JSON parser replaced by 'minimal-json' which is faster on the EV3 hardware
+    - Documentation added
+    - Improve the script API to manipulate the EV3 brick
 
 
  0.1.0 (private release):
-    - Proof of concept: Ensure that the performance reached are acceptable.
+    - Proof of concept: Ensure that the performance reached are acceptable
     - Simple API to manipulate the EV3 brick:
       - Battery
       - Sound: play tone, play note
@@ -1721,7 +3006,28 @@ Features to add (no specific order):
       - Touch sensor
       - Color Sensor: reflected, ambiant, color
       - IR Sensor: distance, seek beacon, remote command
-      - Motors: speed, rotate, tacho "sensor", forward, backward</code></pre>
+      - Motors: speed, rotate, tacho "sensor", forward, backward
+
+
+------------------------------------------------------------------------------
+
+Features to add (no specific order):
+ - Add import/export feature (save all the data on the ev3 in one operation)
+ - Add real time sensor probes
+ - Add a packaging simple to use (eg. write the SD card and play)
+ - Add port checking (auto detection for EV3 devices)
+ - Add documentation to add other scripting language
+ - Add exit script feature/function
+ - Add a feature to shutdown the brick from the browser (Gnikrap user-interface)
+ - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html)
+ - Add API for other LEGO sensors (Gyro sensor, Ultrasonic sensor)
+
+
+------------------------------------------------------------------------------
+
+Known defects:
+ - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
+ - (0.3.0) - Firefox on android, a cosmetic display problem on the xTouch xSensor</pre>
 </div>
 </div>
 </div>
@@ -1729,8 +3035,7 @@ Features to add (no specific order):
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.2.0<br>
-Last updated 2014-12-02 22:32:28 CET
+Last updated 2015-01-29 22:10:36 CET
 </div>
 </div>
 </body>
