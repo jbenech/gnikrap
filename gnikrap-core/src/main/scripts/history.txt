@@ -6,7 +6,7 @@ Current stable release is: 0.3.0
 ------------------------------------------------------------------------------
 
 Version history:
- 0.3.0 (official release):
+ 0.3.0 (30JAN2015 - xSensors):
     - Add xSensors (eXternal Sensors) feature: 
       - xTouch (24 multi-touch on screen keyboard), 
       - xVideo (video object tracking), 
@@ -58,3 +58,9 @@ Features to add (no specific order):
 Known defects:
  - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
  - (0.3.0) - Firefox on android, a cosmetic display problem on the xTouch xSensor
+
+
+------------------------------------------------------------------------------
+
+Work in progress:
+ - TODO
