@@ -1,6 +1,7 @@
 == How to install
 
 The installation consist of several steps:
+
 ** Install leJOS
 ** Download Gnikrap and tools needed for installation
 ** Install Gnikrap
@@ -43,13 +44,13 @@ image::install/0100_Putty_Session.png[]
 Login with "root" as user and no password: image:install/0110_Putty_Login.png[]
 
 . Uncompress the Gnikrap software:
-** Uncompress the files with the command `tar -xz -f gnikrap-core-0.4.0.tar.gz`
+** Uncompress the files with the command `tar -xz -f gnikrap-core-0.3.0.tar.gz`
 
 Launch Gnikrap::
 . If needed, connect to the EV3 brick with a telnet client (see putty section above)
 
 . Launch Gnikrap:
-** Go to the bin folder: `cd gnikrap-core-0.4.0/bin`
+** Go to the bin folder: `cd gnikrap-core-0.3.0/bin`
 ** Start Gnikrap: `./start.sh`
 
 . Finally open a browser on your computer and connect to Gnikrap with the following URL: `http://<IP of the EV3>`

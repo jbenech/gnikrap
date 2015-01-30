@@ -13,16 +13,14 @@ The robot is to be made of:
 
 [NOTE]
 ====
-You also need a device with a webcam that is able to make the xVideo sensor work at a minimun framerate of 20 FPS.
+You also need a device with a webcam that is able to make the xVideo sensor work at a minimun framerate of 20 FPS (frame per second,
+the value is displayed on top of the video).
 ====
 
 [source,javascript]
 ----
 ///////////////////////////////////////////////////////////////////////////////
 // Note: Please adjust the port to what is physically connected on your brick.
-//
-// For more details on this sample, please see 'A robot that stay in the video'
-// in the documentation
 ///////////////////////////////////////////////////////////////////////////////
 
 // Initialization  // <1>
