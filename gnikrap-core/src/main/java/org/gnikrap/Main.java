@@ -140,6 +140,7 @@ public class Main {
 
     try {
       server.start();
+      LOGGER.info("Gnikrap launched on port: " + httpPort + ", wait a few seconds before connection");
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, "Can't launch server", ex);
       System.exit(0);

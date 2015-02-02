@@ -130,6 +130,13 @@ public final class EV3ScriptContext {
   }
 
   /**
+   * Exit the script.
+   */
+  public void exit() throws EV3ExitScriptException {
+    throw new EV3ExitScriptException();
+  }
+
+  /**
    * Set the value and change the settings in order to allocate a minimum of time for the XSensors events processing
    */
   void setXSensorFutureValue(String name, Future<XSensorValue> value) {

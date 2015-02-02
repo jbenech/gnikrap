@@ -47,7 +47,7 @@ You are at the right place to evaluate it ! Just have look to see if it's ok for
 
 Gnikrap is nice, but you're not sure... Here are some element that can make you use another tool to program with the EV3 :
 
-* If you need a full featured API (*access to non-Lego sensors*, location API, etc.) or if *speed 
+* If you need a full featured API (*access to non-Lego sensors*, navigation API, etc.) or if *speed 
 execution* is one of you key criteria, consider using a more complete framework like http://www.lejos.org/[leJOS] 
 or http://www.monobrick.dk/[MonoBrick]
-* If you need *graphical programming* tools, conider using the software provided by Lego
+* If you need *graphical programming* tools, consider using the software provided by Lego

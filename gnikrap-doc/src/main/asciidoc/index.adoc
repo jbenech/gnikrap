@@ -11,7 +11,7 @@ Gnikrap documentation
 Jean Bénech <jbenech at free dot fr>
 v0.3.0 (c) 2014-2015
 
-A scripting environment simple to use for http://mindstroms.lego.com[Lego Mindstrom EV3]
+A javascript development environment simple to use and powerfull for http://mindstroms.lego.com[Lego Mindstrom EV3]
 
 // Paragraphs
 
