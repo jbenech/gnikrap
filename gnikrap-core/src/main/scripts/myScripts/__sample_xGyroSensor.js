@@ -45,7 +45,7 @@ while(ev3.isOk()) {
             if(leftPower >= 0) {
                 leftPower += Math.min(Math.round(y), 50);
                 if(rightPower == 0) {
-                    rightPower = - leftPower;
+                    rightPower = -leftPower;
                 }
             } else {
                 leftPower -= Math.min(Math.round(y), 50);

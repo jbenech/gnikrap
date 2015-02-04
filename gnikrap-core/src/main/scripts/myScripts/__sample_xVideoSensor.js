@@ -13,6 +13,10 @@ var xVideo = ev3.getXSensor("xVideo");
 // The margin in order to consider that we reach the border
 var borderMargin = 80; 
 
+// Motor should not go too fast in order to don't "loose" the ev3
+leftMotor.setSpeedPercent(30);
+rightMotor.setSpeedPercent(30);
+
 // Function in order to check if the ev3 is near from the xSensor "vision" border
 function isNearToBorder(visibleObject) {
     return (visibleObject.getX() < borderMargin) || (visibleObject.getY() < borderMargin) 
@@ -41,6 +45,7 @@ while(ev3.isOk()) {
     if(val.isStarted()) {
         if(val.containsObject("ev3")) {
             if(isNearToBorder(val.getObject("ev3"))) {
+                ev3.notify("Close to the border " + val.getObject("ev3") + ", need to change direction");
                 backwardAndTurnRandomly();
             } else {
                 leftMotor.forward();
