@@ -21,6 +21,7 @@ import lejos.hardware.Button;
 import lejos.hardware.Key;
 
 import org.gnikrap.script.EV3ScriptContext;
+import org.gnikrap.utils.ScriptApi;
 
 /**
  * Provide access to the brick keyboard and leds.
@@ -56,30 +57,37 @@ final public class SimpleEV3Keyboard implements EV3Device {
     // Does nothing for buttons: buttons are static resources of lejos
   }
 
+  @ScriptApi
   public SimpleEV3Button getDown() {
     return down;
   }
 
+  @ScriptApi
   public SimpleEV3Button getEnter() {
     return enter;
   }
 
+  @ScriptApi
   public SimpleEV3Button getEscape() {
     return escape;
   }
 
+  @ScriptApi
   public SimpleEV3Button getLeft() {
     return left;
   }
 
+  @ScriptApi
   public SimpleEV3Button getRight() {
     return right;
   }
 
+  @ScriptApi
   public SimpleEV3Button getUp() {
     return up;
   }
 
+  @ScriptApi
   public int waitForAnyPress() {
     int button = 0;
     while (sc.isOk() && ((button = Button.waitForAnyPress(500)) == 0)) {
@@ -99,6 +107,7 @@ final public class SimpleEV3Keyboard implements EV3Device {
   // return end;
   // }
 
+  @ScriptApi
   public SimpleEV3Led getLed() {
     return led;
   }
@@ -107,19 +116,22 @@ final public class SimpleEV3Keyboard implements EV3Device {
     private final Key delegate;
     private final EV3ScriptContext sc;
 
-    public SimpleEV3Button(Key delegate, EV3ScriptContext sc) {
+    SimpleEV3Button(Key delegate, EV3ScriptContext sc) {
       this.delegate = delegate;
       this.sc = sc;
     }
 
+    @ScriptApi
     public boolean isUp() {
       return delegate.isUp();
     }
 
+    @ScriptApi
     public boolean isDown() {
       return delegate.isDown();
     }
 
+    @ScriptApi
     public void waitForPressAndRelease() {
       boolean wait = sc.getConfiguration().getIsOkWait() < IS_RUNNING_WAIT_THRESHOLD;
       waitForPress();
@@ -130,6 +142,7 @@ final public class SimpleEV3Keyboard implements EV3Device {
       }
     }
 
+    @ScriptApi
     public void waitForPress() {
       boolean wait = sc.getConfiguration().getIsOkWait() < IS_RUNNING_WAIT_THRESHOLD;
       while (sc.isOk() && isUp()) {
@@ -139,6 +152,7 @@ final public class SimpleEV3Keyboard implements EV3Device {
       }
     }
 
+    @ScriptApi
     public int getId() {
       return delegate.getId();
     }

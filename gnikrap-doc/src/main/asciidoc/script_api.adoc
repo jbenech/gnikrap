@@ -554,6 +554,15 @@ ev3.notify("Voltage: " + battery.getVoltageMilliVolt());
 === The XSensor object
 // ///////////////////////////////////////////////////////////////////////////
 
+The XSensor enable you to use sensors of the device used to access to the EV3 brick. For example you can use
+the gyroscope sensor of your tablet, or you can use the webcam of your laptop.
+
+This has two main benefits:
+
+* Have new sensors for free (you already have the tablet or the laptop !).
+* Use these new sensors in your program as simply as if they were Lego sensors.
+
+
 There is API common to all XSensors:
 
 ****
@@ -574,13 +583,17 @@ these methods, the script could be stopped (by an exception).*
 
 ==== The xTouch XSensor
 
+The aim of the xTouch sensor is to provide an easy to define a keyboard (24 touchs) that can be used in order to send "action" to the ev3.
+In some sense, it can be seens as a 'super' beacon (see <<RemoteCommandResult object>>)
+
+
 image::xsensor/xTouch_001_configure.png[xTouch, 640, 400]
 
 In the screen, you can:
 
-* Set the sensor name (in our example: "joystick").
-* Configure the xTouch sensor: Set the buttons 'actions': While not started, click on a button and set the list of actions (comma separated) for the button.
-* Start the xTouch sensor: While a button was clicked, the value of the sensor was updated. On multi-touch devices, you can click several buttons at the same time.
+* Set the sensor name (in the screenshot: "joystick").
+* xTouch not started: Configure the xTouch sensor, that is to say set the buttons 'actions names': Click on a button and set the list of actions (comma separated) for the button.
+* xTouch started: While a button was clicked, the action was sent to the EV3 brick, while the button was no more clicked, the action is canceled. On multi-touch devices, you can click/touch several buttons at the same time.
 +
 Note: While started, the buttons not configured (without associated actions) will be disabled. 
 
@@ -636,12 +649,14 @@ while(ev3.isOk()) {
 
 ==== The xGyro XSensor
 
+The aim of the xGyro sensor is to provide an access to the gyroscope sensor of a tablet or a smartphone. The EV3 brick can use in real-time the information for the x, y and z axis.
+
 image::xsensor/xGyro_001_running.png[xGyro, 640, 400, align="center"]
 
 In the screen, you can:
 
 * Set the sensor name (in our example: "xGyro").
-* Set the orientation of the device (portrait/left landscape/right landscape, reverse portrait) in order to have the right values.
+* Set the orientation of the device (portrait/left landscape/right landscape, reverse portrait) in order to have the 'right' values on each axis.
 * Start the xGyro sensor.
 
 [TIP]
@@ -693,13 +708,16 @@ while(ev3.isOk()) {
 
 ==== The xVideo XSensor
 
+The aim of the xVideo sensor is to provide an access to the webcam of a laptop or a tablet. You can indicate one or several object that are tracked. The EV3 brick can use in real-time the position of all the tracked objects.
+
+
 image::xsensor/xVideo_001_running.png[xVideo, 640, 400, align="center"]
 
 In the screen, you can:
 
-* Start the xVideo sensor. Once started the browser will certainly ask you to select the webcam to use (and to give the authorization to
+* Start the xVideo sensor. While starting the browser will certainly ask you to select the webcam to use (and to give the authorization to
   use this webcam).
-* Select objects to track: Once started, click on the video to select the objects to track. You can give the name you want to the object.
+* Select objects to track: Click on the video to select the objects to track. You can give the name you want to the object.
   You can also change the name by clicking again on the object.
 
 [TIP]
@@ -774,7 +792,7 @@ to run the xGyro sensor on one device and the xVideo sensor on another device.
 [IMPORTANT]
 ====
 .However it is recommended to limit to:
-- 4 active XSensor at the same time _(xGyro and xVideo sensor always generate new values => 
+- 4 active XSensor at the same time _(especially for xGyro and xVideo sensor that always send new values to the EV3 brick. 
   Sending the values of more than 4 sensors at the same time can flood the EV3 brick)_.
 - 2 devices connected to the EV3 at the same time _(The network bandwidth available on
   the EV3 brick is quite limited, especially with bluetooth, so 2 is ok, more can be challenging).
@@ -785,4 +803,4 @@ to run the xGyro sensor on one device and the xVideo sensor on another device.
 A note on the behaviour of the function `ev3.isOk()` while using XSensors: Even if not configured (see <<Configuration object>>)
 this method will automatically wait a bit while one or several XSensors are actively sending data to the brick. This waiting time
 will be automatically reset while there is no more active XSensors. +
-_Note_: The aim of this small waiting time is to let the EV3 CPU process the XSensors incoming events in a proper way.
+_Note_: The aim of this small waiting time is to let the EV3 CPU process the XSensors incoming values in a proper way.

@@ -17,6 +17,8 @@
  */
 package org.gnikrap.script.ev3api.xsensors;
 
+import org.gnikrap.utils.ScriptApi;
+
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
@@ -54,14 +56,17 @@ public class FutureJsonToXGyroValue extends AbstractFutureJsonToXSensorValue {
       }
     }
 
+    @ScriptApi
     public XAxis getX() {
       return x;
     }
 
+    @ScriptApi
     public XAxis getY() {
       return y;
     }
 
+    @ScriptApi
     public XAxis getZ() {
       return z;
     }
@@ -83,6 +88,7 @@ public class FutureJsonToXGyroValue extends AbstractFutureJsonToXSensorValue {
       angle = raw.get(JSonXSensorMessageFields.XGYRO_AXIS_ANGLE).asFloat();
     }
 
+    @ScriptApi
     public float getAngle() {
       return angle;
     }

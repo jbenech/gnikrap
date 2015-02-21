@@ -20,6 +20,8 @@ package org.gnikrap.script.ev3api;
 import lejos.hardware.motor.BaseRegulatedMotor;
 import lejos.hardware.port.Port;
 
+import org.gnikrap.utils.ScriptApi;
+
 public class SimpleEV3Motor implements EV3Device {
 
   private final BaseRegulatedMotor delegate;
@@ -39,12 +41,14 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * @return the tacho count in degree
    */
+  @ScriptApi
   final public int getTachoCount() {
     int result = delegate.getTachoCount();
     logger.log(result);
     return result;
   }
 
+  @ScriptApi
   final public void resetTachoCount() {
     delegate.resetTachoCount();
   }
@@ -52,6 +56,7 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * Motor rotate forward until {{@link #stop()}. This call immediately return.
    */
+  @ScriptApi
   final public void forward() {
     delegate.forward();
   }
@@ -59,6 +64,7 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * Motor rotate backward until {{@link #stop()}. This call immediately return.
    */
+  @ScriptApi
   final public void backward() {
     delegate.backward();
   }
@@ -66,6 +72,7 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * Stop and lock the motor.
    */
+  @ScriptApi
   final public void stop() {
     stop(true);
   }
@@ -73,6 +80,7 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * @param lockMotor is the motor locked at the end of the stop ?
    */
+  @ScriptApi
   final public void stop(boolean lockMotor) {
     stop(lockMotor, true); // Better felling with immediate return while stopping 2 motors that has to be synchronized.
   }
@@ -81,6 +89,7 @@ public class SimpleEV3Motor implements EV3Device {
    * @param lockMotor is the motor locked at the end of the stop ?
    * @param immediateReturn is the function return before the stop was effective or not ?
    */
+  @ScriptApi
   final public void stop(boolean lockMotor, boolean immediateReturn) {
     if (lockMotor) {
       delegate.stop(immediateReturn);
@@ -89,6 +98,7 @@ public class SimpleEV3Motor implements EV3Device {
     }
   }
 
+  @ScriptApi
   final public boolean isMoving() {
     return delegate.isMoving();
   }
@@ -98,6 +108,7 @@ public class SimpleEV3Motor implements EV3Device {
    * 
    * @param speed
    */
+  @ScriptApi
   final public void setSpeed(float degreePerSecond) {
     delegate.setSpeed(degreePerSecond);
   }
@@ -107,6 +118,7 @@ public class SimpleEV3Motor implements EV3Device {
    * 
    * @param percent The percent of speed regarding the maximum speed.
    */
+  @ScriptApi
   final public void setSpeedPercent(int percent) {
     setSpeed(getSpeedRatio() * Math.min(Math.max(percent, 0), 100));
   }
@@ -124,6 +136,7 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * @returns The speed in degrees by second
    */
+  @ScriptApi
   final public float getSpeed() {
     return delegate.getSpeed();
   }
@@ -131,6 +144,7 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * @return The speed in percent
    */
+  @ScriptApi
   final public int getSpeedPercent() {
     return (int) (delegate.getSpeed() / getSpeedRatio());
   }
@@ -138,6 +152,7 @@ public class SimpleEV3Motor implements EV3Device {
   /**
    * Rotate the given number of degree.
    */
+  @ScriptApi
   final public void rotate(int angle) {
     rotate(angle, false);
   }
@@ -147,6 +162,7 @@ public class SimpleEV3Motor implements EV3Device {
    * 
    * @param immediateReturn is the function return before the stop was effective or not ?
    */
+  @ScriptApi
   final public void rotate(int angle, boolean immediateReturn) {
     delegate.rotate(angle, immediateReturn);
   }

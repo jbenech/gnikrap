@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import lejos.hardware.BrickFinder;
 import lejos.hardware.Sounds;
 
 import org.gnikrap.utils.MapBuilder;
+import org.gnikrap.utils.ScriptApi;
 
 /**
  * Enable the play sounds with the HW.
@@ -43,15 +44,18 @@ final public class SimpleEV3Sound implements EV3Device {
   /**
    * @param vol The volume [0-100]
    */
+  @ScriptApi
   public void setVolume(int vol) {
     audio.setVolume(vol);
     volume = getVolume();
   }
 
+  @ScriptApi
   public int getVolume() {
     return audio.getVolume();
   }
 
+  @ScriptApi
   public void beep() {
     audio.systemSound(Sounds.BEEP);
   }
@@ -59,6 +63,7 @@ final public class SimpleEV3Sound implements EV3Device {
   /**
    * Play with the volume defined with {{@link #setVolume(int)} .
    */
+  @ScriptApi
   public void playTone(int frequency, int durationInMS) {
     audio.playTone(frequency, durationInMS, volume);
   }
@@ -67,10 +72,12 @@ final public class SimpleEV3Sound implements EV3Device {
   // audio.playTone(frequency, durationInMS, vol);
   // }
 
+  // Currently not part of the ScriptAPI
   public void playFile(String filename) throws EV3ScriptException {
     playFile(filename, volume);
   }
 
+  // Currently not part of the ScriptAPI
   public void playFile(String filename, int volume) throws EV3ScriptException {
     // TODO: implement
     // Sound.playSample(file, vol)
@@ -92,10 +99,12 @@ final public class SimpleEV3Sound implements EV3Device {
    * 
    * @throws EV3ScriptException
    */
+  @ScriptApi
   public void playNote(String note, float durationInS) throws EV3ScriptException {
     audio.playNote(Sounds.PIANO, getFrequency(note), (int) (durationInS * 1000));
   }
 
+  // Currently not part of the ScriptAPI
   public void playNotes(String[] notes, float durationInS) throws EV3ScriptException {
     for (String n : notes) {
       playNote(n, durationInS);

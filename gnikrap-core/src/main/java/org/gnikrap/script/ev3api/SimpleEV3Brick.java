@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import lejos.hardware.port.SensorPort;
 
 import org.gnikrap.script.EV3ScriptContext;
 import org.gnikrap.utils.MapBuilder;
+import org.gnikrap.utils.ScriptApi;
 
 /**
  * This class act as a factory and is the main entry point to access to the EV3 devices.<br/>
@@ -47,6 +48,7 @@ public class SimpleEV3Brick {
   }
 
   // Actions
+  @ScriptApi
   public SimpleEV3MediumMotor getMediumMotor(String port) throws EV3ScriptException {
     EV3Device d = devices.get(port);
     if (d != null) {
@@ -60,6 +62,7 @@ public class SimpleEV3Brick {
     return getMediumMotor(port);
   }
 
+  @ScriptApi
   public SimpleEV3LargeMotor getLargeMotor(String port) throws EV3ScriptException {
     EV3Device d = devices.get(port);
     if (d != null) {
@@ -73,6 +76,7 @@ public class SimpleEV3Brick {
     return getLargeMotor(port);
   }
 
+  @ScriptApi
   public SimpleEV3Screen getScreen() {
     EV3Device d = devices.get(EV3Constants.SCREEN_KEY);
     if (d != null) {
@@ -82,6 +86,7 @@ public class SimpleEV3Brick {
     return getScreen();
   }
 
+  @ScriptApi
   public SimpleEV3Sound getSound() {
     EV3Device d = devices.get(EV3Constants.SOUND_KEY);
     if (d != null) {
@@ -92,6 +97,7 @@ public class SimpleEV3Brick {
   }
 
   // Both sensor and action
+  @ScriptApi
   public SimpleEV3Keyboard getKeyboard() {
     EV3Device d = devices.get(EV3Constants.KEYBOARD_KEY);
     if (d != null) {
@@ -101,11 +107,13 @@ public class SimpleEV3Brick {
     return getKeyboard();
   }
 
+  @ScriptApi
   public SimpleEV3Led getLed() {
     return getKeyboard().getLed();
   }
 
   // Sensors
+  @ScriptApi
   public SimpleEV3Battery getBattery() {
     EV3Device d = devices.get(EV3Constants.BATTERY_KEY);
     if (d != null) {
@@ -115,6 +123,7 @@ public class SimpleEV3Brick {
     return getBattery();
   }
 
+  @ScriptApi
   public SimpleEV3ColorSensor getColorSensor(String port) throws EV3ScriptException {
     EV3Device d = devices.get(port);
     if (d != null) {
@@ -128,6 +137,7 @@ public class SimpleEV3Brick {
     return getColorSensor(port);
   }
 
+  @ScriptApi
   public SimpleEV3IRSensor getIRSensor(String port) throws EV3ScriptException {
     EV3Device d = devices.get(port);
     if (d != null) {
@@ -141,6 +151,7 @@ public class SimpleEV3Brick {
     return getIRSensor(port);
   }
 
+  @ScriptApi
   public SimpleEV3TouchSensor getTouchSensor(String port) throws EV3ScriptException {
     EV3Device d = devices.get(port);
     if (d != null) {

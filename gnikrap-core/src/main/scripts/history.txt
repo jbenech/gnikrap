@@ -49,7 +49,7 @@ Features to add (no specific order):
  - Add documentation to add other scripting language
  - Add exit script feature/function
  - Add a feature to shutdown the brick from the browser (Gnikrap user-interface)
- - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html)
+ - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
  - Add API for other LEGO sensors (Gyro sensor, Ultrasonic sensor)
 
  
@@ -63,4 +63,5 @@ Known defects:
 ------------------------------------------------------------------------------
 
 Work in progress:
- - TODO
+ - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
+ - 

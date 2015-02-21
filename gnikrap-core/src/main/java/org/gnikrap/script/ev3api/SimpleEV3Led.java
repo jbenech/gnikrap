@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 package org.gnikrap.script.ev3api;
 
 import lejos.hardware.Button;
+
+import org.gnikrap.utils.ScriptApi;
 
 /**
  * Provide access to the EV3 led (behind the keyboard).
@@ -49,11 +51,13 @@ final public class SimpleEV3Led {
     Button.LEDPattern(temp);
   }
 
+  @ScriptApi
   public void off() {
     color = BUTTON_LED_OFF;
     doLight();
   }
 
+  @ScriptApi
   public SimpleEV3Led lightGreen() {
     color = BUTTON_LED_GREEN;
     blink = 0;
@@ -61,6 +65,7 @@ final public class SimpleEV3Led {
     return this;
   }
 
+  @ScriptApi
   public SimpleEV3Led lightRed() {
     color = BUTTON_LED_RED;
     blink = 0;
@@ -68,6 +73,7 @@ final public class SimpleEV3Led {
     return this;
   }
 
+  @ScriptApi
   public SimpleEV3Led lightOrange() {
     color = BUTTON_LED_ORANGE;
     blink = 0;
@@ -78,6 +84,7 @@ final public class SimpleEV3Led {
   /**
    * 2 blink mode available, call {@link #blink()} twice to enable the 2nd mode.
    */
+  @ScriptApi
   public SimpleEV3Led blink() {
     blink = (blink + 1) % 3;
     doLight();

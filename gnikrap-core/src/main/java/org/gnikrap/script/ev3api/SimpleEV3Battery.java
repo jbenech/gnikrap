@@ -20,6 +20,8 @@ package org.gnikrap.script.ev3api;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Power;
 
+import org.gnikrap.utils.ScriptApi;
+
 /**
  * Enable to access to the EV3 Battery HW.
  */
@@ -41,6 +43,7 @@ public final class SimpleEV3Battery implements EV3Device {
   /**
    * @return current draw from the battery (in Amps)
    */
+  @ScriptApi
   public float getBatteryCurrent() {
     float result = power.getBatteryCurrent();
     logger.log(EV3Constants.BATTERY_BATTERY_CURRENT, result);
@@ -50,6 +53,7 @@ public final class SimpleEV3Battery implements EV3Device {
   /**
    * @return the motor current draw (in Amps)
    */
+  @ScriptApi
   public float getMotorCurrent() {
     float result = power.getMotorCurrent();
     logger.log(EV3Constants.BATTERY_MOTOR_CURRENT, result);
@@ -61,6 +65,7 @@ public final class SimpleEV3Battery implements EV3Device {
    * 
    * @return Battery voltage in mV. ~9000 = full.
    */
+  @ScriptApi
   public int getVoltageMilliVolt() {
     int result = power.getVoltageMilliVolt();
     logger.log(EV3Constants.BATTERY_VOLTAGE_MV, result);

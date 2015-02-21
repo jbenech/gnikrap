@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.gnikrap.utils.LoggerUtils;
+import org.gnikrap.utils.ScriptApi;
 
 /**
  * The data for one sensor.
@@ -42,6 +43,7 @@ public class XSensor {
     this.name = name;
   }
 
+  @ScriptApi
   public String getName() {
     return name;
   }
@@ -50,6 +52,7 @@ public class XSensor {
     this.value = futureSensorValue;
   }
 
+  @ScriptApi
   public XSensorValue getValue() {
     try {
       return (value == null ? DEFAULT_XSENSOR_VALUE : value.get());

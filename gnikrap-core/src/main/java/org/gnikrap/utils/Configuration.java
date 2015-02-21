@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,11 @@ import java.io.IOException;
 import java.io.Reader;
 
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 
 /**
  * Basic configuration object (need: have an abstraction on the configuration). <br/>
  * 
- * Note: Not a "generic/powerfull" object, only what has been needed has been put here.
+ * Note: Not a "generic/powerful" object, only what has been needed has been put here.
  */
 public final class Configuration {
 
@@ -42,9 +41,7 @@ public final class Configuration {
   }
 
   public String getValueAsString(String path, String defaultValue) {
-    JsonValue node = data.get(path);
-
-    return (node == null ? defaultValue : node.asString());
+    return data.getString(path, defaultValue);
   }
 
   public boolean getValueAsBoolean(String path) {
@@ -52,9 +49,7 @@ public final class Configuration {
   }
 
   public boolean getValueAsBoolean(String path, boolean defaultValue) {
-    JsonValue node = data.get(path);
-
-    return (node == null ? defaultValue : node.asBoolean());
+    return data.getBoolean(path, defaultValue);
   }
 
   public int getValueAsInt(String path) {
@@ -62,9 +57,7 @@ public final class Configuration {
   }
 
   public int getValueAsInt(String path, int defaultValue) {
-    JsonValue node = data.get(path);
-
-    return (node == null ? defaultValue : node.asInt());
+    return data.getInt(path, defaultValue);
   }
 
   public static Configuration load(Class<?> clazzToConfigure) throws IOException {

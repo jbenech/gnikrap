@@ -21,6 +21,8 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.SensorMode;
 
+import org.gnikrap.utils.ScriptApi;
+
 /**
  * Provide a simple API for the touch sensor.
  * <p/>
@@ -47,6 +49,7 @@ final public class SimpleEV3TouchSensor implements EV3Device {
     delegate.close();
   }
 
+  @ScriptApi
   public boolean isPushed() {
     touchMode.fetchSample(touchSample, 0);
     float result = touchSample[0];

@@ -100,8 +100,6 @@ public class ScriptExecutionManager {
             sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_STARTING, Collections.<String, String> emptyMap()));
             engine.eval(scriptText);
             sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_ENDED, Collections.<String, String> emptyMap()));
-          } catch (EV3ExitScriptException exit) {
-            // Just ignore: exit script
           } catch (EV3Exception ev3ex) {
             throw ev3ex;
           } catch (Exception ex1) {

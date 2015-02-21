@@ -17,6 +17,8 @@
  */
 package org.gnikrap.script.ev3api.xsensors;
 
+import org.gnikrap.utils.ScriptApi;
+
 /**
  * An XSensor value
  */
@@ -27,6 +29,7 @@ public class XSensorValue {
     this.isStarted = isStarted;
   }
 
+  @ScriptApi
   public boolean isStarted() {
     return isStarted;
   }

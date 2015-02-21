@@ -28,6 +28,7 @@ import org.gnikrap.script.ev3api.xsensors.XSensor;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
 import org.gnikrap.utils.LoggerUtils;
+import org.gnikrap.utils.ScriptApi;
 
 /**
  * Enable to provide main entry point to access ev3 device to the script engine.
@@ -61,11 +62,12 @@ public final class EV3ScriptContext {
     }
   }
 
+  @ScriptApi
   public Configuration getConfiguration() {
     return configuration;
   }
 
-  public void start() {
+  void start() {
     running = true;
   }
 
@@ -73,6 +75,7 @@ public final class EV3ScriptContext {
     running = false;
   }
 
+  @ScriptApi
   public void notify(String message) {
     try {
       ctx.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
@@ -86,6 +89,7 @@ public final class EV3ScriptContext {
    * 
    * @return true if the script can continue running, false if the script should stop.
    */
+  @ScriptApi
   public boolean isOk() {
     if (running) {
       // Thread friendly
@@ -111,6 +115,7 @@ public final class EV3ScriptContext {
   /**
    * @return the object that enable to pilot the EV3 brick
    */
+  @ScriptApi
   public SimpleEV3Brick getBrick() {
     return ev3;
   }
@@ -125,15 +130,19 @@ public final class EV3ScriptContext {
   /**
    * @return the XSensor with the given name.
    */
+  @ScriptApi
   public XSensor getXSensor(String name) {
     return xsensor.getSensor(name);
   }
 
   /**
-   * Exit the script.
+   * Stop the script.
+   * <p>
+   * Not a good implementation (Implementation with exception not good as they can be catch by the script)
    */
-  public void exit() throws EV3ExitScriptException {
-    throw new EV3ExitScriptException();
+  // @ScriptApi
+  public void exit() {
+    ctx.stopScript();
   }
 
   /**
@@ -147,6 +156,7 @@ public final class EV3ScriptContext {
   /**
    * Sleep for the given number of seconds
    */
+  @ScriptApi
   public void sleepInS(float s) {
     sleep((long) (s * 1000));
   }
@@ -154,6 +164,7 @@ public final class EV3ScriptContext {
   /**
    * Sleep for the given number of milliseconds
    */
+  @ScriptApi
   public void sleep(long ms) {
     try {
       Thread.sleep(ms);
@@ -173,6 +184,7 @@ public final class EV3ScriptContext {
     /**
      * @param waitTime the waiting time in seconds, 0 means no wait.
      */
+    @ScriptApi
     public Configuration setIsOkWait(int timeInMs) {
       if (timeInMs < 1) { // Avoid negative numbers
         confIsRunningWait = 0;
@@ -183,16 +195,19 @@ public final class EV3ScriptContext {
       return this;
     }
 
+    @ScriptApi
     public int getIsOkWait() {
       return confIsRunningWait;
     }
 
+    @ScriptApi
     public Configuration setIsOkCheckEscapeKey(boolean checkEscapeKey) {
       confIsRunningCheckEscapeKey = checkEscapeKey;
 
       return this;
     }
 
+    @ScriptApi
     public boolean isIsOkCheckEscapeKey() {
       return confIsRunningCheckEscapeKey;
     }
@@ -200,6 +215,7 @@ public final class EV3ScriptContext {
     /**
      * @param time waiting time before hard kill of the script, between [500, 30000]
      */
+    @ScriptApi
     public Configuration setWaitingTimeBeforeHardKill(int timeIsMs) {
       if (timeIsMs < 1000) { // Wait at least 1 second
         confWaitingTimeBeforeHardKill = 1000;
@@ -212,6 +228,7 @@ public final class EV3ScriptContext {
       return this;
     }
 
+    @ScriptApi
     public int getWaitingTimeBeforeHardKill() {
       return confWaitingTimeBeforeHardKill;
     }

@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.gnikrap.utils.ScriptApi;
+
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
@@ -54,6 +56,7 @@ public class FutureJsonToXTouchValue extends AbstractFutureJsonToXSensorValue {
     /**
      * @return true if the touch with the given name is currently active ?
      */
+    @ScriptApi
     public boolean containsTouch(String name) {
       return touches.containsKey(name);
     }
@@ -61,6 +64,7 @@ public class FutureJsonToXTouchValue extends AbstractFutureJsonToXSensorValue {
     /**
      * @return the touch with the given name.
      */
+    @ScriptApi
     public XTouch getTouch(String name) {
       return touches.get(name);
     }
@@ -68,6 +72,7 @@ public class FutureJsonToXTouchValue extends AbstractFutureJsonToXSensorValue {
     /**
      * @return the list of the currently active touch.
      */
+    @ScriptApi
     public XTouch[] getTouches() {
       return touches.values().toArray(new XTouch[touches.size()]);
     }
@@ -95,14 +100,12 @@ public class FutureJsonToXTouchValue extends AbstractFutureJsonToXSensorValue {
       this.hits = hits;
     }
 
+    @ScriptApi
     public String getName() {
       return name;
     }
 
-    // public boolean isActive() {
-    // return (hits > 0);
-    // }
-
+    @ScriptApi
     public int getHits() {
       return hits;
     }

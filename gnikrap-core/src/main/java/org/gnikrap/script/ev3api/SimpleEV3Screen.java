@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@ package org.gnikrap.script.ev3api;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
+
+import org.gnikrap.utils.ScriptApi;
 
 /**
  * Note: Accessing to the screen API create an extra-thread in order to refresh the screen in background.
@@ -43,6 +45,7 @@ final public class SimpleEV3Screen implements EV3Device {
     // TODO Seems that nothing has to be released ?!
   }
 
+  @ScriptApi
   public void clear() {
     // textLCD.clear();
     lcd.clear();

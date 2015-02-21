@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.gnikrap.utils.ScriptApi;
+
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
@@ -39,6 +41,11 @@ public class FutureJsonToXVideoValue extends AbstractFutureJsonToXSensorValue {
   }
 
   public static final class XVideoValue extends XSensorValue {
+    @ScriptApi
+    public static final int VIDEO_WIDTH = 640;
+    @ScriptApi
+    public static final int VIDEO_HEIGHT = 480;
+
     private final Map<String, XVisibleObject> objects = new HashMap<String, XVisibleObject>();
 
     XVideoValue(JsonObject raw) {
@@ -54,6 +61,7 @@ public class FutureJsonToXVideoValue extends AbstractFutureJsonToXSensorValue {
     /**
      * @return true if the object with the given name is currently tracked ?
      */
+    @ScriptApi
     public boolean containsObject(String name) {
       return objects.containsKey(name);
     }
@@ -61,6 +69,7 @@ public class FutureJsonToXVideoValue extends AbstractFutureJsonToXSensorValue {
     /**
      * @return the object with the given name.
      */
+    @ScriptApi
     public XVisibleObject getObject(String name) {
       return objects.get(name);
     }
@@ -68,6 +77,7 @@ public class FutureJsonToXVideoValue extends AbstractFutureJsonToXSensorValue {
     /**
      * @return the list of the currently tracked objects.
      */
+    @ScriptApi
     public XVisibleObject[] getObjects() {
       return objects.values().toArray(new XVisibleObject[objects.size()]);
     }
@@ -97,14 +107,17 @@ public class FutureJsonToXVideoValue extends AbstractFutureJsonToXSensorValue {
       y = raw.get(JSonXSensorMessageFields.XVIDEO_OBJECT_Y).asInt();
     }
 
+    @ScriptApi
     public String getName() {
       return name;
     }
 
+    @ScriptApi
     public int getX() {
       return x;
     }
 
+    @ScriptApi
     public int getY() {
       return y;
     }

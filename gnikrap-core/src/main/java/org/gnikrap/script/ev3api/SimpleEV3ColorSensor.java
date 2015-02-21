@@ -22,6 +22,8 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.Color;
 
+import org.gnikrap.utils.ScriptApi;
+
 final public class SimpleEV3ColorSensor implements EV3Device {
 
   private final EV3ColorSensor delegate;
@@ -60,6 +62,7 @@ final public class SimpleEV3ColorSensor implements EV3Device {
    * 
    * @return A value between 0 and 100.
    */
+  @ScriptApi
   public int getReflectedLight() {
     reflectedLightMode.fetchSample(reflectedLightSample, 0);
     float result = reflectedLightSample[0];
@@ -72,6 +75,7 @@ final public class SimpleEV3ColorSensor implements EV3Device {
    * 
    * @return A value between 0 and 100.
    */
+  @ScriptApi
   public int getAmbientLight() {
     ambientLightMode.fetchSample(ambientLightSample, 0);
     float result = ambientLightSample[0];
@@ -82,6 +86,7 @@ final public class SimpleEV3ColorSensor implements EV3Device {
   /**
    * Note: Color code are not the same as within the LEGO MINDSTORM software.
    */
+  @ScriptApi
   public ColorResult getColor() {
     colorMode.fetchSample(colorModeSample, 0);
     int temp = (int) colorModeSample[0];
@@ -92,46 +97,56 @@ final public class SimpleEV3ColorSensor implements EV3Device {
   public final static class ColorResult {
     private final int value;
 
-    public ColorResult(int value) {
+    ColorResult(int value) {
       this.value = value;
     }
 
+    @ScriptApi
     public int getValue() {
       return value;
     }
 
+    @ScriptApi
     public boolean isNoColor() {
       return value == Color.NONE;
     }
 
+    @ScriptApi
     public boolean isBlack() {
       return value == Color.BLACK;
     }
 
+    @ScriptApi
     public boolean isBlue() {
       return value == Color.BLUE;
     }
 
+    @ScriptApi
     public boolean isGreen() {
       return value == Color.GREEN;
     }
 
+    @ScriptApi
     public boolean isYellow() {
       return value == Color.YELLOW;
     }
 
+    @ScriptApi
     public boolean isRed() {
       return value == Color.RED;
     }
 
+    @ScriptApi
     public boolean isWhite() {
       return value == Color.WHITE;
     }
 
+    @ScriptApi
     public boolean isBrown() {
       return value == Color.BROWN;
     }
 
+    @ScriptApi
     public String getColorAsText() {
       if (isBlack())
         return "Black";

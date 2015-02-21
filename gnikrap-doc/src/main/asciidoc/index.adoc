@@ -19,6 +19,8 @@ include::about.adoc[]
 
 include::how_to_install.adoc[]
 
+include::user_manual.adoc[]
+
 include::script_api.adoc[]
 
 include::script_samples.adoc[]

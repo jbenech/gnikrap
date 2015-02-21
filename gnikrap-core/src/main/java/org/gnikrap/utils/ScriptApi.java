@@ -15,18 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gnikrap.script;
+package org.gnikrap.utils;
 
-import java.util.Collections;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Exception used only to be able to easily exit from the script.
+ * A flag annotation in order to identify the methods that are part of the script API.
+ * <p>
+ * Note: All the items flagged should be stable from one version to the other
  */
-class EV3ExitScriptException extends EV3Exception {
+@Retention(RetentionPolicy.SOURCE)
+@Target({ ElementType.METHOD, ElementType.FIELD })
+public @interface ScriptApi {
 
-  private static final long serialVersionUID = 906875959925906363L;
-
-  public EV3ExitScriptException() {
-    super("exit", Collections.<String, String> emptyMap());
-  }
 }
