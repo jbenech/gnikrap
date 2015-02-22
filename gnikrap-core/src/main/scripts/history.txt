@@ -58,6 +58,7 @@ Features to add (no specific order):
 Known defects:
  - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
  - (0.3.0) - Firefox on android, a cosmetic display problem on the xTouch xSensor
+ - (0.3.0) - Script editor not really usable on Android without an external keyboard
 
 
 ------------------------------------------------------------------------------

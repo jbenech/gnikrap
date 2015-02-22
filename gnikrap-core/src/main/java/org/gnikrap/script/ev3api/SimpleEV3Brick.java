@@ -82,7 +82,7 @@ public class SimpleEV3Brick {
     if (d != null) {
       return (SimpleEV3Screen) d;
     }
-    devices.put(EV3Constants.SCREEN_KEY, new SimpleEV3Screen());
+    devices.put(EV3Constants.SCREEN_KEY, new SimpleEV3Screen(sc));
     return getScreen();
   }
 

@@ -122,12 +122,6 @@ public class FutureJsonToXVideoValue extends AbstractFutureJsonToXSensorValue {
       return y;
     }
 
-    // public float getDistance(XTrackedObject b) {
-    // int dx = x - b.x;
-    // int dy = y - b.y;
-    // return (float) Math.sqrt((dx * dx) + (dy * dy));
-    // }
-
     @Override
     public String toString() {
       return "{name: \"" + getName() + "\", x: " + getX() + ", y: " + getY() + "}";

@@ -1,6 +1,9 @@
 === A robot that stay in the video
 
-The aim of this robot is to have robot that stay in the video.
+video::skdaGRvRs_4[youtube]
+
+
+The aim of this robot is to have robot that stay in the video acquired by your webcam (that is connected/embedded to your laptop or tablet).
 
 The behaviour of the robot will be quite simple: go forward and while your reach the 'border' of the video, go a bit backward, turn
 and... go forward again !

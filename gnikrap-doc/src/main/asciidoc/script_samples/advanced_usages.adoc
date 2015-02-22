@@ -11,7 +11,7 @@ the version of Java used:
 
 ==== Import scripts
 
-TODO
+TODO - Will certainly be done while the switch to Java8 was done
 
 
 ==== Using existing Java API
@@ -54,9 +54,18 @@ while(ev3.isOk()) { // Can still use ev3 function // <3>
 [TIP]
 ====
 You can also use '"your"' jar libraries (found on the internet or home-made). Simply put the library within the 
-gnikrap `lib` folder (this is the folder that already contains the other libs), and restart Gnikrap in order to 
+Gnikrap `lib` folder (this is the folder that already contains the other libs), and restart Gnikrap in order to 
 have the libraries available.
 
 You can now use the libs as described below.
+====
+
+
+==== Use another scripting language
+
+[NOTE]
+====
+It is also feasible to use other scripting language available on the JVM. A list of some scripting 
+language available on the JVM can be found http://en.wikipedia.org/wiki/List_of_JVM_languages[here].
 ====
 

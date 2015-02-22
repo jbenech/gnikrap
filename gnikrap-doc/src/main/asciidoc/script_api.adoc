@@ -46,7 +46,7 @@ getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with th
 
 [WARNING]
 ====
-Configuration object is for advanced use only. If you don't understand what it means, don't use this object.
+Configuration object is for advanced usage only. If you don't understand what it means, don't use this object.
 ====
 
 ****
@@ -113,7 +113,7 @@ See the others objects in order to have sample usage of the brick object.
 
 image::ev3/MotorMedium.png[Medium motor, 300, 200, float="right"]
 [[img-ev3-motors]]
-.45502 Large Servo Motor / 45503 Medium Servo Motor - image from http://education.lego.com
+.45502 Large Servo Motor / 45503 Medium Servo Motor - images from http://education.lego.com
 image::ev3/MotorLarge.png[Large motor, 300, 200, align="left"]
 
 [TIP]
@@ -203,6 +203,7 @@ while((tacho = largeMotor.getTachoCount()) < 1000) {
 .45506 Color Sensor - image from http://education.lego.com
 image::ev3/ColorSensor.png[Color sensor, 300, 200]
 
+
 ****
 getReflectedLight():: Returns the reflected light: a value between 0 and 100.
 
@@ -210,6 +211,19 @@ getAmbientLight():: Returns the ambient light: a value between 0 and 100.
 
 getColor():: Returns a <<Color object>>.
 ****
+
+
+[WARNING]
+====
+This sensor has 3 different modes. It is worth noting that *switching from one mode to the other take time* (around 250ms).
+
+Here is two examples:
+
+* If you call `getReflectedLight()` and latter call it again (and again) there is no switch and the call to `getReflectedLight()` is instantaneous.
+* If you call `getReflectedLight()`  and latter call `getColor()` there is mode switch and the call to `getColor()` will take more than 250ms. 
+After this 1^st^ call, successive calls to `getColor()`  will be instantaneous.
+====
+
 
 ==== Color object
 
@@ -286,6 +300,16 @@ getRemoteCommand():: Check for remote command (beacon) buttons usage. Returns a 
 
 seekBeacon():: Look for the beacon and returns a <<SeekBeaconResult object>>.
 ****
+
+[WARNING]
+====
+This sensor has 3 different modes. It is worth noting that *switching from one mode to the other take time* (around 250ms).
+
+Here is two examples:
+
+* If you want to monitor the remote command, you will call `getRemoteCommand()` and latter it again (and again) there is no switch and the call to `getRemoteCommand()` is instantaneous.
+* If you want to both monitor the remote command and check the distance, you will call `getRemoteCommand()`  and latter call `getDistance()`. In this case there is a mode switch and the call to `getDistance()` will take more than 250ms. If latter you want to call `getRemoteCommand()` there is again a mode switch.
+====
 
 
 ==== RemoteCommandResult object

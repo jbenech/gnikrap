@@ -1,21 +1,16 @@
 == About
 
-=== Scripting on the EV3
 
-*Provide a simple and powerful way to make script based programming on the EV3*.
+=== Javascript on the EV3
+
+*Provide a simple and powerful way to program on the EV3 with Javascript*.
 
 * The tool is *straightforward to use*.
 * Can be *used on a computer or a tablet*, in fact any device that have a modern browser (HTML5 compatible).
-* *Javascript*, the scripting language available by default is currently one of the more popular scripting language)
-
-[NOTE]
-====
-It is also feasible to use other scripting language available on the JVM. A list of some scripting 
-language available on the JVM can be found http://en.wikipedia.org/wiki/List_of_JVM_languages[here].
-====
+* *Javascript*, is currently one of the more popular scripting language
 
 
-=== Empower the device' sensors
+=== Empower your device' sensors
 
 *Give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked to the EV3 device*. 
 The list of XSensors (for eXternal Sensors) available right now is:
@@ -47,7 +42,16 @@ You are at the right place to evaluate it ! Just have look to see if it's ok for
 
 Gnikrap is nice, but you're not sure... Here are some element that can make you use another tool to program with the EV3 :
 
-* If you need a full featured API (*access to non-Lego sensors*, navigation API, etc.) or if *speed 
-execution* is one of you key criteria, consider using a more complete framework like http://www.lejos.org/[leJOS] 
-or http://www.monobrick.dk/[MonoBrick]
+* If you need a full featured API (*access to non-Lego sensors*, navigation/orientation API, etc.) or if *speed 
+execution* (you plan to implement complex/CPU-intensive algorithm) is one of you key criteria, consider using a framework like http://www.lejos.org/[leJOS] or http://www.monobrick.dk/[MonoBrick]. +
+Note: Gnikrap is internally based on leJOS.
 * If you need *graphical programming* tools, consider using the software provided by Lego
+
+
+[NOTE]
+====
+To sum up, the two main objective of Gnikrap are: 
+
+* Give a middle path between the Lego visual programming environment and the "complex" development environment (and associated knowledge) needed by lejos or MonoBrick.
+* Give access to the some of the sensors of your tablet/laptop/smartphone in order to leverage the EV3 possibilities and add more fun to your creations.
+====

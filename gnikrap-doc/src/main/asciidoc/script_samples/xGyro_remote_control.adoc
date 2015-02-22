@@ -1,5 +1,8 @@
 ==== A robot controlled with the xGyro sensor
 
+video::IDihLF-AEEY[youtube]
+
+
 The aim of this sample is to pilot a robot with the gyroscope of a device.
 
 The robot is to be made of:
