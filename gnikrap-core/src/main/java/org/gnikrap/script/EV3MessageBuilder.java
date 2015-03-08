@@ -33,7 +33,7 @@ public final class EV3MessageBuilder {
   /**
    * Build a user information message (message sent by the user with the script).
    */
-  public static String buildInfoUserMessage(String text) throws IOException {
+  public static String buildInfoUserMessage(String text) {
     JsonObject json = new JsonObject()//
         .add(JsonMessageFields.MESSAGE_TYPE, JsonMessageFields.MESSAGE_TYPE_INFO_USER) //
         .add(JsonMessageFields.TEXT, text);
@@ -44,7 +44,7 @@ public final class EV3MessageBuilder {
   /**
    * Build a message that is coded (in order to be translated on the client side)
    */
-  public static String buildInfoCodedMessage(String code, Map<String, String> params) throws IOException {
+  public static String buildInfoCodedMessage(String code, Map<String, String> params) {
     JsonObject json = new JsonObject() //
         .add(JsonMessageFields.MESSAGE_TYPE, JsonMessageFields.MESSAGE_TYPE_INFO_CODED) //
         .add(JsonMessageFields.CODE, code) //
@@ -68,5 +68,16 @@ public final class EV3MessageBuilder {
         .add(JsonMessageFields.PARAMS, JsonUtils.toJson(ev3ex.getParams()));
 
     return JsonUtils.writeToString(json, 512);
+  }
+
+  /**
+   * Build a session UUID message
+   */
+  public static String buildSessionUUIDMessage(String sessionUUID) {
+    JsonObject json = new JsonObject() //
+        .add(JsonMessageFields.MESSAGE_TYPE, JsonMessageFields.MESSAGE_TYPE_SESSION_UUID) //
+        .add(JsonMessageFields.UUID, sessionUUID);
+
+    return JsonUtils.writeToString(json, 128);
   }
 }

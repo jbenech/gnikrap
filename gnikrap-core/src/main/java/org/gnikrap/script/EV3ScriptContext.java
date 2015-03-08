@@ -17,24 +17,19 @@
  */
 package org.gnikrap.script;
 
-import java.io.IOException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
 import org.gnikrap.script.ev3api.xsensors.XSensor;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
-import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.ScriptApi;
 
 /**
  * Enable to provide main entry point to access ev3 device to the script engine.
  */
 public final class EV3ScriptContext {
-  private static final Logger LOGGER = LoggerUtils.getLogger(EV3ScriptContext.class);
 
   private boolean running;
   private final SimpleEV3Button escape;
@@ -77,11 +72,7 @@ public final class EV3ScriptContext {
 
   @ScriptApi
   public void notify(String message) {
-    try {
-      ctx.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
-    } catch (IOException ioe) { // Should never happens
-      LOGGER.log(Level.WARNING, "Exception ignored", ioe);
-    }
+    ctx.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
   }
 
   /**

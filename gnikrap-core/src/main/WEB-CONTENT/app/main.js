@@ -82,6 +82,14 @@ function NavigationBarViewModel(appContext) {
     self.__collapseNavbar();
   }
   
+  self.onShutdownBrick = function() {
+    bootbox.confirm(i18n.t("navigationBar.confirmShutdownBrickModal.title"), function(result) {
+      if(result) {
+        self.context.ev3BrickServer.shutdownBrick();
+      }
+    });
+  }
+  
   self.onDisplaySettings = function() {
     self.context.settingsVM.display();
     self.__collapseNavbar();
@@ -1053,10 +1061,12 @@ function EV3BrickServer(appContext) {
   }
 
   // Send a message to the websocket (if opened)
+  // Returns true if sent, false otherwise
   self.__doWSSend = function(message) {
     if((self.ws != undefined) && (self.ws.readyState == 1)) { // OPEN
       try {
         self.ws.send(message);
+        return true;
       } catch(ex) {
         console.log("Fail to send a message - " + JSON.stringify(ex));
         self.__doWSReconnection();
@@ -1064,32 +1074,37 @@ function EV3BrickServer(appContext) {
     } else {
       console.log("Can't send a message because the ws isn't initialized or isn't opened - " + JSON.stringify(message));
     }
+    return false;
   }
 
   self.runScript = function(scriptCode, stopRunningScript) {
-    if(self.ws != undefined) {
-      var jsonMsg = JSON.stringify({
-          act: "runScript",
-          sLang: "javascript",
-          sText: scriptCode,
-          sFStop: stopRunningScript
-      });
-      // console.log("run - " + jsonMsg);
-      self.__doWSSend(jsonMsg);
-    } else {
+    var jsonMsg = JSON.stringify({
+        act: "runScript",
+        sLang: "javascript",
+        sText: scriptCode,
+        sFStop: stopRunningScript
+    });
+    // console.log("runScript - " + jsonMsg);
+    if(self.__doWSSend(jsonMsg) == false) {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantRunScriptEV3ConnectionNok"));
     }
   }
 
   self.stopScript = function() {
-    if(self.ws != undefined) {
-      var jsonMsg = JSON.stringify({
-          act: "stopScript"
-      });
-      // console.log("stop - " + jsonMsg);
-      self.__doWSSend(jsonMsg);
-    } else {
+    var jsonMsg = JSON.stringify({
+        act: "stopScript"
+    });
+    if(self.__doWSSend(jsonMsg) == false) {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantStopScriptEV3ConnectionNok"));
+    }
+  }
+  
+  self.shutdownBrick = function() {
+    var jsonMsg = JSON.stringify({
+        act: "shutdownBrick"
+    });
+    if(self.__doWSSend(jsonMsg) == false) {
+      self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantDoSomethingEV3ConnectionNok", { "action": "shutdownBrick" }));
     }
   }
 
@@ -1104,12 +1119,11 @@ function EV3BrickServer(appContext) {
   
   // Instantaneously send the sensor value
   self.sendXSensorValue = function(sensorName, sensorType, sensorValue) {
-    if(self.ws != undefined) {
-      var jsonMsg = self.__buildXSensorMessage(sensorName, sensorType, sensorValue);
-      console.log("send xSensorValue - " + jsonMsg);
-      self.__doWSSend(jsonMsg);
-    } else {
-      // TODO error management
+    var jsonMsg = self.__buildXSensorMessage(sensorName, sensorType, sensorValue);
+    console.log("send xSensorValue - " + jsonMsg);
+    if(self.__doWSSend(jsonMsg) == false) {
+      // In case of connection lost: switch to stream behaviour (only the last event will be keep)
+      self.streamXSensorValue(sensorName, sensorType, sensorValue);
     }
   }
   
@@ -1139,7 +1153,7 @@ function EV3BrickServer(appContext) {
   // Send all waiting values
   self.__doStreamXSensorValue = function() {
     self.xSensorStream.timeoutID = undefined;
-    if(self.ws != undefined) {
+    if(self.ws != undefined) { // TODO not correct error checking, see __doWSSend() - to be reworked
       var messageSent = false;
       Object.keys(self.xSensorStream.sensors).forEach(function(sensorName) {
         var sensor = self.xSensorStream.sensors[sensorName];
@@ -1295,6 +1309,17 @@ function round2dec(n) {
   return Math.round(n * 100) / 100;
 }
 
+// Generate a UUID
+function generateUUID(){
+  var d = new Date().getTime();
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = (d + Math.random()*16)%16 | 0;
+      d = Math.floor(d/16);
+      return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+  });
+  return uuid;
+}
+
 
 /////////////////////////////
 // Knockout specific bindings
@@ -1395,10 +1420,12 @@ $(document).ready(function() {
         }
       }
     };
+    
+    console.log("UUID: " + generateUUID());
 
     // Register windows event to ask confirmation while the user leave the page (avoid loosing scripts)
     window.onbeforeunload = function () {
-      return "";
+      //return "";
     };
   });
 });

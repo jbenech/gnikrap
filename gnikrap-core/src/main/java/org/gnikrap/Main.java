@@ -33,6 +33,7 @@ import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.FakeEV3ExecutionManager;
 import org.gnikrap.script.actions.RunScript;
 import org.gnikrap.script.actions.SetXSensorValue;
+import org.gnikrap.script.actions.ShutdownBrick;
 import org.gnikrap.script.actions.StopScript;
 import org.gnikrap.utils.Configuration;
 import org.gnikrap.utils.LoggerUtils;
@@ -122,6 +123,7 @@ public class Main {
     EV3SriptCommandSocketConnectionCallback myWsCC = new EV3SriptCommandSocketConnectionCallback(actionProcessor);
     // TODO Import/Export web service
     actionProcessor.setRemoteControlService(myWsCC);
+    actionProcessor.start();
 
     // Launch server
     Undertow server = Undertow.builder().addHttpListener(httpPort, "0.0.0.0").setHandler( //
@@ -156,6 +158,7 @@ public class Main {
     actionProcessor.registerActionMessageProcessor(new RunScript());
     actionProcessor.registerActionMessageProcessor(new StopScript());
     actionProcessor.registerActionMessageProcessor(new SetXSensorValue());
+    actionProcessor.registerActionMessageProcessor(new ShutdownBrick());
 
     return actionProcessor;
   }

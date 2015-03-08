@@ -29,6 +29,7 @@ import io.undertow.websockets.spi.WebSocketHttpExchange;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +38,7 @@ import org.gnikrap.utils.LoggerUtils;
 import org.xnio.ChannelListener;
 
 /**
- * Handle the WebSocket connections for the EV3 remote-control service.
+ * Handle the WebSocket connections for the Gnikrap web application.
  */
 final public class EV3SriptCommandSocketConnectionCallback implements WebSocketConnectionCallback {
   private static final Logger LOGGER = LoggerUtils.getLogger(EV3SriptCommandSocketConnectionCallback.class);
@@ -45,13 +46,9 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
   /** List of currently active WebSocket connections */
   private final List<WebSocketSession> sessions = new ArrayList<WebSocketSession>();
 
-  private EV3ActionProcessor ev3ActionProcessor;
+  private final EV3ActionProcessor ev3ActionProcessor;
 
   public EV3SriptCommandSocketConnectionCallback(EV3ActionProcessor ev3ActionProcessor) {
-    this.ev3ActionProcessor = ev3ActionProcessor;
-  }
-
-  public void setEv3ActionProcessor(EV3ActionProcessor ev3ActionProcessor) {
     this.ev3ActionProcessor = ev3ActionProcessor;
   }
 
@@ -61,32 +58,59 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
     WebSocketSession wss = new WebSocketSession(channel, ev3ActionProcessor);
     sessions.add(wss);
     if (sessions.size() > 5) {
-      // TODO Check that is not a problem
-      LOGGER.warning("Several (" + sessions.size() + ") EV3-Remote-Control websocket session openned at the same time");
+      // Potential issue on CPU and bandwidth (seems limited to 128Kb/s with Wifi)
+      LOGGER.warning("Important number (" + sessions.size() + ") of session opened at the same time: Potential performance issues");
     }
     channel.resumeReceives(); // /!\ channel don't receive nothing if not called
+
+    // Send the UUID to the new session
+    ev3ActionProcessor.sendSessionUUID(wss.getUUID());
   }
 
   void unregisterSession(WebSocketSession session) {
     sessions.remove(session);
   }
 
+  // /**
+  // * Send a message to all the connected WebSocket sessions.
+  // *
+  // * @param message The message to sent.
+  // */
+  // public void sendMessage(String message) {
+  // for (WebSocketSession session : sessions) {
+  // session.sendMessage(message);
+  // }
+  // }
+
   /**
-   * Send a message to all the connected WebSocket sessions.
+   * Send a message to only one WebSocket session. If UUID is null, the message is broadcasted to all sessions.
    * 
+   * @param session The UUID of the session
    * @param message The message to sent.
    */
-  public void sendMessage(String message) {
-    for (WebSocketSession session : sessions) {
-      session.sendMessage(message);
+  public void sendMessage(String sessionUUID, String message) {
+    if (sessionUUID == null) {
+      for (WebSocketSession session : sessions) {
+        session.sendMessage(message);
+      }
+    } else {
+      // For loop is quicker than Map if there is very few elements
+      for (WebSocketSession session : sessions) {
+        if (sessionUUID.equals(session.getUUID())) {
+          session.sendMessage(message);
+          break;
+        }
+      }
     }
   }
 
   /**
+   * A websocket session.<br/>
    * Manage the various listener and callback associated to the channel.
    */
   class WebSocketSession {
     private final WebSocketChannel myChannel;
+    private final String uuid = UUID.randomUUID().toString();
 
     private final ChannelListener<WebSocketChannel> channelListener = new AbstractReceiveListener() {
       @Override
@@ -95,7 +119,7 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
         if (LOGGER.isLoggable(Level.FINE)) {
           LOGGER.fine("FullTextMessage receive: " + textMsg);
         }
-        ev3ActionProcessor.processMessage(textMsg);
+        ev3ActionProcessor.processMessage(uuid, textMsg);
         // channel.getIoThread();
         // channel.getWorker();
       };
@@ -147,6 +171,10 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
 
     void sendMessage(String message) {
       WebSockets.sendText(message, myChannel, sendCallback);
+    }
+
+    String getUUID() {
+      return uuid;
     }
   }
 }

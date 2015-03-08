@@ -42,12 +42,12 @@ public final class EV3ActionProcessor {
   private static final Logger LOGGER = LoggerUtils.getLogger(EV3ActionProcessor.class);
 
   private final Map<String, ActionMessageProcessor> actionMessageProcessorRepository = new HashMap<String, ActionMessageProcessor>();
-  private EV3SriptCommandSocketConnectionCallback remoteControlService;
+  private EV3SriptCommandSocketConnectionCallback remoteWebSocketService;
   private ScriptExecutionManager context;
 
   // private final ExecutorService executor = Executors.newSingleThreadExecutor();
   private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-  private final BlockingQueue<String> messagesToSend = new LinkedBlockingQueue<String>();
+  private final BlockingQueue<Message> messagesToSend = new LinkedBlockingQueue<Message>();
 
   public EV3ActionProcessor() {
     setContext(new ScriptExecutionManager());
@@ -69,19 +69,19 @@ public final class EV3ActionProcessor {
       @Override
       public void run() {
         try {
-          String toSend;
+          Message toSend;
           while ((toSend = messagesToSend.poll()) != null) {
-            sendBackMessage(toSend);
+            remoteWebSocketService.sendMessage(toSend.getSessionUUID(), toSend.getContent());
           }
         } catch (Exception ex) {
           LOGGER.log(Level.WARNING, "Error while sending message to browser", ex);
         }
       }
-    }, 0, 50, TimeUnit.MILLISECONDS);
+    }, 500, 50, TimeUnit.MILLISECONDS); // Run each 50ms after 500ms initial waiting time
   }
 
   public void setRemoteControlService(EV3SriptCommandSocketConnectionCallback remoteControlService) {
-    this.remoteControlService = remoteControlService;
+    this.remoteWebSocketService = remoteControlService;
   }
 
   /**
@@ -89,10 +89,10 @@ public final class EV3ActionProcessor {
    * 
    * @param message The message to process
    */
-  public void processMessage(final String rawMessage) {
+  public void processMessage(final String sessionUUID, final String rawMessage) {
     try {
       // Parse the message and check if the action is quick or not
-      final EV3Message message = new EV3Message(rawMessage);
+      final EV3Message message = new EV3Message(sessionUUID, rawMessage);
       String key = message.getActionName();
       final ActionMessageProcessor processor = actionMessageProcessorRepository.get(key);
       if (processor == null) {
@@ -124,10 +124,19 @@ public final class EV3ActionProcessor {
   }
 
   /**
-   * Send a message to the client
+   * Send a message to the browser.
    */
   public void sendBackMessage(String message) {
-    remoteControlService.sendMessage(message);
+    // Messages are pooled and sent-back asynchronously by the executor (see start())
+    messagesToSend.add(new Message(message));
+  }
+
+  /**
+   * Send back an UUID to the session.
+   */
+  public void sendSessionUUID(String sessionUUID) {
+    String msg = EV3MessageBuilder.buildSessionUUIDMessage(sessionUUID);
+    messagesToSend.add(new Message(sessionUUID, msg));
   }
 
   void logAndSendBackException(Exception ex) {
@@ -158,5 +167,30 @@ public final class EV3ActionProcessor {
 
   public ScriptExecutionManager getContext() {
     return context;
+  }
+
+  /**
+   * Enable to store pending messages
+   */
+  static class Message {
+    private final String sessionUUID;
+    private final String content;
+
+    public Message(String content) {
+      this(null, content);
+    }
+
+    public Message(String sessionUUID, String content) {
+      this.sessionUUID = sessionUUID;
+      this.content = content;
+    }
+
+    public String getSessionUUID() {
+      return sessionUUID;
+    }
+
+    public String getContent() {
+      return content;
+    }
   }
 }

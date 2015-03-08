@@ -40,6 +40,10 @@ package org.gnikrap.script;
  * <li>xSnsTyp: The type of the XSensor</li>
  * <li>xSnsVal: The value of the XSensor</li>
  * </ul>
+ * <li>Shutdown brick message:</li>
+ * <ul>
+ * <li>msgTyp: Fixed value: 'shutdownBrick'</li>
+ * </ul>
  * </ul>
  * <p/>
  * Possible messages (EV3 -> Browser):
@@ -54,6 +58,11 @@ package org.gnikrap.script;
  * <ul>
  * <li>msgTyp: Fixed value: 'ScriptException'</li>
  * <li>txt: The exception message</li>
+ * </ul>
+ * <li>Session UUID message:</li>
+ * <ul>
+ * <li>msgTyp: Fixed value: 'SessionUUID'</li>
+ * <li>uuid: The session uuid</li>
  * </ul>
  * <li>Messages sent by Gnikrap (coded messages translated on the GUI):</li>
  * <ul>
@@ -84,6 +93,7 @@ public final class JsonMessageFields {
   public static final String ACTION_RUN_SCRIPT = "runScript";
   public static final String ACTION_STOP_SCRIPT = "stopScript";
   public static final String ACTION_SET_XSENSOR_VALUE = "setXSnsValue";
+  public static final String ACTION_SHUTDOWN_BRICK = "shutdownBrick";
 
   // Messages sent by the EV3 to the browser
   /** Message type value: Exception */
@@ -91,14 +101,16 @@ public final class JsonMessageFields {
   public static final String MESSAGE_TYPE_SCRIPT_EXCEPTION = "ScriptException";
   public static final String MESSAGE_TYPE_INFO_USER = "InfoUser";
   public static final String MESSAGE_TYPE_INFO_CODED = "InfoCoded";
+  public static final String MESSAGE_TYPE_SESSION_UUID = "SessionUUID";
 
   /** Text field type */
   public static final String TEXT = "txt";
-
   /** Code field */
   public static final String CODE = "code";
   /** Parameters field */
   public static final String PARAMS = "params";
+  /** UUID field */
+  public static final String UUID = "uuid";
 
   /** Script properties fields */
   public static final String SCRIPT_LANGUAGE = "sLang";

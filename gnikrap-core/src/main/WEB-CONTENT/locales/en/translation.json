@@ -7,8 +7,13 @@
     "gnikrap": {
       "about": "About...",
       "fullScreen": "Toggle full screen",
+      "shutdownBrick": "Shutdown the EV3 brick...",
       "settings": "Settings...",
       "documentation": "Documentation..."
+    },
+    
+    "confirmShutdownBrickModal": {
+      "title": "Are you sure you want to shutdown the EV3 brick ?"
     }
   },
 
@@ -159,7 +164,8 @@
       "ev3ConnectionFailed": "EV3 Brick connection failed. Connection will be retried in a few seconds. [__causedBy__]",
       "ev3ConnectionNok": "EV3 Brick connection closed by the EV3 brick. Connection will be retried in a few seconds.",
       "cantRunScriptEV3ConnectionNok": "Can't execute the script, the connection with the EV3 brick is down",
-      "cantStopScriptEV3ConnectionNok": "Can't stop the script, the connection with the EV3 brick is down"
+      "cantStopScriptEV3ConnectionNok": "Can't stop the script, the connection with the EV3 brick is down",
+      "cantDoSomethingEV3ConnectionNok": "'__action__' cannot be done, the connection with the EV3 brick is down"
     }
   },
 

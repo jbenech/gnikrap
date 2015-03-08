@@ -27,11 +27,17 @@ import com.eclipsesource.json.JsonValue;
  */
 public final class EV3Message {
 
+  private final String sessionUUID;
   private final JsonObject jsonMessage;
   private String action;
 
-  public EV3Message(String rawData) {
+  public EV3Message(String sessionUUID, String rawData) {
+    this.sessionUUID = sessionUUID;
     this.jsonMessage = JsonObject.readFrom(rawData);
+  }
+
+  public String getSessionUUID() {
+    return sessionUUID;
   }
 
   /**
