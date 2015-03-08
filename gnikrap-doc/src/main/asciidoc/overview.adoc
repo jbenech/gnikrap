@@ -1,0 +1,24 @@
+== Quick overview
+
+You can first have a look to video that introduce the main concept of Gnikrap:
+
+video::NE7edagobj8[youtube]
+
+
+The main screen of Gnikrap is divided in 3 main areas:
+
+image::Gnikrap_MainScreenArea.png[Main screen areas]
+
+. The main actions and navigation are in this header. 
+** The Run/Stop button enable to start the program and to stop it.
+** The "Script editor" button enable to display the work-area that enable to edit the script.
+** The "x*" buttons enable to go the work-area of the xSensors.
+** The "Gnikrap" button give access to a small menu.
+. The work-area contains the data for the selected navigation. +
+  The content of this area will change according to the current active work area. It is worth to notice that even if not displayed the 
+  work area still "work". This behaviour is important for xSensors: You can use 2 xSensors at the same time on the same device (or you
+  can use an xSensors and edti at the same time.
+. The notification area contains all the notification from Gnikrap (start/stop program, errors, etc.) and also the notifications of your program.
+
+
+Here 

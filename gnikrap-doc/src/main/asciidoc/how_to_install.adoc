@@ -54,9 +54,7 @@ Launch Gnikrap::
 ** Start Gnikrap: `./start.sh`
 
 . Finally open a browser on your computer and connect to Gnikrap with the following URL: `http://<IP of the EV3>`
-  You should have the Gnikrap main screen (it take a few seconds to load) :
-+
-image::install/0200_Gnikrap_MainScreen.png[]
+  You should have the Gnikrap main screen - See <<Quick overview>> for the screenshot - (it can take a few seconds to load).
 +
 _Note:_ The first time you launch a script it will take several seconds (more than 10s), because there some initialization to be done. 
         Latter script execution are instantaneous.
