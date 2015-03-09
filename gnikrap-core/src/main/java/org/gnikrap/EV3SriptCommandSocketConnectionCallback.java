@@ -62,33 +62,19 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
       LOGGER.warning("Important number (" + sessions.size() + ") of session opened at the same time: Potential performance issues");
     }
     channel.resumeReceives(); // /!\ channel don't receive nothing if not called
-
-    // Send the UUID to the new session
-    ev3ActionProcessor.sendSessionUUID(wss.getUUID());
   }
 
   void unregisterSession(WebSocketSession session) {
     sessions.remove(session);
   }
 
-  // /**
-  // * Send a message to all the connected WebSocket sessions.
-  // *
-  // * @param message The message to sent.
-  // */
-  // public void sendMessage(String message) {
-  // for (WebSocketSession session : sessions) {
-  // session.sendMessage(message);
-  // }
-  // }
-
   /**
    * Send a message to only one WebSocket session. If UUID is null, the message is broadcasted to all sessions.
    * 
-   * @param session The UUID of the session
    * @param message The message to sent.
+   * @param session The UUID of the session (null for broadcast)
    */
-  public void sendMessage(String sessionUUID, String message) {
+  public void sendMessage(String message, UUID sessionUUID) {
     if (sessionUUID == null) {
       for (WebSocketSession session : sessions) {
         session.sendMessage(message);
@@ -110,7 +96,7 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
    */
   class WebSocketSession {
     private final WebSocketChannel myChannel;
-    private final String uuid = UUID.randomUUID().toString();
+    private final UUID uuid = UUID.randomUUID();
 
     private final ChannelListener<WebSocketChannel> channelListener = new AbstractReceiveListener() {
       @Override
@@ -173,7 +159,7 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
       WebSockets.sendText(message, myChannel, sendCallback);
     }
 
-    String getUUID() {
+    UUID getUUID() {
       return uuid;
     }
   }

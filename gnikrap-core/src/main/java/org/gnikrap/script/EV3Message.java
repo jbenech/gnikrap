@@ -17,6 +17,8 @@
  */
 package org.gnikrap.script;
 
+import java.util.UUID;
+
 import org.gnikrap.utils.MapBuilder;
 
 import com.eclipsesource.json.JsonObject;
@@ -27,16 +29,16 @@ import com.eclipsesource.json.JsonValue;
  */
 public final class EV3Message {
 
-  private final String sessionUUID;
+  private final UUID sessionUUID;
   private final JsonObject jsonMessage;
   private String action;
 
-  public EV3Message(String sessionUUID, String rawData) {
+  public EV3Message(UUID sessionUUID, String rawData) {
     this.sessionUUID = sessionUUID;
     this.jsonMessage = JsonObject.readFrom(rawData);
   }
 
-  public String getSessionUUID() {
+  public UUID getSessionUUID() {
     return sessionUUID;
   }
 

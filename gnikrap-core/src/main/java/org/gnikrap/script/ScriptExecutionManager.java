@@ -81,7 +81,7 @@ public class ScriptExecutionManager {
         LOGGER.warning("Submiting a new script while a first one is already running => Stoping the running script");
         stopScript();
       } else {
-        throw new EV3ScriptException(EV3ScriptException.SCRIPT_ALREADY_RUNNING, Collections.<String, String> emptyMap());
+        throw new EV3ScriptException(EV3ScriptException.SCRIPT_ALREADY_RUNNING, Collections.<String, String> emptyMap(), true);
       }
     }
     reset();
@@ -120,7 +120,7 @@ public class ScriptExecutionManager {
   }
 
   void sendBackMessage(String msg) {
-    actionProcessor.sendBackMessage(msg);
+    actionProcessor.sendBackMessage(null, msg);
   }
 
   public void stopScript() {

@@ -69,15 +69,4 @@ public final class EV3MessageBuilder {
 
     return JsonUtils.writeToString(json, 512);
   }
-
-  /**
-   * Build a session UUID message
-   */
-  public static String buildSessionUUIDMessage(String sessionUUID) {
-    JsonObject json = new JsonObject() //
-        .add(JsonMessageFields.MESSAGE_TYPE, JsonMessageFields.MESSAGE_TYPE_SESSION_UUID) //
-        .add(JsonMessageFields.UUID, sessionUUID);
-
-    return JsonUtils.writeToString(json, 128);
-  }
 }

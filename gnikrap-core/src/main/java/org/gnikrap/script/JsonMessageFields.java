@@ -59,11 +59,6 @@ package org.gnikrap.script;
  * <li>msgTyp: Fixed value: 'ScriptException'</li>
  * <li>txt: The exception message</li>
  * </ul>
- * <li>Session UUID message:</li>
- * <ul>
- * <li>msgTyp: Fixed value: 'SessionUUID'</li>
- * <li>uuid: The session uuid</li>
- * </ul>
  * <li>Messages sent by Gnikrap (coded messages translated on the GUI):</li>
  * <ul>
  * <li>msgTyp: Fixed value: 'InfoCoded'</li>
@@ -101,7 +96,6 @@ public final class JsonMessageFields {
   public static final String MESSAGE_TYPE_SCRIPT_EXCEPTION = "ScriptException";
   public static final String MESSAGE_TYPE_INFO_USER = "InfoUser";
   public static final String MESSAGE_TYPE_INFO_CODED = "InfoCoded";
-  public static final String MESSAGE_TYPE_SESSION_UUID = "SessionUUID";
 
   /** Text field type */
   public static final String TEXT = "txt";
@@ -109,8 +103,6 @@ public final class JsonMessageFields {
   public static final String CODE = "code";
   /** Parameters field */
   public static final String PARAMS = "params";
-  /** UUID field */
-  public static final String UUID = "uuid";
 
   /** Script properties fields */
   public static final String SCRIPT_LANGUAGE = "sLang";

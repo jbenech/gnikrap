@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,13 +48,19 @@ public class EV3Exception extends Exception {
    */
   public static final String UNKNOWN_ACTION = "UNKNOWN_ACTION";
 
-  private final Map<String, String> params;
   private final String code;
+  private final Map<String, String> params;
+  private final boolean notifyOnlyCaller;
 
   public EV3Exception(String code, Map<String, String> params) {
+    this(code, params, false);
+  }
+
+  public EV3Exception(String code, Map<String, String> params, boolean notifyOnlyCaller) {
     super(code);
     this.code = code;
     this.params = Collections.unmodifiableMap(new HashMap<String, String>(params));
+    this.notifyOnlyCaller = notifyOnlyCaller;
   }
 
   public String getCode() {
@@ -65,8 +71,12 @@ public class EV3Exception extends Exception {
     return params;
   }
 
+  public boolean isNotifyOnlyCaller() {
+    return notifyOnlyCaller;
+  }
+
   @Override
   public String toString() {
-    return this.getClass().toString() + "[" + code + ", " + params + "]";
+    return this.getClass().toString() + "[code: " + code + ", params: " + params + ", notifyOnlyCaller: " + notifyOnlyCaller + "]";
   }
 }

@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package org.gnikrap.script;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -71,7 +72,7 @@ public final class EV3ActionProcessor {
         try {
           Message toSend;
           while ((toSend = messagesToSend.poll()) != null) {
-            remoteWebSocketService.sendMessage(toSend.getSessionUUID(), toSend.getContent());
+            remoteWebSocketService.sendMessage(toSend.getContent(), toSend.getSessionUUID());
           }
         } catch (Exception ex) {
           LOGGER.log(Level.WARNING, "Error while sending message to browser", ex);
@@ -89,7 +90,7 @@ public final class EV3ActionProcessor {
    * 
    * @param message The message to process
    */
-  public void processMessage(final String sessionUUID, final String rawMessage) {
+  public void processMessage(final UUID sessionUUID, final String rawMessage) {
     try {
       // Parse the message and check if the action is quick or not
       final EV3Message message = new EV3Message(sessionUUID, rawMessage);
@@ -107,7 +108,7 @@ public final class EV3ActionProcessor {
             try {
               processor.process(message, EV3ActionProcessor.this);
             } catch (EV3Exception ev3e) {
-              sendBackEV3Exception(ev3e);
+              sendBackEV3Exception(ev3e, sessionUUID);
             } catch (Exception ex) {
               logAndSendBackException(ex);
             }
@@ -117,7 +118,7 @@ public final class EV3ActionProcessor {
         processor.process(message, EV3ActionProcessor.this);
       }
     } catch (EV3Exception ev3e) {
-      sendBackEV3Exception(ev3e);
+      sendBackEV3Exception(ev3e, sessionUUID);
     } catch (Exception ex) {
       logAndSendBackException(ex);
     }
@@ -125,18 +126,12 @@ public final class EV3ActionProcessor {
 
   /**
    * Send a message to the browser.
+   * 
+   * @param sessionUUID The UUID of the session we want to sent the message, null in case of broadcast
    */
-  public void sendBackMessage(String message) {
+  void sendBackMessage(UUID sessionUUID, String message) {
     // Messages are pooled and sent-back asynchronously by the executor (see start())
-    messagesToSend.add(new Message(message));
-  }
-
-  /**
-   * Send back an UUID to the session.
-   */
-  public void sendSessionUUID(String sessionUUID) {
-    String msg = EV3MessageBuilder.buildSessionUUIDMessage(sessionUUID);
-    messagesToSend.add(new Message(sessionUUID, msg));
+    messagesToSend.add(new Message(sessionUUID, message));
   }
 
   void logAndSendBackException(Exception ex) {
@@ -145,9 +140,14 @@ public final class EV3ActionProcessor {
   }
 
   void sendBackEV3Exception(EV3Exception ex) {
-    LOGGER.fine("sendBackException(" + ex + ")");
+    sendBackEV3Exception(ex, null);
+  }
+
+  void sendBackEV3Exception(EV3Exception ex, UUID sessionUUID) {
+    LOGGER.fine("sendBackException(" + ex + ", " + sessionUUID + ")");
     try {
-      sendBackMessage(EV3MessageBuilder.buildEV3ExceptionMessage(ex));
+      UUID uuid = (ex.isNotifyOnlyCaller() ? sessionUUID : null);
+      sendBackMessage(uuid, EV3MessageBuilder.buildEV3ExceptionMessage(ex));
     } catch (IOException ignore) {
       LOGGER.log(Level.WARNING, "Error while sending an exception message to the browser", ignore);
     }
@@ -170,22 +170,18 @@ public final class EV3ActionProcessor {
   }
 
   /**
-   * Enable to store pending messages
+   * Used to store pending messages
    */
   static class Message {
-    private final String sessionUUID;
+    private final UUID sessionUUID;
     private final String content;
 
-    public Message(String content) {
-      this(null, content);
-    }
-
-    public Message(String sessionUUID, String content) {
+    public Message(UUID sessionUUID, String content) {
       this.sessionUUID = sessionUUID;
       this.content = content;
     }
 
-    public String getSessionUUID() {
+    public UUID getSessionUUID() {
       return sessionUUID;
     }
 

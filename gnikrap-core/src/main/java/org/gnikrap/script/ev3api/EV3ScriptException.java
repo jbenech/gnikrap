@@ -71,4 +71,8 @@ public class EV3ScriptException extends EV3Exception {
   public EV3ScriptException(String code, Map<String, String> params) {
     super(code, params);
   }
+
+  public EV3ScriptException(String code, Map<String, String> params, boolean notifyOnlyCaller) {
+    super(code, params, notifyOnlyCaller);
+  }
 }
