@@ -136,7 +136,7 @@
                 <form class="navbar-left" style="margin-right: 5px; max-width: 200px;" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
-                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'">
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
@@ -161,7 +161,7 @@
                 <form class="navbar-left" style="margin-right: 5px; max-width: 200px;" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
-                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'">
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
@@ -178,9 +178,9 @@
                       <polyline points="70,50 140,50 120,65 50,65" style="fill: #aaaaaa;"></polyline>
                       <polyline points="60,40 130,40 110,90 40,90" style="fill: #103BE7; fill-opacity: 0.9;"></polyline>
                       <polyline points="50,65 120,65 100,80 30,80" style="fill: #aaaaaa; fill-opacity: 0.6;"></polyline>
-                      <line x1="0" y1="65" x2="170" y2="65" style="stroke:#FF0000; stroke-width: 3;""></line>
+                      <line x1="0" y1="65" x2="170" y2="65" style="stroke:#FF0000; stroke-width: 3;"></line>
                       <text x="10" y="60" font-size="24" fill="#FF0000" stroke="#FF0000">X</text>
-                    <svg>
+                    </svg>
                   </div>
                   <div class="col-sm-9">
                     <span class="i18n text-info" data-i18n="gyroSensorTab.xAxis">X</span><br/>
@@ -195,7 +195,7 @@
                       <polyline points="75,40 110,50 60,80 25,70" style="fill: #aaaaaa; fill-opacity: 0.6;"></polyline>
                       <line x1="145" y1="29" x2="30" y2="98" style="stroke:#FF0000; stroke-width: 4;"></line>
                       <text x="10" y="108" font-size="24" fill="#FF0000" stroke="#FF0000">Y</text>
-                    <svg>
+                    </svg>
                   </div>
                   <div class="col-sm-9">
                     <span class="i18n text-info" data-i18n="gyroSensorTab.yAxis">Y</span><br/>
@@ -209,7 +209,7 @@
                       <polyline points="85,45 155,55 80,85 15,75" style="fill: #aaaaaa; fill-opacity: 0.6;"></polyline>
                       <line x1="87.5" y1="29" x2="87.5" y2="98" style="stroke:#FF0000; stroke-width: 4;"></line>
                       <text x="87.5" y="25" font-size="24" fill="#FF0000" stroke="#FF0000" style="text-anchor: middle">Z</text>
-                    <svg>
+                    </svg>
                   </div>
                   <div class="col-sm-9">
                     <p>
@@ -228,7 +228,7 @@
                 <form class="navbar-left" style="margin-right: 5px; max-width: 200px;" role="form" onsubmit="return false;">
                   <div class="input-group input-group-sm">
                     <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
-                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'"></input>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'">
                   </div>
                 </form>
                 <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
@@ -244,6 +244,72 @@
               </div>
               <!-- Webcam isn't displayed - Used only for acquisition -->
               <video id="xVideoSensorWebcam" width="640" height="480" style="display:none;"></video>
+            </div>
+
+            <!-- GPS sensor tab -->
+            <div role="tabpanel" id="gpsSensorTab" class="tab-pane">
+              <div class="nav navOnOneLine" style="margin-bottom: 5px"> <!-- Button bar -->
+                <form class="navbar-left" style="margin-right: 5px; max-width: 200px;" role="form" onsubmit="return false;">
+                  <div class="input-group input-group-sm">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-tag"></span></div>
+                    <input class="form-control" type="text" placeholder="Sensor identifier" data-bind="value: sensorName, valueUpdate: 'input'">
+                  </div>
+                </form>
+                <button class="btn btn-default btn-sm" data-bind="css: {active: isStarted}, click: onStart">
+                  <span class="i18n" data-i18n="gpsSensorTab.start">START</span></button>
+              </div>
+
+              <div> <!-- Nest a bootstrap grid inside <=> 12 columns available -->
+                <div class="row">
+                  <div class="col-sm-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="170" height="110">
+                      <circle cx="85" cy="55" r="40" style="fill:#103BE7"/>
+                      <line x1="20" y1="55" x2="150" y2="55" style="stroke:#FF0000; stroke-width: 3;"></line>
+                    </svg>
+                  </div>
+                  <div class="col-sm-9">
+                    <span class="i18n text-info" data-i18n="gpsSensorTab.latitude">X</span><br/>
+                    <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: latitude">{}</span></strong>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="170" height="110">
+                      <circle cx="85" cy="55" r="40" style="fill:#103BE7"/>
+                      <path d="M85,15 A30,50 0 0,1 85,95" style="stroke:#FF0000; stroke-width: 3; fill:none;"></path>
+                    </svg>
+                  </div>
+                  <div class="col-sm-9">
+                    <p>
+                      <span class="i18n text-info" data-i18n="gpsSensorTab.longitude">X</span><br/>
+                      <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: longitude">{}</span></strong>
+                    </p>
+                    <p><small><em>
+                      <span class="i18n text-info" data-i18n="gpsSensorTab.accuracy">X</span><br/>
+                      <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: accuracy">{}</span></strong>
+                    </em></small></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="170" height="110">
+                        <polygon points="40,90  70,40  100,90" style="fill:#aaaaaa;"></polygon>
+                        <polygon points="60,90  100,10  140,90" style="fill:#103BE7;"></polygon>
+                      <line x1="50" y1="30" x2="150" y2="30" style="stroke:#FF0000; stroke-width: 3;"></line>
+                    </svg>
+                  </div>
+                  <div class="col-sm-9">
+                    <p>
+                      <span class="i18n text-info" data-i18n="gpsSensorTab.altitude">X</span><br/>
+                      <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: altitude">{}</span></strong>
+                    </p>
+                    <p><small><em>
+                      <span class="i18n text-info" data-i18n="gpsSensorTab.altitudeAccuracy">X</span><br/>
+                      <span>&nbsp;</span><strong><span data-bind="visible: isStarted, text: altitudeAccuracy">{}</span></strong>
+                    </em></small></p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

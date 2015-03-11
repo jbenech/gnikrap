@@ -40,14 +40,21 @@ function NavigationBarViewModel(appContext) {
         tabId: "gyroSensorTab",
         active: ko.observable(false)
       });
-    } // else: Don't show Gyro, not supported by the browser
+    } // else: Don't show xGyro, not supported by the browser
     if(self.context.compatibility.isUserMediaSupported()) {
       self.workAreaItems.push({
         name: i18n.t("workArea.videoSensorTab"),
         tabId: "videoSensorTab",
         active: ko.observable(false)
       });
-    } // else: Video/WebCam not supported by the browser
+    } // else: Don't show xVideo, video/WebCam not supported by the browser
+    if(navigator.geolocation) {
+      self.workAreaItems.push({
+          name: i18n.t("workArea.gpsSensorTab"),
+          tabId: "gpsSensorTab",
+          active: ko.observable(false)
+      });
+    } // else: Don't show xGeo, GPS not supported by the browser
   }
 
   // Auto collapse navbar while collapse feature is enabled (screen width is < 768)
@@ -361,7 +368,6 @@ function GyroscopeSensorTabViewModel(appContext) {
   { // Init
     self.context = appContext; // The application context
     self.sensorName = ko.observable("xGyro");
-    self.calibrationMode = ko.observable(true);
     self.isStarted = ko.observable(false);
     self.axisOrientation = 0;
 
@@ -530,22 +536,130 @@ function GyroscopeSensorTabViewModel(appContext) {
     self.isStarted(!self.isStarted());
     if(self.isStarted()) {
       if (window.DeviceOrientationEvent) {
-        console.log("Register events...");
+        console.log("Register DeviceOrientationEvent...");
         self.__resetXValue();
         window.addEventListener('deviceorientation', self.deviceOrientationHandler, false);
         //window.addEventListener('devicemotion', self.deviceMotionHandler, false);
         self.__sendXValue();
       }
     } else {
-      console.log("Remove event listeners...");
-      window.removeEventListener('deviceorientation', self.deviceOrientationHandler, false);
-      //window.removeEventListener('devicemotion', self.deviceMotionHandler, false);
+      if (window.DeviceOrientationEvent) {
+        console.log("Remove DeviceOrientationEvent...");
+        window.removeEventListener('deviceorientation', self.deviceOrientationHandler, false);
+        //window.removeEventListener('devicemotion', self.deviceMotionHandler, false);
+      }
       self.__resetXValue();
       self.__sendXValue();
     }
   }
 }
 
+
+// Model to manage the GPS/Geo x-Sensor
+function GPSSensorTabViewModel(appContext) {
+  var self = this;
+  { // Init
+    self.context = appContext; // The application context
+    self.sensorName = ko.observable("xGeo");
+    self.isStarted = ko.observable(false);
+
+    self.latitude = ko.observable("");
+    self.longitude = ko.observable("");
+    self.accuracy =  ko.observable("");
+    self.altitude = ko.observable("");
+    self.altitudeAccuracy = ko.observable("");
+
+    // Is device orientation supported
+    if(!navigator.geolocation) {
+      // Should not be possible to be here if not allowed (should have already been checked while adding tabs)
+      console.log("Geolocation not supported !");
+    }
+  }
+
+  self.__resetXValue = function() {
+    // EV3 sensor values: angle ° and rate in °/s
+    self.xValue = {
+      isStarted: undefined, // will be defined just before sending
+      latitude: 0,
+      longitude: 0,
+      accuracy: 0,
+      
+      // Optional field (depends on the hardware/device capabilities)
+      altitude: 0,
+      altitudeAccuracy: 0
+    }
+  }
+
+  self.__sendXValue = function() {
+    self.xValue.isStarted = self.isStarted();
+    self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "GPS1", self.xValue);
+    // Also display value to GUI
+    self.latitude(self.xValue.latitude);
+    self.longitude(self.xValue.longitude);
+    self.accuracy(self.xValue.accuracy);
+    self.altitude(self.xValue.altitude);
+    self.altitudeAccuracy(self.xValue.altitudeAccuracy);
+  }
+  
+  self.watchPositionHandler = function(position) {
+    self.xValue.latitude = position.coords.latitude;
+    self.xValue.longitude = position.coords.longitude;
+    self.xValue.accuracy = position.coords.accuracy;
+    self.xValue.altitude = position.coords.altitude;
+    self.xValue.altitudeAccuracy = position.coords.altitudeAccuracy;
+    //self.xValue.heading = position.coords.heading; // Heading can be computer (or use the gyro compass)
+    //self.xValue.speed = position.coords.speed; // Speed can be computed
+    
+    self.__sendXValue();
+  }
+  
+  self.watchPositionErrorHandler = function(error) {
+    var errorMsg;
+    switch(error.code) {
+      case error.TIMEOUT:
+        errorMsg = i18n.t("gpsSensorTab.errors.timeout", {"detail": error.message });
+        break;
+      case error.PERMISSION_DENIED:
+        errorMsg = i18n.t("gpsSensorTab.errors.permissionDenied", {"detail": error.message });
+        break;
+      case error.POSITION_UNAVAILABLE:
+        errorMsg = i18n.t("gpsSensorTab.errors.positionUnavailable", {"detail": error.message });
+        break;
+      case error.UNKNOWN_ERROR:
+      default:
+        errorMsg = i18n.t("gpsSensorTab.errors.unknownError", {"detail": error.message });
+        break;
+    }
+    self.context.messageLogVM.addMessage(true, errorMsg);
+  }
+
+  self.onStart = function() {
+    self.isStarted(!self.isStarted());
+    if(self.isStarted()) {
+      if (navigator.geolocation) {
+        console.log("Register geolocation callback...");
+        self.__resetXValue();
+        var geo_options = { // TODO tune parameters
+          enableHighAccuracy: true, 
+          maximumAge: 30000, 
+          timeout: 27000
+        };
+        self.watchID = navigator.geolocation.watchPosition(self.watchPositionHandler, self.watchPositionErrorHandler, geo_options);
+        self.__sendXValue();
+      }
+    } else {
+      if (navigator.geolocation) {
+        console.log("Remove geolocation callback...");
+        if(self.watchID) {
+          navigator.geolocation.clearWatch(self.watchID);
+          self.watchID = undefined;
+        }
+      }
+      self.__resetXValue();
+      self.__sendXValue();
+    }
+  }
+}
 
 // A computation engine that is able to track points.
 // Current implements is largely inspired from the jsfeast "Lukas Kanade optical flow" sample
@@ -1378,6 +1492,7 @@ $(document).ready(function() {
     context.keyboardSensorTabVM = new KeyboardSensorTabViewModel(context);
     context.gyroscopeSensorTabVM = new GyroscopeSensorTabViewModel(context);
     context.videoSensorTabVM = new VideoSensorTabViewModel(context);
+    context.gpsSensorTabVM = new GPSSensorTabViewModel(context);
     // Dialogs
     context.manageScriptFilesVM = new ManageScriptFilesViewModel(context);
     context.settingsVM = new SettingsViewModel(context);
@@ -1390,6 +1505,7 @@ $(document).ready(function() {
     ko.applyBindings(context.keyboardSensorTabVM, $("#keyboardSensorTab")[0]);
     ko.applyBindings(context.gyroscopeSensorTabVM, $("#gyroSensorTab")[0]);
     ko.applyBindings(context.videoSensorTabVM, $("#videoSensorTab")[0]);
+    ko.applyBindings(context.gpsSensorTabVM, $("#gpsSensorTab")[0]);
     // Dialogs
     ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
     ko.applyBindings(context.settingsVM, $("#settingsModal")[0]);
@@ -1408,7 +1524,7 @@ $(document).ready(function() {
       context.messageLogVM.doResize(workAreaHeight, usefullWorkAreaHeight);
     };
     $(window).resize();
-    
+
     // Register windows events for keyboard shortcuts
     document.onkeydown = function(e) {
       if(e.ctrlKey) {
@@ -1421,8 +1537,6 @@ $(document).ready(function() {
       }
     };
     
-    console.log("UUID: " + generateUUID());
-
     // Register windows event to ask confirmation while the user leave the page (avoid loosing scripts)
     window.onbeforeunload = function () {
       //return "";

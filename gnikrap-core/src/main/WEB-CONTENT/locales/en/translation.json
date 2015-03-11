@@ -23,7 +23,8 @@
     "scriptEditorTab": "Script editor",
     "keyboardSensorTab": "xTouch",
     "videoSensorTab": "xVideo",
-    "gyroSensorTab": "xGyroscope"
+    "gyroSensorTab": "xGyroscope",
+    "gpsSensorTab": "xGeo"
   },
 
 
@@ -122,6 +123,24 @@
 
     "configureTrackedPointNameModal": {
       "title": "Enter the name of the object to track"
+    }
+  },
+  
+  
+  "gpsSensorTab": {
+    "start": "Start",
+
+    "latitude": "Latitude is the north-south position of a point on the Earth's surface (0° for equator, +90° for north pole, -90° for south pole).",
+    "longitude": "Longitude is the east-west position of a point on the Earth's surface (0° for Greenwich meridian).",
+    "accuracy": "The accuracy (in meter) of the latitude and longitude.",
+    "altitude": "The altitude (in metter) from the see level (Some devices don't support altitude, the value will always be 0).",
+    "altitudeAccuracy": "The accuracy (in meter) of the altitude (Some devices don't support altitude, the value will always be 0).",
+    
+    "errors": {
+      "timeout": "The geolocation is too slow (__detail__)",
+      "permissionDenied": "You should accept geolocation in order to have the xGeo sensor working (__detail__)",
+      "positionUnavailable": "There is an internal problem during the geolocation (__detail__)",
+      "unknownError": "Error while using the geolocation (__detail__)"
     }
   },
 
