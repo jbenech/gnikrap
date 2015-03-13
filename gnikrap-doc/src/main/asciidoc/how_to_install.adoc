@@ -17,7 +17,7 @@ Lejos installation::
 ** Either with bluetooth PAN, see http://sourceforge.net/p/lejos/wiki/Configuring%20Bluetooth%20PAN/[Pairing (from the PC)]
 
 Download gnikrap and other tools needed for the installation::
-. Download the Gnikrap distribution https://github.com/jbenech/gnikrap/releases/download/Gnikrap-0.2.0/gnikrap-core-0.2.0.zip[here]
+. Download the Gnikrap distribution https://github.com/jbenech/gnikrap/releases[here]
 . Donwload WinSCP http://winscp.net/eng/download.php[here] (the Portable distribution does it)
 . Download Putty http://the.earth.li/~sgtatham/putty/latest/x86/putty.zip[here]
 

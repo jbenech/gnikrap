@@ -50,8 +50,8 @@ function NavigationBarViewModel(appContext) {
     } // else: Don't show xVideo, video/WebCam not supported by the browser
     if(navigator.geolocation) {
       self.workAreaItems.push({
-          name: i18n.t("workArea.gpsSensorTab"),
-          tabId: "gpsSensorTab",
+          name: i18n.t("workArea.geoSensorTab"),
+          tabId: "geoSensorTab",
           active: ko.observable(false)
       });
     } // else: Don't show xGeo, GPS not supported by the browser
@@ -556,7 +556,7 @@ function GyroscopeSensorTabViewModel(appContext) {
 
 
 // Model to manage the GPS/Geo x-Sensor
-function GPSSensorTabViewModel(appContext) {
+function GeoSensorTabViewModel(appContext) {
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -592,7 +592,7 @@ function GPSSensorTabViewModel(appContext) {
 
   self.__sendXValue = function() {
     self.xValue.isStarted = self.isStarted();
-    self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "GPS1", self.xValue);
+    self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "Geo1", self.xValue);
     // Also display value to GUI
     self.latitude(self.xValue.latitude);
     self.longitude(self.xValue.longitude);
@@ -617,17 +617,17 @@ function GPSSensorTabViewModel(appContext) {
     var errorMsg;
     switch(error.code) {
       case error.TIMEOUT:
-        errorMsg = i18n.t("gpsSensorTab.errors.timeout", {"detail": error.message });
+        errorMsg = i18n.t("geoSensorTab.errors.timeout", {"detail": error.message });
         break;
       case error.PERMISSION_DENIED:
-        errorMsg = i18n.t("gpsSensorTab.errors.permissionDenied", {"detail": error.message });
+        errorMsg = i18n.t("geoSensorTab.errors.permissionDenied", {"detail": error.message });
         break;
       case error.POSITION_UNAVAILABLE:
-        errorMsg = i18n.t("gpsSensorTab.errors.positionUnavailable", {"detail": error.message });
+        errorMsg = i18n.t("geoSensorTab.errors.positionUnavailable", {"detail": error.message });
         break;
       case error.UNKNOWN_ERROR:
       default:
-        errorMsg = i18n.t("gpsSensorTab.errors.unknownError", {"detail": error.message });
+        errorMsg = i18n.t("geoSensorTab.errors.unknownError", {"detail": error.message });
         break;
     }
     self.context.messageLogVM.addMessage(true, errorMsg);
@@ -639,7 +639,7 @@ function GPSSensorTabViewModel(appContext) {
       if (navigator.geolocation) {
         console.log("Register geolocation callback...");
         self.__resetXValue();
-        var geo_options = { // TODO tune parameters
+        var geo_options = { // TODO tune parameters ?
           enableHighAccuracy: true, 
           maximumAge: 30000, 
           timeout: 27000
@@ -1492,7 +1492,7 @@ $(document).ready(function() {
     context.keyboardSensorTabVM = new KeyboardSensorTabViewModel(context);
     context.gyroscopeSensorTabVM = new GyroscopeSensorTabViewModel(context);
     context.videoSensorTabVM = new VideoSensorTabViewModel(context);
-    context.gpsSensorTabVM = new GPSSensorTabViewModel(context);
+    context.geoSensorTabVM = new GeoSensorTabViewModel(context);
     // Dialogs
     context.manageScriptFilesVM = new ManageScriptFilesViewModel(context);
     context.settingsVM = new SettingsViewModel(context);
@@ -1505,7 +1505,7 @@ $(document).ready(function() {
     ko.applyBindings(context.keyboardSensorTabVM, $("#keyboardSensorTab")[0]);
     ko.applyBindings(context.gyroscopeSensorTabVM, $("#gyroSensorTab")[0]);
     ko.applyBindings(context.videoSensorTabVM, $("#videoSensorTab")[0]);
-    ko.applyBindings(context.gpsSensorTabVM, $("#gpsSensorTab")[0]);
+    ko.applyBindings(context.geoSensorTabVM, $("#geoSensorTab")[0]);
     // Dialogs
     ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
     ko.applyBindings(context.settingsVM, $("#settingsModal")[0]);

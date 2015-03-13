@@ -17,7 +17,6 @@
  */
 package org.gnikrap.script.actions;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.gnikrap.ActionMessageProcessor;
@@ -28,25 +27,23 @@ import org.gnikrap.script.JsonMessageFields;
 import org.gnikrap.utils.LoggerUtils;
 
 /**
- * Shutdown the EV3 brick.
+ * Shutdown the Gnikrap JVM.
  */
-public class ShutdownBrick implements ActionMessageProcessor {
-  private static final Logger LOGGER = LoggerUtils.getLogger(ShutdownBrick.class);
+public class ShutdownGnikrap implements ActionMessageProcessor {
+  private static final Logger LOGGER = LoggerUtils.getLogger(ShutdownGnikrap.class);
 
   @Override
   public void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception {
-    LOGGER.info("ShudtownBrick request by the GUI");
+    LOGGER.info("ShudtownGnikrap request by the GUI");
 
-    try {
-      Runtime.getRuntime().exec("shutdown -h now"); // "init 0" in leJOS
-    } catch (IOException e) {
-      // Ignore
-    }
+    // Stop the script (in order to release HW resources) and then stop the JVM
+    context.getContext().stopScript();
+    System.exit(0);
   }
 
   @Override
   public String getName() {
-    return JsonMessageFields.ACTION_SHUTDOWN_BRICK;
+    return JsonMessageFields.ACTION_SHUTDOWN_GNIKRAP;
   }
 
   @Override

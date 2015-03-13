@@ -17,12 +17,16 @@
  */
 package org.gnikrap.script.ev3api.xsensors;
 
+/**
+ * The constants for parsing xSensors values
+ */
 public final class JSonXSensorMessageFields {
 
   // XSensor types
   public static final String XSENSOR_TYPE_XGYRO = "Gyr1";
   public static final String XSENSOR_TYPE_XTOUCH = "Tch1";
   public static final String XSENSOR_TYPE_XVIDEO = "Vid1";
+  public static final String XSENSOR_TYPE_XGEO = "Geo1";
 
   // Field(s) common to all XSensors
   public static final String IS_STARTED = "isStarted";
@@ -40,6 +44,13 @@ public final class JSonXSensorMessageFields {
   public static final String XVIDEO_OBJECTS = "objects";
   public static final String XVIDEO_OBJECT_X = "x";
   public static final String XVIDEO_OBJECT_Y = "y";
+
+  // Fields for xGeo
+  public static final String XGEO_LONGITUDE = "longitude";
+  public static final String XGEO_LATITUDE = "latitude";
+  public static final String XGEO_ACCURACY = "accuracy";
+  public static final String XGEO_ALTITUDE = "altitude";
+  public static final String XGEO_ALTITUDE_ACCURACY = "altitudeAccuracy";
 
   private JSonXSensorMessageFields() {
     // Avoid instanciation

@@ -24,7 +24,7 @@
     "keyboardSensorTab": "xTouch",
     "videoSensorTab": "xVideo",
     "gyroSensorTab": "xGyroscope",
-    "gpsSensorTab": "xGeo"
+    "geoSensorTab": "xGeo"
   },
 
 
@@ -127,7 +127,7 @@
   },
   
   
-  "gpsSensorTab": {
+  "geoSensorTab": {
     "start": "Start",
 
     "latitude": "Latitude is the north-south position of a point on the Earth's surface (0° for equator, +90° for north pole, -90° for south pole).",

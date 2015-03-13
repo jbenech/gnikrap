@@ -17,6 +17,7 @@
  */
 package org.gnikrap.utils;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -29,7 +30,6 @@ import com.eclipsesource.json.JsonObject;
  * Note: Not a "generic/powerful" object, only what has been needed has been put here.
  */
 public final class Configuration {
-
   private final JsonObject data;
 
   private Configuration(JsonObject data) {
@@ -63,6 +63,15 @@ public final class Configuration {
   public static Configuration load(Class<?> clazzToConfigure) throws IOException {
     String defaultConfigurationFile = System.getProperty("user.dir") + "/" + clazzToConfigure.getName() + ".config";
     String configurationFile = System.getProperty("configurationFile", defaultConfigurationFile);
+
+    // If the file don't exists and we are on the EV3, we are maybe launched as a submodule of EV3 menu => try a predefined place
+    if ((new File(configurationFile).exists() == false) && //
+        System.getProperty("os.arch", "-").equalsIgnoreCase("arm") && //
+        System.getProperty("os.name", "-").equalsIgnoreCase("Linux") && //
+        System.getProperty("java.runtime.name", "-").toLowerCase().contains("se embedded")) {
+      // Default configuration file on EV3
+      configurationFile = "/home/root/gnikrap/" + clazzToConfigure.getName() + ".config";
+    }
     try (Reader r = new FileReader(configurationFile)) {
       return new Configuration(JsonObject.readFrom(r));
     }

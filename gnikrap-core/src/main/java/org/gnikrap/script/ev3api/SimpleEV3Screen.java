@@ -44,6 +44,7 @@ final public class SimpleEV3Screen implements EV3Device {
 
   public SimpleEV3Screen(EV3ScriptContext sc) {
     graphicsLCD = BrickFinder.getLocal().getGraphicsLCD();
+    // BrickFinder.getDefault()
     setColor(COLOR_BLACK);
   }
 

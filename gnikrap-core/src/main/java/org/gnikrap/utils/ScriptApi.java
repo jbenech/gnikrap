@@ -31,4 +31,23 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.FIELD })
 public @interface ScriptApi {
 
+  /**
+   * The Gnikrap version where the API was added
+   */
+  String versionAdded() default "NA";
+
+  /**
+   * Is the API in incubating state (caould be change)
+   */
+  boolean isIncubating() default false;
+
+  /**
+   * Is the API deprecated ?
+   */
+  boolean isDeprecated() default false;
+
+  /**
+   * The Gnikrap version where the API has been deprecated
+   */
+  String deprecatedVersion() default "NA";
 }

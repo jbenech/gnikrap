@@ -19,6 +19,8 @@ package org.gnikrap.script;
 
 import java.util.concurrent.Future;
 
+import lejos.utility.Delay;
+
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
 import org.gnikrap.script.ev3api.xsensors.XSensor;
@@ -111,13 +113,6 @@ public final class EV3ScriptContext {
     return ev3;
   }
 
-  // /**
-  // * Return the object that enable to read external sensors values.
-  // */
-  // public XSensorManager getXSensors() {
-  // return xsensor;
-  // }
-
   /**
    * @return the XSensor with the given name.
    */
@@ -128,11 +123,11 @@ public final class EV3ScriptContext {
 
   /**
    * Stop the script.
-   * <p>
-   * Not a good implementation (Implementation with exception not good as they can be catch by the script)
    */
-  // @ScriptApi
+  @ScriptApi(versionAdded = "0.4.0", isIncubating = true)
   public void exit() {
+    // TODO: Implementation with exception is not safe because it can be caught by the script.
+    // The stopScript is not perfect too... / Maybe force the thread kill directly ?
     ctx.stopScript();
   }
 
@@ -153,15 +148,11 @@ public final class EV3ScriptContext {
   }
 
   /**
-   * Sleep for the given number of milliseconds
+   * Sleep for the given number of milliseconds.
    */
-  @ScriptApi
+  @ScriptApi()
   public void sleep(long ms) {
-    try {
-      Thread.sleep(ms);
-    } catch (InterruptedException e) {
-      // Ignore
-    }
+    Delay.msDelay(ms);
   }
 
   void releaseResources() {
