@@ -26,12 +26,15 @@ import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
 import org.gnikrap.script.ev3api.xsensors.XSensor;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
+import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.ScriptApi;
 
 /**
  * Enable to provide main entry point to access ev3 device to the script engine.
  */
 public final class EV3ScriptContext {
+
+  private final ApplicationContext context;
 
   private boolean running;
   private final SimpleEV3Button escape;
@@ -46,12 +49,13 @@ public final class EV3ScriptContext {
   private int confIsRunningWait = 0;
   private boolean confIsRunningCheckEscapeKey = true;
   private int confWaitingTimeBeforeHardKill = 5000;
-  private final ScriptExecutionManager ctx;
+  private final ScriptExecutionManager scriptExecutionMgr;
 
-  public EV3ScriptContext(SimpleEV3Brick ev3, ScriptExecutionManager ctx, XSensorManager xsensor) {
+  public EV3ScriptContext(ApplicationContext context, SimpleEV3Brick ev3, XSensorManager xsensor) {
+    this.context = context;
     this.ev3 = ev3;
-    this.ctx = ctx;
     this.xsensor = xsensor;
+    this.scriptExecutionMgr = context.getObject(ScriptExecutionManager.class);
     if (ev3 != null) {
       escape = ev3.getKeyboard().getEscape();
     } else {
@@ -74,7 +78,7 @@ public final class EV3ScriptContext {
 
   @ScriptApi
   public void notify(String message) {
-    ctx.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
+    scriptExecutionMgr.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
   }
 
   /**
@@ -128,7 +132,7 @@ public final class EV3ScriptContext {
   public void exit() {
     // TODO: Implementation with exception is not safe because it can be caught by the script.
     // The stopScript is not perfect too... / Maybe force the thread kill directly ?
-    ctx.stopScript();
+    scriptExecutionMgr.stopScript();
   }
 
   /**

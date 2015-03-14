@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,15 +28,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.gnikrap.script.EV3ActionProcessor;
-
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
 public final class JsonUtils {
 
-  private static final Logger LOGGER = LoggerUtils.getLogger(EV3ActionProcessor.class);
+  private static final Logger LOGGER = LoggerUtils.getLogger(JsonUtils.class);
 
   private JsonUtils() {
     // Avoid instantiation
@@ -87,7 +85,7 @@ public final class JsonUtils {
       return sw.toString();
     } catch (IOException ioe) {
       // StringWriter don't throw IOException
-      LOGGER.log(Level.WARNING, "Error writing Json", ioe);
+      LOGGER.log(Level.SEVERE, "Error writing Json", ioe);
       throw new RuntimeException(ioe);
     }
   }

@@ -26,7 +26,6 @@ import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
 
-import org.gnikrap.script.EV3ScriptContext;
 import org.gnikrap.utils.ScriptApi;
 
 /**
@@ -42,7 +41,7 @@ final public class SimpleEV3Screen implements EV3Device {
   private final GraphicsLCD graphicsLCD;
   private int color;
 
-  public SimpleEV3Screen(EV3ScriptContext sc) {
+  public SimpleEV3Screen() {
     graphicsLCD = BrickFinder.getLocal().getGraphicsLCD();
     // BrickFinder.getDefault()
     setColor(COLOR_BLACK);

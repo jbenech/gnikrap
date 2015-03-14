@@ -46,7 +46,7 @@ public class StopableExecutor implements Executor {
       if (worker != null) {
         stop();
       }
-      worker = new Thread(command);
+      worker = new Thread(command, "GnikrapJavascriptRunner");
       worker.start();
     } finally {
       mainLock.unlock();

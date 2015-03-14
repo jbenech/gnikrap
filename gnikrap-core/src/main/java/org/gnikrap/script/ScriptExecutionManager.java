@@ -31,6 +31,7 @@ import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
+import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 import org.gnikrap.utils.StopableExecutor;
@@ -40,6 +41,8 @@ import org.gnikrap.utils.StopableExecutor;
  */
 public class ScriptExecutionManager {
   private static final Logger LOGGER = LoggerUtils.getLogger(EV3SriptCommandSocketConnectionCallback.class);
+
+  private final ApplicationContext appContext;
 
   // The script context
   private EV3ScriptContext scriptContext;
@@ -51,8 +54,13 @@ public class ScriptExecutionManager {
 
   private EV3ActionProcessor actionProcessor;
 
-  public void setActionProcessor(EV3ActionProcessor actionProcessor) {
-    this.actionProcessor = actionProcessor;
+  public ScriptExecutionManager(ApplicationContext appContext) {
+    this.appContext = appContext;
+  }
+
+  public void start() {
+    // Finalize init
+    this.actionProcessor = appContext.getObject(EV3ActionProcessor.class);
   }
 
   public void reset() {
@@ -60,7 +68,7 @@ public class ScriptExecutionManager {
       scriptContext.releaseResources();
     } else {
       SimpleEV3Brick brick = buildNewEV3Brick();
-      scriptContext = new EV3ScriptContext(brick, this, new XSensorManager());
+      scriptContext = new EV3ScriptContext(appContext, brick, new XSensorManager());
       if (brick != null) {
         brick.setScriptContext(scriptContext);
       }
@@ -123,6 +131,9 @@ public class ScriptExecutionManager {
     actionProcessor.sendBackMessage(null, msg);
   }
 
+  /**
+   * Stop the script currently running
+   */
   public void stopScript() {
     long waitTime = 5000;
     if (scriptContext != null) {

@@ -44,12 +44,10 @@ Version history:
 Features to add (no specific order):
  - Add import/export feature (save all the data on the ev3 in one operation)
  - Add real time sensor probes
- - Add a packaging simple to use (eg. write the SD card and play)
  - Add port checking (auto detection for EV3 devices)
- - Add documentation to add other scripting language
- - Add exit script feature/function
+ - Add exit script (from the script) feature/function
  - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
- - Add API for other LEGO sensors (Gyro sensor, Ultrasonic sensor)
+ - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor)
  - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items)
 
  
@@ -59,7 +57,6 @@ Known defects:
  - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
- - (0.3.0 and following) - Script editor not really usable on Android without an external keyboard
 
 
 ------------------------------------------------------------------------------
@@ -67,6 +64,7 @@ Known defects:
 Work in progress:
  - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
  - Shutdown EV3 brick from the Gnikrap user interface
+ - Stop Gnikrap on the Brick (but not the brick) from the Gnikrap user interface
  - xGeo (gps) xSensor added
- - TODO: Exit Gnikrap from the Gnikrap user interface
- - Documentation updated (a lot of typo/errors fixed)
+ - Gnikrap can now be installed as a leJOS menu 'Tool' and/or 'Program' (Once installed, there is no more need of telnet/ssh to start/stop Gnikrap)
+ - Documentation updated (a lot of typo/errors fixed, links to youtube videos, etc.)

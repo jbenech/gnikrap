@@ -44,9 +44,9 @@ package org.gnikrap.script;
  * <ul>
  * <li>msgTyp: Fixed value: 'shutdownBrick'</li>
  * </ul>
- * <li>Shutdown Gnikrap message:</li>
+ * <li>Stop Gnikrap message:</li>
  * <ul>
- * <li>msgTyp: Fixed value: 'shutdownGnikrap'</li>
+ * <li>msgTyp: Fixed value: 'stopGnikrap'</li>
  * </ul>
  * </ul>
  * <p/>
@@ -93,7 +93,7 @@ public final class JsonMessageFields {
   public static final String ACTION_STOP_SCRIPT = "stopScript";
   public static final String ACTION_SET_XSENSOR_VALUE = "setXSnsValue";
   public static final String ACTION_SHUTDOWN_BRICK = "shutdownBrick";
-  public static final String ACTION_SHUTDOWN_GNIKRAP = "shutdownGnikrap";
+  public static final String ACTION_STOP_GNIKRAP = "stopGnikrap";
 
   // Messages sent by the EV3 to the browser
   /** Message type value: Exception */

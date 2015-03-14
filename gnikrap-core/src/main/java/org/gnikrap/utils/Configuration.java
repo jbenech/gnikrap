@@ -60,6 +60,11 @@ public final class Configuration {
     return data.getInt(path, defaultValue);
   }
 
+  @Override
+  public String toString() {
+    return "Configuration: " + data.toString();
+  }
+
   public static Configuration load(Class<?> clazzToConfigure) throws IOException {
     String defaultConfigurationFile = System.getProperty("user.dir") + "/" + clazzToConfigure.getName() + ".config";
     String configurationFile = System.getProperty("configurationFile", defaultConfigurationFile);

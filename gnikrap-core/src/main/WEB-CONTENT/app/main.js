@@ -97,6 +97,14 @@ function NavigationBarViewModel(appContext) {
     });
   }
   
+  self.onStopGnikrap = function() {
+    bootbox.confirm(i18n.t("navigationBar.confirmStopGnikrap.title"), function(result) {
+      if(result) {
+        self.context.ev3BrickServer.stopGnikrap();
+      }
+    });
+  }
+  
   self.onDisplaySettings = function() {
     self.context.settingsVM.display();
     self.__collapseNavbar();
@@ -1224,6 +1232,15 @@ function EV3BrickServer(appContext) {
     });
     if(self.__doWSSend(jsonMsg) == false) {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantDoSomethingEV3ConnectionNok", { "action": "shutdownBrick" }));
+    }
+  }
+  
+  self.stopGnikrap = function() {
+    var jsonMsg = JSON.stringify({
+        act: "stopGnikrap"
+    });
+    if(self.__doWSSend(jsonMsg) == false) {
+      self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantDoSomethingEV3ConnectionNok", { "action": "stopGnikrap" }));
     }
   }
 

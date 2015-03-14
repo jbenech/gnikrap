@@ -20,30 +20,42 @@ package org.gnikrap.script.actions;
 import java.util.logging.Logger;
 
 import org.gnikrap.ActionMessageProcessor;
+import org.gnikrap.GnikrapApp;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;
 import org.gnikrap.script.JsonMessageFields;
+import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.LoggerUtils;
 
 /**
- * Shutdown the Gnikrap JVM.
+ * Stop the Gnikrap application.
  */
-public class ShutdownGnikrap implements ActionMessageProcessor {
-  private static final Logger LOGGER = LoggerUtils.getLogger(ShutdownGnikrap.class);
+public class StopGnikrap implements ActionMessageProcessor {
+  private static final Logger LOGGER = LoggerUtils.getLogger(StopGnikrap.class);
+
+  private final ApplicationContext appContext;
+
+  public StopGnikrap(ApplicationContext appContext) {
+    this.appContext = appContext;
+  }
 
   @Override
   public void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception {
-    LOGGER.info("ShudtownGnikrap request by the GUI");
+    LOGGER.info("StopGnikrap application requested by the GUI");
 
-    // Stop the script (in order to release HW resources) and then stop the JVM
-    context.getContext().stopScript();
-    System.exit(0);
+    // Stop Gnikrap - Need to create a new Thread in order to avoid the action been stopped while stopping Gnikrap application.
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        appContext.getObject(GnikrapApp.class).stop();
+      }
+    }).run();
   }
 
   @Override
   public String getName() {
-    return JsonMessageFields.ACTION_SHUTDOWN_GNIKRAP;
+    return JsonMessageFields.ACTION_STOP_GNIKRAP;
   }
 
   @Override

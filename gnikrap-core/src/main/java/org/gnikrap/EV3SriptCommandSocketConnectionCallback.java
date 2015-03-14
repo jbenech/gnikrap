@@ -34,6 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.gnikrap.script.EV3ActionProcessor;
+import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.LoggerUtils;
 import org.xnio.ChannelListener;
 
@@ -48,8 +49,8 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
 
   private final EV3ActionProcessor ev3ActionProcessor;
 
-  public EV3SriptCommandSocketConnectionCallback(EV3ActionProcessor ev3ActionProcessor) {
-    this.ev3ActionProcessor = ev3ActionProcessor;
+  public EV3SriptCommandSocketConnectionCallback(ApplicationContext context) {
+    this.ev3ActionProcessor = context.getObject(EV3ActionProcessor.class);
   }
 
   @Override

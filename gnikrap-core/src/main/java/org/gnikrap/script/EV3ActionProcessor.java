@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 import org.gnikrap.ActionMessageProcessor;
 import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
 import org.gnikrap.script.ev3api.EV3ScriptException;
+import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 
@@ -44,20 +45,27 @@ public final class EV3ActionProcessor {
 
   private final Map<String, ActionMessageProcessor> actionMessageProcessorRepository = new HashMap<String, ActionMessageProcessor>();
   private EV3SriptCommandSocketConnectionCallback remoteWebSocketService;
-  private ScriptExecutionManager context;
+  private ScriptExecutionManager scriptExecutionContext;
 
   // private final ExecutorService executor = Executors.newSingleThreadExecutor();
   private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
   private final BlockingQueue<Message> messagesToSend = new LinkedBlockingQueue<Message>();
 
-  public EV3ActionProcessor() {
-    setContext(new ScriptExecutionManager());
+  private final ApplicationContext appContext;
+
+  public EV3ActionProcessor(ApplicationContext appContext) {
+    this.appContext = appContext;
   }
 
-  public void setContext(ScriptExecutionManager context) {
-    this.context = context;
-    if (context != null) {
-      this.context.setActionProcessor(this);
+  private void finalizeInit() {
+    scriptExecutionContext = appContext.getObject(ScriptExecutionManager.class);
+    if (scriptExecutionContext == null) {
+      throw new RuntimeException("Intialization problem, ScriptExecutionManager should have been initialized");
+    }
+
+    this.remoteWebSocketService = appContext.getObject(EV3SriptCommandSocketConnectionCallback.class);
+    if (remoteWebSocketService == null) {
+      throw new RuntimeException("Intialization problem, EV3SriptCommandSocketConnectionCallback should have been initialized");
     }
   }
 
@@ -65,6 +73,8 @@ public final class EV3ActionProcessor {
    * Start processing of tasks
    */
   public void start() {
+    finalizeInit();
+
     // Start the answer processor executor
     executor.scheduleAtFixedRate(new Runnable() {
       @Override
@@ -81,8 +91,11 @@ public final class EV3ActionProcessor {
     }, 500, 50, TimeUnit.MILLISECONDS); // Run each 50ms after 500ms initial waiting time
   }
 
-  public void setRemoteControlService(EV3SriptCommandSocketConnectionCallback remoteControlService) {
-    this.remoteWebSocketService = remoteControlService;
+  /**
+   * Stop the work in progress
+   */
+  public void stop() {
+    executor.shutdownNow();
   }
 
   /**
@@ -166,7 +179,7 @@ public final class EV3ActionProcessor {
   }
 
   public ScriptExecutionManager getContext() {
-    return context;
+    return scriptExecutionContext;
   }
 
   /**

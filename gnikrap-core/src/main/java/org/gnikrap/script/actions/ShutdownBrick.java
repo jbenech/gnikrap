@@ -35,7 +35,7 @@ public class ShutdownBrick implements ActionMessageProcessor {
 
   @Override
   public void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception {
-    LOGGER.info("ShudtownBrick request by the GUI");
+    LOGGER.info("ShudtownBrick requested by the GUI");
 
     try {
       Runtime.getRuntime().exec("shutdown -h now"); // "init 0" in leJOS

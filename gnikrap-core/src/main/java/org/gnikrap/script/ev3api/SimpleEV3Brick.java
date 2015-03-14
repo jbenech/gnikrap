@@ -35,7 +35,6 @@ import org.gnikrap.utils.ScriptApi;
  * This class act as a factory and is the main entry point to access to the EV3 devices.<br/>
  */
 public class SimpleEV3Brick {
-
   private final Map<String, EV3Device> devices = new HashMap<String, EV3Device>();
   private EV3ScriptContext sc;
 
@@ -82,7 +81,7 @@ public class SimpleEV3Brick {
     if (d != null) {
       return (SimpleEV3Screen) d;
     }
-    devices.put(EV3Constants.SCREEN_KEY, new SimpleEV3Screen(sc));
+    devices.put(EV3Constants.SCREEN_KEY, new SimpleEV3Screen());
     return getScreen();
   }
 
