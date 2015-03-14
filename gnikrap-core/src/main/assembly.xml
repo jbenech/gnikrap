@@ -7,14 +7,14 @@
 	<fileSets>
 		<fileSet>
 			<directory>src/main/scripts</directory>
-			<outputDirectory>bin</outputDirectory>
+			<outputDirectory>.</outputDirectory>
       <excludes>
         <exclude>*.sh</exclude>
       </excludes>
 		</fileSet>
 		<fileSet>
 			<directory>src/main/scripts</directory>
-			<outputDirectory>bin</outputDirectory>
+			<outputDirectory>.</outputDirectory>
       <includes>
         <include>*.sh</include>
       </includes>
@@ -27,10 +27,21 @@
 			<outputDirectory>WEB-CONTENT</outputDirectory>
 		</fileSet>
 	</fileSets>
+  <files>
+    <file>
+      <source>${project.build.directory}/${gnikrap.uberjar}.jar</source>
+      <outputDirectory>lib</outputDirectory>
+    </file>
+  </files>
 
   <dependencySets>
+    <!-- Keep only what is not included in the uber-jar -->
     <dependencySet>
       <outputDirectory>lib</outputDirectory>
+      <includes>
+        <include>lejos:*</include>
+        <include>org.freedesktop.dbus:*</include>
+      </includes>
     </dependencySet>
   </dependencySets>
   

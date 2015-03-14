@@ -38,6 +38,7 @@ public class FutureJsonToXGeoValue extends AbstractFutureJsonToXSensorValue {
 
   public static final class XGeoValue extends XSensorValue {
 
+    private final long timestamp;
     private final double latitude;
     private final double longitude;
     private final double accuracy;
@@ -46,11 +47,17 @@ public class FutureJsonToXGeoValue extends AbstractFutureJsonToXSensorValue {
 
     XGeoValue(JsonObject raw) {
       super(raw.get(JSonXSensorMessageFields.IS_STARTED).asBoolean());
+      timestamp = raw.getLong(JSonXSensorMessageFields.XGEO_TIMESTAMP, 0);
       latitude = raw.getDouble(JSonXSensorMessageFields.XGEO_LATITUDE, 0);
       longitude = raw.getDouble(JSonXSensorMessageFields.XGEO_LONGITUDE, 0);
       accuracy = raw.getDouble(JSonXSensorMessageFields.XGEO_ACCURACY, 0);
       altitude = raw.getDouble(JSonXSensorMessageFields.XGEO_ALTITUDE, 0);
       altitudeAccuracy = raw.getDouble(JSonXSensorMessageFields.XGEO_ALTITUDE_ACCURACY, 0);
+    }
+
+    @ScriptApi(versionAdded = "0.4.0")
+    public long getTimestamp() {
+      return timestamp;
     }
 
     @ScriptApi(versionAdded = "0.4.0")
@@ -80,7 +87,7 @@ public class FutureJsonToXGeoValue extends AbstractFutureJsonToXSensorValue {
 
     @Override
     public String toString() {
-      return "{isStarted: " + isStarted() + //
+      return "{isStarted: " + isStarted() + ", timestamp: " + timestamp + //
           ", latitude: " + getLatitude() + ", longitude: " + getLongitude() + ", accuracy: " + getAccuracy() + //
           ", altitude: " + getAltitude() + ", altitudeAccuracy: " + getAltitudeAccuracy() + "}";
     }

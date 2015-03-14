@@ -46,8 +46,9 @@ public final class JSonXSensorMessageFields {
   public static final String XVIDEO_OBJECT_Y = "y";
 
   // Fields for xGeo
-  public static final String XGEO_LONGITUDE = "longitude";
+  public static final String XGEO_TIMESTAMP = "timestamp";
   public static final String XGEO_LATITUDE = "latitude";
+  public static final String XGEO_LONGITUDE = "longitude";
   public static final String XGEO_ACCURACY = "accuracy";
   public static final String XGEO_ALTITUDE = "altitude";
   public static final String XGEO_ALTITUDE_ACCURACY = "altitudeAccuracy";

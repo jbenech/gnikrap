@@ -563,6 +563,7 @@ function GeoSensorTabViewModel(appContext) {
     self.sensorName = ko.observable("xGeo");
     self.isStarted = ko.observable(false);
 
+    self.timestamp = ko.observable("");
     self.latitude = ko.observable("");
     self.longitude = ko.observable("");
     self.accuracy =  ko.observable("");
@@ -580,6 +581,7 @@ function GeoSensorTabViewModel(appContext) {
     // EV3 sensor values: angle ° and rate in °/s
     self.xValue = {
       isStarted: undefined, // will be defined just before sending
+      timestamp: 0,
       latitude: 0,
       longitude: 0,
       accuracy: 0,
@@ -594,6 +596,7 @@ function GeoSensorTabViewModel(appContext) {
     self.xValue.isStarted = self.isStarted();
     self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "Geo1", self.xValue);
     // Also display value to GUI
+    self.timestamp(self.xValue.timestamp);
     self.latitude(self.xValue.latitude);
     self.longitude(self.xValue.longitude);
     self.accuracy(self.xValue.accuracy);
@@ -602,12 +605,14 @@ function GeoSensorTabViewModel(appContext) {
   }
   
   self.watchPositionHandler = function(position) {
+    self.xValue.timestamp = position.timestamp;
+    console.log("timestamp: " + position.timestamp);
     self.xValue.latitude = position.coords.latitude;
     self.xValue.longitude = position.coords.longitude;
     self.xValue.accuracy = position.coords.accuracy;
     self.xValue.altitude = position.coords.altitude;
     self.xValue.altitudeAccuracy = position.coords.altitudeAccuracy;
-    //self.xValue.heading = position.coords.heading; // Heading can be computer (or use the gyro compass)
+    //self.xValue.heading = position.coords.heading; // Heading can be computed (or use the gyro compass)
     //self.xValue.speed = position.coords.speed; // Speed can be computed
     
     self.__sendXValue();
