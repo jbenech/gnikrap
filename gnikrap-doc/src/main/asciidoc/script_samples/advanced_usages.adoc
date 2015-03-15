@@ -59,13 +59,3 @@ have the libraries available.
 
 You can now use the libs as described below.
 ====
-
-
-==== Use another scripting language
-
-[NOTE]
-====
-It is also feasible to use other scripting language available on the JVM. A list of some scripting 
-language available on the JVM can be found http://en.wikipedia.org/wiki/List_of_JVM_languages[here].
-====
-

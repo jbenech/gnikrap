@@ -1,6 +1,6 @@
 ==== A robot controlled with the xGyro sensor
 
-video::IDihLF-AEEY[youtube]
+See the video of this sample: https://www.youtube.com/watch?feature=player_embedded&v=IDihLF-AEEY[Gnikrap xSensor: 2 axis Gyroscope for Lego Mindstorm EV3]
 
 
 The aim of this sample is to pilot a robot with the gyroscope of a device.

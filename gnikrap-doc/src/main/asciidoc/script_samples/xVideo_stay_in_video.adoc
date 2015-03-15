@@ -1,6 +1,6 @@
 === A robot that stay in the video
 
-video::skdaGRvRs_4[youtube]
+See the video of this sample: https://www.youtube.com/watch?feature=player_embedded&v=skdaGRvRs_4[Gnikrap xSensor: Webcam for Lego Mindstorm EV3]
 
 
 The aim of this robot is to have robot that stay in the video acquired by your webcam (that is connected/embedded to your laptop or tablet).

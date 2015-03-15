@@ -8,7 +8,9 @@
 | <<The ev3 object>>      | All samples.
 | <<The Brick object>>    | All samples.
 | <<The Motor object>>    | All samples.
-| <<The IR (Infra-Red) sensor object>> | <<A robot controlled with the remote beacon>>
+| <<The IR (Infra-Red) sensor object>> | <<A robot controlled with the remote beacon>>, + 
+On Youtube: https://www.youtube.com/watch?feature=player_embedded&v=NE7edagobj8[Gnikrap introduction to EV3 programming with Javascript]
+| <<The Touch sensor object>> | On Youtube: https://www.youtube.com/watch?feature=player_embedded&v=NE7edagobj8[Gnikrap introduction to EV3 programming with Javascript]
 | <<The xGyro XSensor>>   | <<A robot controlled with the xGyro sensor>>
 | <<The xTouch XSensor>>  | <<A robot controlled with the xTouch sensor>>
 | <<The xVideo XSensor>>  | <<A robot that stay in the video>>

@@ -9,7 +9,7 @@
 Gnikrap documentation
 =====================
 Jean Bénech <jbenech at free dot fr>
-v0.3.0 (c) 2014-2015
+v0.4.0 (c) 2014-2015
 
 A javascript development environment simple to use and powerfull for http://mindstroms.lego.com[Lego Mindstrom EV3]
 
@@ -20,8 +20,6 @@ include::about.adoc[]
 include::how_to_install.adoc[]
 
 include::overview.adoc[]
-
-include::user_manual.adoc[]
 
 include::script_api.adoc[]
 

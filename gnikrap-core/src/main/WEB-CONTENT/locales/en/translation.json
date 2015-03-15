@@ -8,12 +8,17 @@
       "about": "About...",
       "fullScreen": "Toggle full screen",
       "shutdownBrick": "Shutdown the EV3 brick...",
+      "stopGnikrap": "Stop Gnikrap on the EV3 brick...",
       "settings": "Settings...",
       "documentation": "Documentation..."
     },
     
     "confirmShutdownBrickModal": {
-      "title": "Are you sure you want to shutdown the EV3 brick ?"
+      "title": "Shutdown the EV3 brick (the brick will be off) ? ('Yes' to shutdown, 'No' to do nothing)"
+    },
+
+    "confirmStopGnikrap": {
+      "title": "Stop Gnikrap on the EV3 brick (the brick will remains on) ? ('Yes' to stop, 'No' to do nothing)"
     }
   },
 
@@ -135,6 +140,7 @@
     "accuracy": "The accuracy (in meter) of the latitude and longitude.",
     "altitude": "The altitude (in metter) from the see level (Some devices don't support altitude, the value will always be 0).",
     "altitudeAccuracy": "The accuracy (in meter) of the altitude (Some devices don't support altitude, the value will always be 0).",
+    "timestamp": "The timestamp (date and time) where the geolocation has been done.",
     
     "errors": {
       "timeout": "The geolocation is too slow (__detail__)",
@@ -217,7 +223,8 @@
     "softwareUsed": "This software has been made possible by using several open-source software:",
     "gnikrapLicence": "Licence (full text of the <a href=\"licence-lgpl-3.0.txt\" target=\"_blank\">GPL v3</a> licence):",
     "gplV3Notice": [
-      "Gnikrap is a simple to use but powerfull javascript development environment for the Lego Mindstrom EV3",
+      "Gnikrap is a simple to use but powerfull javascript development ",
+      "environment for the Lego Mindstrom EV3",
       "Copyright (C) 2014-2015 Jean BENECH",
       "",
       "This program is free software: you can redistribute it and/or modify",

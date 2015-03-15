@@ -14,8 +14,8 @@ Gnikrap changelog is available [here](gnikrap-core/src/main/scripts/history.txt)
 #### Contributing
 
 You can contribute to Gnikrap in several way:
-* Fixing or adding new translation, you can have a look to the files [here](gnikrap-core/src/main/WEB-CONTENT/locales). +
-  There is basically a file 'translation.json' which contains all the translation for one language. This files has to be put +
+* Fixing or adding new translation, you can have a look to the files [here](gnikrap-core/src/main/WEB-CONTENT/locales).   
+  There is basically a file 'translation.json' which contains all the translation for one language. This files has to be put 
   in a folder with the language code (eg. 'en' for english, 'fr' for french, 'es' fos spanish, 'zh' for chinese, ...).
 * Fixing or adding some documentation, you can have a look to the files [here](gnikrap-doc/src/main/asciidoc).
 * Hacking the code, see details on compiling below.
@@ -23,6 +23,7 @@ You can contribute to Gnikrap in several way:
 ##### Compiling gnikrap
 
 In order to compile Gnikrap, you will need: a JRE (1.7+) and Maven (3+).
+
 In the dependencies, the leJOS library need to be pushed manually to your local repository (currently not available on public repositories): 
 
 ```XML

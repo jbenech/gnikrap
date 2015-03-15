@@ -35,8 +35,8 @@ import org.gnikrap.utils.ScriptApi;
  */
 final public class SimpleEV3Screen implements EV3Device {
 
-  public static final int COLOR_BLACK = 0x000000;
-  public static final int COLOR_WHITE = 0xFFFFFF;
+  public static final int COLOR_BLACK = GraphicsLCD.BLACK; // 0x000000;
+  public static final int COLOR_WHITE = GraphicsLCD.WHITE; // 0xFFFFFF;
 
   private final GraphicsLCD graphicsLCD;
   private int color;
@@ -88,11 +88,11 @@ final public class SimpleEV3Screen implements EV3Device {
   /**
    * @param size available size: [S, M, L] for [Small, Medium, Large]. Default size is 'M'
    */
-  public void setFont(char c) {
+  public void setFont(String size) {
     Font font;
-    if (c == 'S') {
+    if ("S".equalsIgnoreCase(size)) {
       font = Font.getSmallFont();
-    } else if (c == 'L') {
+    } else if ("L".equalsIgnoreCase(size)) {
       font = Font.getLargeFont();
     } else {
       font = Font.getDefaultFont();
@@ -115,6 +115,7 @@ final public class SimpleEV3Screen implements EV3Device {
   /**
    * Draw the given string at the given x and x (x and y are expressed as characters and not pixel)
    */
+  @ScriptApi(versionAdded = "0.4.0")
   public void drawText(Object txt, int x, int y) {
     drawText(txt, x, y, false);
   }
@@ -128,23 +129,28 @@ final public class SimpleEV3Screen implements EV3Device {
     }
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void drawLine(int x1, int y1, int x2, int y2) {
     graphicsLCD.drawLine(x1, y1, x2, y2);
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void drawRectangle(int x, int y, int width, int height) {
     graphicsLCD.drawRect(x, y, width, height);
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void fillRectangle(int x, int y, int width, int height) {
     graphicsLCD.fillRect(x, y, width, height);
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void drawCircle(int x, int y, int r) {
     int d = 2 * r;
     graphicsLCD.drawArc(x - r, y - r, d, d, 0, 360);
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void fillCircle(int x, int y, int r) {
     int d = 2 * r;
     graphicsLCD.fillArc(x - r, y - r, d, d, 0, 360);
@@ -154,10 +160,12 @@ final public class SimpleEV3Screen implements EV3Device {
     graphicsLCD.setPixel(x, y, color);
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
     graphicsLCD.drawArc(x, y, width, height, startAngle, arcAngle);
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
     graphicsLCD.fillArc(x, y, width, height, startAngle, arcAngle);
   }

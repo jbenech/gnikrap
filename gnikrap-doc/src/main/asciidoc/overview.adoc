@@ -1,8 +1,6 @@
 == Quick overview
 
-You can first have a look to video that introduce the main concept of Gnikrap:
-
-video::NE7edagobj8[youtube]
+You can first have a look to video that introduce the main concept of Gnikrap: https://www.youtube.com/watch?feature=player_embedded&v=NE7edagobj8[Gnikrap introduction to EV3 programming with Javascript]
 
 
 The main screen of Gnikrap is divided in 3 main areas:
@@ -21,4 +19,4 @@ image::Gnikrap_MainScreenArea.png[Main screen areas]
 . The notification area contains all the notification from Gnikrap (start/stop program, errors, etc.) and also the notifications of your program.
 
 
-Here 
+Here TODO - finish this section

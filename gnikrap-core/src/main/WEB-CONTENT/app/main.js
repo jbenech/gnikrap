@@ -604,7 +604,7 @@ function GeoSensorTabViewModel(appContext) {
     self.xValue.isStarted = self.isStarted();
     self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "Geo1", self.xValue);
     // Also display value to GUI
-    self.timestamp(self.xValue.timestamp);
+    self.timestamp(self.xValue.timestamp + (self.xValue.timestamp != 0 ? " - " + new Date(self.xValue.timestamp).toLocaleString() : ""));
     self.latitude(self.xValue.latitude);
     self.longitude(self.xValue.longitude);
     self.accuracy(self.xValue.accuracy);
@@ -614,7 +614,6 @@ function GeoSensorTabViewModel(appContext) {
   
   self.watchPositionHandler = function(position) {
     self.xValue.timestamp = position.timestamp;
-    console.log("timestamp: " + position.timestamp);
     self.xValue.latitude = position.coords.latitude;
     self.xValue.longitude = position.coords.longitude;
     self.xValue.accuracy = position.coords.accuracy;

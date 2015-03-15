@@ -179,6 +179,31 @@ ev3.notify("Voltage: " + battery.getVoltageMilliVolt());
 */
 
 
+// ////////////////////////////////////////////////////////////////////////////
+// Screen API
+
+/*
+// Screen API
+var screen = ev3.getBrick().getScreen();
+
+screen.clear();
+
+screen.drawText("Hello world !", 0, 0);
+
+screen.drawLine(5, 20, 120, 20);
+
+screen.drawRectangle(10, 30, 20, 30);
+screen.fillRectangle(40, 30, 30, 20);
+
+screen.drawCircle(90, 40, 15);
+screen.fillCircle(130, 40, 15);
+
+screen.drawArc(10, 70, 20, 30, 0, 180);
+screen.fillArc(10, 70, 20, 30, 180, 180);
+
+
+ev3.sleep(5000);
+*/
 
 // ////////////////////////////////////////////////////////////////////////////
 // xTouch XSensor

@@ -820,6 +820,51 @@ while(ev3.isOk()) {
 ----
 
 
+==== The xGeo XSensor
+
+The aim of the xGeo sensor is to provide an access to the GPX sensor of a tablet or a smartphone. The EV3 brick can use in real-time the information for the latitude, longitude and altitude.
+
+image::xsensor/xGeo_001_running.png[xGeo, 640, 400, align="center"]
+
+In the screen, you can:
+
+* Set the sensor name (in our example: "xGeo").
+* Start the xGeo sensor.
+
+
+****
+isStarted():: Returns `true` if the XSensor is started, `false` otherwise.
+
+getTimestamp():: Returns the timestamp where the GPS coordinate has been acquired.
+
+getLatitude():: Returns the latitude.
+
+getLongitude():: Returns the longitude.
+
+getAccuracy():: Returns the accuracy (in meter) of the latitude and longitude.
+
+getAltitude():: Returns the altitude (in meter). +
+                _Note_: Some devices don't support altitude (the value will always be 0).
+                
+getAltitudeAccuracy():: Returns the accuracy (in meter) of the altitude. +
+                        _Note_: Some devices don't support altitude (the value will always be 0).
+****
+
+
+Sample script with xGeo XSensor:
+[source,javascript]
+----
+TODO
+----
+
+
+[NOTE]
+====
+The GPS coordinate are currently requested to be acquired every 30 seconds. +
+_Note:_ This parameter could be make configurable in a future version of Gnikrap.
+====
+
+
 ==== Advanced usage
 
 You can use several xSensor at the same time. Theses sensors can be on the same device or on several devices.
