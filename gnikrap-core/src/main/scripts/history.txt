@@ -54,7 +54,6 @@ Features to add (no specific order):
 ------------------------------------------------------------------------------
 
 Known defects:
- - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
 
@@ -64,7 +63,8 @@ Known defects:
 Work in progress:
  - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
  - Shutdown EV3 brick from the Gnikrap user interface
- - Stop Gnikrap on the Brick (but not the brick) from the Gnikrap user interface
- - xGeo (gps) xSensor added
+ - Stop Gnikrap on the Brick (<=> return to leJOS menu) from the Gnikrap user interface
  - Gnikrap can now be installed as a leJOS menu 'Tool' and/or 'Program' (Once installed, there is no more need of telnet/ssh to start/stop Gnikrap)
+ - xGeo (gps) xSensor added
+ - API added for EV3 brick screen
  - Documentation updated (a lot of typo/errors fixed, links to youtube videos, etc.)

@@ -43,13 +43,18 @@ final public class SimpleEV3Screen implements EV3Device {
 
   public SimpleEV3Screen() {
     graphicsLCD = BrickFinder.getLocal().getGraphicsLCD();
-    // BrickFinder.getDefault()
+    resetToDefault();
+  }
+
+  private void resetToDefault() {
     setColor(COLOR_BLACK);
+    setFont("M");
   }
 
   @Override
   public void release() {
-    graphicsLCD.clear(); // TODO confirm that clear at exit is ok ?
+    graphicsLCD.clear();
+    resetToDefault();
   }
 
   /**
@@ -63,7 +68,7 @@ final public class SimpleEV3Screen implements EV3Device {
   /**
    * @return The width of the screen in pixel
    */
-  // To be tested
+  @ScriptApi(versionAdded = "0.4.0")
   public int getWidth() {
     return graphicsLCD.getWidth();
   }
@@ -71,7 +76,7 @@ final public class SimpleEV3Screen implements EV3Device {
   /**
    * @return The height of the screen in pixel
    */
-  // To be tested
+  @ScriptApi(versionAdded = "0.4.0")
   public int getHeight() {
     return graphicsLCD.getHeight();
   }
@@ -79,7 +84,7 @@ final public class SimpleEV3Screen implements EV3Device {
   /**
    * @return the height of the font in pixel, 0 if not font is currently set.
    */
-  // To be tested
+  @ScriptApi(versionAdded = "0.4.0")
   public int getFontHeight() {
     Font f = graphicsLCD.getFont();
     return (f != null ? f.getHeight() : 0);
@@ -88,6 +93,7 @@ final public class SimpleEV3Screen implements EV3Device {
   /**
    * @param size available size: [S, M, L] for [Small, Medium, Large]. Default size is 'M'
    */
+  @ScriptApi(versionAdded = "0.4.0")
   public void setFont(String size) {
     Font font;
     if ("S".equalsIgnoreCase(size)) {
@@ -113,13 +119,14 @@ final public class SimpleEV3Screen implements EV3Device {
   }
 
   /**
-   * Draw the given string at the given x and x (x and y are expressed as characters and not pixel)
+   * Draw the given string at the given x and x
    */
   @ScriptApi(versionAdded = "0.4.0")
   public void drawText(Object txt, int x, int y) {
     drawText(txt, x, y, false);
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void drawText(Object txt, int x, int y, boolean inverted) {
     String textToDraw = String.valueOf(txt);
     if (inverted) {
@@ -157,6 +164,7 @@ final public class SimpleEV3Screen implements EV3Device {
   }
 
   public void drawPoint(int x, int y) {
+    // Don't work ?
     graphicsLCD.setPixel(x, y, color);
   }
 
@@ -188,10 +196,19 @@ final public class SimpleEV3Screen implements EV3Device {
     try (FileInputStream fis = new FileInputStream(name)) {
       DataInputStream in = new DataInputStream(fis);
       int w = in.readUnsignedByte();
-      int h = in.readUnsignedByte();
+      int height = in.readUnsignedByte();
 
-      byte[] ev3ImageData = new byte[w * ((h + 7) / 8)];
-      byte[] line = new byte[w / 8];
+      byte[] ev3ImageData = new byte[w * ((height + 7) / 8)];
+      byte[] line = new byte[(w + 7) / 8]; // Want a full number of bytes
+      for (int l = 0; l < height; l++) {
+        if (in.read(line) != line.length) {
+          // TODO - Problem...
+        }
+        for (int b = line.length; b > 0; b--) {
+
+        }
+      }
+
       // in.readFully(imageData);
 
       // return SimpleEV3Image(new Image(w, h, ev3ImageData));

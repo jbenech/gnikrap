@@ -30,11 +30,10 @@ import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.ScriptApi;
 
 /**
- * Enable to provide main entry point to access ev3 device to the script engine.
+ * Enable to provide main entry point to access ev3 device to the script engine.<br/>
+ * Within the script, the object {@code ev3} is in fact an instance of this object.
  */
 public final class EV3ScriptContext {
-
-  private final ApplicationContext context;
 
   private boolean running;
   private final SimpleEV3Button escape;
@@ -52,7 +51,6 @@ public final class EV3ScriptContext {
   private final ScriptExecutionManager scriptExecutionMgr;
 
   public EV3ScriptContext(ApplicationContext context, SimpleEV3Brick ev3, XSensorManager xsensor) {
-    this.context = context;
     this.ev3 = ev3;
     this.xsensor = xsensor;
     this.scriptExecutionMgr = context.getObject(ScriptExecutionManager.class);
@@ -128,7 +126,7 @@ public final class EV3ScriptContext {
   /**
    * Stop the script.
    */
-  @ScriptApi(versionAdded = "0.4.0", isIncubating = true)
+  @ScriptApi(isIncubating = true)
   public void exit() {
     // TODO: Implementation with exception is not safe because it can be caught by the script.
     // The stopScript is not perfect too... / Maybe force the thread kill directly ?
@@ -154,8 +152,9 @@ public final class EV3ScriptContext {
   /**
    * Sleep for the given number of milliseconds.
    */
-  @ScriptApi()
+  @ScriptApi
   public void sleep(long ms) {
+    // TODO: Is it better sleep of delay ? maybe both are needed ?
     Delay.msDelay(ms);
   }
 

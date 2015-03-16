@@ -31,6 +31,7 @@ import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
+import org.gnikrap.script.ev3menu.WelcomeMenu;
 import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
@@ -42,17 +43,19 @@ import org.gnikrap.utils.StopableExecutor;
 public class ScriptExecutionManager {
   private static final Logger LOGGER = LoggerUtils.getLogger(EV3SriptCommandSocketConnectionCallback.class);
 
+  // The application context
   private final ApplicationContext appContext;
-
-  // The script context
-  private EV3ScriptContext scriptContext;
-
+  // The JMV script engine
   private final ScriptEngineManager scriptEngineFactory = new ScriptEngineManager();
   // private final ExecutorService scriptProcessor = Executors.newSingleThreadExecutor();
   private final StopableExecutor scriptExecutor = new StopableExecutor();
-  private Future<?> scriptResult;
 
   private EV3ActionProcessor actionProcessor;
+
+  // The script context
+  private EV3ScriptContext scriptContext;
+  private Future<?> scriptResult;
+  private WelcomeMenu menu;
 
   public ScriptExecutionManager(ApplicationContext appContext) {
     this.appContext = appContext;
@@ -61,17 +64,27 @@ public class ScriptExecutionManager {
   public void start() {
     // Finalize init
     this.actionProcessor = appContext.getObject(EV3ActionProcessor.class);
+    reset(true);
   }
 
-  public void reset() {
+  public void reset(boolean displayMenu) {
+    if ((menu != null) && (displayMenu == false)) {
+      menu.stop(); // Need to be done before releaseResources to avoid re-allocating resources just released !
+    }
+
     if (scriptContext != null) {
       scriptContext.releaseResources();
     } else {
       SimpleEV3Brick brick = buildNewEV3Brick();
       scriptContext = new EV3ScriptContext(appContext, brick, new XSensorManager());
-      if (brick != null) {
+      if (brick != null) { // In case of FakeEV3
         brick.setScriptContext(scriptContext);
+        menu = new WelcomeMenu(appContext, brick);
       }
+    }
+
+    if ((menu != null) && displayMenu) {
+      menu.start();
     }
   }
 
@@ -92,7 +105,7 @@ public class ScriptExecutionManager {
         throw new EV3ScriptException(EV3ScriptException.SCRIPT_ALREADY_RUNNING, Collections.<String, String> emptyMap(), true);
       }
     }
-    reset();
+    reset(false);
 
     Runnable scriptTask = new Runnable() {
       @Override
@@ -114,7 +127,7 @@ public class ScriptExecutionManager {
             throw new EV3ScriptException(EV3ScriptException.UNEXPECTED_ERROR, MapBuilder.buildHashMap("error", ex1.toString()).build());
           } finally {
             try {
-              reset();
+              reset(true);
             } catch (Exception ex) {
               LOGGER.log(Level.WARNING, "Exception ignored", ex);
             }
@@ -171,7 +184,7 @@ public class ScriptExecutionManager {
 
     scriptResult = null;
     // Script ended, release all the hardware resources
-    reset();
+    reset(true);
   }
 
   public void setXSensorFutureValue(String sensorName, Future<XSensorValue> value) {

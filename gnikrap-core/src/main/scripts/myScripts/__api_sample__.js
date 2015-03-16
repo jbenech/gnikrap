@@ -201,7 +201,6 @@ screen.fillCircle(130, 40, 15);
 screen.drawArc(10, 70, 20, 30, 0, 180);
 screen.fillArc(10, 70, 20, 30, 180, 180);
 
-
 ev3.sleep(5000);
 */
 

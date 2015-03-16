@@ -557,11 +557,77 @@ sound.playNote("Si", 500);
 === The Screen object
 // ///////////////////////////////////////////////////////////////////////////
 
+The EV3 screen is monochrome (only white and black) and has a resolution of 178x128.
+
+image::ev3_screen_resolution.png[EV3 screen]
+
+
 ****
 clear():: Clear the LCD screen.
 
-TODO - other methods currently not working.
+drawText(txt, x, y):: Draw some text at the given x and y. +
+                      *txt*: the text to draw. If a number or something else is given, it will be converted in text before drawing. +
+                      *x*, *y*: the x coordinate of the top left corner of the text.
+
+                      
+drawLine(x1, y1, x2, y2):: Draw a line between the given points. +
+                           *x1*, *y1*: the 1st point coordinates. +
+                           *x2*, *y2*: the 2nd point coordinates.
+
+drawRectangle(x, y, width, height):: Draw a rectangle starting at the given point with the given width and height. +
+                                     *x*, *y*: the top left corner of the rectangle. +
+                                     *width*: the width of the rectangle. +
+                                     *height*: the height of the rectangle (under the top left corner: The rectangle is draw to the bottom of the screen).
+
+fillRectangle(x, y, width, height):: Fill a rectangle, see `drawRectangle` for parameters description.
+
+drawCircle(x, y, radius):: Draw a circle with the given center and radius. +
+                           *x*, *y*: the center of the circle. +
+                           *radius*: the radius of the circle.
+
+fillCircle(x, y, raduis):: Fill a circle, see `drawCircle` for parameters description.
+
+drawArc(x, y, width, height, startAngle, arcAngle):: Draw an arc that is in the rectangle given by the point, the width and the height. The arc that at the startAngle and turn for arcAngle. +
+                                                     *x*, *y*: the top left corner of the rectangle containing the arc. +
+                                                     *width*: the width of the rectangle containing the arc. +
+                                                     *height*: the height of the rectangle containing the arc. +
+                                                     *startAngle*: the angle where we start to draw the arc. +
+                                                     *arcAngle*: the angle of the arc draw. Example: 360 means that the full arc (elipse) will be drawn, 90 means that only a quarter of the arc will be drawn. 
+
+fillArc(x, y, width, height, startAngle, arcAngle):: Fill an arc, see `drawArc` for parameters description.
+
+getWidth():: Returns the width of the screen (should be 178).
+
+getHeight():: Returns the height of the screen (should be 128).
+
+getFontHeight():: Returns the height of the current font (O if no font selected).
+
 ****
+
+
+Sample script with Screen object:
+[source,javascript]
+----
+// Screen API
+var screen = ev3.getBrick().getScreen();
+
+screen.clear();
+
+screen.drawText("Hello world !", 0, 0);
+
+screen.drawLine(5, 20, 120, 20);
+
+screen.drawRectangle(10, 30, 20, 30);
+screen.fillRectangle(40, 30, 30, 20);
+
+screen.drawCircle(90, 40, 15);
+screen.fillCircle(130, 40, 15);
+
+screen.drawArc(10, 70, 20, 30, 0, 180);
+screen.fillArc(10, 70, 20, 30, 180, 180);
+
+ev3.sleep(5000);
+----
 
 
 // ///////////////////////////////////////////////////////////////////////////

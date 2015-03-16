@@ -24,6 +24,9 @@ import io.undertow.Undertow;
 import io.undertow.server.handlers.resource.FileResourceManager;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 import org.gnikrap.httphandler.FilesHttpHandler;
 import org.gnikrap.script.EV3ActionProcessor;
@@ -36,11 +39,15 @@ import org.gnikrap.script.actions.StopGnikrap;
 import org.gnikrap.script.actions.StopScript;
 import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.Configuration;
+import org.gnikrap.utils.LoggerUtils;
+import org.gnikrap.utils.Utils;
 
 /**
  * A class that is able to build/start/stop Gnikrap application.
  */
 public class GnikrapApp {
+  private static final Logger LOGGER = LoggerUtils.getLogger(GnikrapApp.class);
+
   private final ApplicationContext appContext;
   private Undertow server;
   private EV3ActionProcessor actionProcessor;
@@ -90,7 +97,6 @@ public class GnikrapApp {
     // Init web-socket callback
     EV3SriptCommandSocketConnectionCallback myWsCC = new EV3SriptCommandSocketConnectionCallback(appContext);
     appContext.registerObject(myWsCC);
-    // TODO Import/Export web service
 
     // Launch server
     server = Undertow.builder().addHttpListener(httpPort, "0.0.0.0").setHandler( //
@@ -112,16 +118,21 @@ public class GnikrapApp {
     return httpPort;
   }
 
+  public String getVersion() {
+    return "0.4.0"; // TODO make it dynamic (in configuration file ?)
+  }
+
   /**
    * Start Gnikrap
    */
   public void start() {
     if (alreadyStopped) {
-      throw new IllegalStateException("Can't start a GnikrapApp that has already been stopped");
+      LOGGER.warning("Cannot start a Gnikrap app that has been stopped");
+    } else {
+      scriptExecutionManager.start();
+      actionProcessor.start();
+      server.start();
     }
-    scriptExecutionManager.start();
-    actionProcessor.start();
-    server.start();
   }
 
   /**
@@ -132,5 +143,20 @@ public class GnikrapApp {
     actionProcessor.stop();
     server.stop();
     scriptExecutionManager.stopScript();
+  }
+
+  /**
+   * Returns the list of URL available to access Gnikrap
+   */
+  public List<String> getGnikrapURL() {
+    List<String> result = new ArrayList<String>();
+
+    String port = (getHttpPort() == 80 ? "" : ":" + getHttpPort());
+
+    for (String ip : Utils.getIPAddresses()) {
+      result.add("http://" + ip + port + "/");
+    }
+
+    return result;
   }
 }

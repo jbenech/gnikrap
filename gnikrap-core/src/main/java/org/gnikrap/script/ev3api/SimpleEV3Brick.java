@@ -173,7 +173,7 @@ public class SimpleEV3Brick {
   }
 
   // Utility methods
-  static Port getSensorPort(String p) throws EV3ScriptException {
+  private static Port getSensorPort(String p) throws EV3ScriptException {
     switch (p) {
     case "1":
     case EV3Constants.S1:
@@ -191,7 +191,7 @@ public class SimpleEV3Brick {
     throw new EV3ScriptException(EV3ScriptException.INVALID_SENSOR_PORT, MapBuilder.buildHashMap("port", p).build());
   }
 
-  static Port getMotorPort(String p) throws EV3ScriptException {
+  private static Port getMotorPort(String p) throws EV3ScriptException {
     switch (p) {
     case EV3Constants.A:
       return MotorPort.A;
