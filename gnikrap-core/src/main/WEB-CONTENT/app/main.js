@@ -90,19 +90,43 @@ function NavigationBarViewModel(appContext) {
   }
   
   self.onShutdownBrick = function() {
-    // TODO make explicit buttons
-    bootbox.confirm(i18n.t("navigationBar.confirmShutdownBrickModal.title"), function(result) {
-      if(result) {
-        self.context.ev3BrickServer.shutdownBrick();
+    bootbox.dialog({
+      title: i18n.t("navigationBar.confirmShutdownBrickModal.title"),
+      message: i18n.t("navigationBar.confirmShutdownBrickModal.message"),
+      buttons: {
+        cancel: {
+          label: i18n.t("navigationBar.confirmShutdownBrickModal.cancel"),
+          className: "btn-primary",
+          callback: function() { /* Cancel */ },
+        },
+        shutdownBrick: {
+          label: i18n.t("navigationBar.confirmShutdownBrickModal.shutdownBrick"),
+          className: "btn-default",
+          callback: function() {
+            self.context.ev3BrickServer.shutdownBrick();
+          }
+        }
       }
     });
   }
   
   self.onStopGnikrap = function() {
-    // TODO make explicit buttons
-    bootbox.confirm(i18n.t("navigationBar.confirmStopGnikrap.title"), function(result) {
-      if(result) {
-        self.context.ev3BrickServer.stopGnikrap();
+    bootbox.dialog({
+      title: i18n.t("navigationBar.confirmStopGnikrap.title"),
+      message: i18n.t("navigationBar.confirmStopGnikrap.message"),
+      buttons: {
+        cancel: {
+          label: i18n.t("navigationBar.confirmStopGnikrap.cancel"),
+          className: "btn-primary",
+          callback: function() { /* Cancel */ },
+        },
+        shutdownBrick: {
+          label: i18n.t("navigationBar.confirmStopGnikrap.stopGnikrap"),
+          className: "btn-default",
+          callback: function() {
+            self.context.ev3BrickServer.stopGnikrap();
+          }
+        }
       }
     });
   }
@@ -135,6 +159,8 @@ function ScriptEditorTabViewModel(appContext) {
     self.editor = ace.edit("editor")
     self.editor.setTheme("ace/theme/chrome");
     self.editor.getSession().setMode("ace/mode/javascript");
+    self.editor.getSession().setTabSize(2);
+    self.editor.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
   }
 
   self.onClearScript = function() {
@@ -205,6 +231,7 @@ function ScriptEditorTabViewModel(appContext) {
 
   this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
     $('#editor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
+    self.editor.resize();
   };
 
   this.__doClearScript = function() {
@@ -462,8 +489,8 @@ function GyroscopeSensorTabViewModel(appContext) {
   
   self.__askAxisOrientationFull = function() {
     bootbox.dialog({
-      message: i18n.t("gyroSensorTab.setAxisDialogFull.message"),
       title: i18n.t("gyroSensorTab.setAxisDialogFull.title"),
+      message: i18n.t("gyroSensorTab.setAxisDialogFull.message"),
       buttons: {
         cancel: {
           label: i18n.t("gyroSensorTab.setAxisDialogFull.cancel"),
@@ -515,8 +542,8 @@ function GyroscopeSensorTabViewModel(appContext) {
       var woLabel = i18n.t("gyroSensorTab.axisOrientation.o" + wo);
       
       bootbox.dialog({
-        message: i18n.t("gyroSensorTab.setAxisDialogLight.message", {"axisOrientation": woLabel }),
         title: i18n.t("gyroSensorTab.setAxisDialogLight.title"),
+        message: i18n.t("gyroSensorTab.setAxisDialogLight.message", {"axisOrientation": woLabel }),
         buttons: {
           cancel: {
             label: i18n.t("gyroSensorTab.setAxisDialogLight.cancel"),
