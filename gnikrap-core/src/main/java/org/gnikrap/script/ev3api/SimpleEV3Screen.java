@@ -20,12 +20,14 @@ package org.gnikrap.script.ev3api;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 
 import lejos.hardware.BrickFinder;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
 
+import org.gnikrap.utils.MapBuilder;
 import org.gnikrap.utils.ScriptApi;
 
 /**
@@ -188,36 +190,65 @@ final public class SimpleEV3Screen implements EV3Device {
    * <li>image data: line by line, 1 line is stored on a full number of byte (so 180 => 23 bytes, some of the bits of the last bytes are not used)</li>
    * </ul>
    * </p>
-   * 
-   * @param name
-   * @return
    */
-  public SimpleEV3Image loadImage(String name) {
-    try (FileInputStream fis = new FileInputStream(name)) {
-      DataInputStream in = new DataInputStream(fis);
-      int w = in.readUnsignedByte();
+  public SimpleEV3Image loadImage(String name) throws EV3ScriptException {
+    try (DataInputStream in = new DataInputStream(new FileInputStream(name))) {
+      int width = in.readUnsignedByte();
       int height = in.readUnsignedByte();
+      byte[] ev3ImageData = new byte[(width + 7) / 8 * height]; // + 7 in order to have a full number of bytes
+      if (in.read(ev3ImageData) != ev3ImageData.length) {
+        throw new EV3ScriptException(EV3ScriptException.IMAGE_CORRUPTED, MapBuilder.buildHashMap("filename", name).build());
+      }
+      return new SimpleEV3Image(new Image(width, height, ev3ImageData));
+    } catch (IOException e) {
+      throw new EV3ScriptException(EV3ScriptException.CANT_READ_FILE, MapBuilder.buildHashMap("filename", name).put("error", e.toString()).build());
+    }
+  }
 
-      byte[] ev3ImageData = new byte[w * ((height + 7) / 8)];
-      byte[] line = new byte[(w + 7) / 8]; // Want a full number of bytes
-      for (int l = 0; l < height; l++) {
-        if (in.read(line) != line.length) {
-          // TODO - Problem...
-        }
-        for (int b = line.length; b > 0; b--) {
-
+  /**
+   * Build an image from an array of string.<br/>
+   * Use space for white and any other characters for black.
+   */
+  public SimpleEV3Image buildImage(String... data) throws EV3ScriptException {
+    // Check validity of data
+    int height, width;
+    if ((data != null) && (data.length > 0)) {
+      height = data.length;
+      width = data[0] != null ? data[0].length() : -1;
+      for (String line : data) {
+        if (line == null || line.length() != width) {
+          throw new EV3ScriptException(EV3ScriptException.BAD_IMAGE_DATA, Collections.<String, String> emptyMap());
         }
       }
-
-      // in.readFully(imageData);
-
-      // return SimpleEV3Image(new Image(w, h, ev3ImageData));
-      return null;
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    } else {
+      throw new EV3ScriptException(EV3ScriptException.BAD_IMAGE_DATA, Collections.<String, String> emptyMap());
     }
-    return null;
+
+    // Build image
+    byte[] ev3ImageData = new byte[(width + 7) / 8 * height]; // + 7 in order to have a full number of bytes
+    int index = 0;
+    for (int i = 0; i < height; i++) {
+      char[] line = data[i].toCharArray();
+      for (int j = 0; j < width; j += 8) {
+        byte d = 0;
+        for (int k = 7; k >= 0; k--) {
+          d <<= 1;
+          int x = j + k;
+          if (x < width) { // End of line is blank
+            d |= (byte) (line[x] != ' ' ? 1 : 0);
+          }
+        }
+        ev3ImageData[index++] = d;
+      }
+    }
+
+    return new SimpleEV3Image(new Image(width, height, ev3ImageData));
+  }
+
+  public void drawImage(SimpleEV3Image img, int x, int y) {
+    if (img != null) {
+      graphicsLCD.drawImage(img.getImage(), x, y, 0);
+    }
   }
 
   public static final class SimpleEV3Image {

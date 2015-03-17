@@ -64,6 +64,21 @@ public class EV3ScriptException extends EV3Exception {
   public static final String SCRIPT_ALREADY_RUNNING = "SCRIPT_ALREADY_RUNNING";
 
   /**
+   * "Can't read file '{filename}', technical error is: {error}"
+   */
+  public static final String CANT_READ_FILE = "CANT_READ_FILE";
+
+  /**
+   * "The image '{filename}' is corrupted (invalid file size)"
+   */
+  public static final String IMAGE_CORRUPTED = "IMAGE_CORRUPTED";
+
+  /**
+   * The data provided to build the image is not correct (check that all the lines should have the same length).
+   */
+  public static final String BAD_IMAGE_DATA = "BAD_IMAGE_DATA";
+
+  /**
    * "Unexpected error: '{error}'"
    */
   public static final String UNEXPECTED_ERROR = "UNEXPECTED_ERROR";

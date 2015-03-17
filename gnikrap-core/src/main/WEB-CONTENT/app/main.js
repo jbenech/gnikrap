@@ -90,6 +90,7 @@ function NavigationBarViewModel(appContext) {
   }
   
   self.onShutdownBrick = function() {
+    // TODO make explicit buttons
     bootbox.confirm(i18n.t("navigationBar.confirmShutdownBrickModal.title"), function(result) {
       if(result) {
         self.context.ev3BrickServer.shutdownBrick();
@@ -98,6 +99,7 @@ function NavigationBarViewModel(appContext) {
   }
   
   self.onStopGnikrap = function() {
+    // TODO make explicit buttons
     bootbox.confirm(i18n.t("navigationBar.confirmStopGnikrap.title"), function(result) {
       if(result) {
         self.context.ev3BrickServer.stopGnikrap();

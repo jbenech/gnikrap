@@ -10,7 +10,7 @@
       "shutdownBrick": "Shutdown the EV3 brick...",
       "stopGnikrap": "Stop Gnikrap on the EV3 brick...",
       "settings": "Settings...",
-      "documentation": "Documentation..."
+      "documentation": "Online documentation..."
     },
     
     "confirmShutdownBrickModal": {
@@ -209,7 +209,10 @@
       "INVALID_CHANNEL_VALUE": "Invalid channel value: '__channel__', valid values in [1, 2, 3, 4]",
       "INVALID_NOTE": "Invalid note: '__note__', should be in [C1-B7, # allowed on C, D, F, G, A] or [Do-Si, # allowed on Do, Re, Fa, Sol, La]",
       "UNEXPECTED_ERROR": "Unexpected error: '__error__'",
-      "SCRIPT_STOP_FORCED": "Script forced to stop, please use \"ev3.isOk()\""
+      "SCRIPT_STOP_FORCED": "Script forced to stop, please use \"ev3.isOk()\"",
+      "CANT_READ_FILE": "Can't read file '__filename__', technical error is: __error__",
+      "IMAGE_CORRUPTED": "The image '__filename__' is corrupted (invalid file size)",
+      "BAD_IMAGE_DATA": "The data provided to build the image is not correct (try to check that all the lines should have the same length)."
     },
     "messages": {
       "SCRIPT_STARTING": "Script starting",

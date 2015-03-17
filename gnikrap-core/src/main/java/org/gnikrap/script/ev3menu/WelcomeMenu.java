@@ -17,12 +17,11 @@
  */
 package org.gnikrap.script.ev3menu;
 
-import lejos.hardware.BrickFinder;
-import lejos.hardware.lcd.Image;
-
 import org.gnikrap.GnikrapApp;
+import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Screen;
+import org.gnikrap.script.ev3api.SimpleEV3Screen.SimpleEV3Image;
 import org.gnikrap.utils.ApplicationContext;
 
 /**
@@ -34,6 +33,43 @@ import org.gnikrap.utils.ApplicationContext;
  * </ul>
  */
 public class WelcomeMenu {
+  static String[] LOGO = {
+      //
+      "  XXXXXXXXXXXXXXXXXXXXXXXXXXX  ", //
+      " XXXXXXXXXXXXXXXXXXXXXXXXXXXXX ", //
+      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
+      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
+      "XXXXXXXXXX               XXXXXX", //
+      "XXXXXXXX                 XXXXXX", //
+      "XXXXXXXX                 XXXXXX", //
+      "XXXXXXX                  XXXXXX", //
+      "XXXXXXX                  XXXXXX", //
+      "XXXXXX        XXXXXX     XXXXXX", //
+      "XXXXXX      XXXXXXXX     XXXXXX", //
+      "XXXXXX      XXXXXXXX     XXXXXX", //
+      "XXXXXX      XXXXXXXX     XXXXXX", //
+      "XXXXXX      XXXXXXXX     XXXXXX", //
+      "XXXXXX       XXXXXXX     XXXXXX", //
+      "XXXXXX                   XXXXXX", //
+      "XXXXXXX                  XXXXXX", //
+      "XXXXXXX                  XXXXXX", //
+      "XXXXXXXX                 XXXXXX", //
+      "XXXXXXXXX                XXXXXX", //
+      "XXXXXXXXXXXX             XXXXXX", //
+      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
+      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
+      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
+      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
+      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
+      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
+      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
+      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
+      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
+      " XXXXXXXXXXXXXXXXXXXXXXXXXXXXX ", //
+      "  XXXXXXXXXXXXXXXXXXXXXXXXXXX  " };
+
+  private static SimpleEV3Image logoImage;
+
   private final SimpleEV3Screen screen;
   private final GnikrapApp gnikrapApp;
 
@@ -44,23 +80,31 @@ public class WelcomeMenu {
 
   public void start() {
     screen.setFont("L"); // Height: 32
-    screen.drawText("Gnikrap", 5, 5);
+    screen.drawText("Gnikrap", 0, 5);
+    screen.drawImage(getLogoImage(screen), 145, 5);
+
     screen.setFont("S"); // Height: 8
     screen.drawText("Version: " + gnikrapApp.getVersion(), 10, 35);
-    // screen.drawText("Press ESC to quit Gnikrap", 10, 120);
 
-    screen.drawText("Try to connect at:", 10, 50);
+    screen.drawText("Try to connect at:", 5, 60);
     int i = 0;
     for (String url : gnikrapApp.getGnikrapURL()) { // A maximum of 2 URLs (bluetooth and Wifi)
-      screen.drawText(" - " + url, 10, 60 + 10 * i++);
+      screen.drawText("- " + url, 10, 70 + 10 * i++);
     }
-
-    Image img = new Image(4, 5, new byte[] { (byte) 0x7F, (byte) 0x00, (byte) 0x02, (byte) 0x7f, (byte) 0x00, (byte) 0x00 });
-    // byte[] imageData = new byte[width * (height + 7) / 8];
-    BrickFinder.getLocal().getGraphicsLCD().drawImage(img, 100, 100, 0);
   }
 
   public void stop() {
     screen.clear();
+  }
+
+  static SimpleEV3Image getLogoImage(SimpleEV3Screen screen) {
+    if (logoImage == null) {
+      try {
+        logoImage = screen.buildImage(LOGO);
+      } catch (EV3ScriptException ex) {
+        // Ignore should never happens
+      }
+    }
+    return logoImage;
   }
 }
