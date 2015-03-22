@@ -49,6 +49,7 @@ public class GnikrapApp {
   private static final Logger LOGGER = LoggerUtils.getLogger(GnikrapApp.class);
 
   private final ApplicationContext appContext;
+  private final Configuration config;
   private Undertow server;
   private EV3ActionProcessor actionProcessor;
   private ScriptExecutionManager scriptExecutionManager;
@@ -60,12 +61,12 @@ public class GnikrapApp {
    */
   public GnikrapApp(ApplicationContext context) {
     this.appContext = context;
+    config = appContext.getObject(Configuration.class);
     buildActionProcessor();
     buildHttpServer();
   }
 
   private void buildActionProcessor() {
-    Configuration config = appContext.getObject(Configuration.class);
     boolean fakeEV3 = config.getValueAsBoolean("FakeEV3", false);
 
     if (fakeEV3) {
@@ -88,7 +89,6 @@ public class GnikrapApp {
 
   private void buildHttpServer() {
     // Load config
-    Configuration config = appContext.getObject(Configuration.class);
     String webContentFolder = config.getValueAsString("WebContent");
     String scriptsFolder = config.getValueAsString("ScriptsFolder");
     String keyboardFolder = config.getValueAsString("xKeyboardFolder");
@@ -119,7 +119,7 @@ public class GnikrapApp {
   }
 
   public String getVersion() {
-    return "0.4.0"; // TODO make it dynamic (in configuration file ?)
+    return config.getValueAsString("Version", "??");
   }
 
   /**

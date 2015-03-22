@@ -10,7 +10,7 @@
       "shutdownBrick": "Shutdown the EV3 brick...",
       "stopGnikrap": "Stop Gnikrap...",
       "settings": "Settings...",
-      "documentation": "Online documentation..."
+      "documentation": "Documentation..."
     },
     
     "confirmShutdownBrickModal": {
