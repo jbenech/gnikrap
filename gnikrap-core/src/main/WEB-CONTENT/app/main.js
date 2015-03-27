@@ -88,28 +88,7 @@ function NavigationBarViewModel(appContext) {
     self.context.compatibility.toggleFullScreen();
     self.__collapseNavbar();
   }
-  
-  self.onShutdownBrick = function() {
-    bootbox.dialog({
-      title: i18n.t("navigationBar.confirmShutdownBrickModal.title"),
-      message: i18n.t("navigationBar.confirmShutdownBrickModal.message"),
-      buttons: {
-        cancel: {
-          label: i18n.t("navigationBar.confirmShutdownBrickModal.cancel"),
-          className: "btn-primary",
-          callback: function() { /* Cancel */ },
-        },
-        shutdownBrick: {
-          label: i18n.t("navigationBar.confirmShutdownBrickModal.shutdownBrick"),
-          className: "btn-default",
-          callback: function() {
-            self.context.ev3BrickServer.shutdownBrick();
-          }
-        }
-      }
-    });
-  }
-  
+
   self.onStopGnikrap = function() {
     bootbox.dialog({
       title: i18n.t("navigationBar.confirmStopGnikrap.title"),
@@ -120,11 +99,18 @@ function NavigationBarViewModel(appContext) {
           className: "btn-primary",
           callback: function() { /* Cancel */ },
         },
-        shutdownBrick: {
+        stopGnikrap: {
           label: i18n.t("navigationBar.confirmStopGnikrap.stopGnikrap"),
           className: "btn-default",
           callback: function() {
             self.context.ev3BrickServer.stopGnikrap();
+          }
+        },
+        shutdownBrick: {
+          label: i18n.t("navigationBar.confirmStopGnikrap.shutdownBrick"),
+          className: "btn-default",
+          callback: function() {
+            self.context.ev3BrickServer.shutdownBrick();
           }
         }
       }

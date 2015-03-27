@@ -14,6 +14,8 @@
   </modules>
   
   <properties>
+    <InnoSetupCompiler>C:/Program Files/Inno Setup 5/ISCC.exe</InnoSetupCompiler>
+
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
@@ -61,6 +63,12 @@
         <groupId>org.gnikrap</groupId>
         <artifactId>gnikrap-doc</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gnikrap</groupId>
+        <artifactId>gnikrap-install-all</artifactId>
+        <version>${project.version}</version>
+        <type>tar.gz</type>
       </dependency>
     </dependencies>
   </dependencyManagement>

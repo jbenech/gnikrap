@@ -1,0 +1,35 @@
+<assembly>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<formats>
+    <format>zip</format>
+    <format>dir</format>
+	</formats>
+  
+	<fileSets>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory>.</outputDirectory>
+      <excludes>
+        <exclude>**/*.bat</exclude>
+      </excludes>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/scripts</directory>
+			<outputDirectory>.</outputDirectory>
+      <includes>
+        <include>**/*.bat</include>
+      </includes>
+      <filtered>true</filtered>
+		</fileSet>
+    <!-- Dependencies and build files -->
+		<fileSet>
+			<directory>${project.build.directory}/install</directory>
+			<outputDirectory>.</outputDirectory>
+		</fileSet>
+	</fileSets>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>data</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+</assembly>

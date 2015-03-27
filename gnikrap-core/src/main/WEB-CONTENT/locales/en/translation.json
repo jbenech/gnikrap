@@ -7,24 +7,17 @@
     "gnikrap": {
       "about": "About...",
       "fullScreen": "Toggle full screen",
-      "shutdownBrick": "Shutdown the EV3 brick...",
       "stopGnikrap": "Stop Gnikrap...",
       "settings": "Settings...",
       "documentation": "Documentation..."
     },
-    
-    "confirmShutdownBrickModal": {
-      "title": "EV3 brick shutdown",
-      "message": "Do you confirm that you want to shutdown the EV3 brick ?",
-      "cancel": "No, does nothing",
-      "shutdownBrick": "Yes, shutdown the EV3 brick"
-    },
 
     "confirmStopGnikrap": {
       "title": "Stop Gnikrap",
-      "message": "Do you confirm that you want to stop Gnikrap (and return to the EV3 brick menu) ?",
+      "message": "Do you want to stop Gnikrap (and return to the 'brick menu') or stop the brick?",
       "cancel": "No, does nothing",
-      "stopGnikrap": "Yes, stop Gnikrap"
+      "stopGnikrap": "Yes, stop Gnikrap",
+      "shutdownBrick": "Yes, shutdown the brick"
     }
   },
 

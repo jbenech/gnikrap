@@ -36,6 +36,7 @@ uninstall() {
   rm -f /home/gnikrap/*.config
   rm -rf /home/gnikrap/WEB-CONTENT
   rm -f /home/lejos/programs/gnikrap*.jar
+  rm -f /home/lejos/programs/gnikrap*.err
   #rm -f /home/root/lejos/tools/gnikrap*.jar
 }
 

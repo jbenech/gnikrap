@@ -72,7 +72,7 @@ public final class Configuration {
    * Load the configuration file which have the name of the package.class in the following order:
    * <ul>
    * <li>File in the current user.dir</li>
-   * <li>If not found and if on EV3: look in /home/root/gnikrap</li>
+   * <li>If not found and if on EV3: look in /home/gnikrap/</li>
    * <li>If not found: look in root classpath</li>
    * <ul>
    */
@@ -85,7 +85,7 @@ public final class Configuration {
           System.getProperty("os.name", "-").equalsIgnoreCase("Linux") && //
           System.getProperty("java.runtime.name", "-").toLowerCase().contains("se embedded")) {
         // Default configuration file on EV3
-        configurationFile = "/home/root/gnikrap/" + clazzToConfigure.getName() + ".config";
+        configurationFile = "/home/gnikrap/" + clazzToConfigure.getName() + ".config";
       }
     }
 

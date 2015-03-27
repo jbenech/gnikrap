@@ -3,7 +3,6 @@
   <baseDirectory>gnikrap-${project.version}</baseDirectory -->
 	<formats>
     <format>tar.gz</format>
-    <format>tar</format>
 	</formats>
   
 	<fileSets>
@@ -43,15 +42,4 @@
 			<outputDirectory>/WEB-CONTENT/gnikrap-doc/</outputDirectory>
 		</fileSet>
 	</fileSets>
-
-  <!-- dependencySets>
-    <!- - Keep only what is not included in the uber-jar - ->
-    <dependencySet>
-      <outputDirectory>lib</outputDirectory>
-      <includes>
-        <include>lejos:*</include>
-        <include>org.freedesktop.dbus:*</include>
-      </includes>
-    </dependencySet>
-  </dependencySets -->
 </assembly>
