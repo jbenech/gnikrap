@@ -20,6 +20,7 @@ package org.gnikrap.script.ev3api;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collections;
 
 import lejos.hardware.BrickFinder;
@@ -29,13 +30,14 @@ import lejos.hardware.lcd.Image;
 
 import org.gnikrap.utils.MapBuilder;
 import org.gnikrap.utils.ScriptApi;
+import org.gnikrap.utils.Utils;
 
 /**
  * Note: Accessing to the screen API create an extra-thread in order to refresh the screen in background.
- * <p/>
- * TODO create a simple text API that have print() println() like feature with auto line break.
  */
 final public class SimpleEV3Screen implements EV3Device {
+
+  static final String DATA_FORMAT_RFG = "image/rgf";
 
   public static final int COLOR_BLACK = GraphicsLCD.BLACK; // 0x000000;
   public static final int COLOR_WHITE = GraphicsLCD.WHITE; // 0xFFFFFF;
@@ -165,8 +167,9 @@ final public class SimpleEV3Screen implements EV3Device {
     graphicsLCD.fillArc(x - r, y - r, d, d, 0, 360);
   }
 
+  @ScriptApi(versionAdded = "TBD", isIncubating = true)
   public void drawPoint(int x, int y) {
-    // Don't work ?
+    // Currenlty Don't work ?
     graphicsLCD.setPixel(x, y, color);
   }
 
@@ -191,6 +194,7 @@ final public class SimpleEV3Screen implements EV3Device {
    * </ul>
    * </p>
    */
+  @ScriptApi(versionAdded = "TBD", isIncubating = true)
   public SimpleEV3Image loadImage(String name) throws EV3ScriptException {
     try (DataInputStream in = new DataInputStream(new FileInputStream(name))) {
       int width = in.readUnsignedByte();
@@ -206,9 +210,41 @@ final public class SimpleEV3Screen implements EV3Device {
   }
 
   /**
-   * Build an image from an array of string.<br/>
-   * Use space for white and any other characters for black.
+   * Decode the image from a Data URI string. Currently, only one binary data format was supported: 'image/rgf' (that is to say, RGF files like EV3 images)
    */
+  @ScriptApi(versionAdded = "0.4.0")
+  public SimpleEV3Image decodeImage(String data) throws EV3ScriptException {
+    try {
+      Utils.Base64DataURI dataURI = Utils.decodeBase64DataURI(data);
+      if (DATA_FORMAT_RFG.equals(dataURI.getMimeType())) {
+        return decodeRgfImage(dataURI.getData());
+      } else {
+        throw new EV3ScriptException(EV3ScriptException.CANT_DECODE_IMAGE_INVALID_TYPE, MapBuilder.buildHashMap("type", dataURI.getMimeType()).build());
+      }
+    } catch (ParseException pe) {
+      throw new EV3ScriptException(EV3ScriptException.CANT_DECODE_IMAGE, MapBuilder.buildHashMap("reason", pe.toString()).build());
+    }
+  }
+
+  private SimpleEV3Image decodeRgfImage(byte[] imageData) throws EV3ScriptException {
+    if ((imageData != null) && (imageData.length > 2)) {
+      int width = imageData[0];
+      int height = imageData[1];
+      byte[] ev3ImageData = new byte[(width + 7) / 8 * height]; // + 7 in order to have a full number of bytes
+      if (imageData.length >= ev3ImageData.length + 2) {
+        System.arraycopy(imageData, 2, ev3ImageData, 0, ev3ImageData.length);
+        return new SimpleEV3Image(new Image(width, height, ev3ImageData));
+      }
+      throw new EV3ScriptException(EV3ScriptException.CANT_DECODE_IMAGE_INVALID_DATA_SIZE, MapBuilder.buildHashMap("width", String.valueOf(width)).put("height", String.valueOf(height)).build());
+    }
+    throw new EV3ScriptException(EV3ScriptException.CANT_DECODE_IMAGE, MapBuilder.buildHashMap("reason", "Binary data is invalid").build());
+  }
+
+  /**
+   * Build an image from an array of string.<br/>
+   * Each characters represent 1 pixel, use a space for white and any other characters for black.
+   */
+  @ScriptApi(versionAdded = "0.4.0")
   public SimpleEV3Image buildImage(String... data) throws EV3ScriptException {
     // Check validity of data
     int height, width;
@@ -226,25 +262,31 @@ final public class SimpleEV3Screen implements EV3Device {
 
     // Build image
     byte[] ev3ImageData = new byte[(width + 7) / 8 * height]; // + 7 in order to have a full number of bytes
-    int index = 0;
+
+    int index = 0; // The index within the image
+    char[] line; // The image line currently processed
+    byte currentByte; // The 8 pixels in progress (1 pixel is 1 bit)
+    int idxInline; // The index of the current pixel in the line
+
     for (int i = 0; i < height; i++) {
-      char[] line = data[i].toCharArray();
+      line = data[i].toCharArray();
       for (int j = 0; j < width; j += 8) {
-        byte d = 0;
+        currentByte = 0;
         for (int k = 7; k >= 0; k--) {
-          d <<= 1;
-          int x = j + k;
-          if (x < width) { // End of line is blank
-            d |= (byte) (line[x] != ' ' ? 1 : 0);
+          currentByte <<= 1;
+          idxInline = j + k;
+          if (idxInline < width) { // End of line is blank
+            currentByte |= (byte) (line[idxInline] != ' ' ? 1 : 0);
           }
         }
-        ev3ImageData[index++] = d;
+        ev3ImageData[index++] = currentByte;
       }
     }
 
     return new SimpleEV3Image(new Image(width, height, ev3ImageData));
   }
 
+  @ScriptApi(versionAdded = "0.4.0")
   public void drawImage(SimpleEV3Image img, int x, int y) {
     if (img != null) {
       graphicsLCD.drawImage(img.getImage(), x, y, 0);
@@ -261,6 +303,25 @@ final public class SimpleEV3Screen implements EV3Device {
 
     Image getImage() {
       return image;
+    }
+
+    @ScriptApi(versionAdded = "0.4.0")
+    public int getHeight() {
+      return image.getHeight();
+    }
+
+    @ScriptApi(versionAdded = "0.4.0")
+    public int getWidth() {
+      return image.getWidth();
+    }
+
+    public String toDataURI() {
+      byte[] ev3ImageData = image.getData();
+      byte[] temp = new byte[ev3ImageData.length + 2];
+      temp[0] = (byte) image.getWidth();
+      temp[1] = (byte) image.getHeight();
+      System.arraycopy(ev3ImageData, 0, temp, 2, ev3ImageData.length);
+      return new Utils.Base64DataURI(DATA_FORMAT_RFG, ev3ImageData).encode();
     }
   }
 }

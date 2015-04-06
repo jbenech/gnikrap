@@ -44,31 +44,6 @@
           </execution>
         </executions>
       </plugin>
-      <!-- Get dependencies -->
-      <!-- plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.gnikrap</groupId>
-                  <artifactId>gnikrap-install-all</artifactId>
-                  <version>${project.version}</version>
-                  <type>tar.gz</type>
-                  <outputDirectory>${project.build.directory}/install/data</outputDirectory>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>

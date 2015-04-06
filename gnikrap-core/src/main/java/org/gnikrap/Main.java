@@ -77,12 +77,13 @@ import org.gnikrap.utils.LoggerUtils;
  * </p>
  * <p>
  * <h4>Threading</h4>
- * Gnikrap is made of 6 threads (and the JVM threads, GC, etc.):
+ * Gnikrap is made of 7 threads (and the JVM threads, GC, etc.):
  * <ul>
  * <li>Undertow (N)IO: 2 threads. This thread receive IO and also perform some non blocking processing</li>
  * <li>Undertow Worker Thread: 2 threads. These two threads are used while serving static pages. The rest of the time there are mainly idle.</li>
  * <li>Gnikrap Script Thread: This thread is used in order to run the script.</li>
  * <li>Gnikrap Processor: Process the action which can take time, also process all the outgoing messages.</li>
+ * <li>leJOS screen manager: Process to refresh of the EV3 screen in an asynchronous way.</li>
  * </ul>
  * </p>
  * <p>

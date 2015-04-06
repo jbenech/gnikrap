@@ -14,7 +14,7 @@
 
     "confirmStopGnikrap": {
       "title": "Stop Gnikrap",
-      "message": "Do you want to stop Gnikrap (and return to the 'brick menu') or stop the brick?",
+      "message": "Do you want to stop Gnikrap (and return to the 'brick menu') or to stop the brick?",
       "cancel": "No, does nothing",
       "stopGnikrap": "Yes, stop Gnikrap",
       "shutdownBrick": "Yes, shutdown the brick"
@@ -211,7 +211,10 @@
       "SCRIPT_STOP_FORCED": "Script forced to stop, please use \"ev3.isOk()\"",
       "CANT_READ_FILE": "Can't read file '__filename__', technical error is: __error__",
       "IMAGE_CORRUPTED": "The image '__filename__' is corrupted (invalid file size)",
-      "BAD_IMAGE_DATA": "The data provided to build the image is not correct (try to check that all the lines should have the same length)."
+      "BAD_IMAGE_DATA": "The data provided to build the image is not correct (try to check that all the lines should have the same length)",
+      "CANT_DECODE_IMAGE_INVALID_DATA_SIZE": "There is not enough data to decode an image with the following size: [__width__, __height__]",
+      "CANT_DECODE_IMAGE": "The data provided is not correct for an image, reason: '__reason__'",
+      "CANT_DECODE_IMAGE_INVALID_TYPE": "The type of the image provided is unknown: __type__"
     },
     "messages": {
       "SCRIPT_STARTING": "Script starting",

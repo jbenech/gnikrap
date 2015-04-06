@@ -32,7 +32,7 @@ done
 # ----------------------------------------------------------------------------
 # Uninstall procedure
 uninstall() {
-  echo Delete previous installation
+  echo "Delete previous installation"
   rm -f /home/gnikrap/*.config
   rm -rf /home/gnikrap/WEB-CONTENT
   rm -f /home/lejos/programs/gnikrap*.jar
@@ -44,7 +44,7 @@ uninstall() {
 # ----------------------------------------------------------------------------
 # Install procedure (install Gnikrap as leJOS menu 'program')
 install() {
-  echo Install Gnikrap
+  echo "Install Gnikrap"
   mkdir -p /home/gnikrap
   mkdir -p /home/gnikrap/WEB-CONTENT
   mkdir -p /home/gnikrap/userData
@@ -65,14 +65,14 @@ then
   then
     uninstall;
   else
-    echo Gnikrap already installed, uninstall old version ? [y/n]
+    echo "Gnikrap already installed, uninstall old version ? [y/n]"
     read word
     case $word in
       [Yy] ) 
         uninstall;
         ;;
       * ) 
-        echo Installation aborted by user
+        echo "Installation aborted by user"
         exit 1
         ;;
     esac

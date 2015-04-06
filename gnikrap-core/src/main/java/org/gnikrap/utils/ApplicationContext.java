@@ -34,7 +34,7 @@ public class ApplicationContext {
 
   /**
    * Register an object.<br/>
-   * Not check on registered objects (be careful to don't register twice the same object).
+   * No check on registered objects (be careful to don't register twice the same object).
    */
   public void registerObject(Object obj) {
     if (obj != null) {

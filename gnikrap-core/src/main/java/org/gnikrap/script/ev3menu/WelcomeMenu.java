@@ -33,40 +33,9 @@ import org.gnikrap.utils.ApplicationContext;
  * </ul>
  */
 public class WelcomeMenu {
-  static String[] LOGO = {
-      //
-      "  XXXXXXXXXXXXXXXXXXXXXXXXXXX  ", //
-      " XXXXXXXXXXXXXXXXXXXXXXXXXXXXX ", //
-      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
-      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
-      "XXXXXXXXXX               XXXXXX", //
-      "XXXXXXXX                 XXXXXX", //
-      "XXXXXXXX                 XXXXXX", //
-      "XXXXXXX                  XXXXXX", //
-      "XXXXXXX                  XXXXXX", //
-      "XXXXXX        XXXXXX     XXXXXX", //
-      "XXXXXX      XXXXXXXX     XXXXXX", //
-      "XXXXXX      XXXXXXXX     XXXXXX", //
-      "XXXXXX      XXXXXXXX     XXXXXX", //
-      "XXXXXX      XXXXXXXX     XXXXXX", //
-      "XXXXXX       XXXXXXX     XXXXXX", //
-      "XXXXXX                   XXXXXX", //
-      "XXXXXXX                  XXXXXX", //
-      "XXXXXXX                  XXXXXX", //
-      "XXXXXXXX                 XXXXXX", //
-      "XXXXXXXXX                XXXXXX", //
-      "XXXXXXXXXXXX             XXXXXX", //
-      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
-      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
-      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
-      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
-      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
-      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
-      "XXXXXXXXXXXXXXXXXX       XXXXXX", //
-      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
-      "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", //
-      " XXXXXXXXXXXXXXXXXXXXXXXXXXXXX ", //
-      "  XXXXXXXXXXXXXXXXXXXXXXXXXXX  " };
+  static String LOGO_BASE64 = "data:image/rgf;base64,HyD8//8f/v//P////3////9//wMAfv8AAH7/" + //
+      "AAB+fwAAfn8AAH4/wA9+P/APfj/wD34/8A9+P/APfj/gD34/AAB+fwAAfn8AAH7/AAB+/wEAfv8PAH7//w" + //
+      "N+//8Dfv//A37//wN+//8Dfv//A37//wN+////f////3/+//8//P//Hw==";
 
   private static SimpleEV3Image logoImage;
 
@@ -84,7 +53,7 @@ public class WelcomeMenu {
     screen.drawImage(getLogoImage(screen), 145, 5);
 
     screen.setFont("S"); // Height: 8
-    screen.drawText("Version: " + gnikrapApp.getVersion(), 10, 35);
+    screen.drawText("Version: " + gnikrapApp.getVersion(), 10, 37);
 
     screen.drawText("Try to connect at:", 5, 60);
     int i = 0;
@@ -100,9 +69,9 @@ public class WelcomeMenu {
   static SimpleEV3Image getLogoImage(SimpleEV3Screen screen) {
     if (logoImage == null) {
       try {
-        logoImage = screen.buildImage(LOGO);
+        logoImage = screen.decodeImage(LOGO_BASE64);
       } catch (EV3ScriptException ex) {
-        // Ignore should never happens
+        // Ignore: Should never happens once tested
       }
     }
     return logoImage;

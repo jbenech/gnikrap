@@ -121,6 +121,11 @@ function NavigationBarViewModel(appContext) {
     self.context.settingsVM.display();
     self.__collapseNavbar();
   }
+  
+  self.onDisplayImportImages = function() {
+    self.context.importImagesVM.display();
+    self.__collapseNavbar();
+  }
 
   self.onShowWorkAreaItem = function(workAreaItem) {
     // Set the active item in the model and on screen
@@ -1110,6 +1115,173 @@ function SettingsViewModel(appContext) {
 }
 
 
+// Model that manage the "Import Images" dialog
+function ImportImagesViewModel(appContext) {
+  var self = this;
+  { // Init
+    self.context = appContext; // The application context
+    self.imageAsDataURI = ko.observable("");
+
+    self.canvas = document.getElementById("importImagesModalCanvas"); // Canvas for displaying the image
+    self.canvasCtx = self.canvas.getContext('2d');
+    
+    self.MAX_WIDTH = 178;
+    self.MAX_HEIGHT = 128;
+  }
+  
+  self.display = function() {
+    // Initialize the values
+    $('#importImagesModal').modal('show');
+    
+    self.imageAsDataURI("");
+  }
+  
+  self.uploadImage = function(file) {
+    console.log("Filename: " + file.name);
+    
+    // Only process image files.
+    if (file.type.match('image.*')) {
+      console.log(file.name  + " is an image");
+      // Initialize the image object
+      var newImg = new Image;
+      newImg.onload = function() {
+        self.__doImageLoaded(newImg);
+      }
+      // Load the selected file
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        console.log("Source of the image: " + event.target.result);
+        newImg.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      console.log("Not an image !");
+    }
+  }
+  
+  self.hide = function() {
+    $('#importImagesModal').modal('hide');
+  }
+
+  self.onCopyAndClose = function() {
+    self.hide();    
+  }
+  
+  self.__doImageLoaded = function(newImg) {
+    console.log("Image loaded ! " + newImg);
+    console.log("Image width: " + newImg.width + " / " + (self.MAX_WIDTH / newImg.width));
+    console.log("Image height: " + newImg.height + " / " + (self.MAX_HEIGHT / newImg.height));
+    var ratio = Math.min(1, (self.MAX_WIDTH / newImg.width), (self.MAX_HEIGHT / newImg.height));
+    console.log("Ratio: " + ratio);
+    var targetWidth = Math.min(self.MAX_WIDTH, Math.ceil(newImg.width * ratio));
+    var targetHeight = Math.min(self.MAX_HEIGHT, Math.ceil(newImg.height * ratio));
+    console.log("Target width: " + targetWidth + ", target height: " + targetHeight);
+    self.canvasCtx.clearRect(0, 0, self.canvas.width, self.canvas.height);
+    self.canvasCtx.drawImage(newImg, 0, 0, targetWidth, targetHeight);
+    
+    var imageData = self.canvasCtx.getImageData(0, 0, targetWidth, targetHeight);
+    var pixels = imageData.data;
+    var numPixels = imageData.width * imageData.height;     
+
+    var sPixels = new Uint8Array(numPixels);
+    
+    // Grayscale on luminosity - See http://en.wikipedia.org/wiki/Luma_%28video%29
+    for (var i = 0; i < numPixels; i++) {
+        var i4 = 4*i;
+        sPixels[i] = .21 * pixels[i4] + .72 * pixels[i4+1] + .07 * pixels[i4+2];
+    }
+    // Dithering in white and black
+    self.__convertToWhiteAndBlackDither(targetWidth, targetHeight, sPixels);
+    
+    // Copy back pixels to context imageData
+    for (var i = 0; i < numPixels; i++) {
+        var i4 = 4*i;
+        pixels[i4] = sPixels[i];
+        pixels[i4+1] = sPixels[i];
+        pixels[i4+2] = sPixels[i];
+    }
+    // Display the images
+    self.canvasCtx.putImageData(imageData, 0, 0);
+    
+    // Encode to data URI
+    var imageAsDataURI = self.__encodeRBGImageAsDataURI(self.__convertToRGFBinaryData(imageData.width, imageData.height, sPixels));
+    self.imageAsDataURI(imageAsDataURI);
+  }
+  
+  // Floyd–Steinberg dithering algorithm - See http://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering
+  self.__convertToWhiteAndBlackDither = function(width, height, pixels) {
+    for(var i = 0; i < height; i++) {
+      var lineOffset = i * width;
+      for (var j = 0; j < width; j++) {
+        var idx = lineOffset + j; // Current pixel index
+        var currentPixel = pixels[idx];
+        var newPixel = (currentPixel  < 128 ? 0 : 255); // Black or white
+        var error = currentPixel - newPixel;
+        pixels[idx] = newPixel; // Set the pixel color                  
+        // Report error on other pixels
+        if(Math.abs(error) > 16) { // Variation with the original algorithm: Ignore (too) small errors
+          var notLastRow = (j+1 < width);
+          if(notLastRow) {
+            pixels[idx+1] += error*7/16; // pixel at right
+          }
+          if(i+1 < height) {
+            if(j > 0) {
+            pixels[idx + width - 1] += error*3/16; // Pixel at bottom left
+            }
+            pixels[idx + width] += error*5/16; // Pixel at bottom
+            if(notLastRow) {
+              pixels[idx + width + 1] += error/16; // Pixel at bottom right
+            }
+          }
+        }
+      }
+    }      
+  }
+
+  // Basic algorithm that make white and black on a given threshold
+  self.__convertToWhiteAndBlack = function(width, height, threshold, pixels) {
+    for(var i = 0; i < height; i++) {
+      var lineOffset = i * width;
+      for (var j = 0; j < width; j++) {
+        var idx = lineOffset + j; // Current pixel index
+        pixels[idx] = (pixels[idx]  < threshold ? 0 : 255); // Black or white
+      }
+    }
+  }
+  
+  // Convert the array of pixels (Uint8Array) to an RGB binary representation
+  self.__convertToRGFBinaryData = function(width, height, pixels) {
+    var ev3ImageData = new Uint8Array(Math.ceil((width + 7) / 8 * height)); // + 7 in order to have a full number of bytes
+
+    var index = 0; // The index within the image
+    var currentByte = 0; // The 8 pixels in progress (1 pixel is 1 bit)
+
+    for (var i = 0; i < height; i++) {
+      var lineOffset = i * width;
+      var idxInLine = 0;
+      for (var j = 0; j < width; j += 8) {
+        currentByte = 0;
+        for (var k = 7; k >= 0; k--) {
+          currentByte <<= 1;
+          idxInline = j + k;
+          if (idxInline < width) { // End of line is blank
+            currentByte |= (pixels[lineOffset + idxInline] == 255 ? 1 : 0);
+          }
+        }
+        ev3ImageData[index++] = currentByte;
+      }
+    }
+    
+    return ev3ImageData;
+  }
+
+  // Return a Data URI representing the given RGF binary data
+  self.__encodeRBGImageAsDataURI = function(binaryData) {
+    return "data:image/rgf;base64," + btoa(String.fromCharCode.apply(null, binaryData));
+  }
+}
+
+
 // Manage the interaction with the server on the EV3 brick
 function EV3BrickServer(appContext) {
   var self = this;
@@ -1532,6 +1704,7 @@ $(document).ready(function() {
     // Dialogs
     context.manageScriptFilesVM = new ManageScriptFilesViewModel(context);
     context.settingsVM = new SettingsViewModel(context);
+    context.importImagesVM = new ImportImagesViewModel(context);
 
     // Knockout bindings
     ko.applyBindings(context.navigationBarVM, $("#navigationBar")[0]);
@@ -1545,6 +1718,7 @@ $(document).ready(function() {
     // Dialogs
     ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
     ko.applyBindings(context.settingsVM, $("#settingsModal")[0]);
+    ko.applyBindings(context.importImagesVM, $("#importImagesModal")[0]);
 
     // Other initialization
     context.ev3BrickServer.initialize(); // WS connexion with the server

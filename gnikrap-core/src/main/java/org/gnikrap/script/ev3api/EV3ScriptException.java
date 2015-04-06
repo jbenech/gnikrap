@@ -74,12 +74,27 @@ public class EV3ScriptException extends EV3Exception {
   public static final String IMAGE_CORRUPTED = "IMAGE_CORRUPTED";
 
   /**
-   * The data provided to build the image is not correct (check that all the lines should have the same length).
+   * The data provided to build the image is not correct (check that all the lines should have the same length)
    */
   public static final String BAD_IMAGE_DATA = "BAD_IMAGE_DATA";
 
   /**
-   * "Unexpected error: '{error}'"
+   * There is not enough data to decode an image with the following size: [{width}, {height}]
+   */
+  public static final String CANT_DECODE_IMAGE_INVALID_DATA_SIZE = "CANT_DECODE_IMAGE_INVALID_DATA_SIZE";
+
+  /**
+   * The data provided is not correct for an image, reason: '{reason}'
+   */
+  public static final String CANT_DECODE_IMAGE = "CANT_DECODE_IMAGE";
+
+  /**
+   * The type of the image provided is unknown: {type}
+   */
+  public static final String CANT_DECODE_IMAGE_INVALID_TYPE = "CANT_DECODE_IMAGE_INVALID_TYPE";
+
+  /**
+   * Unexpected error: '{error}'
    */
   public static final String UNEXPECTED_ERROR = "UNEXPECTED_ERROR";
 

@@ -1,14 +1,8 @@
 == How to install
 
-The installation consist of several steps:
+=== Prerequesite: Install leJOS
 
-** Install leJOS
-** Download Gnikrap and tools needed for installation
-** Install Gnikrap
-** Launch Gnikrap (only this step has to be performed once installed)
-
-
-Here are the steps needed in order to have Gnikrap working on your EV3:
+Before installing Gnikrap, you need to have a working leJOS firmware. Moreover, a network (either Wifi or bluetooth should have been configured.
 
 Lejos installation::
 . Download and install http://www.lejos.org/[leJOS] as described on the page: http://sourceforge.net/p/lejos/wiki/Installing%20leJOS/[Installing leJOS
@@ -16,68 +10,36 @@ Lejos installation::
 ** Either with Wifi, see http://sourceforge.net/p/lejos/wiki/Configuring%20Wifi/[Configuring Wifi]
 ** Either with bluetooth PAN, see http://sourceforge.net/p/lejos/wiki/Configuring%20Bluetooth%20PAN/[Pairing (from the PC)]
 
-Download gnikrap and other tools needed for the installation::
-. Download the Gnikrap distribution https://github.com/jbenech/gnikrap/releases[here]
-. Donwload WinSCP http://winscp.net/eng/download.php[here] (the Portable distribution does it)
-. Download Putty http://the.earth.li/~sgtatham/putty/latest/x86/putty.zip[here]
 
-Copy and install Gnikrap::
-. Connect by using the following settings (Host name can depend of your network settings. 
-  10.0.1.1 is the IP address to use while connected with bluetooth):
-+
-image::install/0010_WinSCP_Session.png[WinSCP session]
-+
-_Note:_ There is no password for the root account on the EV3.
-+
-image::install/0020_WinSCP_PasswordPrompt.png[]
+=== Install for Windows users
 
-. Put the Gnikrap distribution file on the EV3.
-+
-image::install/030_WinSCP_DownloadFile.png[]
-+
-_Note:_ The network speed with the EV3 is quite slow.
+You're lucky, you benefit of a full automated install.
 
-. Connect to the EV3 brick with Putty
-+
-image::install/0100_Putty_Session.png[]
-+
-Login with "root" as user and no password: image:install/0110_Putty_Login.png[]
+** Download the Gnikrap distribution for Windows https://github.com/jbenech/gnikrap/releases[here]
+** Unzip the distribution and launch the program `insall_on_ev3.exe`. This program will ask you the IP address of the EV3 and will install
+leJOS on the EV3. +
+_Note:_ The IP address is displayed on the screen while leJOS is installed and running.
 
-. Uncompress the Gnikrap software:
-** Uncompress the files with the command `tar -xz -f gnikrap-core-0.3.0.tar.gz`
-
-Launch Gnikrap::
-. If needed, connect to the EV3 brick with a telnet client (see putty section above)
-
-. Launch Gnikrap:
-** Go to the bin folder: `cd gnikrap-core-0.3.0/bin`
-** Start Gnikrap: `./start.sh`
-
-. Finally open a browser on your computer and connect to Gnikrap with the following URL: `http://<IP of the EV3>`
-  You should have the Gnikrap main screen - See <<Quick overview>> for the screenshot - (it can take a few seconds to load).
-+
-_Note:_ The first time you launch a script it will take several seconds (more than 10s), because there some initialization to be done. 
-        Latter script execution are instantaneous.
-
-. While shutdown of the EV3 brick is needed, you can use the leJOS menu.
+That's all ! You can now run Gnikrap, see TODO
 
 
-[NOTE]
-====
-In some cases, there is not enough memory on the EV3 brick to have 2 java process running at the same time. 
-The solution is to kill the leJOS process (the menu). In order to do that you have to:
+=== Install for non Windows users
 
-- Stop the Gnikrap application kbd:[Ctrl + C]. 
-- Found, the process with the command: `ps | grep ejre`.
-- Kill the process with the command: `kill 1527` where "1527" is the process Id found with the ps command
-- Relaunch the Gnikrap application (see below).
-
-While the menu has been killed, you have to stop the brick manually:
-
-- Stop the Gnikrap application kbd:[Ctrl + C]. 
-- Shutdown the EV3 brick by using the command: `shutdown -h now`
-
-====
+** Download the Gnikrap distribution for all operating systems (install-all) https://github.com/jbenech/gnikrap/releases[here]
+** Upload the tar.gz file on the brick. You can upload on the brick by using the a software that implement the SCP protocol (eg on Windows: http://winscp.net/eng/download.php[WinSCP])
+** Once uploaded, you need to connect (either with telnet or ssh) to the EV3. (eg on Windows, http://the.earth.li/~sgtatham/putty/latest/x86/putty.zip[Putty]) +
+   _Note:_ The login to use is "root" and there is no password.
+** Once connected, decompress the tar.gz file with a command like: `tar -xzf gnikrap-install-all-<Version>.tar.gz` (Replace <Version> with the right version according to the file you have)
+** Go to the folder just created with a command like: `cd gnikrap-install-all-<Version>` (Here again, <Version> has to be replaced with the right version)
+** Last but not least, launch the Gnikrap install with a command like: `./install.sh` +
+   Note: If Gnikrap has already been installed, the program can prompt you to uninstall the previous installed version.
 
 
-Note: There is a plan in order to provide a packaging more simple to use (See <<Changelog>> for more details)
+=== Launch Gnikrap   
+
+** With the leJOS menu go to 'Program' TODO # click on the middle button.
+** On the list, select Gnikrap and click again on the middle button.
+** Select 'run' TODO (this is the default) and click again on the middle button.
+** Gnikrap will be launched (it take a some long seconds).
+** Once Gnikrap was launched, you can connect with a browser. +
+   _Note:_ In order to come back to the leJOS menu, you have to stop Gnikrap by using the `Gnikrap` menu in the any browser connected to the brick.

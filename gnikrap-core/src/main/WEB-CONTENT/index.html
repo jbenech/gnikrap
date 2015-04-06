@@ -47,7 +47,24 @@
           display: flex; 
         }
       }
-    </style>
+      
+      /* Image drop zone css */
+      .upload-drop-zone {
+      }
+
+      /* skin.css Style*/
+      .upload-drop-zone {
+        color: #ccc;
+        border-style: dashed;
+        border-color: #ccc;
+        line-height: 200px;
+        text-align: center
+      }
+      .upload-drop-zone.drop {
+        color: #222;
+        border-color: #222;
+      }
+  </style>
 
     <!-- Load libraries (Updated SEP2014) -->
     <!-- TBD: Consider using AMD tools, eg. require.js (Drawback: don't work without http server (local dev mode) ?) -->
@@ -95,11 +112,12 @@
             
             <div class="nav navbar-nav navbar-right">
               <div class="btn-group dropdown" role="group">
-                <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" src="images/gnikrap.png"/> <span class="caret"></span></button>
+                <button class="btn navbar-btn" data-toggle="dropdown"><strong>Gnikrap</strong> <img height="20" alt="Logo" src="images/gnikrap.png"/> <span class="caret"></span></button>
                   <ul class="dropdown-menu" role="menu">
                     <li class="hidden-lg"><a data-bind="click: onFullScreen"><span class="i18n" data-i18n="navigationBar.gnikrap.fullScreen">FULL_SCREEN</span></a></li>
                     <li><a data-bind="click: onStopGnikrap"><span class="i18n" data-i18n="navigationBar.gnikrap.stopGnikrap">STOP_GNIKRAP</span></a></li>
                     <!-- li><a data-bind="click: onDisplaySettings"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li -->
+                    <li><a data-bind="click: onDisplayImportImages"><span class="i18n" data-i18n="navigationBar.gnikrap.importImages">IMPORT_IMAGES</span></a></li>
                     <li><a href="gnikrap-doc/index.html" target="_blank" ><span class="i18n" data-i18n="navigationBar.gnikrap.documentation">DOCUMENTATION</span></a></li>
                     <li class="divider"></li>
                     <li><a data-bind="click: onDisplayAbout"><span class="i18n" data-i18n="navigationBar.gnikrap.about">ABOUT</span></a></li>
@@ -361,6 +379,7 @@
                 <tr>
                   <th class="i18n" data-i18n="manageScriptFilesModal.c1.title">FILENAME</th>
                   <th class="i18n" data-i18n="manageScriptFilesModal.c2.title">LANGUAGE</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody data-bind="foreach: files">
@@ -409,8 +428,45 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">
               <span class="i18n" data-i18n="settingsModal.cancel">CANCEL</span></button>
-            <button type="button" class="btn btn-primary" type="submit" data-bind="click: onSave">
+            <button type="button" class="btn btn-primary" data-bind="click: onSave">
               <span class="i18n" data-i18n="settingsModal.save">SAVE</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ############################################################ -->
+    <!-- Image modal -->
+    <div id="importImagesModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">CrossCloseButton</span></button>
+            <h4 class="modal-title"><span class="i18n" data-i18n="importImageModal.title">IMPORT_IMAGES</span></h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="exampleInputFile" data-i18n="importImageModal.selectImage">SELECT_IMAGE</label>
+                <input type="file" id="exampleInputFile" data-bind="event: { change: function() { uploadImage($element.files[0]) } }">
+              </div>
+            </form>
+
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <canvas id="importImagesModalCanvas" width="178" height="128">
+                  <!-- Insert fallback content here -->
+                </canvas>
+              </div>
+            </div>
+            
+            <textarea class="form-control" rows="5" data-bind="value: imageAsDataURI" readonly></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              <span class="i18n" data-i18n="importImageModal.cancel">CANCEL</span></button>
+            <button type="button" class="btn btn-primary" data-bind="click: onCopyAndClose">
+              <span class="i18n" data-i18n="importImageModal.copyAndClose">COPY_AND_CLOSE</span></button>
           </div>
         </div>
       </div>
@@ -422,7 +478,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title"><img src="images/gnikrap.png"/> <strong>Gnikrap 0.4.0</strong></h3>
+            <h3 class="modal-title"><img alt="Logo" src="images/gnikrap.png"/> <strong>Gnikrap 0.4.0</strong></h3>
           </div>
           <div class="modal-body">
             <p class="i18n" data-i18n="[html]aboutModal.gnikrapShortDescription">GNIKRAP_SHORT_DESCRIPTION</p>
