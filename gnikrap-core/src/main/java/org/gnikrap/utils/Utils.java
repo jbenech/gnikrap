@@ -74,6 +74,15 @@ public class Utils {
     return result;
   }
 
+  /**
+   * Returns true if it seems launched on a EV3 brick, false otherwise
+   */
+  public static boolean isOnEV3() {
+    return System.getProperty("os.arch", "-").equalsIgnoreCase("arm") && //
+        System.getProperty("os.name", "-").equalsIgnoreCase("Linux") && //
+        System.getProperty("java.runtime.name", "-").toLowerCase().contains("se embedded");
+  }
+
   // //////////////////////////////////////////////////////////////////////////
   // Base64 utils
 

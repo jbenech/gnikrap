@@ -48,7 +48,7 @@ Features to add (no specific order):
  - Add exit script (from the script) feature/function
  - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
  - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor)
- - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items)
+ - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items, etc.)
 
  
 ------------------------------------------------------------------------------
@@ -62,13 +62,15 @@ Known defects:
 ------------------------------------------------------------------------------
 
 Work in progress:
- - Easy use (no more need telnet/ssh/scp) / leJOS integration:
-   - Automated GUI installation on Windows.
-   - Shell script (for the EV3) for others platforms.
-   - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
-   - Shutdown EV3 brick / Stop Gnikrap (<=> return to leJOS menu) from the Gnikrap user interface
- - xGeo (GPS) xSensor added
- - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
- - Documentation updated
- - Fix: 
-   - API for the EV3 brick screen is now operational
+ 0.4.0 (TBD - leJOS Firmware/Menu integration)
+    - Easy use (no more need telnet/ssh/scp) / leJOS integration:
+     - Automated GUI installation on Windows.
+     - Shell script (for the EV3) for others platforms.
+     - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
+     - Shutdown EV3 brick / Stop Gnikrap (<=> return to leJOS menu) from the Gnikrap user interface
+    - xGeo (GPS) xSensor added
+    - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
+    - Documentation updated
+
+    - Fix: 
+     - API for the EV3 brick screen is now operational (include import and use any image on the EV3 screen)

@@ -71,22 +71,17 @@ public final class Configuration {
   /**
    * Load the configuration file which have the name of the package.class in the following order:
    * <ul>
-   * <li>File in the current user.dir</li>
-   * <li>If not found and if on EV3: look in /home/gnikrap/</li>
+   * <li>File in the current folder: <user.dir></li>
+   * <li>If not found: look at <user.home>/.gnikrap/</li>
    * <li>If not found: look in root classpath</li>
    * <ul>
    */
   public static Configuration load(Class<?> clazzToConfigure) throws IOException {
-    String configurationFile = System.getProperty("user.dir") + "/" + clazzToConfigure.getName() + ".config";
+    String shortFileName = clazzToConfigure.getName() + ".config";
+    String configurationFile = System.getProperty("user.dir") + "/" + shortFileName;
 
     if (new File(configurationFile).exists() == false) {
-      // If the file don't exists and we are on the EV3, we are maybe launched as a submodule of EV3 menu => try a predefined place
-      if (System.getProperty("os.arch", "-").equalsIgnoreCase("arm") && //
-          System.getProperty("os.name", "-").equalsIgnoreCase("Linux") && //
-          System.getProperty("java.runtime.name", "-").toLowerCase().contains("se embedded")) {
-        // Default configuration file on EV3
-        configurationFile = "/home/gnikrap/" + clazzToConfigure.getName() + ".config";
-      }
+      configurationFile = System.getProperty("user.home") + "/.gnikrap/" + shortFileName;
     }
 
     if (new File(configurationFile).exists()) {
@@ -94,11 +89,11 @@ public final class Configuration {
         return new Configuration(JsonObject.readFrom(r));
       }
     } else {
-      InputStream is = ClassLoader.getSystemResourceAsStream("/" + configurationFile);
+      InputStream is = ClassLoader.getSystemResourceAsStream("/" + shortFileName);
       if (is != null) {
         return new Configuration(JsonObject.readFrom(new InputStreamReader(is)));
       } else {
-        throw new IOException("Configuration file: '" + configurationFile + "' not found");
+        throw new IOException("No configuration file found for: '" + shortFileName + "'");
       }
     }
   }

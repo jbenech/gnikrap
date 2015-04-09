@@ -52,7 +52,7 @@ rem - =========================================================================
 rem - Check if Gnikrap installed
 :CHECK_INSTALL
 echo Check if Gnikrap has already been installed...
-%PLINK_CMD% "ls /home/gnikrap/"
+%PLINK_CMD% "ls /home/root/.gnikrap/"
 if ERRORLEVEL 0 GOTO :FAIL_INSTALL
 
 EXIT /B 0
