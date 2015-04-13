@@ -9,6 +9,7 @@
       "fullScreen": "Toggle full screen",
       "stopGnikrap": "Stop Gnikrap...",
       "settings": "Settings...",
+      "importImages": "Import images...",
       "documentation": "Documentation..."
     },
 
@@ -179,6 +180,21 @@
   },
 
 
+  "importImagesModal": {
+    "title": "Import images",
+    "selectImage": "Select an image to use on the EV3:",
+    "useDithering": "Use dithering ?",
+    "keepAspectRatio": "Keep aspect ratio ?",
+    "whiteBlackthreshold": "Threshold white to black",
+    "selectCodeAndCopy": "If you want to use the image, select and copy the following code:",
+    "close": "Close",
+    
+    "errors": {
+      "fileIsNotAnImageSelectAnother": "'__filename__' cannot be read as an image, select a valid image file"
+    }
+  },
+
+  
   "ev3brick": {
     "ev3ConnectionOk": "EV3 Brick connection ok",
     "confirmStopScriptAlreadyRunning": "A script is already running, stop the script currently running and start the new script ?",

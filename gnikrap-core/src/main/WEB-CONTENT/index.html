@@ -436,19 +436,41 @@
     </div>
 
     <!-- ############################################################ -->
-    <!-- Image modal -->
+    <!-- Import image modal -->
     <div id="importImagesModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">CrossCloseButton</span></button>
-            <h4 class="modal-title"><span class="i18n" data-i18n="importImageModal.title">IMPORT_IMAGES</span></h4>
+            <h4 class="modal-title"><span class="i18n" data-i18n="importImagesModal.title">IMPORT_IMAGES</span></h4>
           </div>
           <div class="modal-body">
-            <form>
+            <form id="importImages_selectFileForm">
               <div class="form-group">
-                <label for="exampleInputFile" data-i18n="importImageModal.selectImage">SELECT_IMAGE</label>
-                <input type="file" id="exampleInputFile" data-bind="event: { change: function() { uploadImage($element.files[0]) } }">
+                <label for="selectImageFile" class="i18n" data-i18n="importImagesModal.selectImage">SELECT_IMAGE</label>
+                <input type="file" id="selectImageFile" data-bind="event: { change: function() { uploadImage($element.files[0]) } }" />
+              </div>
+            </form>
+            <form class="form-horizontal" disabled>
+              <div class="form-group">
+                <div class="col-sm-offset-1 checkbox">
+                  <label>
+                    <input type="checkbox" data-bind="checked: keepAspectRatio" /> <span class="i18n" data-i18n="importImagesModal.keepAspectRatio">KEEP_ASPECT_RATIO</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-1 checkbox">
+                  <label>
+                    <input type="checkbox" data-bind="checked: useDithering" /> <span class="i18n" data-i18n="importImagesModal.useDithering">USE_DITHERING</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <span class="col-sm-offset-1 col-sm-4 i18n" data-i18n="importImagesModal.whiteBlackthreshold">WHITE_BLACK_THRESHOLD</span>
+                <div class="col-sm-7">
+                  <input type="range" data-bind="value: threshold" min="1" max="255" >
+                </div>
               </div>
             </form>
 
@@ -460,13 +482,13 @@
               </div>
             </div>
             
-            <textarea class="form-control" rows="5" data-bind="value: imageAsDataURI" readonly></textarea>
+            
+            <label for="importImages_jsCodeToCopy" class="i18n" data-i18n="importImagesModal.selectCodeAndCopy">SELECT_AND_COPY</label>
+            <textarea class="form-control" id="importImages_jsCodeToCopy" rows="5" data-bind="value: codeToBuildTheImage"></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">
-              <span class="i18n" data-i18n="importImageModal.cancel">CANCEL</span></button>
-            <button type="button" class="btn btn-primary" data-bind="click: onCopyAndClose">
-              <span class="i18n" data-i18n="importImageModal.copyAndClose">COPY_AND_CLOSE</span></button>
+              <span class="i18n" data-i18n="importImagesModal.close">CLOSE</span></button>
           </div>
         </div>
       </div>
