@@ -228,8 +228,8 @@ final public class SimpleEV3Screen implements EV3Device {
 
   private SimpleEV3Image decodeRgfImage(byte[] imageData) throws EV3ScriptException {
     if ((imageData != null) && (imageData.length > 2)) {
-      int width = imageData[0];
-      int height = imageData[1];
+      int width = imageData[0] & 0xFF; // TODO: JDK8, replace by Byte.toUnsignedInt
+      int height = imageData[1] & 0xFF;
       byte[] ev3ImageData = new byte[(width + 7) / 8 * height]; // + 7 in order to have a full number of bytes
       if (imageData.length >= ev3ImageData.length + 2) {
         System.arraycopy(imageData, 2, ev3ImageData, 0, ev3ImageData.length);

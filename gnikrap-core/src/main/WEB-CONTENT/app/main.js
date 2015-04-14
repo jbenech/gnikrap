@@ -1285,9 +1285,12 @@ function ImportImagesViewModel(appContext) {
   
   // Convert the array of pixels (Uint8Array) to an RGB binary representation
   self.__convertToRGFBinaryData = function(width, height, pixels) {
-    var ev3ImageData = new Uint8Array(Math.ceil((width + 7) / 8 * height)); // + 7 in order to have a full number of bytes
+    var ev3ImageData = new Uint8Array(2 + Math.floor((width + 7) / 8) * height); // + 7 in order to have a full number of bytes
 
-    var index = 0; // The index within the image
+    ev3ImageData[0] = width;
+    ev3ImageData[1] = height;
+    
+    var index = 2; // The index within the raw image data
     var currentByte = 0; // The 8 pixels in progress (1 pixel is 1 bit)
 
     for (var i = 0; i < height; i++) {
@@ -1299,7 +1302,7 @@ function ImportImagesViewModel(appContext) {
           currentByte <<= 1;
           idxInline = j + k;
           if (idxInline < width) { // End of line is blank
-            currentByte |= (pixels[lineOffset + idxInline] == 255 ? 1 : 0);
+            currentByte |= (pixels[lineOffset + idxInline] == 255 ? 0 : 1);
           }
         }
         ev3ImageData[index++] = currentByte;
@@ -1331,7 +1334,7 @@ function ImportImagesViewModel(appContext) {
       // Just ignore, not standard filename
     }
     // Build the code
-    var jsCode = "var " + varName + " = ev3.getScreen().decodeImage(";
+    var jsCode = "var " + varName + " = ev3.getBrick().getScreen().decodeImage(";
     var index = 0, nextLineLength = Math.max(100 - jsCode.length, 10);
     while(index < imgDataURI.length) {
       jsCode += "\"" + imgDataURI.slice(index, index + nextLineLength) + "\"";
