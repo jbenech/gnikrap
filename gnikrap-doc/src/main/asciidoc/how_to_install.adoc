@@ -15,31 +15,39 @@ Lejos installation::
 
 You're lucky, you benefit of a full automated install.
 
-** Download the Gnikrap distribution for Windows https://github.com/jbenech/gnikrap/releases[here]
+** Download the Gnikrap distribution for Windows https://github.com/jbenech/gnikrap/releases[here] (file gnikrap-install-windows-<Version>.zip)
 ** Unzip the distribution and launch the program `insall_on_ev3.exe`. This program will ask you the IP address of the EV3 and will install
 leJOS on the EV3. +
 _Note:_ The IP address is displayed on the screen while leJOS is installed and running.
 
-That's all ! You can now run Gnikrap, see TODO
+That's all ! You can now run Gnikrap, see <<Launch Gnikrap>>
 
 
 === Install for non Windows users
 
-** Download the Gnikrap distribution for all operating systems (install-all) https://github.com/jbenech/gnikrap/releases[here]
+** Download the Gnikrap distribution for all operating systems (install-all) https://github.com/jbenech/gnikrap/releases[here] (file gnikrap-install-all-<Version>.tar.gz)
 ** Upload the tar.gz file on the brick. You can upload on the brick by using the a software that implement the SCP protocol (eg on Windows: http://winscp.net/eng/download.php[WinSCP])
 ** Once uploaded, you need to connect (either with telnet or ssh) to the EV3. (eg on Windows, http://the.earth.li/~sgtatham/putty/latest/x86/putty.zip[Putty]) +
    _Note:_ The login to use is "root" and there is no password.
 ** Once connected, decompress the tar.gz file with a command like: `tar -xzf gnikrap-install-all-<Version>.tar.gz` (Replace <Version> with the right version according to the file you have)
 ** Go to the folder just created with a command like: `cd gnikrap-install-all-<Version>` (Here again, <Version> has to be replaced with the right version)
-** Last but not least, launch the Gnikrap install with a command like: `./install.sh` +
-   Note: If Gnikrap has already been installed, the program can prompt you to uninstall the previous installed version.
+** Last but not least, launch the Gnikrap install with the command: `./install.sh` +
+   Note: If Gnikrap has already been installed, the program can prompt you to confirm the uninstallation/update of the previously installed version.
 
 
 === Launch Gnikrap   
 
-** With the leJOS menu go to 'Program' TODO # click on the middle button.
-** On the list, select Gnikrap and click again on the middle button.
-** Select 'run' TODO (this is the default) and click again on the middle button.
-** Gnikrap will be launched (it take a some long seconds).
-** Once Gnikrap was launched, you can connect with a browser. +
+** With the leJOS menu go to 'Programs' menu click on the middle button.
+** On the 'Files' list, select Gnikrap and click again on the middle button.
+** Select 'Execute program' (this is the default) and click again on the middle button.
+** Duke, the java maskot is displayed with the following message: "Wait a second", ... so just wait +
+   Gnikrap will be launched (it take a some long seconds).
+** Once Gnikrap was launched, you can connect with a browser (Note: Once the Gnikrap welcome screen was displayed, you have to wait a few seconds +
+   before being able to connect with a browser). +
    _Note:_ In order to come back to the leJOS menu, you have to stop Gnikrap by using the `Gnikrap` menu in the any browser connected to the brick.
+
+
+[TIP]
+====
+If you want to have Gnikrap started automatically at the EV3 brick startup, you have to select 'Set as Default'.
+====

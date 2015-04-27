@@ -111,13 +111,20 @@ final public class SimpleEV3Screen implements EV3Device {
   }
 
   /**
+   * TODO: Don't work ?!
+   * 
    * @param color The #RRGGBB color as an integer. All the values that are not black will be displayed as white.
    */
+  @ScriptApi(versionAdded = "TBD", isIncubating = true)
   public void setColor(int color) {
     this.color = color;
     graphicsLCD.setColor(color);
   }
 
+  /**
+   * TODO: Don't work ?!
+   */
+  @ScriptApi(versionAdded = "TBD", isIncubating = true)
   public int getColor() {
     return color;
   }
@@ -167,9 +174,11 @@ final public class SimpleEV3Screen implements EV3Device {
     graphicsLCD.fillArc(x - r, y - r, d, d, 0, 360);
   }
 
+  /**
+   * TODO: Don't work
+   */
   @ScriptApi(versionAdded = "TBD", isIncubating = true)
   public void drawPoint(int x, int y) {
-    // Currenlty Don't work ?
     graphicsLCD.setPixel(x, y, color);
   }
 

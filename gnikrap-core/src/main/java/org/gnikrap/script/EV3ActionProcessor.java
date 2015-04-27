@@ -33,6 +33,7 @@ import org.gnikrap.ActionMessageProcessor;
 import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
 import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.utils.ApplicationContext;
+import org.gnikrap.utils.Configuration;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 
@@ -53,8 +54,13 @@ public final class EV3ActionProcessor {
 
   private final ApplicationContext appContext;
 
+  private final boolean sendMessageToBrowserAsynchroneously;
+
   public EV3ActionProcessor(ApplicationContext appContext) {
     this.appContext = appContext;
+
+    Configuration conf = appContext.getObject(Configuration.class);
+    sendMessageToBrowserAsynchroneously = conf.getValueAsBoolean("SendMessageToBrowserAsynchroneously", false);
   }
 
   private void finalizeInit() {
@@ -76,19 +82,21 @@ public final class EV3ActionProcessor {
     finalizeInit();
 
     // Start the answer processor executor
-    executor.scheduleAtFixedRate(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          Message toSend;
-          while ((toSend = messagesToSend.poll()) != null) {
-            remoteWebSocketService.sendMessage(toSend.getContent(), toSend.getSessionUUID());
+    if (sendMessageToBrowserAsynchroneously) {
+      executor.scheduleAtFixedRate(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            Message toSend;
+            while ((toSend = messagesToSend.poll()) != null) {
+              remoteWebSocketService.sendMessage(toSend.getContent(), toSend.getSessionUUID());
+            }
+          } catch (Exception ex) {
+            LOGGER.log(Level.WARNING, "Error while sending message to browser", ex);
           }
-        } catch (Exception ex) {
-          LOGGER.log(Level.WARNING, "Error while sending message to browser", ex);
         }
-      }
-    }, 500, 50, TimeUnit.MILLISECONDS); // Run each 50ms after 500ms initial waiting time
+      }, 500, 50, TimeUnit.MILLISECONDS); // Run each 50ms after 500ms initial waiting time
+    }
   }
 
   /**
@@ -143,8 +151,13 @@ public final class EV3ActionProcessor {
    * @param sessionUUID The UUID of the session we want to sent the message, null in case of broadcast
    */
   void sendBackMessage(UUID sessionUUID, String message) {
-    // Messages are pooled and sent-back asynchronously by the executor (see start())
-    messagesToSend.add(new Message(sessionUUID, message));
+    if (sendMessageToBrowserAsynchroneously) {
+      // Messages should be pooled and sent-back asynchronously by the executor (see start())
+      messagesToSend.add(new Message(sessionUUID, message));
+    } else {
+      // Better user feed (more responsive if send directly in the javascript call.
+      remoteWebSocketService.sendMessage(message, sessionUUID);
+    }
   }
 
   void logAndSendBackException(Exception ex) {

@@ -1,11 +1,25 @@
 ------------------------------------------------------------------------------
 
-Current stable release is: 0.3.0
+Current stable release is: 0.4.0
 
 
 ------------------------------------------------------------------------------
 
 Version history:
+ 0.4.0 (TBD - leJOS Firmware/Menu integration)
+    - Easy use (no more need telnet/ssh/scp) / leJOS integration:
+     - Automated GUI installation on Windows.
+     - Shell script (for the EV3) for others platforms.
+     - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
+     - Shutdown EV3 brick / Stop Gnikrap (<=> return to leJOS menu) from the Gnikrap user interface
+    - xGeo (GPS) xSensor added
+    - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
+    - Documentation updated
+
+    - Fix: 
+     - API for the EV3 brick screen is now operational (include import of images for displaying on the EV3 screen)
+
+
  0.3.0 (30JAN2015 - xSensors):
     - Add xSensors (eXternal Sensors) feature: 
       - xTouch (24 multi-touch on screen keyboard), 
@@ -62,15 +76,4 @@ Known defects:
 ------------------------------------------------------------------------------
 
 Work in progress:
- 0.4.0 (TBD - leJOS Firmware/Menu integration)
-    - Easy use (no more need telnet/ssh/scp) / leJOS integration:
-     - Automated GUI installation on Windows.
-     - Shell script (for the EV3) for others platforms.
-     - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
-     - Shutdown EV3 brick / Stop Gnikrap (<=> return to leJOS menu) from the Gnikrap user interface
-    - xGeo (GPS) xSensor added
-    - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
-    - Documentation updated
-
-    - Fix: 
-     - API for the EV3 brick screen is now operational (include import and use any image on the EV3 screen)
+ - Blockly

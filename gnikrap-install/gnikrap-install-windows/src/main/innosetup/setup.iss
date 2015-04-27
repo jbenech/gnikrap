@@ -131,7 +131,7 @@ begin
 
   try
     // Check IP adress
-    installPage.SetProgress(1, 4);
+    installPage.SetProgress(1, 5);
     installPage.SetText('Checking that the IP adress...' + ev3IpAdress + ' is correct', '');
     if not RemoteEV3('CHECK_IP', False) then begin
       Result := 'No EV3 with leJOS installed found at the IP adress: ' + ev3IpAdress + '.' + #13#10 + 
@@ -140,7 +140,7 @@ begin
     
     if Result = '' then begin
       // Check not already installed
-      installPage.SetProgress(2, 4);
+      installPage.SetProgress(2, 5);
       installPage.SetText('Checking if Gnikrap has already been installed on your brick', '');
       if not RemoteEV3('CHECK_INSTALL', False) then begin
         if MsgBox('Gnikrap has already been installed on your EV3 brick.' + #13#10 +
@@ -153,11 +153,22 @@ begin
 
     if Result = '' then begin
       // Perform the installation
-      installPage.SetProgress(3, 4);
+      installPage.SetProgress(3, 5);
       installPage.SetText('Installation in progress...' + #13#10 +
                           'Don''t close the black box, it display installation progress information and will be automatically closed while installation is done', '');
       if not RemoteEV3('INSTALL_ON_EV3', True) then begin
         Result := 'Unexpected problem while installing Gnikrap on your EV3 brick.';
+      end;
+    end;
+
+    // Note: While udapting Gnikrap, we have very often a NPE on the the leJOS menu if Gnikrap has been launched before the update
+    //       <=> Reboot is performed in order to avoid this issue.
+    if Result = '' then begin
+      // Perform the EV3 reboot
+      installPage.SetProgress(3, 5);
+      installPage.SetText('EV3 brick reboot in progress...', '');
+      if not RemoteEV3('REBOOT_EV3', False) then begin
+        Result := 'Installation done, but an unexpected problem while rebooting the EV3 Brick.';
       end;
     end;
   finally

@@ -10,6 +10,7 @@ rem - Process arguments
 if "%2" == "CHECK_IP" GOTO :CHECK_IP
 if "%2" == "CHECK_INSTALL" GOTO :CHECK_INSTALL
 if "%2" == "INSTALL_ON_EV3" GOTO :INSTALL_ON_EV3
+if "%2" == "REBOOT_EV3" GOTO :REBOOT_EV3
 
 rem - Print usage and exit
 echo Usage: %0 ev3_ip_adress mode
@@ -25,6 +26,8 @@ echo                    CHECK_INSTALL:  Check if Gnikrap has already been instal
 echo                                    Returns code: O if not installed, 1 if already installed
 echo                    INSTALL_ON_EV3: Install on the EV3 brick
 echo                                    Returns code: 0 if installed, 1 otherwise
+echo                    REBOOT_EV3:     Reboot the EV3 brick
+echo                                    Returns code: 0 if ok, 1 otherwise
 EXIT /B 1
 
 
@@ -66,7 +69,7 @@ EXIT /B 1
 rem - =========================================================================
 rem - Copy files to EV3
 :INSTALL_ON_EV3
-echo Copying Gnikrap to the EV3 brick...
+echo Copy Gnikrap to the EV3 brick...
 rem Silently override if already exists
 pscp -pw "" -scp %INSTALL_ALL_NAME%.tar.gz root@%1:/home/root
 if ERRORLEVEL 1 GOTO :FAIL_INSTALL_ON_EV3
@@ -90,5 +93,19 @@ EXIT /B 0
 
 :FAIL_INSTALL_ON_EV3
 echo.
-echo Error while installing Gnikrap to the EV3 brick
+echo Error while installing Gnikrap on the EV3 brick
 EXIT /B 1
+
+
+rem - =========================================================================
+rem - Reboot the EV3
+:REBOOT_EV3
+echo Reboot the EV3 brick...
+%PLINK_CMD% "shutdown -r now"
+if ERRORLEVEL 0 GOTO :FAIL_REBOOT
+
+EXIT /B 0
+
+:FAIL_REBOOT
+rem Shutdown kill the current connection <=> always fails... but it's normal (otherwise, has to done it in 1 minute with '+1' instead of 'now')
+EXIT /B /0
