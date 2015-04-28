@@ -6,7 +6,7 @@ Current stable release is: 0.4.0
 ------------------------------------------------------------------------------
 
 Version history:
- 0.4.0 (TBD - leJOS Firmware/Menu integration)
+ 0.4.0 (28APR2015 - leJOS Firmware/Menu integration)
     - Easy use (no more need telnet/ssh/scp) / leJOS integration:
      - Automated GUI installation on Windows.
      - Shell script (for the EV3) for others platforms.
