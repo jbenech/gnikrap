@@ -163,6 +163,7 @@ sound.playNote("Fa", 500);
 sound.playNote("Sol", 500);
 sound.playNote("La", 500);
 sound.playNote("Si", 500);
+sound.playNote("Do4", 500);
 */
 
 
@@ -354,5 +355,24 @@ while(ev3.isOk()) {
   }
   
   ev3.sleep(100);
+}
+*/
+
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// xGeo XSensor
+
+/*
+// xGeo XSensor
+var xGeo = ev3.getXSensor("xGeo");
+while(ev3.isOk()) {
+  var value = xGeo.getValue();
+  if(value.isStarted()) {
+    ev3.notify("Latitude: " + value.getLatitude() + ", longitude: " + value.getLongitude() 
+      + ", accurancy: " + value.getAccuracy() + ", timestamp: " + value.getTimestamp());
+  }
+  
+  ev3.sleep(2000);
 }
 */

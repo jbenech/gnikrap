@@ -111,8 +111,11 @@ final public class SimpleEV3Sound implements EV3Device {
     }
   }
 
-  static final float[] OCTAVE3 = { //
-  261.626f, // Do3 - C4
+  // Data on notes from http://fr.wikipedia.org/wiki/Fr%C3%A9quences_des_touches_du_piano
+
+  static final float[] OCTAVE3 = {
+      //
+      261.626f, // Do3 - C4
       277.183f, // Do3# - C#4
       293.665f, // Re3 - D4
       311.127f, // Re3# - D#4
@@ -126,9 +129,10 @@ final public class SimpleEV3Sound implements EV3Device {
       493.883f, // Si3 - B4
   };
 
-  // Coefficient used to convert from the 4th octave to the others
-  static final float[] OCTAVE_COEF = { //
-  0.125f, // 1
+  // Coefficient used to convert from the 4th Gregorian octave to the others
+  static final float[] GREGORIAN_OCTAVE_COEF = {
+      //
+      0.125f, // 1
       0.25f, // 2
       0.5f, // 3
       1, // 4
@@ -137,105 +141,105 @@ final public class SimpleEV3Sound implements EV3Device {
       8 // 7
   };
 
+  // Coefficient used to convert from the 3th Latin octave to the others
+  static final float[] LATIN_OCTAVE_COEF = {
+      //
+      0.25f, // 1
+      0.5f, // 2
+      1, // 3
+      2, // 4
+      4, // 5
+      8 // 6
+  };
+
   static final int DO3 = 0, C4 = 0;
-  static final int DO3_s = 1, Cd4 = 1;
   static final int RE3 = 2, D4 = 2;
-  static final int RE3_s = 3, Dd4 = 3;
   static final int MI3 = 4, E4 = 4;
   static final int FA3 = 5, F4 = 5;
-  static final int FA3_s = 6, Fd4 = 6;
   static final int SOL3 = 7, G4 = 7;
-  static final int SOL3_s = 8, Gd4 = 8;
   static final int LA3 = 9, A4 = 9;
-  static final int LA3_s = 10, Ad4 = 10;
   static final int SI3 = 11, B4 = 11;
 
-  /**
-   * // C - Do // D - Re // E - Mi // F - Fa // G - Sol // A - La // B - Si
-   * 
-   * @param note
-   * @return
-   * @throws EV3ScriptException
-   */
   static int getFrequency(String note) throws EV3ScriptException {
-    int length = note.length();
-    boolean isLength3orUpper = length >= 3;
-    if (length >= 2) {
-      // Gregorian notation
+    String cleanNote = note.trim();
+    int length = cleanNote.length();
+    if ((length >= 2) && (length <= 5)) {
+      char last = cleanNote.charAt(length - 1);
+
+      // Sharp or not ?
+      boolean isSharp = (last == '#');
+
+      // Octave
+      char octaveChar = (isSharp ? cleanNote.charAt(length - 2) : last);
+      int octaveIndex = -1; // 0 for octave 1
+      if ((octaveChar >= '1') && (octaveChar <= '7')) {
+        octaveIndex = octaveChar - '1';
+      }
+
+      // Note
       final char c0 = note.charAt(0);
       final char c1 = note.charAt(1);
-      final char c2 = (isLength3orUpper ? note.charAt(2) : '-');
-
-      if ((c0 >= 'A') && (c0 <= 'G')) {
-        // C4 - C#4, etc...
-        boolean isSharp = (c1 == '#');
-        char octave = (isSharp ? c2 : c1); // => If not parsable, Exception will be launched later
-        if ((octave >= '1') && (octave <= '7')) {
-          float coef = OCTAVE_COEF[octave - '1'];
-          if (c0 == 'C') {
-            return (int) (OCTAVE3[(isSharp ? Cd4 : C4)] * coef);
-          }
-          if (c0 == 'D') {
-            return (int) (OCTAVE3[(isSharp ? Dd4 : D4)] * coef);
-          }
-          if (c0 == 'E' && isSharp == false) {
-            return (int) (OCTAVE3[E4] * coef);
-          }
-          if (c0 == 'F') {
-            return (int) (OCTAVE3[(isSharp ? Fd4 : F4)] * coef);
-          }
-          if (c0 == 'G') {
-            return (int) (OCTAVE3[(isSharp ? Gd4 : G4)] * coef);
-          }
-          if (c0 == 'A') {
-            return (int) (OCTAVE3[(isSharp ? Ad4 : A4)] * coef);
-          }
-          if (c0 == 'B' && isSharp == false) {
-            return (int) (OCTAVE3[B4] * coef);
-          }
-        }
-      }
 
       // Latin notation
-      if (c0 == 'D' && c1 == 'o') { // Do
-        if (isLength3orUpper && c2 == '#') {
-          return (int) OCTAVE3[DO3_s];
+      if ((length <= 4) || isSharp) {
+        float coef = ((octaveIndex >= 0) && (octaveIndex < LATIN_OCTAVE_COEF.length) ? LATIN_OCTAVE_COEF[octaveIndex] : 1);
+
+        if (c0 == 'D' && c1 == 'o') { // Do
+          return getFrequency(DO3, coef, isSharp);
         }
-        return (int) OCTAVE3[DO3];
-      }
-      if (c0 == 'R' && c1 == 'e') { // Re
-        if (isLength3orUpper && c2 == '#') {
-          return (int) OCTAVE3[RE3_s];
+        if (c0 == 'R' && c1 == 'e') { // Re
+          return getFrequency(RE3, coef, isSharp);
         }
-        return (int) OCTAVE3[RE3];
-      }
-      if (c0 == 'M' && c1 == 'i') { // Mi
-        return (int) OCTAVE3[MI3];
-      }
-      if (c0 == 'F' && c1 == 'a') { // Fa
-        if (isLength3orUpper && c2 == '#') {
-          return (int) OCTAVE3[FA3_s];
+        if (c0 == 'M' && c1 == 'i') { // Mi
+          return getFrequency(MI3, coef, false);
         }
-        return (int) OCTAVE3[FA3];
-      }
-      if (c0 == 'S') {
-        if (c1 == 'o' && c2 == 'l') { // Sol
-          if (length >= 4 && note.charAt(3) == '#') {
-            return (int) OCTAVE3[SOL3_s];
+        if (c0 == 'F' && c1 == 'a') { // Fa
+          return getFrequency(FA3, coef, isSharp);
+        }
+        if (c0 == 'S') {
+          if (c1 == 'o' && length >= 3 && note.charAt(2) == 'l') { // Sol
+            return getFrequency(SOL3, coef, isSharp);
           }
-          return (int) OCTAVE3[SOL3];
+          if (c1 == 'i') { // Si
+            return getFrequency(SI3, coef, false);
+          }
         }
-        if (c1 == 'i') { // Si
-          return (int) OCTAVE3[SI3];
+        if (c0 == 'L' && c1 == 'a') { // La
+          return getFrequency(LA3, coef, isSharp);
         }
       }
-      if (c0 == 'L' && c1 == 'a') { // La
-        if (isLength3orUpper && c2 == '#') {
-          return (int) OCTAVE3[LA3_s];
+
+      // Gregorian notation
+      if ((isSharp && length == 3) || (length == 2)) {
+        float coef = ((octaveIndex >= 0) && (octaveIndex < GREGORIAN_OCTAVE_COEF.length) ? GREGORIAN_OCTAVE_COEF[octaveIndex] : 1);
+
+        if (c0 == 'C') {
+          return getFrequency(C4, coef, isSharp);
         }
-        return (int) OCTAVE3[LA3];
+        if (c0 == 'D') {
+          return getFrequency(D4, coef, isSharp);
+        }
+        if (c0 == 'E' && isSharp == false) {
+          return getFrequency(E4, coef, false);
+        }
+        if (c0 == 'F') {
+          return getFrequency(F4, coef, isSharp);
+        }
+        if (c0 == 'G') {
+          return getFrequency(G4, coef, isSharp);
+        }
+        if (c0 == 'A') {
+          return getFrequency(A4, coef, isSharp);
+        }
+        if (c0 == 'B' && isSharp == false) {
+          return getFrequency(B4, coef, false);
+        }
       }
     }
     throw new EV3ScriptException(EV3ScriptException.INVALID_NOTE, MapBuilder.buildHashMap("note", note).build());
+  }
+
+  static final int getFrequency(int note, float octaveCoef, boolean isSharp) {
+    return (int) (OCTAVE3[(isSharp ? note + 1 : note)] * octaveCoef);
   }
 }

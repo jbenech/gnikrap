@@ -528,7 +528,8 @@ playTone(frequency, durationInMs):: Play a tone of the given frequency for the g
                                     *durationInMs*: the duration in milliseconds.
 
 playNote(note, durationInMs):: Play the given note for the given duration. +
-                               *note*: the note to play. Notes should be in ["C1"-"B7", # allowed on C, D, F, G, A] or ["Do"-"Si", # allowed on Do, Re, Fa, Sol, La]. +
+                               *note*: the note to play. +
+                               Notes should be in ["C1"-"B7", # allowed on C, D, F, G, A] or ["Do1"-"Si6", "Do"-"Si" the same "Do3"-"Si3", # allowed on Do, Re, Fa, Sol, La]. +
                                *durationInMs*: the duration in milliseconds.
 ****
 
@@ -550,6 +551,7 @@ sound.playNote("Fa", 500);
 sound.playNote("Sol", 500);
 sound.playNote("La", 500);
 sound.playNote("Si", 500);
+sound.playNote("Do4", 500);
 ----
 
 
@@ -1027,7 +1029,17 @@ getAltitudeAccuracy():: Returns the accuracy (in meter) of the altitude. +
 Sample script with xGeo XSensor:
 [source,javascript]
 ----
-TODO
+// xGeo XSensor
+var xGeo = ev3.getXSensor("xGeo");
+while(ev3.isOk()) {
+  var value = xGeo.getValue();
+  if(value.isStarted()) {
+    ev3.notify("Latitude: " + value.getLatitude() + ", longitude: " + value.getLongitude() 
+      + ", accurancy: " + value.getAccuracy() + ", timestamp: " + value.getTimestamp());
+  }
+  
+  ev3.sleep(2000);
+}
 ----
 
 
