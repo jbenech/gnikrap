@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 // Manage the interaction with the server on the EV3 brick
 function EV3BrickServer(appContext) {

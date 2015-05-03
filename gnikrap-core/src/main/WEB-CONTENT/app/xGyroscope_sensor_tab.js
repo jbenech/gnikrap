@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 // Model to manage the Gyroscope x-Sensor
 function GyroscopeSensorTabViewModel(appContext) {

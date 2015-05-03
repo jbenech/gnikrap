@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 ////////////////////////////////////
 // Initialization of the application
@@ -83,13 +85,10 @@ $(document).ready(function() {
     context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
     
     // Register windows events for editor auto-resize
-    // TODO consider using events
     window.onresize = function() {
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
-      context.scriptEditorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);
-      context.keyboardSensorTabVM.doResize(workAreaHeight, usefullWorkAreaHeight);
-      context.messageLogVM.doResize(workAreaHeight, usefullWorkAreaHeight);
+      $.publish("/gnikrap/doResize", [workAreaHeight, usefullWorkAreaHeight]);
     };
     $(window).resize();
 
@@ -107,7 +106,7 @@ $(document).ready(function() {
     
     // Register windows event to ask confirmation while the user leave the page (avoid loosing scripts)
     window.onbeforeunload = function () {
-      //return "";
+      return "";
     };
   });
 });

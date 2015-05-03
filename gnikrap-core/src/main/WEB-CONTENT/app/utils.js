@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 ////////////////////////////////////////////////////////////////////////////////////
 // Other stuff reworked from things found on the internet without explicit copyright
@@ -153,6 +155,14 @@ function generateUUID(){
   });
   return uuid;
 }
+
+// Event jQuery 'plugin' - from: https://gist.github.com/cowboy/661855
+(function($) {
+  var o         = $({});
+  $.subscribe   = o.on.bind(o);
+  $.unsubscribe = o.off.bind(o);
+  $.publish     = o.trigger.bind(o);
+}(jQuery));
 
 
 /////////////////////////////

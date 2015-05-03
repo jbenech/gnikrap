@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 // Model to manage the script editor tab
 function ScriptEditorTabViewModel(appContext) {
@@ -30,6 +32,11 @@ function ScriptEditorTabViewModel(appContext) {
     self.editor.getSession().setMode("ace/mode/javascript");
     self.editor.getSession().setTabSize(2);
     self.editor.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
+    
+    // Register events
+    $.subscribe("/gnikrap/doResize", function(evt, workAreaHeight, usefullWorkAreaHeight) {
+      self.doResize(workAreaHeight, usefullWorkAreaHeight);
+    });
   }
 
   self.onClearScript = function() {

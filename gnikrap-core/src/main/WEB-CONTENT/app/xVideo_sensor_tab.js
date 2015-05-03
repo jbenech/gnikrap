@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 // A computation engine that is able to track points.
 // Current implements is largely inspired from the jsfeast "Lukas Kanade optical flow" sample

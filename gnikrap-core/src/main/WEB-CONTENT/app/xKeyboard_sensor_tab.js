@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 // Model to manage the keyboard x-Sensor
 function KeyboardSensorTabViewModel(appContext) {
@@ -55,6 +57,11 @@ function KeyboardSensorTabViewModel(appContext) {
       $(this).removeClass("active");
       this.style.removeProperty("color");
       return false;
+    });
+    
+    // Register events
+    $.subscribe("/gnikrap/doResize", function(evt, workAreaHeight, usefullWorkAreaHeight) {
+      self.doResize(workAreaHeight, usefullWorkAreaHeight);
     });
   }
   

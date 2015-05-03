@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 // Model that manage the message log view
 function MessageLogViewModel(appContext) { // appContext not used for MessageLog
@@ -25,6 +27,11 @@ function MessageLogViewModel(appContext) { // appContext not used for MessageLog
     self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
     self.keepOnlyLastMessages = ko.observable(true);
     self.MESSAGES_TO_KEEP = 15;
+
+    // Register events
+    $.subscribe("/gnikrap/doResize", function(evt, workAreaHeight, usefullWorkAreaHeight) {
+      self.doResize(workAreaHeight, usefullWorkAreaHeight);
+    });
   }
 
   self.addMessage = function(isError, message) {

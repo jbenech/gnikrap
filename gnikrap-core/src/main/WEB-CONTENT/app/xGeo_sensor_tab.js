@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2015 Jean BENECH
+ * Copyright (C) 2015 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+'use strict';
 
 
 // Model to manage the GPS/Geo x-Sensor

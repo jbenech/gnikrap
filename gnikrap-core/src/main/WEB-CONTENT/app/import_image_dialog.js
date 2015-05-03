@@ -16,6 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+'use strict';
+
 
 // Model that manage the "Import Images" dialog
 function ImportImagesViewModel(appContext) {
