@@ -16,20 +16,21 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Model that manage the message log view
 function MessageLogViewModel(appContext) { // appContext not used for MessageLog
+  'use strict';
+
   var self = this;
   { // Init
+    self.context = appContext; // The application context
     self.messages = ko.observableArray();
     self.messages.extend({ rateLimit: 200 }); // Accept lower refresh rate
     self.keepOnlyLastMessages = ko.observable(true);
     self.MESSAGES_TO_KEEP = 15;
 
     // Register events
-    $.subscribe("/gnikrap/doResize", function(evt, workAreaHeight, usefullWorkAreaHeight) {
+    $.subscribe(self.context.events.resize, function(evt, workAreaHeight, usefullWorkAreaHeight) {
       self.doResize(workAreaHeight, usefullWorkAreaHeight);
     });
   }
@@ -55,25 +56,25 @@ function MessageLogViewModel(appContext) { // appContext not used for MessageLog
     } else {
       doAddMessage(isError, message, 1);
     }
-  }
+  };
 
   self.onResetMessages = function() {
     self.messages.removeAll();
-  }
+  };
 
   self.onKeepOnlyLastMessages = function() {
     self.keepOnlyLastMessages(!self.keepOnlyLastMessages());
     self.__doKeepOnlyLastMessages();
-  }
+  };
   
   self.__doKeepOnlyLastMessages = function() {
     if(self.keepOnlyLastMessages()) {
       self.messages.splice(self.MESSAGES_TO_KEEP); // Keep the first n messages
     }
-  }
+  };
   
   self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
     self.MESSAGES_TO_KEEP = Math.max(15, Math.round(usefullWorkAreaHeight/40)); // 40 is a bit more than the height of a single line message
     self.__doKeepOnlyLastMessages();
-  }
+  };
 }

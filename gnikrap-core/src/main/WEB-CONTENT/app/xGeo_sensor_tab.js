@@ -16,11 +16,11 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Model to manage the GPS/Geo x-Sensor
 function GeoSensorTabViewModel(appContext) {
+  'use strict';
+
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -53,8 +53,8 @@ function GeoSensorTabViewModel(appContext) {
       // Optional field (depends on the hardware/device capabilities)
       altitude: 0,
       altitudeAccuracy: 0
-    }
-  }
+    };
+  };
 
   self.__sendXValue = function() {
     self.xValue.isStarted = self.isStarted();
@@ -66,7 +66,7 @@ function GeoSensorTabViewModel(appContext) {
     self.accuracy(self.xValue.accuracy);
     self.altitude(self.xValue.altitude);
     self.altitudeAccuracy(self.xValue.altitudeAccuracy);
-  }
+  };
   
   self.watchPositionHandler = function(position) {
     self.xValue.timestamp = position.timestamp;
@@ -79,7 +79,7 @@ function GeoSensorTabViewModel(appContext) {
     //self.xValue.speed = position.coords.speed; // Speed can be computed
     
     self.__sendXValue();
-  }
+  };
   
   self.watchPositionErrorHandler = function(error) {
     var errorMsg;
@@ -93,13 +93,13 @@ function GeoSensorTabViewModel(appContext) {
       case error.POSITION_UNAVAILABLE:
         errorMsg = i18n.t("geoSensorTab.errors.positionUnavailable", {"detail": error.message });
         break;
-      case error.UNKNOWN_ERROR:
+      // case error.UNKNOWN_ERROR: // Use default
       default:
         errorMsg = i18n.t("geoSensorTab.errors.unknownError", {"detail": error.message });
         break;
     }
     self.context.messageLogVM.addMessage(true, errorMsg);
-  }
+  };
 
   self.onStart = function() {
     self.isStarted(!self.isStarted());
@@ -126,5 +126,5 @@ function GeoSensorTabViewModel(appContext) {
       self.__resetXValue();
       self.__sendXValue();
     }
-  }
+  };
 }

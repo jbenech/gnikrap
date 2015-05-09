@@ -16,11 +16,11 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Model to manage the Gyroscope x-Sensor
 function GyroscopeSensorTabViewModel(appContext) {
+  'use strict';
+
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -49,11 +49,11 @@ function GyroscopeSensorTabViewModel(appContext) {
       x: { angle: 0 }, //, rate: 0.0},
       y: { angle: 0 }, //, rate: 0.0},
       z: { angle: 0 } //, rate: 0.0}
-    }
-  }
+    };
+  };
 
   self.deviceOrientationHandler = function(eventData) {
-    var xv = self.xValue
+    var xv = self.xValue;
     xv.x.angle = Math.round(eventData.beta);
     xv.y.angle = Math.round(eventData.gamma);
     xv.z.angle = Math.round(eventData.alpha);
@@ -72,7 +72,7 @@ function GyroscopeSensorTabViewModel(appContext) {
     }    
 
     self.__sendXValue();
-  }
+  };
 
   /*
   function deviceMotionHandler(eventData) {
@@ -101,11 +101,11 @@ function GyroscopeSensorTabViewModel(appContext) {
     self.xAxisValue("x: " + JSON.stringify(self.xValue.x));
     self.yAxisValue("y: " + JSON.stringify(self.xValue.y));
     self.zAxisValue("z: " + JSON.stringify(self.xValue.z));
-  }
+  };
 
   self.__setAxisOrientation = function(orientation) {
     self.axisOrientation = orientation;
-  }
+  };
   
   self.__askAxisOrientationFull = function() {
     bootbox.dialog({
@@ -147,7 +147,7 @@ function GyroscopeSensorTabViewModel(appContext) {
         }
       }
     });
-  }
+  };
   
   self.onSetAxis = function() {
     var wo = window.orientation;
@@ -157,7 +157,7 @@ function GyroscopeSensorTabViewModel(appContext) {
     } else {
       if(wo == -180) {
         wo = 180;
-      };
+      }
       
       var woLabel = i18n.t("gyroSensorTab.axisOrientation.o" + wo);
       
@@ -187,7 +187,7 @@ function GyroscopeSensorTabViewModel(appContext) {
         }
       });
     }
-  }
+  };
   
   self.onStart = function() {
     self.isStarted(!self.isStarted());
@@ -208,5 +208,5 @@ function GyroscopeSensorTabViewModel(appContext) {
       self.__resetXValue();
       self.__sendXValue();
     }
-  }
+  };
 }

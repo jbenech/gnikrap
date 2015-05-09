@@ -16,12 +16,12 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // A computation engine that is able to track points.
 // Current implements is largely inspired from the jsfeast "Lukas Kanade optical flow" sample
 function PointTrackingComputationEngine(appContext) {
+  'use strict';
+
   var self = this;
   { // init
     self.context = appContext; // The application context
@@ -49,7 +49,7 @@ function PointTrackingComputationEngine(appContext) {
     self.previousImagePyramid.allocate(self.width, self.height, jsfeat.U8_t|jsfeat.C1_t);
     // Clear the points already defined
     self.points.number = 0;
-  }
+  };
 
   self.compute = function(imageData, width, height) {
     // Swap data (recycle old objects to avoid costly instantiation)
@@ -78,14 +78,13 @@ function PointTrackingComputationEngine(appContext) {
                               // processed, it allows to remove bad points and get a performance boost (default: 0.0001)
 
     self.__removeLostPoints();
-  }
+  };
   
   self.__removeLostPoints = function() {
     var n = self.points.number;
     var name = self.points.name;
     var status = self.points.status;
     var curXY = self.points.currentXY;
-    var name = self.points.name;
     var j = 0; // New number of points
     for (var i = 0; i < n; i++) {
       if (status[i] == 1) { // Keep the point
@@ -100,7 +99,7 @@ function PointTrackingComputationEngine(appContext) {
       }
     }
     self.points.number = j;
-  }
+  };
 
   // Draw also returns the points structure as JSON
   self.drawComputationResult = function(ctx) {
@@ -125,7 +124,7 @@ function PointTrackingComputationEngine(appContext) {
     }
 
     return result;
-  }
+  };
 
   self.onClick = function(x, y) {
     var n = self.points.number;
@@ -152,7 +151,7 @@ function PointTrackingComputationEngine(appContext) {
     } else {
       bootbox.alert(i18n.t("videoSensorTab.errors.maximumTrackedPointsReached", { number: self.MAX_POINT }));
     }
-  }
+  };
 
   self.__renamePoint = function(pointIdx) {
     // Get the point name
@@ -165,12 +164,14 @@ function PointTrackingComputationEngine(appContext) {
         } // Cancel clicked
       }
     });
-  }
+  };
 }
 
 
 // Model to manage the Video x-Sensor.
 function VideoSensorTabViewModel(appContext) {
+  'use strict';
+
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -221,11 +222,11 @@ function VideoSensorTabViewModel(appContext) {
       // Send an not started value
       self.__doSendSensorValue({ isStarted: self.isStarted() });
     }
-  }
+  };
   
   self.__doSendSensorValue = function(value) {
     self.context.ev3BrickServer.streamXSensorValue(self.sensorName(), "Vid1", value);
-  }
+  };
 
   // Start acquisition: Ensure that all the stuff is correctly initialized
   self.handleVideo = function(webcamMediaStream) {
@@ -240,12 +241,12 @@ function VideoSensorTabViewModel(appContext) {
         self.webcam.play();
         self.context.compatibility.requestAnimationFrame(self.onAnimationFrame);
       }, 500);
-  }
+  };
 
   self.videoAccessRefused = function(err) {
     console.log("Error: " + JSON.stringify(err));
     alert(i18n.t("videoSensorTab.errors.videoAccessRefused"));
-  }
+  };
 
   self.onAnimationFrame = function() {
     //console.log("onAnimmationFrame");
@@ -269,11 +270,11 @@ function VideoSensorTabViewModel(appContext) {
     } else {
       self.__clearCanvas();
     }
-  }
+  };
 
   self.__clearCanvas = function() {
     self.canvasCtx.clearRect(0, 0, self.WIDTH, self.HEIGHT);
-  }
+  };
 
   self.onCanvasClick = function(data, event) {
     if(self.isStarted()) {
@@ -285,5 +286,5 @@ function VideoSensorTabViewModel(appContext) {
         self.ptce.onClick(x, y);
       }
     }
-  }
+  };
 }

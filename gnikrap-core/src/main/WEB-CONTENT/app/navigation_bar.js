@@ -16,11 +16,11 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Model to manage the navigation bar actions
 function NavigationBarViewModel(appContext) {
+  'use strict';
+
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -62,34 +62,34 @@ function NavigationBarViewModel(appContext) {
   // Auto collapse navbar while collapse feature is enabled (screen width is < 768)
   self.__collapseNavbar = function() {
     if($("#bs-navbar-collapse-1-button").css("display") != "none") {
-      $("#bs-navbar-collapse-1-button").click()
+      $("#bs-navbar-collapse-1-button").click();
     }
-  }
+  };
   
   self.onRunScript = function() {
     self.doRunScript(false);
-  }
+  };
 
   self.doRunScript = function(stopRunningScript) {
     var value = (self.context.scriptEditorTabVM != undefined ? self.context.scriptEditorTabVM.getValue() : null);
 
     // Execute the script
     self.context.ev3BrickServer.runScript(value, stopRunningScript);
-  }
+  };
 
   self.onStopScript = function() {
     self.context.ev3BrickServer.stopScript();
-  }
+  };
 
   self.onDisplayAbout = function() {
     $('#aboutModal').modal("show");
     self.__collapseNavbar();
-  }
+  };
   
   self.onFullScreen = function() {
     self.context.compatibility.toggleFullScreen();
     self.__collapseNavbar();
-  }
+  };
 
   self.onStopGnikrap = function() {
     bootbox.dialog({
@@ -117,17 +117,17 @@ function NavigationBarViewModel(appContext) {
         }
       }
     });
-  }
+  };
   
   self.onDisplaySettings = function() {
     self.context.settingsVM.display();
     self.__collapseNavbar();
-  }
+  };
   
   self.onDisplayImportImages = function() {
     self.context.importImagesVM.display();
     self.__collapseNavbar();
-  }
+  };
 
   self.onShowWorkAreaItem = function(workAreaItem) {
     // Set the active item in the model and on screen
@@ -137,5 +137,5 @@ function NavigationBarViewModel(appContext) {
       $("#" + items[i].tabId).toggleClass("active", items[i].active());
     }
     self.__collapseNavbar();
-  }
+  };
 }

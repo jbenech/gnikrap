@@ -16,33 +16,36 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Model that manage the "Settings" dialog
 function SettingsViewModel(appContext) {
+  'use strict';
+
   var self = this;
   { // Init
     self.context = appContext; // The application context
     self.language = ko.observable("");
+    self.programingStyle = ko.observable("TEXT");
   }
   
   self.display = function() {
     // Initialize the values
     self.language(self.context.settings.language);
+    self.programingStyle(self.context.settings.programingStyle);
 
     $('#settingsModal').modal('show');
-  }
+  };
   
   self.hide = function() {
     $('#settingsModal').modal('hide');
-  }
+  };
 
   self.onSave = function() {
+    self.context.settings.update({
+      language: self.language(),
+      programingStyle: self.programingStyle()
+    });
+
     self.hide();
-    
-    // TODO use events/signal to change settings
-    self.context.settings.language = self.language();
-    i18n.setLng(self.context.settings.language, function(t) { $(".i18n").i18n() });
-  }  
+  };
 }

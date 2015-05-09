@@ -16,11 +16,11 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
  
 // Model that manage the "load/manage scripts" dialog
 function ManageScriptFilesViewModel(appContext) {
+  'use strict';
+
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -30,11 +30,11 @@ function ManageScriptFilesViewModel(appContext) {
   self.display = function() {
     self.doRefreshFileList();
     $('#manageScriptFilesModal').modal('show');
-  }
+  };
 
   self.hide = function() {
     $('#manageScriptFilesModal').modal('hide');
-  }
+  };
 
   self.doRefreshFileList = function() {
     // Retrieve the list from the server
@@ -57,12 +57,12 @@ function ManageScriptFilesViewModel(appContext) {
         self.hide();
       }
     });
-  }
+  };
 
   self.onLoadScript = function(file) {
     self.hide();
     self.context.scriptEditorTabVM.loadScriptFile(file.name);
-  }
+  };
 
   self.onDeleteScript = function(file) {
     bootbox.confirm(i18n.t("manageScriptFilesModal.confirmScriptFileDeletion", { filename: file.name }), function(result) {
@@ -83,5 +83,5 @@ function ManageScriptFilesViewModel(appContext) {
         });
       } // else cancel
     });
-  }
+  };
 }

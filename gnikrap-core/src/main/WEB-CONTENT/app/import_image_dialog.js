@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2015 Jean BENECH
+ * Copyright (C) 2015 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Model that manage the "Import Images" dialog
 function ImportImagesViewModel(appContext) {
+  'use strict';
+  
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -57,7 +57,7 @@ function ImportImagesViewModel(appContext) {
     self.codeToBuildTheImage("");
     self.threshold(128);
     self.canvasCtx.clearRect(0, 0, self.canvas.width, self.canvas.height);
-  }
+  };
   
   self.uploadImage = function(file) {
     console.log("Filename: " + file.name);
@@ -65,11 +65,11 @@ function ImportImagesViewModel(appContext) {
     // Only process image files.
     if (file.type.match('image.*')) {
       // Initialize the image object
-      var newImg = new Image;
+      var newImg = new Image();
       newImg.onload = function() {
         self.currentImage = { filename: file.name, rawData: newImg };
         self.__doImageLoaded();
-      }
+      };
       // Load the selected file
       var reader = new FileReader();
       reader.onload = function(event) {
@@ -81,18 +81,18 @@ function ImportImagesViewModel(appContext) {
       self.currentImage = undefined;
       $('#importImages_selectFileForm')[0].reset();
     }
-  }
+  };
   
   self.hide = function() {
     $('#importImagesModal').modal('hide');
-  }
+  };
   
   self.__doRecomputeImage = function() {
     if(self.currentImage) {
       self.__doImageLoaded();
     }
     // else: No image loaded => ignore
-  }
+  };
   
   self.__doImageLoaded = function() {
     var newImg = self.currentImage.rawData;
@@ -121,7 +121,7 @@ function ImportImagesViewModel(appContext) {
     // Grayscale on luminosity - See http://en.wikipedia.org/wiki/Luma_%28video%29
     for (var i = 0; i < numPixels; i++) {
         var i4 = 4*i;
-        sPixels[i] = .21 * pixels[i4] + .72 * pixels[i4+1] + .07 * pixels[i4+2];
+        sPixels[i] = 0.21 * pixels[i4] + 0.72 * pixels[i4+1] + 0.07 * pixels[i4+2];
     }
     if(self.useDithering()) {
       // Dithering in white and black
@@ -144,7 +144,7 @@ function ImportImagesViewModel(appContext) {
     // Encode to data URI
     var imageAsDataURI = self.__getCodeToBuildTheImage(self.__convertToRGFBinaryData(imageData.width, imageData.height, sPixels), filename);
     self.codeToBuildTheImage(imageAsDataURI);
-  }
+  };
   
   // Floyd–Steinberg dithering algorithm - See http://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering
   // One deviation: Divide by 32 instead of 16 in order to don't report all the error (seems to give better results with only 
@@ -174,7 +174,7 @@ function ImportImagesViewModel(appContext) {
         }
       }
     }      
-  }
+  };
 
   // Basic algorithm that make white and black on a given threshold
   self.__convertToWhiteAndBlack = function(width, height, threshold, pixels) {
@@ -185,7 +185,7 @@ function ImportImagesViewModel(appContext) {
         pixels[idx] = (pixels[idx]  < threshold ? 0 : 255); // Black or white
       }
     }
-  }
+  };
   
   // Convert the array of pixels (Uint8Array) to an RGB binary representation
   self.__convertToRGFBinaryData = function(width, height, pixels) {
@@ -214,7 +214,7 @@ function ImportImagesViewModel(appContext) {
     }
     
     return ev3ImageData;
-  }
+  };
 
   // Return a Data URI representing the given RGF binary data
   self.__getCodeToBuildTheImage = function(binaryData, filename) {
@@ -252,5 +252,5 @@ function ImportImagesViewModel(appContext) {
     }
     
     return jsCode;
-  }
+  };
 }

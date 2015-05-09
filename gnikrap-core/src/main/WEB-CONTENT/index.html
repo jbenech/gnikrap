@@ -67,7 +67,7 @@
   </style>
 
     <!-- Load libraries (Updated SEP2014) -->
-    <!-- Manual import ! Make better while ES6 is available -->
+    <!-- Yes 'Manual' import !! In our case (few libs, browserify or require.js or ... does bring a big advantage) - Make better while ES6 is available -->
     <script src="lib/miscellaneous/profiler.js" type="text/javascript"></script> <!-- No dependencies -->
     <script src="lib/jsfeat-20140902/jsfeat-min.js" type="text/javascript"></script> <!-- No dependencies -->
     <script src="lib/ace-1.1.6.min/ace.js" type="text/javascript" charset="utf-8"></script> <!-- No dependencies -->
@@ -91,6 +91,7 @@
     <script src="app/import_image_dialog.js" type="text/javascript"></script>
     <script src="app/settings_dialog.js" type="text/javascript"></script>
     <script src="app/script_editor_tab.js" type="text/javascript"></script>
+    <script src="app/blockly_editor_tab.js" type="text/javascript"></script>
     <script src="app/main.js" type="text/javascript"></script> <!-- Depend on all the scripts before -->
   </head>
   <body>
@@ -129,7 +130,7 @@
                   <ul class="dropdown-menu" role="menu">
                     <li class="hidden-lg"><a data-bind="click: onFullScreen"><span class="i18n" data-i18n="navigationBar.gnikrap.fullScreen">FULL_SCREEN</span></a></li>
                     <li><a data-bind="click: onStopGnikrap"><span class="i18n" data-i18n="navigationBar.gnikrap.stopGnikrap">STOP_GNIKRAP</span></a></li>
-                    <!-- li><a data-bind="click: onDisplaySettings"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li -->
+                    <li><a data-bind="click: onDisplaySettings"><span class="i18n" data-i18n="navigationBar.gnikrap.settings">SETTINGS</span></a></li>
                     <li><a data-bind="click: onDisplayImportImages"><span class="i18n" data-i18n="navigationBar.gnikrap.importImages">IMPORT_IMAGES</span></a></li>
                     <li><a href="gnikrap-doc/index.html" target="_blank" ><span class="i18n" data-i18n="navigationBar.gnikrap.documentation">DOCUMENTATION</span></a></li>
                     <li class="divider"></li>
@@ -434,6 +435,19 @@
                   <select class="form-control" id="language" data-bind="value: language">
                     <option>en</option><option>fr</option>
                   </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="programingStyle" class="col-sm-3 control-label i18n" data-i18n="settingsModal.programingStyle">STYLE</label>
+                <div class="col-sm-9">
+                  <label class="radio-inline">
+                    <input type="radio" value="TEXT" data-bind="checked: programingStyle">
+                    <span class="i18n" data-i18n="settingsModal.programingStyleText">TEXT</span>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" value="VISUAL" data-bind="checked: programingStyle">
+                    <span class="i18n" data-i18n="settingsModal.programingStyleVisual">VISUAL</span>
+                  </label>
                 </div>
               </div>
             </form>

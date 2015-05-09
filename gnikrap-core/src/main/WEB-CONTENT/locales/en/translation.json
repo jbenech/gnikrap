@@ -175,6 +175,9 @@
   "settingsModal": {
     "title": "Settings",
     "language": "Language",
+    "programingStyle": "Programing style",
+    "programingStyleText": "Text (javascript)",
+    "programingStyleVisual": "Visual (EV3 blocks)",
     "save": "Save",
     "cancel": "Cancel"
   },

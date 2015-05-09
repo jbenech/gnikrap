@@ -16,35 +16,69 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
-
-////////////////////////////////////
-// Initialization of the application
-var context = { // The application context - used as a basic dependency-injection mechanism
-  settings: {
-    language: undefined
-  }
-};
-
 
 // Basic checks for "browser compatibility"
 //
 // Note: Don't perform this check in jQuery .ready() callback as version 2.x of jQuery don't have compatibility with some 'old' browser.
 //       Don't use i18n as it doesn't work on some old browser (eg. IE8)
-if(!('WebSocket' in window
-     && 'matchMedia' in window)) { // A minimal level of css for bootstrap
+if(!('WebSocket' in window && 
+      'matchMedia' in window)) { // A minimal level of css for bootstrap
   alert("Gnikrap can't run in this browser, consider using a more recent browser.\nThe page will be automatically closed.");
   window.close();
 }
 
 
-$(document).ready(function() {
-  // Translation
-  var language_complete = navigator.language.split("-");
-  var language = (language_complete[0]);
+var context = { // The application context - used as a basic dependency-injection mechanism
+  events: {
+    resize: "gnikrap_resize", // Params: workAreaHeight, usefullWorkAreaHeight
+    changeSettings: "gnikrap_changeSettings" // Params: keyChanged, newValue
+  }
+};
 
-  i18n.init({ fallbackLng: 'en', lng: language }, function() {
+context.settings = (function() { // Load application settings
+  var STORAGE_SETTINGS = "gnikrap_settings";
+
+  var loaded = localStorage[STORAGE_SETTINGS];
+  console.log("loaded: " + loaded);
+  var settings = {};
+  if(loaded) {
+    settings = JSON.parse(loaded);
+  }
+  
+  if(!settings.language) {
+    var language_complete = navigator.language.split("-");
+    settings.language = (language_complete[0]);
+  }
+
+  if(!settings.programingStyle) {
+    settings.programingStyle = "TEXT";
+  }
+
+  settings.update = function(newSettings) {
+    // Note function called latter on, but 'settings' should the same object as 'context.settings'
+    var needSave = false;
+    for(var key in newSettings) {
+      if(settings[key] && settings[key] != newSettings[key]) {
+        settings[key] = newSettings[key];
+        $.publish(context.events.changeSettings, [key, settings[key]]);
+        needSave = true;
+      }
+    }
+    if(needSave) {
+      localStorage[STORAGE_SETTINGS] = JSON.stringify(settings);
+    }
+  };
+
+  return settings;
+}());
+
+
+// Initialization of the application
+$(document).ready(function() {
+  'use strict';
+
+  // Translation
+  i18n.init({ fallbackLng: 'en', lng: context.settings.language }, function() {
     $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
     context.settings.language = i18n.lng(); // Language really used
     
@@ -88,7 +122,7 @@ $(document).ready(function() {
     window.onresize = function() {
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
-      $.publish("/gnikrap/doResize", [workAreaHeight, usefullWorkAreaHeight]);
+      $.publish(context.events.resize, [workAreaHeight, usefullWorkAreaHeight]);
     };
     $(window).resize();
 

@@ -16,11 +16,8 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-
-////////////////////////////////////////////////////////////////////////////////////
-// Other stuff reworked from things found on the internet without explicit copyright
+// Stuff reworked from things found on the internet without explicit copyright
 
 // Manage compatibility for accessing to the webcam (getUserMedia) and video rendering (requestAnimationFrame)
 var compatibility = (function() {
@@ -139,24 +136,32 @@ var CanvasUtils = (function() {
   };
 })();
 
-// Round by keeping only 2 decimal
-function round2dec(n) {
-  // return Number(n.toFixed(2));
-  return Math.round(n * 100) / 100;
-}
+var Utils = (function() {
+  // Round by keeping only 2 decimal
+  var round2dec = function (n) {
+    // return Number(n.toFixed(2));
+    return Math.round(n * 100) / 100;
+  },
 
-// Generate a UUID
-function generateUUID(){
-  var d = new Date().getTime();
-  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = (d + Math.random()*16)%16 | 0;
-      d = Math.floor(d/16);
-      return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-  });
-  return uuid;
-}
+  // Generate a UUID
+  generateUUID = function (){
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+  };
+  
+  return {
+    round2dec: round2dec,
+    generateUUID: generateUUID
+  };
+})();
 
-// Event jQuery 'plugin' - from: https://gist.github.com/cowboy/661855
+
+// Event jQuery 'plugin'/'patch' - from: https://gist.github.com/cowboy/661855
 (function($) {
   var o         = $({});
   $.subscribe   = o.on.bind(o);
@@ -178,4 +183,4 @@ ko.bindingHandlers['disabled'] = {
       $(element).removeAttr("disabled");
     }
   }
-}
+};

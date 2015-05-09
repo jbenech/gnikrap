@@ -16,25 +16,25 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Model to manage the script editor tab
 function ScriptEditorTabViewModel(appContext) {
+  'use strict';
+
   var self = this;
   { // Init
     self.context = appContext; // The application context
     self.editor = undefined;
     self.scriptFilename = undefined;
   
-    self.editor = ace.edit("editor")
+    self.editor = ace.edit("editor");
     self.editor.setTheme("ace/theme/chrome");
     self.editor.getSession().setMode("ace/mode/javascript");
     self.editor.getSession().setTabSize(2);
     self.editor.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
     
     // Register events
-    $.subscribe("/gnikrap/doResize", function(evt, workAreaHeight, usefullWorkAreaHeight) {
+    $.subscribe(self.context.events.resize, function(evt, workAreaHeight, usefullWorkAreaHeight) {
       self.doResize(workAreaHeight, usefullWorkAreaHeight);
     });
   }
@@ -45,11 +45,11 @@ function ScriptEditorTabViewModel(appContext) {
         self.__doClearScript();
       }
     });
-  }
+  };
 
   self.onLoadScript = function() {
     self.context.manageScriptFilesVM.display();
-  }
+  };
 
   self.loadScriptFile = function(filename) {
     self.__setValue(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
@@ -69,7 +69,7 @@ function ScriptEditorTabViewModel(appContext) {
           { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
       }
     });
-  }
+  };
 
   self.onSaveScript = function() {
     bootbox.prompt({
@@ -99,11 +99,11 @@ function ScriptEditorTabViewModel(appContext) {
         } // else: cancel clicked
       }
     });
-  }
+  };
 
   this.getValue = function() {
     return self.editor.getValue();
-  }
+  };
 
   this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
     $('#editor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
@@ -112,10 +112,10 @@ function ScriptEditorTabViewModel(appContext) {
 
   this.__doClearScript = function() {
     self.__setValue("");
-  }
+  };
 
   this.__setValue = function(value) {
     self.editor.setValue(value);
     self.editor.moveCursorTo(0, 0);
-  }
+  };
 }

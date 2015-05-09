@@ -80,9 +80,28 @@
         <filtering>true</filtering>
       </resource>
     </resources>
+    <testResources>
+      <testResource>
+        <directory>src/test/filters</directory> <!-- see https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html -->
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
   
     <pluginManagement>
       <plugins>
+        <!-- Plugin versions -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.asciidoctor</groupId>
+          <artifactId>asciidoctor-maven-plugin</artifactId>
+          <version>1.5.2</version>
+        </plugin>
+        
+        <!-- General plugin configuration -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>

@@ -16,11 +16,11 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 
 // Manage the interaction with the server on the EV3 brick
 function EV3BrickServer(appContext) {
+  'use strict';
+  
   var self = this;
   { // Init
     self.context = appContext; // The application context
@@ -37,9 +37,9 @@ function EV3BrickServer(appContext) {
       var wsURI = "ws://" + location.host + "/ws/gnikrap/script";
       try {
         self.ws = new WebSocket(wsURI);
-        self.ws.onopen = function(evt) { self.__onWSOpen(evt) };
-        self.ws.onclose = function(evt) { self.__onWSClose(evt) };
-        self.ws.onmessage = function(evt) { self.__onWSMessage(evt); }
+        self.ws.onopen = function(evt) { self.__onWSOpen(evt); };
+        self.ws.onclose = function(evt) { self.__onWSClose(evt); };
+        self.ws.onmessage = function(evt) { self.__onWSMessage(evt); };
         self.ws.onerror = function(evt) { self.__onWSError(evt); };
       } catch(ex) {
         console.warn("Fail to create websocket for: '" + wsURI + "'");
@@ -50,11 +50,11 @@ function EV3BrickServer(appContext) {
     else {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.websocketNotSupported"));
     }
-  }
+  };
 
   self.__onWSOpen = function(evt) {
     self.context.messageLogVM.addMessage(false, i18n.t("ev3brick.ev3ConnectionOk"));
-  }
+  };
 
   self.__onWSMessage = function(evt) {
     var received_msg = evt.data;
@@ -80,21 +80,21 @@ function EV3BrickServer(appContext) {
       // Default: Assume this is a text message
       self.context.messageLogVM.addMessage(false, received_data.txt);
     }
-  }
+  };
 
   self.__onWSClose = function(evt) {
     self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.ev3ConnectionNok"));
     self.__doWSReconnection();
-  }
+  };
 
   self.__onWSError = function(evt) {
     // Does nothing, onError seems redundant with onClose, see http://www.w3.org/TR/websockets/#feedback-from-the-protocol
-  }
+  };
 
   self.__doWSReconnection = function() {
     self.__doWSClose();
     setTimeout(self.initialize, 15000); // Run once in 15s
-  }
+  };
 
   // Close the websocket (if initialized)
   self.__doWSClose = function() {
@@ -108,7 +108,7 @@ function EV3BrickServer(appContext) {
       } // else: CLOSED or CLOSING => No need to close again
       self.ws = undefined;
     }
-  }
+  };
 
   // Send a message to the websocket (if opened)
   // Returns true if sent, false otherwise
@@ -125,7 +125,7 @@ function EV3BrickServer(appContext) {
       console.log("Can't send a message because the ws isn't initialized or isn't opened - " + JSON.stringify(message));
     }
     return false;
-  }
+  };
 
   self.runScript = function(scriptCode, stopRunningScript) {
     var jsonMsg = JSON.stringify({
@@ -138,7 +138,7 @@ function EV3BrickServer(appContext) {
     if(self.__doWSSend(jsonMsg) == false) {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantRunScriptEV3ConnectionNok"));
     }
-  }
+  };
 
   self.stopScript = function() {
     var jsonMsg = JSON.stringify({
@@ -147,7 +147,7 @@ function EV3BrickServer(appContext) {
     if(self.__doWSSend(jsonMsg) == false) {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantStopScriptEV3ConnectionNok"));
     }
-  }
+  };
   
   self.shutdownBrick = function() {
     var jsonMsg = JSON.stringify({
@@ -156,7 +156,7 @@ function EV3BrickServer(appContext) {
     if(self.__doWSSend(jsonMsg) == false) {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantDoSomethingEV3ConnectionNok", { "action": "shutdownBrick" }));
     }
-  }
+  };
   
   self.stopGnikrap = function() {
     var jsonMsg = JSON.stringify({
@@ -165,7 +165,7 @@ function EV3BrickServer(appContext) {
     if(self.__doWSSend(jsonMsg) == false) {
       self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantDoSomethingEV3ConnectionNok", { "action": "stopGnikrap" }));
     }
-  }
+  };
 
   self.__buildXSensorMessage = function(sensorName, sensorType, sensorValue) {
     return JSON.stringify({
@@ -174,7 +174,7 @@ function EV3BrickServer(appContext) {
         xSnsTyp: sensorType,
         xSnsVal: sensorValue
       });
-  }
+  };
   
   // Instantaneously send the sensor value
   self.sendXSensorValue = function(sensorName, sensorType, sensorValue) {
@@ -184,7 +184,7 @@ function EV3BrickServer(appContext) {
       // In case of connection lost: switch to stream behaviour (only the last event will be keep)
       self.streamXSensorValue(sensorName, sensorType, sensorValue);
     }
-  }
+  };
   
   // Stream the xSensor values in order to avoid flood the EV3 brick
   self.streamXSensorValue = function(sensorName, sensorType, sensorValue) {
@@ -198,7 +198,7 @@ function EV3BrickServer(appContext) {
       };
     } else {
       if(jsonMsg == sensor.lastJsonSent) {
-        jsonMsg = undefined
+        jsonMsg = undefined;
       } else {
         sensor.currentJson = jsonMsg;
       }
@@ -207,7 +207,7 @@ function EV3BrickServer(appContext) {
     if((jsonMsg != undefined) && (self.xSensorStream.timeoutID == undefined)) {
       self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, self.XSENSOR_STREAM_FREQUENCY / 2); // No send planned => send rather quickly. Real "message rate" is done in __doStreamXSensorValue.
     }
-  }
+  };
   
   // Send all waiting values
   self.__doStreamXSensorValue = function() {
@@ -238,5 +238,5 @@ function EV3BrickServer(appContext) {
       // TODO error management - Reset the sensors ?
       //self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, 1000); // Retry later
     }
-  }
+  };
 }

@@ -89,7 +89,7 @@ public final class Configuration {
         return new Configuration(JsonObject.readFrom(r));
       }
     } else {
-      InputStream is = ClassLoader.getSystemResourceAsStream("/" + shortFileName);
+      InputStream is = Configuration.class.getResourceAsStream("/" + shortFileName);
       if (is != null) {
         return new Configuration(JsonObject.readFrom(new InputStreamReader(is)));
       } else {
