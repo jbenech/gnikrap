@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014 Jean BENECH
+ * Copyright (C) 2014-2015 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,11 +126,17 @@ public final class EV3ScriptContext {
   /**
    * Stop the script.
    */
-  @ScriptApi(isIncubating = true)
-  public void exit() {
-    // TODO: Implementation with exception is not safe because it can be caught by the script.
-    // The stopScript is not perfect too... / Maybe force the thread kill directly ?
-    scriptExecutionMgr.stopScript();
+  @ScriptApi(versionAdded = "0.5.0")
+  public void exit() throws EV3StopScriptException {
+    // Several implementation option:
+    // - Call stop() and wait that the script call ev3.isOk() (not really efficient)
+    // - Call stopScript() on ScriptExecutionManager (not viable option: caller will be locked for several seconds and will be stop => following option is better)
+    // - Hard kill the script thread (not recommended for a clean threading management)
+    // - Throw an exception (work as long as there is no try/catch in the script code)
+    //
+    // The chosen implementation is combination of 1st and 4th.
+    stop();
+    throw new EV3StopScriptException();
   }
 
   /**

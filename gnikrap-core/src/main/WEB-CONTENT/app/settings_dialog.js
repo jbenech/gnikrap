@@ -25,13 +25,13 @@ function SettingsViewModel(appContext) {
   { // Init
     self.context = appContext; // The application context
     self.language = ko.observable("");
-    self.programingStyle = ko.observable("TEXT");
+    self.programmingStyle = ko.observable("TEXT");
   }
   
   self.display = function() {
     // Initialize the values
     self.language(self.context.settings.language);
-    self.programingStyle(self.context.settings.programingStyle);
+    self.programmingStyle(self.context.settings.programmingStyle);
 
     $('#settingsModal').modal('show');
   };
@@ -43,7 +43,7 @@ function SettingsViewModel(appContext) {
   self.onSave = function() {
     self.context.settings.update({
       language: self.language(),
-      programingStyle: self.programingStyle()
+      programmingStyle: self.programmingStyle()
     });
 
     self.hide();

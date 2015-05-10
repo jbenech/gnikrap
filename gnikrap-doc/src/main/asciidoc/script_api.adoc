@@ -44,6 +44,9 @@ getConfiguration():: Returns a <<Configuration object>>. Enable to configure som
 
 getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with the given name. (The name is configured within the GUI)
                          *XSensorName*: the name of the sensor.
+
+exit():: Terminate the script. +
+         _Note_: If you use `try`/`catch` in your scripts, this function may not work as it use internally `Exception` in order to stop the script engine.
 ****
 
 

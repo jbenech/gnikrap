@@ -26,37 +26,43 @@ function NavigationBarViewModel(appContext) {
     self.context = appContext; // The application context
     self.workAreaItems = ko.observableArray();
     
+    self.workAreaItems.removeAll();
     self.workAreaItems.push({
-      name: i18n.t("workArea.scriptEditorTab"),
-      tabId: "scriptEditorTab",
+      name: "SCRIPT_EDITOR",
+      data_i18n: "workArea.scriptEditorTab",
+      tabId: "editorTab",
       active: ko.observable(true)
     });
     self.workAreaItems.push({
-      name: i18n.t("workArea.keyboardSensorTab"),
+      name: "xKEYBOARD",
+      data_i18n: "workArea.keyboardSensorTab",
       tabId: "keyboardSensorTab",
       active: ko.observable(false)
     });
     if(window.DeviceOrientationEvent) {
       self.workAreaItems.push({
-        name: i18n.t("workArea.gyroSensorTab"),
-        tabId: "gyroSensorTab",
-        active: ko.observable(false)
+          name: "xGYRO",
+          data_i18n: "workArea.gyroSensorTab",
+          tabId: "gyroSensorTab",
+          active: ko.observable(false)
       });
     } // else: Don't show xGyro, not supported by the browser
     if(self.context.compatibility.isUserMediaSupported()) {
       self.workAreaItems.push({
-        name: i18n.t("workArea.videoSensorTab"),
-        tabId: "videoSensorTab",
-        active: ko.observable(false)
+          name: "xVIDEO",
+          data_i18n: "workArea.videoSensorTab",
+          tabId: "videoSensorTab",
+          active: ko.observable(false)
       });
     } // else: Don't show xVideo, video/WebCam not supported by the browser
     if(navigator.geolocation) {
       self.workAreaItems.push({
-          name: i18n.t("workArea.geoSensorTab"),
+          name: "xGEO",
+          data_i18n: "workArea.geoSensorTab",
           tabId: "geoSensorTab",
           active: ko.observable(false)
       });
-    } // else: Don't show xGeo, GPS not supported by the browser
+    } // else: Don't show xGeo, GPS not supported by the browser    
   }
 
   // Auto collapse navbar while collapse feature is enabled (screen width is < 768)

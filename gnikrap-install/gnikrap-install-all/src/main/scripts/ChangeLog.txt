@@ -8,16 +8,16 @@ Current stable release is: 0.4.0
 Version history:
  0.4.0 (28APR2015 - leJOS Firmware/Menu integration)
     - Easy use (no more need telnet/ssh/scp) / leJOS integration:
-     - Automated GUI installation on Windows.
-     - Shell script (for the EV3) for others platforms.
-     - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
-     - Shutdown EV3 brick / Stop Gnikrap (<=> return to leJOS menu) from the Gnikrap user interface
+      - Automated GUI installation on Windows.
+      - Shell script (for the EV3) for others platforms.
+      - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
+      - Shutdown EV3 brick / Stop Gnikrap (<=> return to leJOS menu) from the Gnikrap user interface
     - xGeo (GPS) xSensor added
     - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
     - Documentation updated
 
     - Fix: 
-     - API for the EV3 brick screen is now operational (include import of images for displaying on the EV3 screen)
+      - API for the EV3 brick screen is now operational (include import of images for displaying on the EV3 screen)
 
 
  0.3.0 (30JAN2015 - xSensors):
@@ -59,7 +59,6 @@ Features to add (no specific order):
  - Add import/export feature (save all the data on the ev3 in one operation)
  - Add real time sensor probes
  - Add port checking (auto detection for EV3 devices)
- - Add exit script (from the script) feature/function
  - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
  - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor)
  - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items, etc.)
@@ -68,12 +67,19 @@ Features to add (no specific order):
 ------------------------------------------------------------------------------
 
 Known defects:
- - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
+ - (0.4.0) - French translation don't work (page will not load) - Let me known if you need a specific patch for this one
 
 
 ------------------------------------------------------------------------------
 
 Work in progress:
- - Blockly
+ 0.5.0:
+    - Blockly:
+      - Settings dialog added (settings are saved in the browser)
+    - Add an API to exit from the script
+    - Documentation updated
+    
+    - Fix: 
+      - French translation is now ok (translation files are now checked by the build)

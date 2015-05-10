@@ -119,7 +119,12 @@ public class ScriptExecutionManager {
             engine.put("ev3", scriptContext);
             scriptContext.start();
             sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_STARTING, Collections.<String, String> emptyMap()));
-            engine.eval(scriptText);
+            try {
+              engine.eval(scriptText);
+            } catch (EV3StopScriptException stopEx) {
+              // Script normally stopped, just ignore
+              LOGGER.fine(stopEx.getMessage());
+            }
             sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_ENDED, Collections.<String, String> emptyMap()));
           } catch (EV3Exception ev3ex) {
             throw ev3ex;

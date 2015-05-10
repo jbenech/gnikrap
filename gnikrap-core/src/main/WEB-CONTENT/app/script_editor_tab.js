@@ -17,32 +17,146 @@
  */
 
 
+// An editor should have the following API:
+//   doResize(workAreaHeight, usefullWorkAreaHeight): void
+//   clearScript(): void
+//   setValue(value): void
+//   getValue(): Value
+//   displatMessage(msg): void // Can do nothing
+//   setVisible(visible): void
+
+ 
+ // The Javascript editor based on ace (http://ace.c9.io/)
+function JavascriptEditor(appContext) {
+  'use strict';
+  
+  var self = this;
+  { // Init
+    self.context = appContext; // The application context
+    self.ace = ace.edit("aceEditor");
+    self.ace.setTheme("ace/theme/chrome");
+    self.ace.getSession().setMode("ace/mode/javascript");
+    self.ace.getSession().setTabSize(2);
+    self.ace.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
+  }
+
+  this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
+    $('#aceEditor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
+    self.ace.resize();
+  };
+  
+  this.clearScript = function() {
+    self.setValue("");
+  };
+  
+  this.setValue = function(value) {
+    self.ace.setValue(value);
+    self.ace.moveCursorTo(0, 0);
+  };
+  
+  this.displayMessage = function(msg) {
+    self.setValue(msg);
+  };
+  
+  this.setVisible = function(visible) {
+    if(visible) {
+      $('#aceEditor').css('display', '');
+    } else {
+      $('#aceEditor').css('display', 'none');
+    }
+  };
+}
+
+function BlocklyEditor(appContext) {
+  'use strict';
+  
+  var self = this;
+  { // Init
+    self.context = appContext; // The application context
+    Blockly.inject(document.getElementById('blocklyEditor'),
+        { /*toolbox: document.getElementById('toolbox') */ });
+  }
+  
+  this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
+    $('#blocklyEditor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
+    //self.ace.resize();
+  };
+  
+  this.clearScript = function() {
+    self.setValue("");
+  };
+  
+  this.setValue = function(value) {
+    self.ace.setValue(value);
+    self.ace.moveCursorTo(0, 0);
+  };
+  
+  this.displayMessage = function(msg) {
+    // Does nothing
+  };
+
+  this.setVisible = function(visible) {
+    if(visible) {
+      $('#blocklyEditor').css('display', '');
+    } else {
+      $('#blocklyEditor').css('display', 'none');
+    }
+  };
+}  
+
 // Model to manage the script editor tab
 function ScriptEditorTabViewModel(appContext) {
   'use strict';
 
   var self = this;
+
   { // Init
     self.context = appContext; // The application context
-    self.editor = undefined;
     self.scriptFilename = undefined;
-  
-    self.editor = ace.edit("editor");
-    self.editor.setTheme("ace/theme/chrome");
-    self.editor.getSession().setMode("ace/mode/javascript");
-    self.editor.getSession().setTabSize(2);
-    self.editor.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
-    
+    self.editor = undefined;
+    self.javascriptEditor = undefined;
+    self.blocklyEditor = undefined;
+
     // Register events
     $.subscribe(self.context.events.resize, function(evt, workAreaHeight, usefullWorkAreaHeight) {
-      self.doResize(workAreaHeight, usefullWorkAreaHeight);
+      if(self.editor) {
+        self.editor.doResize(workAreaHeight, usefullWorkAreaHeight);
+      }
+    });
+    $.subscribe(self.context.events.changeSettings, function(evt, keyChanged, newValue) {
+      if("programmingStyle" == keyChanged) {
+        self.__doChangeEditor();
+      }
     });
   }
 
+  self.__doChangeEditor = function() {
+    if(self.editor) {
+      self.editor.setVisible(false);
+      self.editor = undefined;
+    }
+    if("TEXT" == self.context.settings.programmingStyle) {
+      if(self.javascriptEditor == undefined) {
+        console.log("JavaScript editor created");
+        self.javascriptEditor = new JavascriptEditor(self.context);
+      }
+      console.log("Editor set to JavaScript editor");
+      self.editor = self.javascriptEditor;
+    } else {
+      if(self.blocklyEditor == undefined) {
+        console.log("Blockly editor created");
+        self.blocklyEditor = new BlocklyEditor(self.context);
+      }
+      console.log("Editor set to Blockly editor");
+      self.editor = self.blocklyEditor;
+    }
+    self.editor.setVisible(true);
+  };
+    
   self.onClearScript = function() {
     bootbox.confirm(i18n.t("scriptEditorTab.clearScriptModal.title"), function(result) {
       if(result) {
-        self.__doClearScript();
+        self.editor.clearScript();
       }
     });
   };
@@ -52,13 +166,16 @@ function ScriptEditorTabViewModel(appContext) {
   };
 
   self.loadScriptFile = function(filename) {
-    self.__setValue(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
+    if(self.editor == undefined) {
+      return;
+    }
+    self.editor.displayMessage(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
     self.scriptFilename = undefined;
     $.ajax({
       url: "/rest/scriptfiles/" + filename,
       success: function(data, status) {
         var scriptFile = JSON.parse(data);
-        self.__setValue(scriptFile.content);
+        self.editor.setValue(scriptFile.content);
         if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
           self.scriptFilename = filename;
         }
@@ -99,23 +216,5 @@ function ScriptEditorTabViewModel(appContext) {
         } // else: cancel clicked
       }
     });
-  };
-
-  this.getValue = function() {
-    return self.editor.getValue();
-  };
-
-  this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
-    $('#editor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
-    self.editor.resize();
-  };
-
-  this.__doClearScript = function() {
-    self.__setValue("");
-  };
-
-  this.__setValue = function(value) {
-    self.editor.setValue(value);
-    self.editor.moveCursorTo(0, 0);
   };
 }

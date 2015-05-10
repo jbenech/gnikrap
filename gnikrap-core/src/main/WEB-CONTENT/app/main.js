@@ -35,11 +35,12 @@ var context = { // The application context - used as a basic dependency-injectio
   }
 };
 
-context.settings = (function() { // Load application settings
+// Load/Initialize application settings
+context.settings = (function() {
   var STORAGE_SETTINGS = "gnikrap_settings";
 
   var loaded = localStorage[STORAGE_SETTINGS];
-  console.log("loaded: " + loaded);
+  console.log("Settings loaded on local storage: " + loaded);
   var settings = {};
   if(loaded) {
     settings = JSON.parse(loaded);
@@ -50,12 +51,12 @@ context.settings = (function() { // Load application settings
     settings.language = (language_complete[0]);
   }
 
-  if(!settings.programingStyle) {
-    settings.programingStyle = "TEXT";
+  if(!settings.programmingStyle) {
+    settings.programmingStyle = "TEXT";
   }
 
   settings.update = function(newSettings) {
-    // Note function called latter on, but 'settings' should the same object as 'context.settings'
+    // Note function called latter on, but 'settings' should be the same object as 'context.settings'
     var needSave = false;
     for(var key in newSettings) {
       if(settings[key] && settings[key] != newSettings[key]) {
@@ -79,7 +80,6 @@ $(document).ready(function() {
 
   // Translation
   i18n.init({ fallbackLng: 'en', lng: context.settings.language }, function() {
-    $(".i18n").i18n(); // Translate all the DOM item that have the class "i18n"
     context.settings.language = i18n.lng(); // Language really used
     
     // Technical objects
@@ -118,6 +118,18 @@ $(document).ready(function() {
     context.ev3BrickServer.initialize(); // WS connexion with the server
     context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
     
+    // Register events to translation
+    $.subscribe(self.context.events.changeSettings, function(evt, keyChanged, newValue) {
+      if("language" == keyChanged) {
+        i18n.setLng(context.settings.language, function(t) { $(".i18n").i18n() });
+      }
+    });
+    
+    // Publish events for settings
+    $.publish(context.events.changeSettings, ["language", context.settings.language]);
+    $.publish(context.events.changeSettings, ["programmingStyle", context.settings.programmingStyle]);
+    
+
     // Register windows events for editor auto-resize
     window.onresize = function() {
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
@@ -141,6 +153,6 @@ $(document).ready(function() {
     // Register windows event to ask confirmation while the user leave the page (avoid loosing scripts)
     window.onbeforeunload = function () {
       return "";
-    };
+    };  
   });
 });

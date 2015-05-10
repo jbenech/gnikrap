@@ -184,3 +184,22 @@ ko.bindingHandlers['disabled'] = {
     }
   }
 };
+
+// Binding used for setting data-i18n tag and i18n class
+ko.bindingHandlers['i18n'] = {
+  update: function (element, valueAccessor) {
+    var valueUnwrapped = ko.unwrap(valueAccessor());
+    if(valueUnwrapped) {
+      $(element)
+        .attr("data-i18n", valueUnwrapped)
+        .removeClass("i18n") // Remove in order to avoid duplicate i18n (maybe useless ?)
+        .addClass("i18n")
+        .i18n(); // Finally translate the item
+    } else {
+      // Useless case
+      $(element)
+        .removeAttr("data-i18n")
+        .removeClass("i18n");
+    }
+  }
+};

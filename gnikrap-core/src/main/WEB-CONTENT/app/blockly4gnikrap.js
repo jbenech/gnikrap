@@ -16,4 +16,4 @@
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+// In this file we define all Gnikrap blocks and also toolbar utilities
