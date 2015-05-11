@@ -42,7 +42,6 @@ function GeoSensorTabViewModel(appContext) {
   }
 
   self.__resetXValue = function() {
-    // EV3 sensor values: angle ° and rate in °/s
     self.xValue = {
       isStarted: undefined, // will be defined just before sending
       timestamp: 0,

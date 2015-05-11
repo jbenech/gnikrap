@@ -98,7 +98,7 @@ function EV3BrickServer(appContext) {
 
   // Close the websocket (if initialized)
   self.__doWSClose = function() {
-    if(self.ws != undefined) {
+    if(self.ws) {
       if(self.ws.readyState == 0 || self.ws.readyState == 1) { // CONNECTING or OPEN - See https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants
         try {
           self.ws.close();
@@ -113,7 +113,7 @@ function EV3BrickServer(appContext) {
   // Send a message to the websocket (if opened)
   // Returns true if sent, false otherwise
   self.__doWSSend = function(message) {
-    if((self.ws != undefined) && (self.ws.readyState == 1)) { // OPEN
+    if(self.ws && (self.ws.readyState == 1)) { // OPEN
       try {
         self.ws.send(message);
         return true;
@@ -204,7 +204,7 @@ function EV3BrickServer(appContext) {
       }
     }
     
-    if((jsonMsg != undefined) && (self.xSensorStream.timeoutID == undefined)) {
+    if(jsonMsg && (self.xSensorStream.timeoutID == undefined)) {
       self.xSensorStream.timeoutID = setTimeout(self.__doStreamXSensorValue, self.XSENSOR_STREAM_FREQUENCY / 2); // No send planned => send rather quickly. Real "message rate" is done in __doStreamXSensorValue.
     }
   };
@@ -212,11 +212,11 @@ function EV3BrickServer(appContext) {
   // Send all waiting values
   self.__doStreamXSensorValue = function() {
     self.xSensorStream.timeoutID = undefined;
-    if(self.ws != undefined) { // TODO not correct error checking, see __doWSSend() - to be reworked
+    if(self.ws) { // TODO not correct error checking, see __doWSSend() - to be reworked
       var messageSent = false;
       Object.keys(self.xSensorStream.sensors).forEach(function(sensorName) {
         var sensor = self.xSensorStream.sensors[sensorName];
-        if(sensor.currentJson != undefined) {
+        if(sensor.currentJson) {
           console.log("send xSensorValue - " + sensor.currentJson);
           messageSent = true;
           self.__doWSSend(sensor.currentJson);

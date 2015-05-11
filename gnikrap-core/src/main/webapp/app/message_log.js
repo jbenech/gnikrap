@@ -50,7 +50,7 @@ function MessageLogViewModel(appContext) { // appContext not used for MessageLog
 
     // Manage the message count
     var m0 = (self.messages().length > 0 ? self.messages()[0] : undefined);
-    if((m0 != undefined) && (m0.isError == isError) && (m0.text == message)) {
+    if(m0 && (m0.isError == isError) && (m0.text == message)) {
       self.messages.shift();
       doAddMessage(isError, message, m0.count + 1);
     } else {

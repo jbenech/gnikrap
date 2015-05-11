@@ -43,7 +43,7 @@ function GyroscopeSensorTabViewModel(appContext) {
   }
 
   self.__resetXValue = function() {
-    // EV3 sensor values: angle ° and rate in °/s
+    // EV3 sensor values: angle degree and rate in degree/s
     self.xValue = {
       isStarted: undefined, // will be defined just before sending
       x: { angle: 0 }, //, rate: 0.0},

@@ -6,7 +6,7 @@
   
 	<fileSets>
 		<fileSet>
-			<directory>src/main/WEB-CONTENT</directory>
+			<directory>src/main/webapp</directory>
 			<outputDirectory>WEB-CONTENT</outputDirectory>
 		</fileSet>
 	</fileSets>

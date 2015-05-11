@@ -77,7 +77,7 @@ function NavigationBarViewModel(appContext) {
   };
 
   self.doRunScript = function(stopRunningScript) {
-    var value = (self.context.scriptEditorTabVM != undefined ? self.context.scriptEditorTabVM.getValue() : null);
+    var value = (self.context.scriptEditorTabVM ? self.context.scriptEditorTabVM.getValue() : null);
 
     // Execute the script
     self.context.ev3BrickServer.runScript(value, stopRunningScript);

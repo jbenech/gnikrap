@@ -74,7 +74,7 @@ function BlocklyEditor(appContext) {
   { // Init
     self.context = appContext; // The application context
     Blockly.inject(document.getElementById('blocklyEditor'),
-        { /*toolbox: document.getElementById('toolbox') */ });
+        { toolbox: BlocklyUtils.generateToolbox() });
   }
   
   this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
@@ -137,20 +137,22 @@ function ScriptEditorTabViewModel(appContext) {
     }
     if("TEXT" == self.context.settings.programmingStyle) {
       if(self.javascriptEditor == undefined) {
-        console.log("JavaScript editor created");
+        console.log("Create JavaScript editor...");
         self.javascriptEditor = new JavascriptEditor(self.context);
       }
       console.log("Editor set to JavaScript editor");
       self.editor = self.javascriptEditor;
     } else {
       if(self.blocklyEditor == undefined) {
-        console.log("Blockly editor created");
+        console.log("Create Blockly editor...");
         self.blocklyEditor = new BlocklyEditor(self.context);
       }
       console.log("Editor set to Blockly editor");
       self.editor = self.blocklyEditor;
     }
     self.editor.setVisible(true);
+    // Force resiez in order to ensure visibility
+    $(window).resize();    
   };
     
   self.onClearScript = function() {
@@ -191,9 +193,9 @@ function ScriptEditorTabViewModel(appContext) {
   self.onSaveScript = function() {
     bootbox.prompt({
       title: i18n.t('scriptEditorTab.saveScriptModal.title'),
-      value: (self.scriptFilename == undefined ? "" : self.scriptFilename),
+      value: (self.scriptFilename ? self.scriptFilename : ""),
       callback: function(result) {
-        if ((result != null) && (result.trim().lenght != 0)) {
+        if (result && (result.trim().lenght != 0)) {
           var filename = result.trim();
           console.log("Save script: '" + filename + "'");
           $.ajax({

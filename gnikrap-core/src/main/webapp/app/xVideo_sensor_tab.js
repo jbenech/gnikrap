@@ -159,7 +159,7 @@ function PointTrackingComputationEngine(appContext) {
       title: i18n.t('videoSensorTab.configureTrackedPointNameModal.title'),
       value: self.points.name[pointIdx],
       callback: function(result) {
-        if (result != null) {
+        if (result) {
           self.points.name[pointIdx] = result;
         } // Cancel clicked
       }

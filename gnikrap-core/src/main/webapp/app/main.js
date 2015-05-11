@@ -121,7 +121,7 @@ $(document).ready(function() {
     // Register events to translation
     $.subscribe(self.context.events.changeSettings, function(evt, keyChanged, newValue) {
       if("language" == keyChanged) {
-        i18n.setLng(context.settings.language, function(t) { $(".i18n").i18n() });
+        i18n.setLng(context.settings.language, function(t) { $(".i18n").i18n(); });
       }
     });
     

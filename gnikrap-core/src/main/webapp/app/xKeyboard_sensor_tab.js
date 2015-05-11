@@ -88,7 +88,7 @@ function KeyboardSensorTabViewModel(appContext) {
         title: i18n.t('keyboardSensorTab.configureKeyboardButtonModal.title'),
         value: btn.name(),
         callback: function(result) {
-          if (result != null) {
+          if (result) {
             btn.actions = self.__splitNameToActions(result);
             btn.name(self.__buildNameFromActions(btn.actions));
           } // else, cancel clicked
