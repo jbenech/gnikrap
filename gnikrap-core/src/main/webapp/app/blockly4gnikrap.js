@@ -30,30 +30,30 @@
   // notify(String): void
   Blockly.Blocks['gnikrap_ev3_notify'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_notify.helpUrl"));
       this.setColour(EV3_BLOCKS_COLOUR);
       this.appendValueInput("TEXT")
-          .appendField("notify");
+          .appendField(i18n.t("blocks.gnikrap_ev3_notify.text_notify"));
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_notify.tooltip"));
     }
   };
   Blockly.JavaScript['gnikrap_ev3_notify'] = function(block) {
     var value_text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_ATOMIC);
-    var code = "ev3.notify(" + value_text + ")";
+    var code = "ev3.notify(" + value_text + ");";
     return code;
   };
   
   // isOK(): boolean
   Blockly.Blocks['gnikrap_ev3_isok'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_isok.helpUrl"));
       this.setColour(EV3_BLOCKS_COLOUR);
       this.appendDummyInput()
-          .appendField("EV3 is ok");
+          .appendField(i18n.t("blocks.gnikrap_ev3_isok.text_ev3_is_ok"));
       this.setOutput(true, "Boolean");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_isok.tooltip"));
     }
   };
 
@@ -66,17 +66,19 @@
   // sleep(int): void
   Blockly.Blocks['gnikrap_ev3_sleep'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_sleep.helpUrl"));
       this.setColour(EV3_BLOCKS_COLOUR);
       this.appendValueInput("TIME")
           .setCheck("Number")
-          .appendField("sleep");
+          .appendField(i18n.t("blocks.gnikrap_ev3_sleep.text_sleep"));
       this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([["millisecond", "MS"], ["second", "S"]]), "TIME_UNIT");
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_time_unit.MS"), "MS"], 
+            [i18n.t("blocks.list_time_unit.S"), "S"]]), "TIME_UNIT");
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_sleep.tooltip"));
     }
   };
 
@@ -84,7 +86,7 @@
     var value_time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_ATOMIC);
     var dropdown_time_unit = block.getFieldValue('TIME_UNIT');
     // TODO: Assemble JavaScript into code variable.
-    var code = "ev3.sleep(" + (dropdown_time_unit == 'S' ? (value_time * 1000) : value_time) + ")";
+    var code = "ev3.sleep(" + (dropdown_time_unit == 'S' ? (value_time * 1000) : value_time) + ");";
     return code;
   };
   
@@ -92,18 +94,25 @@
   // LED object API
   Blockly.Blocks['gnikrap_ev3_led'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_led_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_led.helpUrl"));
       this.setColour(EV3_BLOCKS_COLOUR);
       this.appendDummyInput()
-          .appendField("change the LED status to")
-          .appendField(new Blockly.FieldDropdown([["off", "OFF"], 
-            ["green", "GREEN"], ["flashing green", "GREEN_1"], ["fast flashing green", "GREEN_2"],
-            ["orange", "ORANGE"], ["flashing orange", "ORANGE_1"], ["fast flashing orange", "ORANGE_2"],
-            ["red", "RED"], ["flashing red", "RED_1"], ["fast flashing red", "RED_2"]]), "STATUS");
+          .appendField(i18n.t("blocks.gnikrap_ev3_led.text_change_LED_status"))
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_led_status.OFF"), "OFF"], 
+            [i18n.t("blocks.list_led_status.GREEN"), "GREEN"], 
+            [i18n.t("blocks.list_led_status.GREEN_1"), "GREEN_1"], 
+            [i18n.t("blocks.list_led_status.GREEN_2"), "GREEN_2"],
+            [i18n.t("blocks.list_led_status.ORANGE"), "ORANGE"], 
+            [i18n.t("blocks.list_led_status.ORANGE_1"), "ORANGE_1"], 
+            [i18n.t("blocks.list_led_status.ORANGE_2"), "ORANGE_2"],
+            [i18n.t("blocks.list_led_status.RED"), "RED"], 
+            [i18n.t("blocks.list_led_status.RED_1"), "RED_1"], 
+            [i18n.t("blocks.list_led_status.RED_2"), "RED_2"]]), "STATUS");
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_led.tooltip"));
     }
   };
 
@@ -141,7 +150,7 @@
       default:
         code = 'off()';
     }
-    return 'ev3.getBrick().getLED().' + code;
+    return 'ev3.getBrick().getLED().' + code + ';';
   };
   
   /////////////////////////////////////////////////////////////////////////////
@@ -150,60 +159,62 @@
   // setVolume(int): void
   Blockly.Blocks['gnikrap_ev3_sound_setvolume'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_sound_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_sound_setvolume.helpUrl"));
       this.setColour(EV3_BLOCKS_COLOUR);
       this.appendValueInput("VOL")
           .setCheck("Number")
-          .appendField("set volume to");
+          .appendField(i18n.t("blocks.gnikrap_ev3_sound_setvolume.text_set_volume"));
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_sound_setvolume.tooltip"));
     }
   };  
   
   Blockly.JavaScript['gnikrap_ev3_sound_setvolume'] = function(block) {
     var value_vol = Blockly.JavaScript.valueToCode(block, 'VOL', Blockly.JavaScript.ORDER_ATOMIC);
-    var code = 'ev3.getBrick().getSound().setVolume(' + value_vol + ')';
+    var code = 'ev3.getBrick().getSound().setVolume(' + value_vol + ');';
     return code;
   };
   
   // beep()
   Blockly.Blocks['gnikrap_ev3_sound_beep'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_sound_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_sound_beep.helpUrl"));
       this.setColour(EV3_BLOCKS_COLOUR);
       this.appendDummyInput()
-          .appendField("beep");
+          .appendField(i18n.t("blocks.gnikrap_ev3_sound_beep.text_beep"));
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_sound_beep.tooltip"));
     }
   };  
   
   Blockly.JavaScript['gnikrap_ev3_sound_beep'] = function(block) {
-    var code = 'ev3.getBrick().getSound().beep()';
+    var code = 'ev3.getBrick().getSound().beep();';
     return code;
   };  
   
   // playNote(string, int): void
   Blockly.Blocks['gnikrap_ev3_sound_playnote'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_sound_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_sound_playnote.helpUrl"));
       this.setColour(EV3_BLOCKS_COLOUR);
       this.appendValueInput("NOTE")
           .setCheck("String")
-          .appendField("play note");
+          .appendField(i18n.t("blocks.gnikrap_ev3_sound_playnote.text_play_note"));
       this.appendValueInput("DURATION")
           .setCheck("Number")
-          .appendField("for");
+          .appendField(i18n.t("blocks.gnikrap_ev3_sound_playnote.text_for"));
       this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([["millisecond", "MS"], ["second", "S"]]), "TIME_UNIT");
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_time_unit.MS"), "MS"], 
+            [i18n.t("blocks.list_time_unit.S"), "S"]]), "TIME_UNIT");
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_sound_playnote.tooltip"));
     }
   };
 
@@ -212,7 +223,7 @@
     var value_duration = Blockly.JavaScript.valueToCode(block, 'DURATION', Blockly.JavaScript.ORDER_ATOMIC);
     var dropdown_time_unit = block.getFieldValue('TIME_UNIT');
     var code = 'ev3.getBrick().getSound().playNote("' + value_note + '", ' +
-        (dropdown_time_unit == 'S' ? (value_duration * 1000) : value_duration) + ')';
+        (dropdown_time_unit == 'S' ? (value_duration * 1000) : value_duration) + ');';
     return code;
   };  
 
@@ -221,14 +232,14 @@
   
   Blockly.Blocks['gnikrap_ev3_touchsensor_pushed'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_touch_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_touchsensor_pushed.helpUrl"));
       this.appendDummyInput()
-          .appendField("is sensor")
+          .appendField(i18n.t("blocks.gnikrap_ev3_touchsensor_pushed.text_sensor"))
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT")
-          .appendField("pushed ?");
+          .appendField(i18n.t("blocks.gnikrap_ev3_touchsensor_pushed.text_is_pushed"));
       this.setInputsInline(true);
       this.setOutput(true, "Boolean");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_touchsensor_pushed.tooltip"));
     }
   };  
   
@@ -244,13 +255,13 @@
   // getReflectedLight(): float
   Blockly.Blocks['gnikrap_ev3_colorsensor_reflected'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_colorsensor_reflected.helpUrl"));
       this.appendDummyInput()
-          .appendField("reflected light of sensor")
+          .appendField(i18n.t("blocks.gnikrap_ev3_colorsensor_reflected.text_reflected_light") )
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
       this.setInputsInline(true);
       this.setOutput(true, "Number");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_colorsensor_reflected.tooltip"));
     }
   };  
   
@@ -264,13 +275,13 @@
   // getAmbientLight(): float
   Blockly.Blocks['gnikrap_ev3_colorsensor_ambient'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_colorsensor_ambient.helpUrl"));
       this.appendDummyInput()
-          .appendField("ambient light of sensor")
+          .appendField(i18n.t("blocks.gnikrap_ev3_colorsensor_ambient.text_ambiant_light"))
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
       this.setInputsInline(true);
       this.setOutput(true, "Number");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_colorsensor_ambient.tooltip"));
     }
   };  
   
@@ -284,13 +295,13 @@
   // getColor(): String
   Blockly.Blocks['gnikrap_ev3_colorsensor_getcolor'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_colorsensor_getcolor.helpUrl"));
       this.appendDummyInput()
-          .appendField("color of sensor")
+          .appendField(i18n.t("blocks.gnikrap_ev3_colorsensor_getcolor.text_color"))
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
       this.setInputsInline(true);
       this.setOutput(true, "String");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_colorsensor_getcolor.tooltip"));
     }
   };  
   
@@ -304,15 +315,21 @@
   // isColor(color): boolean
   Blockly.Blocks['gnikrap_ev3_colorsensor_iscolor'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_colorsensor_iscolor.helpUrl"));
       this.appendDummyInput()
-          .appendField("is")
-          .appendField(new Blockly.FieldDropdown([["black", "BLACK"], ["blue", "BLUE"], ["yellow", "YELLOW"], ["red", "RED"], ["white", "WHITE"], ["brown", "BROWN"], ["no color", "NONE"]]), "COLOR")
-          .appendField("detected by sensor")
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_colors.BLACK"), "BLACK"], 
+            [i18n.t("blocks.list_colors.BLUE"), "BLUE"], 
+            [i18n.t("blocks.list_colors.YELLOW"), "YELLOW"], 
+            [i18n.t("blocks.list_colors.RED"), "RED"], 
+            [i18n.t("blocks.list_colors.WHITE"), "WHITE"], 
+            [i18n.t("blocks.list_colors.BROWN"), "BROWN"], 
+            [i18n.t("blocks.list_colors.NONE"), "NONE"]]), "COLOR")
+          .appendField(i18n.t("blocks.gnikrap_ev3_colorsensor_iscolor.text_is_detected"))
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
       this.setInputsInline(true);
       this.setOutput(true, "Boolean");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_colorsensor_iscolor.tooltip"));
     }
   };
   
@@ -354,16 +371,16 @@
   // setChannel(int): void
   Blockly.Blocks['gnikrap_ev3_irsensor_setchannel'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ir_infra_red_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_irsensor_setchannel.helpUrl"));
       this.appendDummyInput()
-          .appendField("set channel ")
+          .appendField(i18n.t("blocks.gnikrap_ev3_irsensor_setchannel.text_set_channel"))
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "CHANNEL")
-          .appendField("to IR sensor")
+          .appendField(i18n.t("blocks.gnikrap_ev3_irsensor_setchannel.text_to_sensor"))
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
       this.setInputsInline(true);
       this.setPreviousStatement(true);
       this.setNextStatement(true);
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_irsensor_setchannel.tooltip"));
     }
   };  
   
@@ -371,7 +388,7 @@
     var dropdown_channel = block.getFieldValue('CHANNEL');
     var dropdown_port = block.getFieldValue('PORT');
     // TODO: Assemble JavaScript into code variable.
-    var code = 'ev3.getBrick().getIRSensor("' + dropdown_port + '").setChannel("' + dropdown_channel + '")';
+    var code = 'ev3.getBrick().getIRSensor("' + dropdown_port + '").setChannel("' + dropdown_channel + '");';
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE];
   };
@@ -379,13 +396,13 @@
   // getDistance(): int
   Blockly.Blocks['gnikrap_ev3_irsensor_getdistance'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ir_infra_red_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_irsensor_getdistance.helpUrl"));
       this.appendDummyInput()
-          .appendField("distance to IR sensor")
+          .appendField(i18n.t("blocks.gnikrap_ev3_irsensor_getdistance.text_distance_to_sensor"))
           .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
       this.setInputsInline(true);
       this.setOutput(true, "Number");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_irsensor_getdistance.tooltip"));
     }
   };  
   
@@ -399,14 +416,20 @@
   // getRemoteCommand(): boolean
   Blockly.Blocks['gnikrap_ev3_irsensor_getremotecommand'] = {
     init: function() {
-      this.setHelpUrl('http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ir_infra_red_sensor_object');
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_irsensor_getremotecommand.helpUrl"));
       this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([["is top left enabled", "TOP_LEFT"], ["is top right enabled", "TOP_RIGHT"], ["is bottom left enabled", "BOTTOM_LEFT"], ["is bottom right enabled", "BOTTOM_RIGHT"], ["is beacon enabled", "BEACON"]]), "CHECK")
-          .appendField("on IR sensor")
-          .appendField(new Blockly.FieldDropdown([["option", "OPTIONNAME"], ["option", "OPTIONNAME"], ["option", "OPTIONNAME"]]), "PORT");
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_beacon_buttons_enabled.TOP_LEFT"), "TOP_LEFT"], 
+            [i18n.t("blocks.list_beacon_buttons_enabled.TOP_RIGHT"), "TOP_RIGHT"], 
+            [i18n.t("blocks.list_beacon_buttons_enabled.BOTTOM_LEFT"), "BOTTOM_LEFT"], 
+            [i18n.t("blocks.list_beacon_buttons_enabled.BOTTOM_RIGHT"), "BOTTOM_RIGHT"], 
+            [i18n.t("blocks.list_beacon_buttons_enabled.BEACON"), "BEACON"], 
+            [i18n.t("blocks.list_beacon_buttons_enabled.NOTHING"), "NOTHING"]]), "CHECK")
+          .appendField(i18n.t("blocks.gnikrap_ev3_irsensor_getremotecommand.text_on_sensor"))
+          .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
       this.setInputsInline(true);
       this.setOutput(true, "Boolean");
-      this.setTooltip('');
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_irsensor_getremotecommand.tooltip"));
     }
   };
   
@@ -428,15 +451,348 @@
       case "BOTTOM_RIGHT":
         code = 'isBottomRightEnabled()';
         break;
-      default:
+      case "BEACON":
         code = 'isBeaconEnabled()';
         break;
+      default:
+        code = 'isNothingEnabled()';
     }
     code = 'ev3.getBrick().getIRSensor("' + dropdown_port + '").getRemoteCommand().' + code;
     // TODO: Change ORDER_NONE to the correct strength.
     return [code, Blockly.JavaScript.ORDER_NONE];
   };  
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Keyboard API
+
+  // wait(touch): void
+  Blockly.Blocks['gnikrap_ev3_keyboard_wait'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_keyboard_wait.helpUrl"));
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_keyboard_buttons_wait.UP"), "UP"], 
+            [i18n.t("blocks.list_keyboard_buttons_wait.DOWN"), "DOWN"], 
+            [i18n.t("blocks.list_keyboard_buttons_wait.LEFT"), "LEFT"], 
+            [i18n.t("blocks.list_keyboard_buttons_wait.RIGHT"), "RIGHT"], 
+            [i18n.t("blocks.list_keyboard_buttons_wait.ENTER"), "ENTER"] 
+            /*, [i18n.t("blocks.list_keyboard_buttons.ESCAPE"), "ESCAPE"] */]), "BUTTON")
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_keyboard_buttons_actions.PRESSED"), "PRESSED"], 
+            [i18n.t("blocks.list_keyboard_buttons_actions.PRESSED_AND_RELEASED"), "PRESSED_AND_RELEASED"]]), "ACTION");
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip('');
+    }
+  };
+
+  Blockly.JavaScript['gnikrap_ev3_keyboard_wait'] = function(block) {
+    var dropdown_button = block.getFieldValue('BUTTON');
+    var dropdown_action = block.getFieldValue('ACTION');
+    // TODO: Assemble JavaScript into code variable.
+    var code = '';
+    switch(dropdown_button) {
+      case "UP":
+        code = 'getUp()';
+        break;
+      case "DOWN":
+        code = 'getDown()';
+        break;
+      case "LEFT":
+        code = 'getLeft()';
+        break;
+      case "RIGHT":
+        code = 'getRight()';
+        break;
+      case "ESCAPE":
+        code = 'getEscape()';
+        break;
+      default:
+        code = 'getEnter()';
+    }
+    code = code + '.';
+    switch(dropdown_action) {
+      case "PRESSED":
+        code = 'waitForPress()';
+        break;
+      default:
+        code = 'waitForPressAndRelease()';
+    }
+        
+    code = 'ev3.getKeyboard().' + code + ';';
+    return code;
+  };
+
+  // isPressed(touch): boolean
+  Blockly.Blocks['gnikrap_ev3_keyboard_ispressed'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_keyboard_ispressed.helpUrl"));
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_keyboard_buttons_is_pressed.UP"), "UP"], 
+            [i18n.t("blocks.list_keyboard_buttons_is_pressed.DOWN"), "DOWN"], 
+            [i18n.t("blocks.list_keyboard_buttons_is_pressed.LEFT"), "LEFT"], 
+            [i18n.t("blocks.list_keyboard_buttons_is_pressed.RIGHT"), "RIGHT"], 
+            [i18n.t("blocks.list_keyboard_buttons_is_pressed.ENTER"), "ENTER"] 
+            /*, [i18n.t("blocks.list_keyboard_buttons_is_pressed.ESCAPE"), "ESCAPE"] */]), "BUTTON");
+      this.setOutput(true, "Boolean");
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_keyboard_ispressed.tooltip"));
+    }
+  };
+
+  Blockly.JavaScript['gnikrap_ev3_keyboard_ispressed'] = function(block) {
+    var dropdown_button = block.getFieldValue('BUTTON');
+    // TODO: Assemble JavaScript into code variable.
+    var code = '';
+    switch(dropdown_button) {
+      case "UP":
+        code = 'getUp()';
+        break;
+      case "DOWN":
+        code = 'getDown()';
+        break;
+      case "LEFT":
+        code = 'getLeft()';
+        break;
+      case "RIGHT":
+        code = 'getRight()';
+        break;
+      case "ESCAPE":
+        code = 'getEscape()';
+        break;
+      default:
+        code = 'getEnter()';
+    }
+    code = 'ev3.getKeyboard().' + code + '.isDown()';
+    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_NONE];
+  };  
   
+  /////////////////////////////////////////////////////////////////////////////
+  // Motor API
+  
+  // setType(port, type): void
+  Blockly.Blocks['gnikrap_ev3_motor_settype'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_settype.helpUrl"));
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_motor_type.LARGE"), "LARGE"], 
+            [i18n.t("blocks.list_motor_type.MEDIUM"), "MEDIUM"]]), "TYPE")
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_settype.text_is_connected_on"))
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_settype.tooltip"));
+    }
+  };
+
+  Blockly.JavaScript['gnikrap_ev3_motor_settype'] = function(block) {
+    var dropdown_type = block.getFieldValue('TYPE');
+    var dropdown_port = block.getFieldValue('PORT');
+    // TODO: Assemble JavaScript into code variable.
+    //var code = '...';
+    
+    //Blockly.JavaScript.definitions_
+    
+    return null;
+  };  
+  
+  // move(action, port): void
+  Blockly.Blocks['gnikrap_ev3_motor_move'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_move.helpUrl"));
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_motor_actions1.FORWARD"), "FORWARD"], 
+            [i18n.t("blocks.list_motor_actions1.BACKWARD"), "BACKWARD"], 
+            [i18n.t("blocks.list_motor_actions1.STOP_LOCK"), "STOP_LOCK"], 
+            [i18n.t("blocks.list_motor_actions1.STOP"), "STOP"]]), "ACTION")
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_move.text_motor"))
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_move.tooltip"));
+    }
+  };  
+  
+  Blockly.JavaScript['gnikrap_ev3_motor_move'] = function(block) {
+    var dropdown_port = block.getFieldValue('PORT');
+    var dropdown_action = block.getFieldValue('ACTION');
+    var code = '';
+    switch(dropdown_action) {
+      case "FORWARD":
+        code = 'forward()';
+        break;
+      case "BACKWARD":
+        code = 'backward()';
+        break;
+      case "STOP_LOCK":
+        code = 'stop(true)';
+        break;
+      default:
+        code = 'stop(false)';
+    }
+    code = 'ev3.getBrick().getLargeMotor("' + dorpdown_port + '").' + code + ';';
+    return code;
+  };  
+  
+  // isMoving(port): boolean
+  Blockly.Blocks['gnikrap_ev3_motor_ismoving'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_ismoving.helpUrl"));
+      this.appendDummyInput()
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_ismoving.text_motor"))
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT")
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_ismoving.text_is_moving"));
+      this.setOutput(true, "Boolean");
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_ismoving.tooltip"));
+    }
+  };
+
+  Blockly.JavaScript['gnikrap_ev3_motor_ismoving'] = function(block) {
+    var dropdown_port = block.getFieldValue('PORT');
+    // TODO: Assemble JavaScript into code variable.
+    var code = 'ev3.getBrick().getLargeMotor("' + dropdown_port + '").isMoving()';
+    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_NONE];
+  };
+  
+  // rotate(port, value, type): void
+  Blockly.Blocks['gnikrap_ev3_motor_rotate'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_rotate.helpUrl"));
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_motor_actions2.ROTATE"), "ROTATE"], 
+            [i18n.t("blocks.list_motor_actions2.ROTATE_NO_WAIT"), "ROTATE_NO_WAIT"]]), "ACTION")
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+      this.appendValueInput("VALUE")
+          .setCheck("Number")
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_rotate.text_for"));
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_angle_unit.DEGREE"), "DEGREE"], 
+            [i18n.t("blocks.list_angle_unit.TURN"), "TURN"]]), "ANGLE_UNIT");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_rotate.tooltip"));
+    }
+  };
+
+  Blockly.JavaScript['gnikrap_ev3_motor_rotate'] = function(block) {
+    var value_value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
+    var dropdown_angle_unit = block.getFieldValue('ANGLE_UNIT');
+    var dropdown_action = block.getFieldValue('ACTION');
+    var dropdown_port = block.getFieldValue('PORT');
+    // TODO: Assemble JavaScript into code variable.
+    var code = 'ev3.getBrick().getLargeMotor("'+ dropdown_port + '").rotate(' + 
+        (dropdown_angle_unit == "TURN" ? value_value * 360 : value_value) + 
+        ', ' + (dropdown_action == "ROTATE_NO_WAIT" ? "true" : "false") + ');';
+    return code;
+  };  
+  
+  // setSpeed(port, speed): void
+  Blockly.Blocks['gnikrap_ev3_motor_setspeed'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_setspeed.helpUrl"));
+      this.appendDummyInput()
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_setspeed.text_set_speed_of_motor"))
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+      this.appendValueInput("SPEED")
+          .setCheck("Number")
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_setspeed.text_to"));
+      this.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_speed_unit.DEGREE_PER_S"), "DEGREE_PER_S"], 
+            [i18n.t("blocks.list_speed_unit.PERCENT"), "PERCENT"]]), "SPEED_UNIT");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_setspeed.tooltip"));
+    }
+  };  
+  
+  Blockly.JavaScript['gnikrap_ev3_motor_setspeed'] = function(block) {
+    var value_speed = Blockly.JavaScript.valueToCode(block, 'SPEED', Blockly.JavaScript.ORDER_ATOMIC);
+    var dropdown_speed_unit = block.getFieldValue('SPEED_UNIT');
+    var dropdown_port = block.getFieldValue('PORT');
+    // TODO: Assemble JavaScript into code variable.
+    var code = 'ev3.getBrick().getLargeMotor("' + dropdown_port + '").' + 
+        (dropdown_speed_unit == "PERCENT" ? 'setSpeedPercent' : 'setSpeed' ) + '(' + value_speed + ');';
+    return code;
+  };  
+  
+  // getSpeed(port): void
+  Blockly.Blocks['gnikrap_ev3_motor_getspeed'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_getspeed.helpUrl"));
+      this.appendDummyInput()
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_getspeed.text_speed_of_motor"))
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+      this.appendDummyInput()
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_getspeed.text_in"))
+          .appendField(new Blockly.FieldDropdown([
+            [i18n.t("blocks.list_speed_unit.DEGREE_PER_S"), "DEGREE_PER_S"], 
+            [i18n.t("blocks.list_speed_unit.PERCENT"), "PERCENT"]]), "SPEED_UNIT");
+      this.setInputsInline(true);
+      this.setOutput(true, "Number");
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_getspeed.tooltip"));
+    }
+  };
+
+  Blockly.JavaScript['gnikrap_ev3_motor_getspeed'] = function(block) {
+    var dropdown_port = block.getFieldValue('PORT');
+    var dropdown_speed_unit = block.getFieldValue('SPEED_UNIT');
+    // TODO: Assemble JavaScript into code variable.
+    var code = 'ev3.getBrick().getLargeMotor("' + dropdown_port + '").' + 
+        (dropdown_speed_unit == "PERCENT" ? 'getSpeedPercent' : 'getSpeed' ) + '()';
+    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_NONE];
+  };  
+
+  //  getTacho(port): int
+  Blockly.Blocks['gnikrap_ev3_motor_gettacho'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_gettacho.helpUrl"));
+      this.appendDummyInput()
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_gettacho.text_tacho_count_of_motor"))
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+      this.setInputsInline(true);
+      this.setOutput(true, "Number");
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_gettacho.tooltip"));
+    }
+  };  
+  
+  Blockly.JavaScript['gnikrap_ev3_motor_gettacho'] = function(block) {
+    var dropdown_port = block.getFieldValue('PORT');
+    // TODO: Assemble JavaScript into code variable.
+    var code = 'ev3.getBrick().getLargeMotor("' + dropdown_port + '").getTachoCount()';
+    // TODO: Change ORDER_NONE to the correct strength.
+    return [code, Blockly.JavaScript.ORDER_NONE];
+  };  
+  
+  // resetTacho(port): void
+  Blockly.Blocks['gnikrap_ev3_motor_resettacho'] = {
+    init: function() {
+      this.setHelpUrl(i18n.t("blocks.gnikrap_ev3_motor_resettacho.helpUrl"));
+      this.appendDummyInput()
+          .appendField(i18n.t("blocks.gnikrap_ev3_motor_resettacho.text_reset_tacho_count_of_motor"))
+          .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+      this.setInputsInline(true);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.setTooltip(i18n.t("blocks.gnikrap_ev3_motor_resettacho.tooltip"));
+    }
+  };
+
+  Blockly.JavaScript['gnikrap_ev3_motor_resettacho'] = function(block) {
+    var dropdown_port = block.getFieldValue('PORT');
+    // TODO: Assemble JavaScript into code variable.
+    var code = 'ev3.getBrick().getLargeMotor("' + dropdown_port + '").resetTachoCount();';
+    return code;
+  };
 })();
 
 // Define utils function for blockly
@@ -552,14 +908,12 @@ var BlocklyUtils = (function() {
           {type: "gnikrap_ev3_sound_beep" },
           {type: "gnikrap_ev3_sound_playnote",
             xmlContent: '<value name="NOTE"><block type="text"><field name="TEXT">Do</field></block></value>' +
-                        '<value name="DURATION"><block type="math_number"><field name="NUM">100</field></block></value>'}
+                        '<value name="DURATION"><block type="math_number"><field name="NUM">100</field></block></value>' }
         ].map(blockToXML).join(''));
-
     xml.push('</category>');
 
     xml.push('<category name="Sensors blocks">');
     xml.push([
-          //{type: "gnikrap_motor"},
           {type: "gnikrap_ev3_touchsensor_pushed"},
           {type: "gnikrap_ev3_colorsensor_reflected"},
           {type: "gnikrap_ev3_colorsensor_ambient"},
@@ -567,30 +921,53 @@ var BlocklyUtils = (function() {
           {type: "gnikrap_ev3_colorsensor_iscolor"},
           {type: "gnikrap_ev3_irsensor_setchannel"},
           {type: "gnikrap_ev3_irsensor_getdistance"},
-          {type: "gnikrap_ev3_irsensor_getremotecommand"}
+          {type: "gnikrap_ev3_irsensor_getremotecommand"},
+          {type: "gnikrap_ev3_keyboard_wait"},
+          {type: "gnikrap_ev3_keyboard_ispressed"}
         ].map(blockToXML).join(''));
+    xml.push('</category>');
 
+    xml.push('<category name="xSensors blocks">');
+    xml.push([
+        ].map(blockToXML).join(''));
+    xml.push('</category>');
+    
+    xml.push('<category name="Motors blocks">');
+    xml.push([
+          {type: "gnikrap_ev3_motor_settype"},
+          {type: "gnikrap_ev3_motor_move"},
+          {type: "gnikrap_ev3_motor_rotate", 
+            xmlContent: '<value name="VALUE"><block type="math_number"><field name="NUM">90</field></block></value>' },
+          {type: "gnikrap_ev3_motor_setspeed",
+            xmlContent: '<value name="SPEED"><block type="math_number"><field name="NUM">90</field></block></value>'},
+          {type: "gnikrap_ev3_motor_getspeed"},
+          {type: "gnikrap_ev3_motor_ismoving"},
+          {type: "gnikrap_ev3_motor_gettacho"},
+          {type: "gnikrap_ev3_motor_resettacho"}
+        ].map(blockToXML).join(''));
     xml.push('</category>');
     
     return xml.join('');
   };
+  
+  var generateMagicCategories = function() {
+    var xml = [];
+    xml.push('<category name="Variables" custom="VARIABLE"></category>');
+    xml.push('<category name="Functions" custom="PROCEDURE"></category>');
+    return xml.join('');
+  }
     
   var generateToolbox = function() {
     // Very simple XML => Generate with string concatenation
     var xml = [ '<xml>' ];
-
+    
     xml.push(generateBlocklyCategories());
-
     xml.push('<sep></sep>');
     xml.push(generateGnikrapCategories());
-    
-    // Magic categories
     xml.push('<sep></sep>');
-    xml.push('<category name="Variables" custom="VARIABLE"></category>');
-    xml.push('<category name="Functions" custom="PROCEDURE"></category>');
+    xml.push(generateMagicCategories());
 
     xml.push('</xml>');
-    
     return xml.join('');
   };
 

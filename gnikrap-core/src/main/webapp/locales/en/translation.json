@@ -47,6 +47,11 @@
     "loadingScripWait": "// Loading script: '__filename__', please wait...",
     "scriptSuccessfullySaved": "Script '__filename__' successfully saved",
 
+    "demo": {
+      "no_load": "Demo mode, cannot load file",
+      "no_save": "Demo mode, cannot save file"
+    },
+    
     "errors": {
       "cantLoadScriptFile": "Can't load '__filename__' script file. [__causedBy__]",
       "cantSaveScriptFile": "Can't save '__filename__' script file. [__causedBy__]"
@@ -202,6 +207,11 @@
     "ev3ConnectionOk": "EV3 Brick connection ok",
     "confirmStopScriptAlreadyRunning": "A script is already running, stop the script currently running and start the new script ?",
 
+    "demo": {
+      "no_connection_to_EV3": "Demo mode, no connection to EV3",
+      "no_run": "Demo mode, cannot run program"
+    },
+    
     "errors": {
       "webSocketNotSupported": "WebSocket not supported by your Browser. Please try with a recent version of your browser. If not possible, please consider installing Firefox.",
       "ev3ConnectionFailed": "EV3 Brick connection failed. Connection will be retried in a few seconds. [__causedBy__]",
@@ -265,5 +275,251 @@
       "along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\" target=\"_blank\">http://www.gnu.org/licenses/</a>"
     ],
     "close": "Close"
+  },
+  
+  "blocks": {
+    "@comment": "Translation for blockly'blocks defined for Gnikrap",
+    
+    "list_time_unit": {
+      "S": "seconds",
+      "MS": "milliseconds"
+    },
+    
+    "list_led_status": {
+      "OFF": "off",
+      "GREEN": "green",
+      "GREEN_1": "flashing green",
+      "GREEN_2": "fast flashing green",
+      "ORANGE": "orange",
+      "ORANGE_1": "flashing orange",
+      "ORANGE_2": "fast flashing orange",
+      "RED": "red",
+      "RED_1": "flashing red",
+      "RED_2": "fast flashing red"
+    },
+    
+    "list_colors": {
+      "BLACK": "black",
+      "BLUE": "blue",
+      "YELLOW": "yellow",
+      "RED": "red",
+      "WHITE": "white",
+      "BROWN": "brown",
+      "NONE": "no color"
+    },
+    
+    "list_beacon_buttons_enabled": {
+      "TOP_LEFT": "top left button is enabled",
+      "TOP_RIGHT": "top right button is enabled",
+      "BOTTOM_LEFT": "bottom left button is enabled",
+      "BOTTOM_RIGHT": "bottom right button is enabled",
+      "BEACON": "beacon button is enabled",
+      "NOTHING": "nothing is enabled"
+    },
+    
+    "list_keyboard_buttons_wait": {
+      "UP": "wait up button",
+      "DOWN": "wait down button",
+      "LEFT": "wait left button",
+      "RIGHT": "wait right button",
+      "ENTER": "wait enter button",
+      "ESCAPE": "wait escape button"
+    },
+
+    "list_keyboard_buttons_is_pressed": {
+      "UP": "up button is pressed",
+      "DOWN": "down button is pressed",
+      "LEFT": "left button is pressed",
+      "RIGHT": "right button is pressed",
+      "ENTER": "enter button is pressed",
+      "ESCAPE": "escape button is pressed"
+    },
+    
+    "list_keyboard_buttons_actions": {
+      "PRESSED": "is pressed",
+      "PRESSED_AND_RELEASED": "is pressed and released"
+    },
+    
+    "list_motor_type": {
+      "LARGE": "a large motor",
+      "MEDIUM": "a medium motor"
+    },
+    
+    "list_motor_actions1": {
+      "FORWARD": "rotate forward",
+      "BACKWARD": "rotate backward",
+      "STOP_LOCK": "stop and lock",
+      "STOP": "stop"
+    },
+    
+    "list_motor_actions2": {
+      "ROTATE": "rotate motor",
+      "ROTATE_NO_WAIT": "start rotate motor"
+    },
+    
+    "list_angle_unit": {
+      "DEGREE": "degree(s)",
+      "TURN": "turn(s)"
+    },
+    
+    "list_speed_unit": {
+      "DEGREE_PER_S": "degrees/second",
+      "TURN_PER_S": "turn/second",
+      "PERCENT": "%"
+    },
+    
+    "gnikrap_ev3_notify": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object",
+      "tooltip": "Display a message on the Gnikrap interface",
+      "text_notify": "notify"
+    },
+    
+    "gnikrap_ev3_isok": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object",
+      "tooltip": "is everything ok on the EV3 brick ?",
+      "text_ev3_is_ok": "EV3 is ok"
+    },
+    
+    "gnikrap_ev3_sleep": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object",
+      "tooltip": "Make the program sleeping for the given time",
+      "text_sleep": "sleep"
+    },
+
+    "gnikrap_ev3_led": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_led_object",
+      "tooltip": "Change the LED status to the selected lightning pattern",
+      "text_change_LED_status": "change the LED status to"
+    },
+    
+    "gnikrap_ev3_sound_setvolume": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_sound_object",
+      "tooltip": "Set the sound volume",
+      "text_set_volume": "set volume to"
+    },
+
+    "gnikrap_ev3_sound_beep": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_sound_object",
+      "tooltip": "Play a beep",
+      "text_beep": "beep"
+    },
+    
+    "gnikrap_ev3_sound_playnote": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_sound_object",
+      "tooltip": "Play the given note for the given duration",
+      "text_play_note": "play note",
+      "text_for": "for"
+    },
+    
+    "gnikrap_ev3_touchsensor_pushed": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_touch_sensor_object",
+      "tooltip": "Is the touch sensor pushed ?",
+      "text_sensor": "sensor",
+      "text_is_pushed": "is pushed"
+    },
+    
+    "gnikrap_ev3_colorsensor_reflected": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
+      "tooltip": "Returns the reflected light: a value between 0 and 100",
+      "text_reflected_light": "reflected light of sensor"
+    },
+    
+    "gnikrap_ev3_colorsensor_ambient": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
+      "tooltip": "Returns the ambient light: a value between 0 and 100",
+      "text_ambiant_light": "ambient light of sensor"
+    },
+    
+    "gnikrap_ev3_colorsensor_getcolor": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
+      "tooltip": "Returns the color (in English) of the sensor",
+      "text_color": "color of sensor"
+    },
+    
+    "gnikrap_ev3_colorsensor_iscolor": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
+      "tooltip": "Does the color sensor detect the given color ?",
+      "text_is_detected": "is detected by sensor"
+    },
+    
+    "gnikrap_ev3_irsensor_setchannel": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ir_infra_red_sensor_object",
+      "tooltip": "Set the channel to use with the IR sensor",
+      "text_set_channel": "set channel",
+      "text_to_sensor": "to IR sensor"
+    },
+    
+    "gnikrap_ev3_irsensor_getdistance": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ir_infra_red_sensor_object",
+      "tooltip": "The distance from the IR sensor: a value between 0 and 100",
+      "text_distance_to_sensor": "distance to IR sensor"
+    },
+    
+    "gnikrap_ev3_irsensor_getremotecommand": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ir_infra_red_sensor_object",
+      "tooltip": "Check for remote command (beacon) buttons usage",
+      "text_on_sensor": "on IR sensor"
+    },
+    
+    "gnikrap_ev3_keyboard_wait": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_keyboard_object",
+      "tooltip": "Wait for a button to be pressed (and released is selected)"
+    },
+    
+    "gnikrap_ev3_keyboard_ispressed": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_keyboard_object",
+      "tooltip": "Is a button pressed ?"
+    },
+    
+    "gnikrap_ev3_motor_settype": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "Set the type of motor on the given port",
+      "text_is_connected_on": "is connected on port"
+    },
+    
+    "gnikrap_ev3_motor_move": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "TODO",
+      "text_motor": "motor"
+    },
+    
+    "gnikrap_ev3_motor_ismoving": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "Is the motor currently moving or not ?",
+      "text_motor": "motor",
+      "text_is_moving": "is moving"
+    },
+    
+    "gnikrap_ev3_motor_rotate": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "TODO",
+      "text_for": "for"
+    },
+    
+    "gnikrap_ev3_motor_setspeed": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "Set the speed of the motor",
+      "text_set_speed_of_motor": "set speed of motor",
+      "text_to": "to"
+    },
+    
+    "gnikrap_ev3_motor_getspeed": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "Get the speed of the motor",
+      "text_speed_of_motor": "speed of motor",
+      "text_in": "in"
+    },
+    
+    "gnikrap_ev3_motor_gettacho": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "Get the tacho count since the last 'reset tacho'",
+      "text_tacho_count_of_motor": "tacho count of motor"
+    },
+    
+    "gnikrap_ev3_motor_resettacho": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
+      "tooltip": "Reset the tacho count to 0",
+      "text_reset_tacho_count_of_motor": "reset tacho count of motor"
+    }
   }
 }
