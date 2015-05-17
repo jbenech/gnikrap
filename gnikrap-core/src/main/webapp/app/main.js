@@ -20,7 +20,7 @@
 // Basic checks for "browser compatibility"
 //
 // Note: Don't perform this check in jQuery .ready() callback as version 2.x of jQuery don't have compatibility with some 'old' browser.
-//       Don't use i18n as it doesn't work on some old browser (eg. IE8)
+//       Don't use i18n as it doesn't work on some 'old' browser (eg. IE8)
 if(!('WebSocket' in window && 
       'matchMedia' in window)) { // A minimal level of css for bootstrap
   alert("Gnikrap can't run in this browser, consider using a more recent browser.\nThe page will be automatically closed.");
@@ -31,62 +31,90 @@ if(!('WebSocket' in window &&
 var context = { // The application context - used as a basic dependency-injection mechanism
   events: {
     resize: "gnikrap_resize", // Params: workAreaHeight, usefullWorkAreaHeight
-    changeSettings: "gnikrap_changeSettings" // Params: keyChanged, newValue
-  }
+    changeSettings: "gnikrap_changeSettings", // Params: keyChanged, newValue
+                                              // Be carefull, on 'language' translations may not have been reloaded, use 'languageReloaded' instead
+    languageReloaded: "gnikrap_languageReleaoded" // Params: none
+  }  
 };
 
-// Load/Initialize application settings
-context.settings = (function() {
-  var STORAGE_SETTINGS = "gnikrap_settings";
+// Define a settings object
+function GnikrapSettings() {
+  'use strict';
 
-  var loaded = localStorage[STORAGE_SETTINGS];
-  console.log("Settings loaded on local storage: " + loaded);
-  var settings = {};
-  if(loaded) {
-    settings = JSON.parse(loaded);
-  }
+  var self = this;
+  (function() { // Init
+    self.STORAGE_SETTINGS = "gnikrap_settings";
+    self.JSON_FIELDS = ['language', 'programmingStyle'];
+    
+    // Load 
+    var loaded = localStorage[self.STORAGE_SETTINGS];
+    console.log("Settings loaded on local storage: " + loaded);
+    if(loaded) {
+      try {
+        var newSettings = JSON.parse(loaded);
+        for(var key in newSettings) {
+          if(self.JSON_FIELDS.indexOf(key) != -1) {
+            self[key] = newSettings[key];
+          }
+        }
+      } catch(ex) {
+        console.log("Error: " + ex + " on settings loaded: " + loaded);
+      }
+    }
+    
+    // Language
+    if(!self.language) {
+      var language_complete = navigator.language.split("-");
+      self.language = (language_complete[0]);
+    }
+    
+    // ProgrammingStyle
+    if(!self.programmingStyle) {
+      self.programmingStyle = "TEXT";
+    }
+    // Override with url param if exist
+    var param = Utils.getUrlParameter("programmingStyle");
+    if(param && (param == "TEXT" || param == "VISUAL")) {
+      self.programmingStyle = param;
+    }
+    
+    // Demo mode (not http and no demo_mode parameter)
+    self.demoMode = !((window.location.protocol.indexOf('http') == 0) && (Utils.getUrlParameter("demoMode") != "true"));
+  })();
   
-  if(!settings.language) {
-    var language_complete = navigator.language.split("-");
-    settings.language = (language_complete[0]);
-  }
-
-  if(!settings.programmingStyle) {
-    settings.programmingStyle = "TEXT";
-  }
-
-  settings.update = function(newSettings) {
-    // Note function called latter on, but 'settings' should be the same object as 'context.settings'
+  self.update = function(newSettings) {
     var needSave = false;
     for(var key in newSettings) {
-      if(settings[key] && settings[key] != newSettings[key]) {
-        settings[key] = newSettings[key];
-        $.publish(context.events.changeSettings, [key, settings[key]]);
+      if(self[key] && self[key] != newSettings[key]) {
+        self[key] = newSettings[key];
+        $.publish(context.events.changeSettings, [key, self[key]]);
         needSave = true;
       }
     }
     if(needSave) {
-      localStorage[STORAGE_SETTINGS] = JSON.stringify(settings);
+      localStorage[self.STORAGE_SETTINGS] = JSON.stringify(self, self.JSON_FIELDS);
     }
-  };
-
-  return settings;
-}());
-
+  };  
+}
+context.settings = new GnikrapSettings(context);
 
 // Initialization of the application
 $(document).ready(function() {
   'use strict';
-
+  
   // Translation
   i18n.init({ fallbackLng: 'en', lng: context.settings.language }, function() {
-    context.settings.language = i18n.lng(); // Language really used
+    context.settings.language = i18n.lng(); // Set language really used    
     
     // Technical objects
     context.compatibility = compatibility;
 
     // Objects and 'ViewModel/VM' instantiation
-    context.ev3BrickServer = new EV3BrickServer(context);
+    if(context.settings.demoMode) {
+      context.ev3BrickServer = new DemoEV3BrickServer(context);
+    } else {
+      context.ev3BrickServer = new EV3BrickServer(context);
+    }
     context.navigationBarVM = new NavigationBarViewModel(context);
     context.messageLogVM = new MessageLogViewModel(context);
     // Tabs
@@ -121,9 +149,13 @@ $(document).ready(function() {
     // Register events to translation
     $.subscribe(self.context.events.changeSettings, function(evt, keyChanged, newValue) {
       if("language" == keyChanged) {
-        i18n.setLng(context.settings.language, function(t) { $(".i18n").i18n(); });
+        i18n.setLng(context.settings.language, function(t) { 
+          $(".i18n").i18n(); 
+          $.publish(context.events.languageReloaded, []);
+        });
       }
     });
+
     
     // Publish events for settings
     $.publish(context.events.changeSettings, ["language", context.settings.language]);

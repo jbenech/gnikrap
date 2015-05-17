@@ -240,3 +240,45 @@ function EV3BrickServer(appContext) {
     }
   };
 }
+
+// A Demo instance of the EV3 brick server.
+function DemoEV3BrickServer(appContext) {
+  'use strict';
+  
+  var self = this;
+  { // Init
+    self.context = appContext; // The application context
+  }
+  
+  self.initialize = function() {
+    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_connection_to_EV3"));
+  }
+  
+  self.runScript = function(scriptCode, stopRunningScript) {
+    console.log("Demo mode - Script that should be sent to EV3: \n" +
+        "----------------------------------------------------------------------\n" +
+        scriptCode + 
+        "\n----------------------------------------------------------------------");
+    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_run"));
+  };
+
+  self.stopScript = function() {
+    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
+  };
+  
+  self.shutdownBrick = function() {
+    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
+  };
+  
+  self.stopGnikrap = function() {
+    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
+  };
+  
+  self.sendXSensorValue = function(sensorName, sensorType, sensorValue) {
+    // Demo: Does nothing
+  };
+  
+  self.streamXSensorValue = function(sensorName, sensorType, sensorValue) {
+    // Demo: Does nothing
+  };  
+}

@@ -1,11 +1,11 @@
 #### Contributing
 
 You can contribute to Gnikrap in several way:
-* Fixing or adding new translation, you can have a look to the files [here](gnikrap-core/src/main/WEB-CONTENT/locales).   
+* Fixing or adding new translation, you can have a look to the files [here](gnikrap-core/src/main/webapp/locales).   
   There is basically a file 'translation.json' which contains all the translation for one language. This files has to be put 
   in a folder with the language code (eg. 'en' for english, 'fr' for french, 'es' fos spanish, 'zh' for chinese, ...).
 * Fixing or adding some documentation, you can have a look to the files [here](gnikrap-doc/src/main/asciidoc).
-* Hacking the code, see details on compiling below.
+* Hacking the code, see details on building below.
 
 ##### Building gnikrap
 

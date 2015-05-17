@@ -77,9 +77,10 @@ Known defects:
 Work in progress:
  0.5.0:
     - Blockly:
-      - Settings dialog added (settings are saved in the browser)
+      - Settings dialog added (switch between Text/Visual programming)
+    - Demo mode added (GUI can be launched without error even if not installed on an EV3)
     - Add an API to exit from the script
     - Documentation updated
     
     - Fix: 
-      - French translation is now ok (translation files are now checked by the build)
+      - All translations are working (translation files are now checked during the build)

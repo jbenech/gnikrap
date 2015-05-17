@@ -209,7 +209,8 @@
 
     "demo": {
       "no_connection_to_EV3": "Demo mode, no connection to EV3",
-      "no_run": "Demo mode, cannot run program"
+      "no_run": "Demo mode, cannot run program",
+      "no_stop_nor_shutdown": "Demo mode, nothing will be stopped/shutdown"
     },
     
     "errors": {

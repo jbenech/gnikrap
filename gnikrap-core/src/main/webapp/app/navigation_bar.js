@@ -30,7 +30,7 @@ function NavigationBarViewModel(appContext) {
     self.workAreaItems.push({
       name: "SCRIPT_EDITOR",
       data_i18n: "workArea.scriptEditorTab",
-      tabId: "editorTab",
+      tabId: "scriptEditorTab",
       active: ko.observable(true)
     });
     self.workAreaItems.push({

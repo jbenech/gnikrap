@@ -31,39 +31,43 @@ function JavascriptEditor(appContext) {
   'use strict';
   
   var self = this;
-  { // Init
+  (function() { // Init
     self.context = appContext; // The application context
     self.ace = ace.edit("aceEditor");
     self.ace.setTheme("ace/theme/chrome");
     self.ace.getSession().setMode("ace/mode/javascript");
     self.ace.getSession().setTabSize(2);
     self.ace.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
-  }
+  })();
 
-  this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
+  self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
     $('#aceEditor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
     self.ace.resize();
   };
   
-  this.clearScript = function() {
+  self.clearScript = function() {
     self.setValue("");
   };
   
-  this.setValue = function(value) {
+  self.setValue = function(value) {
     self.ace.setValue(value);
     self.ace.moveCursorTo(0, 0);
   };
   
-  this.displayMessage = function(msg) {
+  self.displayMessage = function(msg) {
     self.setValue(msg);
   };
   
-  this.setVisible = function(visible) {
+  self.setVisible = function(visible) {
     if(visible) {
       $('#aceEditor').css('display', '');
     } else {
       $('#aceEditor').css('display', 'none');
     }
+  };
+  
+  self.getValue = function() {
+    return self.ace.getValue();
   };
 }
 
@@ -71,36 +75,44 @@ function BlocklyEditor(appContext) {
   'use strict';
   
   var self = this;
-  { // Init
+  (function() { // Init
     self.context = appContext; // The application context
-    Blockly.inject(document.getElementById('blocklyEditor'),
-        { toolbox: BlocklyUtils.generateToolbox() });
-  }
+
+    BlocklyUtils.initAndInjectInDOM(document.getElementById('blocklyEditor'), self.context.settings.language);
+
+    // Register events
+    $.subscribe(self.context.events.languageReloaded, function(evt) {
+      BlocklyUtils.updateLanguage(self.context.settings.language);
+    });
+  })();
   
-  this.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
+  self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
     $('#blocklyEditor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
-    //self.ace.resize();
   };
   
-  this.clearScript = function() {
+  self.clearScript = function() {
     self.setValue("");
   };
   
-  this.setValue = function(value) {
-    self.ace.setValue(value);
-    self.ace.moveCursorTo(0, 0);
+  self.setValue = function(value) {
+    // TODO
   };
   
-  this.displayMessage = function(msg) {
+  self.displayMessage = function(msg) {
     // Does nothing
   };
 
-  this.setVisible = function(visible) {
+  self.setVisible = function(visible) {
     if(visible) {
       $('#blocklyEditor').css('display', '');
     } else {
       $('#blocklyEditor').css('display', 'none');
     }
+  };
+
+  self.getValue = function() {
+    console.log("Generated code: " + Blockly.JavaScript.workspaceToCode());
+    return "'TODO';";
   };
 }  
 
@@ -109,8 +121,7 @@ function ScriptEditorTabViewModel(appContext) {
   'use strict';
 
   var self = this;
-
-  { // Init
+  (function() { // Init
     self.context = appContext; // The application context
     self.scriptFilename = undefined;
     self.editor = undefined;
@@ -128,7 +139,7 @@ function ScriptEditorTabViewModel(appContext) {
         self.__doChangeEditor();
       }
     });
-  }
+  })();
 
   self.__doChangeEditor = function() {
     if(self.editor) {
@@ -164,6 +175,10 @@ function ScriptEditorTabViewModel(appContext) {
   };
 
   self.onLoadScript = function() {
+    if(self.context.settings.demoMode) {
+      self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.demo.no_load"));
+      return;
+    }
     self.context.manageScriptFilesVM.display();
   };
 
@@ -191,6 +206,10 @@ function ScriptEditorTabViewModel(appContext) {
   };
 
   self.onSaveScript = function() {
+    if(self.context.settings.demoMode) {
+      self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.demo.no_save"));
+      return;
+    }
     bootbox.prompt({
       title: i18n.t('scriptEditorTab.saveScriptModal.title'),
       value: (self.scriptFilename ? self.scriptFilename : ""),
@@ -218,5 +237,9 @@ function ScriptEditorTabViewModel(appContext) {
         } // else: cancel clicked
       }
     });
+  };
+  
+  self.getValue = function() {
+    return self.editor.getValue();
   };
 }

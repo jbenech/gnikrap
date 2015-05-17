@@ -260,7 +260,7 @@ isWhite():: Returns `true` if the white color was detected, `false` otherwise.
 
 isBrown():: Returns `true` if the brown color was detected, `false` otherwise.
 
-getColorAsText:: Returns the color as a string.
+getColorAsText():: Returns the color as a string.
 ****
 
 

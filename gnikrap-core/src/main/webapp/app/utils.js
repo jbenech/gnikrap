@@ -141,10 +141,10 @@ var Utils = (function() {
   var round2dec = function (n) {
     // return Number(n.toFixed(2));
     return Math.round(n * 100) / 100;
-  },
+  };
 
   // Generate a UUID
-  generateUUID = function (){
+  var generateUUID = function () {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = (d + Math.random()*16)%16 | 0;
@@ -154,9 +154,22 @@ var Utils = (function() {
     return uuid;
   };
   
+  // From: http://www.jquerybyexample.net/2012/06/get-url-parameters-using-jquery.html
+  var getUrlParameter = function (sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+        }
+    }
+  };
+  
   return {
     round2dec: round2dec,
-    generateUUID: generateUUID
+    generateUUID: generateUUID,
+    getUrlParameter: getUrlParameter
   };
 })();
 
