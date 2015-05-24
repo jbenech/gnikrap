@@ -67,7 +67,16 @@ function JavascriptEditor(appContext) {
   };
   
   self.getValue = function() {
-    return self.ace.getValue();
+    var x = self.ace.getValue();
+
+    x.warnings.forEach(function(warn) {
+        self.context.messageLogVM.addMessage(false, warn);
+      });
+    x.errors.forEach(function(err) {
+        self.context.messageLogVM.addMessage(true, err);
+      });
+
+    return (x.errors > 0 ? null : x.code);
   };
 }
 
@@ -78,11 +87,12 @@ function BlocklyEditor(appContext) {
   (function() { // Init
     self.context = appContext; // The application context
 
-    BlocklyUtils.initAndInjectInDOM(document.getElementById('blocklyEditor'), self.context.settings.language);
+    self.blockly = new GnikrapBlocks();
+    self.blockly.injectInDOM(document.getElementById('blocklyEditor'), self.context.settings.language);
 
     // Register events
     $.subscribe(self.context.events.languageReloaded, function(evt) {
-      BlocklyUtils.updateLanguage(self.context.settings.language);
+      self.blockly.updateLanguage(self.context.settings.language);
     });
   })();
   
@@ -91,7 +101,7 @@ function BlocklyEditor(appContext) {
   };
   
   self.clearScript = function() {
-    self.setValue("");
+    self.blockly.clear();
   };
   
   self.setValue = function(value) {
@@ -111,8 +121,16 @@ function BlocklyEditor(appContext) {
   };
 
   self.getValue = function() {
-    console.log("Generated code: " + Blockly.JavaScript.workspaceToCode());
-    return "'TODO';";
+    var result = self.blockly.buildJavascriptCode();
+
+    result.warnings.forEach(function(warn) {
+        self.context.messageLogVM.addMessage(false, warn);
+      });
+    result.errors.forEach(function(err) {
+        self.context.messageLogVM.addMessage(true, err);
+      });
+
+    return (result.errors.length > 0 ? undefined : result.code);
   };
 }  
 
@@ -176,7 +194,7 @@ function ScriptEditorTabViewModel(appContext) {
 
   self.onLoadScript = function() {
     if(self.context.settings.demoMode) {
-      self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.demo.no_load"));
+      self.context.messageLogVM.addMessage(false, i18n.t("scriptEditorTab.demo.no_load"));
       return;
     }
     self.context.manageScriptFilesVM.display();
@@ -207,7 +225,7 @@ function ScriptEditorTabViewModel(appContext) {
 
   self.onSaveScript = function() {
     if(self.context.settings.demoMode) {
-      self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.demo.no_save"));
+      self.context.messageLogVM.addMessage(false, i18n.t("scriptEditorTab.demo.no_save"));
       return;
     }
     bootbox.prompt({

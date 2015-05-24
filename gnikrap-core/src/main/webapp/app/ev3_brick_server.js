@@ -128,15 +128,17 @@ function EV3BrickServer(appContext) {
   };
 
   self.runScript = function(scriptCode, stopRunningScript) {
-    var jsonMsg = JSON.stringify({
-        act: "runScript",
-        sLang: "javascript",
-        sText: scriptCode,
-        sFStop: stopRunningScript
-    });
-    // console.log("runScript - " + jsonMsg);
-    if(self.__doWSSend(jsonMsg) == false) {
-      self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantRunScriptEV3ConnectionNok"));
+    if(scriptCode) {
+      var jsonMsg = JSON.stringify({
+          act: "runScript",
+          sLang: "javascript",
+          sText: scriptCode,
+          sFStop: stopRunningScript
+      });
+      // console.log("runScript - " + jsonMsg);
+      if(self.__doWSSend(jsonMsg) == false) {
+        self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.errors.cantRunScriptEV3ConnectionNok"));
+      }
     }
   };
 
@@ -259,19 +261,19 @@ function DemoEV3BrickServer(appContext) {
         "----------------------------------------------------------------------\n" +
         scriptCode + 
         "\n----------------------------------------------------------------------");
-    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_run"));
+    self.context.messageLogVM.addMessage(false, i18n.t("ev3brick.demo.no_run"));
   };
 
   self.stopScript = function() {
-    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
+    self.context.messageLogVM.addMessage(false, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
   };
   
   self.shutdownBrick = function() {
-    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
+    self.context.messageLogVM.addMessage(false, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
   };
   
   self.stopGnikrap = function() {
-    self.context.messageLogVM.addMessage(true, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
+    self.context.messageLogVM.addMessage(false, i18n.t("ev3brick.demo.no_stop_nor_shutdown"));
   };
   
   self.sendXSensorValue = function(sensorName, sensorType, sensorValue) {

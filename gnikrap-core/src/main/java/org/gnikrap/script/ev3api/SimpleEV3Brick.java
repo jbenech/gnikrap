@@ -49,6 +49,10 @@ public class SimpleEV3Brick {
   // Actions
   @ScriptApi
   public SimpleEV3MediumMotor getMediumMotor(String port) throws EV3ScriptException {
+    if (port == null) {
+      return null;
+    }
+
     EV3Device d = devices.get(port);
     if (d != null) {
       if (d instanceof SimpleEV3MediumMotor) {
@@ -192,15 +196,17 @@ public class SimpleEV3Brick {
   }
 
   private static Port getMotorPort(String p) throws EV3ScriptException {
-    switch (p) {
-    case EV3Constants.A:
-      return MotorPort.A;
-    case EV3Constants.B:
-      return MotorPort.B;
-    case EV3Constants.C:
-      return MotorPort.C;
-    case EV3Constants.D:
-      return MotorPort.D;
+    if (p != null) {
+      switch (p) {
+      case EV3Constants.A:
+        return MotorPort.A;
+      case EV3Constants.B:
+        return MotorPort.B;
+      case EV3Constants.C:
+        return MotorPort.C;
+      case EV3Constants.D:
+        return MotorPort.D;
+      }
     }
     throw new EV3ScriptException(EV3ScriptException.INVALID_MOTOR_PORT, MapBuilder.buildHashMap("port", p).build());
   }

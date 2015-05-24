@@ -205,6 +205,10 @@ final public class SimpleEV3Screen implements EV3Device {
    */
   @ScriptApi(versionAdded = "TBD", isIncubating = true)
   public SimpleEV3Image loadImage(String name) throws EV3ScriptException {
+    if (name == null) {
+      throw new EV3ScriptException(EV3ScriptException.CANT_READ_FILE, MapBuilder.buildHashMap("filename", String.valueOf(name)).put("error", "name is null").build());
+    }
+
     try (DataInputStream in = new DataInputStream(new FileInputStream(name))) {
       int width = in.readUnsignedByte();
       int height = in.readUnsignedByte();
@@ -223,6 +227,10 @@ final public class SimpleEV3Screen implements EV3Device {
    */
   @ScriptApi(versionAdded = "0.4.0")
   public SimpleEV3Image decodeImage(String data) throws EV3ScriptException {
+    if (data == null) {
+      throw new EV3ScriptException(EV3ScriptException.CANT_DECODE_IMAGE, MapBuilder.buildHashMap("reason", "data is null").build());
+    }
+
     try {
       Utils.Base64DataURI dataURI = Utils.decodeBase64DataURI(data);
       if (DATA_FORMAT_RFG.equals(dataURI.getMimeType())) {

@@ -101,13 +101,17 @@ final public class SimpleEV3Sound implements EV3Device {
    */
   @ScriptApi
   public void playNote(String note, float durationInMS) throws EV3ScriptException {
-    audio.playNote(Sounds.PIANO, getFrequency(note), (int) durationInMS);
+    if (note != null) {
+      audio.playNote(Sounds.PIANO, getFrequency(note), (int) durationInMS);
+    }
   }
 
   @ScriptApi(isIncubating = true)
   public void playNotes(String[] notes, float durationInMS) throws EV3ScriptException {
-    for (String n : notes) {
-      playNote(n, durationInMS);
+    if (notes != null) {
+      for (String n : notes) {
+        playNote(n, durationInMS);
+      }
     }
   }
 

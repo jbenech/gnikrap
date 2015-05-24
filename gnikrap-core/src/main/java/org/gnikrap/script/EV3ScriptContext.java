@@ -76,7 +76,9 @@ public final class EV3ScriptContext {
 
   @ScriptApi
   public void notify(String message) {
-    scriptExecutionMgr.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
+    if (message != null) {
+      scriptExecutionMgr.sendBackMessage(EV3MessageBuilder.buildInfoUserMessage(message));
+    }
   }
 
   /**

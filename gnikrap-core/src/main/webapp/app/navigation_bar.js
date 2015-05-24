@@ -80,7 +80,9 @@ function NavigationBarViewModel(appContext) {
     var value = (self.context.scriptEditorTabVM ? self.context.scriptEditorTabVM.getValue() : null);
 
     // Execute the script
-    self.context.ev3BrickServer.runScript(value, stopRunningScript);
+    if(value) {
+      self.context.ev3BrickServer.runScript(value, stopRunningScript);
+    }
   };
 
   self.onStopScript = function() {

@@ -65,22 +65,25 @@
     <script src="lib/blockly-20150510/blockly_compressed.js"></script>
     <script src="lib/blockly-20150510/blocks_compressed.js"></script>
     <script src="lib/blockly-20150510/javascript_compressed.js"></script>
+    <!-- English translation loaded as a default translation. 
+         Real translation will be loaded dynamically (within blockly4gnikrap.js) according to the user selected locale. 
+         /!\ while version change, also change path in blockly4gnikrap.js -->
     <script src="lib/blockly-20150510/msg/js/en.js"></script>
     
     <!-- Gnikrap libs -->
-    <script src="app/ev3_brick_server.js" type="text/javascript"></script> <!-- No specific order for theses files -->
+    <script src="app/ev3_brick_server.js" type="text/javascript"></script>
+    <script src="app/gnikrap_blocks.js" type="text/javascript"></script>
     <script src="app/message_log.js" type="text/javascript"></script>
     <script src="app/navigation_bar.js" type="text/javascript"></script>
     <script src="app/utils.js" type="text/javascript"></script>
-    <script src="app/xGeo_sensor_tab.js" type="text/javascript"></script>
-    <script src="app/xVideo_sensor_tab.js" type="text/javascript"></script>
-    <script src="app/xGyroscope_sensor_tab.js" type="text/javascript"></script>
-    <script src="app/xKeyboard_sensor_tab.js" type="text/javascript"></script>
-    <script src="app/manage_script_files_dialog.js" type="text/javascript"></script>
-    <script src="app/import_image_dialog.js" type="text/javascript"></script>
-    <script src="app/settings_dialog.js" type="text/javascript"></script>
-    <script src="app/blockly4gnikrap.js" type="text/javascript"></script>
-    <script src="app/script_editor_tab.js" type="text/javascript"></script> <!-- Depends on blockly4gnikrap -->
+    <script src="app/dialog_manage_script_files.js" type="text/javascript"></script>
+    <script src="app/dialog_import_image.js" type="text/javascript"></script>
+    <script src="app/dialog_settings.js" type="text/javascript"></script>
+    <script src="app/tab_xGeo_sensor.js" type="text/javascript"></script>
+    <script src="app/tab_xVideo_sensor.js" type="text/javascript"></script>
+    <script src="app/tab_xGyroscope_sensor.js" type="text/javascript"></script>
+    <script src="app/tab_xKeyboard_sensor.js" type="text/javascript"></script>
+    <script src="app/tab_script_editor.js" type="text/javascript"></script> <!-- Depends on gnikrap_blocks -->
     <script src="app/main.js" type="text/javascript"></script> <!-- Depend on all the scripts before -->
   </head>
   <body>
