@@ -124,7 +124,7 @@ function BlocklyEditor(appContext) {
     var result = self.blockly.buildJavascriptCode();
 
     result.warnings.forEach(function(warn) {
-        self.context.messageLogVM.addMessage(false, warn);
+        self.context.messageLogVM.addMessage(true, warn);
       });
     result.errors.forEach(function(err) {
         self.context.messageLogVM.addMessage(true, err);

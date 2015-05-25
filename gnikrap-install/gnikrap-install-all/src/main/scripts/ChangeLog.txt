@@ -77,7 +77,11 @@ Known defects:
 Work in progress:
  0.5.0:
     - Blockly:
-      - Settings dialog added (switch between Text/Visual programming)
+      - Blockly blocks added: logic, loops, math, text, lists, variables, functions
+      - Gnikrap blocks created: EV3 brick, Color sensor, IR sensor, Touch sensor, Motors, xSensors
+      - Instantaneous 'Warning' on erroneous blocks
+      - Javascript code generation/optimization/verification
+    - Settings dialog added (switch language and Text/Visual programming)
     - Demo mode added (GUI can be launched without error even if not installed on an EV3)
     - Add an API to exit from the script
     - Documentation updated

@@ -307,7 +307,7 @@
       "blockNeedToDefineMotorType": "Motor type is not defined for this port.",
       
       "compilePortWithSeveralMotorType": "ERROR: Port __port__ used with several motor types !",
-      "compileMotorTypeNotDefineFor": "WARNING: Motor type not defined for port __port__. The motor type will be set by default to 'LargeMotor' for this port",
+      "compileMotorTypeNotDefineFor": "WARNING: Motor type not defined for port __port__. The motor type will be set by default to 'LargeMotor' for this port.",
       "compilePortUsedForSeveralSensor": "ERROR: Port __port__ used for several sensors types !"
     },
 
