@@ -52,20 +52,6 @@ function GnikrapBlocks() {
     Blockly.HSV_VALUE = 0.65;
 
     self.XSENSOR_MAGIC = '@XSensorValue@';
-/*
-    // Define some variable name that will be internally used (and should not be used by the user)
-    // Note: Another option should be to use Blockly.JavaScript.variableDB_.getDistinctName() in buildJavascriptCode()
-    var variableName = ['ev3Keyboard', 'ev3LED', 'ev3Sound']; // Objects without port
-    ['ev3TouchSensor', 'ev3ColorSensor', 'ev3IRSensor'].forEach(function(sensor) {
-      ['1', '2', '3', '4'].forEach(function(port) {
-          variableName.push(sensor + '_' + port);
-      });
-    });
-    ['A', 'B', 'C', 'D'].forEach(function(port) {
-      variableName.push('ev3Motor_' + port);
-    });
-    Blockly.JavaScript.addReservedWords(variableName.join(','));
-*/
 
     self.workspace = undefined; // Useless, already to undefined here :-)
   })();
@@ -192,7 +178,6 @@ function GnikrapBlocks() {
 
   // Return an object containing the code generated and the list of error/warning if any
   self.buildJavascriptCode = function() {
-    // var GENERATED_VAR_MAGIC = '\uA7FC_'; // Reversed P - See http://www.fileformat.info/info/unicode/char/a7fc/index.htm
     var code = "\n" + Blockly.JavaScript.workspaceToCode(self.__getWorkspace());
     var result = { errors: [], warnings: [] };
 
@@ -206,11 +191,11 @@ function GnikrapBlocks() {
         } else {
           motorTypes[p1] = p2;
         }
-        return ''; // Discard the motor type definition line
+        return "/* Motor on port " + p1 + " set to '" + p2 + "' */"; // Discard the motor type definition line
       });
 
     // Build the list of devices connected to the EV3 ports
-    var ev3Ports = {}; // Key: port, value: variable declaration
+    var ev3Ports = {}; // Key: port, value: [varName, getter ]
     [ [/ev3\.getBrick\(\).getTouchSensor\("([1-4])"\)/g, 'ev3TouchSensor'],
       [/ev3\.getBrick\(\).getColorSensor\("([1-4])"\)/g, 'ev3ColorSensor'],
       [/ev3\.getBrick\(\).getIRSensor\("([1-4])"\)/g, 'ev3IRSensor'],
@@ -218,39 +203,39 @@ function GnikrapBlocks() {
     ].forEach(function(value) {
         code = code.replace(value[0], function(match, p1) {
             // Check if the port is not already used by another device and register it if new
-            var varName = value[1] + "_" + p1;
-            var varDeclaration = "var " + varName + " = ";
+            var varDeclaration = [];
             var isMotor = p1.match(/[A-D]/);
             if(isMotor) {
               if(!motorTypes[p1]) {
                 motorTypes[p1] = 'getLargeMotor'; // Default to large motor
                 result.warnings.push(i18n.t("blocks.errors.compileMotorTypeNotDefineFor", { port: p1}));
               }
-              varDeclaration = varDeclaration + match.replace('getLargeMotor', motorTypes[p1]) + ";\n";
+              varDeclaration[1] = match.replace('getLargeMotor', motorTypes[p1]);
             } else {
-              varDeclaration = varDeclaration + match + ";\n";
+              varDeclaration[1] = match;
             }
             if(ev3Ports[p1]) {
-              if(ev3Ports[p1] != varDeclaration) {
+              if(ev3Ports[p1][1] != varDeclaration[1]) {
                 result.errors.push(i18n.t("blocks.errors.compilePortUsedForSeveralSensor", { port: p1}));
                 return match;
               }
             } else {
+              varDeclaration[0] = Blockly.JavaScript.variableDB_.getDistinctName("ev3Port_" + p1);
               ev3Ports[p1] = varDeclaration;
             }
-            return varName;
+            return ev3Ports[p1][0];
           });
       });
 
     // Add in the code the associated variables
     for(var p in ev3Ports) {
-      code = ev3Ports[p] + code;
+      code = "var " + ev3Ports[p][0] + " = " + ev3Ports[p][1] + ';\n' + code;
     }
 
     // Other simple replace (for better Javascript execution performances)
-    [ [/ev3.getBrick\(\).getKeyboard\(\)/g, 'ev3Keyboard', 'ev3.getBrick().getKeyboard()'],
-      [/ev3.getBrick\(\).getLED\(\)/g, 'ev3LED', 'ev3.getBrick().getLED()'],
-      [/ev3.getBrick\(\).getSound\(\)/g, 'ev3Sound', 'ev3.getBrick().getSound()']
+    [ [/ev3.getBrick\(\).getKeyboard\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('ev3Keyboard'), 'ev3.getBrick().getKeyboard()'],
+      [/ev3.getBrick\(\).getLED\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('ev3LED'), 'ev3.getBrick().getLED()'],
+      [/ev3.getBrick\(\).getSound\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('ev3Sound'), 'ev3.getBrick().getSound()']
     ].forEach(function(value) {
         var varName = value[1];
         var newCode = code.replace(value[0], varName);
@@ -259,7 +244,7 @@ function GnikrapBlocks() {
         }
       });
 
-    // Check for xSensor
+    // Check for xSensor (all XSENSOR_MAGIC should have been replaced)
     if(code.indexOf(self.XSENSOR_MAGIC) != -1) {
       result.errors.push(i18n.t("blocks.errors.compileXSensorMustBeInsideWithxSensorDo"));
     }
@@ -475,27 +460,27 @@ function GnikrapBlocks() {
       block.setTooltip(i18n.t(baseKey + ".tooltip"));
       block.setColour(colour);
     }
-    
+
     // Init blocks that are stackable (previous and next statement
     function initBlockStackable(block, baseKey, colour) {
       initBlock(block, baseKey, colour);
       block.setPreviousStatement(true);
       block.setNextStatement(true);
     }
-    
+
     // Init blocks that return something
     function initBlockWithOutput(block, baseKey, colour, outputType) {
       initBlock(block, baseKey, colour);
       block.setOutput(true, outputType);
     }
-    
+
     // Build a mapper to translate a list of thing with format: [[key, ...], ...]
     function createListForFieldDropdownMapper(translateKey) {
       return function(item) {
         return [ i18n.t(translateKey + "." + item[0]), item[0] ];
       }
     };
-    
+
     // Look for code in a list with format: [[key, code, ...], ...]
     function getCodeForList(list, key) {
       for(var i = 0; i < list.length; i++) {
@@ -505,7 +490,7 @@ function GnikrapBlocks() {
       }
       return list[0][1]; // Default to 1st item of the list (Should never be triggered)
     };
-    
+
     /////////////////////////////////////////////////////////////////////////////
     // EV3 object API
 
@@ -573,8 +558,8 @@ function GnikrapBlocks() {
 
     /////////////////////////////////////////////////////////////////////////////
     // LED object API
-    var LED_STATUS = [ 
-        ["OFF", "off()"], 
+    var LED_STATUS = [
+        ["OFF", "off()"],
         ["GREEN", "lightGreen()"],
         ["GREEN_1", "lightGreen().blink()"],
         ["GREEN_2", "lightGreen().blink().blink()"],
@@ -584,7 +569,7 @@ function GnikrapBlocks() {
         ["RED", "lightRed()"],
         ["RED_1", "lightRed().blink()"],
         ["RED_2", "lightRed().blink().blink()"]];
-        
+
     Blockly.Blocks['gnikrap_ev3_led'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_led", EV3_BRICK_COLOUR);
@@ -634,7 +619,7 @@ function GnikrapBlocks() {
 
     // playNote(string, int): void
     var TIME_UNIT = [["MS"], ["S"]]; // No need of javascript code
-    
+
     Blockly.Blocks['gnikrap_ev3_sound_playnote'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_sound_playnote", EV3_BRICK_COLOUR);
@@ -760,7 +745,7 @@ function GnikrapBlocks() {
         ["WHITE", "isWhite()"],
         ["BROWN", "isBrown()"],
         ["NONE", "isNoColor()"]];
-    
+
     Blockly.Blocks['gnikrap_ev3_colorsensor_iscolor'] = {
       init: function() {
         initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_iscolor", EV3_COLOR_SENSOR_COLOUR, "Boolean");
@@ -839,7 +824,7 @@ function GnikrapBlocks() {
         ["BOTTOM_RIGHT", "isBottomRightEnabled()"],
         ["BEACON", "isBeaconEnabled()"],
         ["NOTHING", "isNothingEnabled()"]];
-              
+
     Blockly.Blocks['gnikrap_ev3_irsensor_getremotecommand'] = {
       init: function() {
         initBlockWithOutput(this, "blocks.gnikrap_ev3_irsensor_getremotecommand", EV3_IR_SENSOR_COLOUR, "Boolean");
@@ -876,7 +861,7 @@ function GnikrapBlocks() {
     var KEYBOARD_BUTTONS_ACTIONS = [
         ["PRESSED", "waitForPress()"],
         ["PRESSED_AND_RELEASED", "waitForPressAndRelease()"]];
-              
+
     Blockly.Blocks['gnikrap_ev3_keyboard_wait'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_keyboard_wait", EV3_KEYBOARD_COLOUR);
@@ -892,7 +877,7 @@ function GnikrapBlocks() {
       var button = block.getFieldValue('BUTTON');
       var action = block.getFieldValue('ACTION');
 
-      return 'ev3.getBrick().getKeyboard().' + 
+      return 'ev3.getBrick().getKeyboard().' +
           getCodeForList(KEYBOARD_BUTTONS, button) + '.' + getCodeForList(KEYBOARD_BUTTONS_ACTIONS, action) + ';\n';
     };
 
@@ -918,9 +903,9 @@ function GnikrapBlocks() {
 
     // setType(port, type): void
     var MOTOR_TYPE = [
-        ["LARGE", "getMediumMotor"],
-        ["MEDIUM", "getLargeMotor"]];
-              
+        ["LARGE", "getLargeMotor"],
+        ["MEDIUM", "getMediumMotor"]];
+
     Blockly.Blocks['gnikrap_ev3_motor_settype'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_motor_settype", EV3_MOTOR_COLOUR);
@@ -948,7 +933,7 @@ function GnikrapBlocks() {
         ["BACKWARD", "backward()"],
         ["STOP_LOCK", "stop(true)"],
         ["STOP", "stop(false)"]];
-              
+
     Blockly.Blocks['gnikrap_ev3_motor_move'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_motor_move", EV3_MOTOR_COLOUR);
@@ -995,7 +980,7 @@ function GnikrapBlocks() {
     // rotate(port, value, type): void
     var MOTOR_ACTION2 = [["ROTATE"], ["ROTATE_NO_WAIT"]]; // No need javascript code
     var ANGLE_UNIT = [["DEGREE"], ["TURN"]]; // No need javascript code
-    
+
     Blockly.Blocks['gnikrap_ev3_motor_rotate'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_motor_rotate", EV3_MOTOR_COLOUR);
@@ -1028,7 +1013,7 @@ function GnikrapBlocks() {
 
     // setSpeed(port, speed): void
     var SPEED_UNIT = [["DEGREE_PER_S"], ["PERCENT"]]; // No need javascript code
-    
+
     Blockly.Blocks['gnikrap_ev3_motor_setspeed'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_motor_setspeed", EV3_MOTOR_COLOUR);
@@ -1144,7 +1129,7 @@ function GnikrapBlocks() {
           block.setWarningText(i18n.t("blocks.errors.blockXSensorValue"));
         };
     }
-    
+
     // No simple API here :-)
     // Get the xSensor, check if it exists, then get the value, and check if the xSensor is running. Finally execute the user code (if running)
     Blockly.Blocks['gnikrap_ev3_xsensor_workwith'] = {
@@ -1158,16 +1143,16 @@ function GnikrapBlocks() {
             .setAlign(Blockly.ALIGN_RIGHT)
             .appendField(i18n.t("blocks.gnikrap_ev3_xsensor_workwith.text_do"));
         this.setMutator(new Blockly.Mutator(['gnikrap_ev3_xsensor_workwith_else']));
-        
+
         this.elseCount_ = 0;
       },
-      
+
       // Populate the Mutator dialog box
       decompose: function(workspace) {
         // Init top level block
         var containerBlock = Blockly.Block.obtain(workspace, 'gnikrap_ev3_xsensor_workwith_workwith');
         containerBlock.initSvg();
-        var connection = containerBlock.getInput('STACK').connection;      
+        var connection = containerBlock.getInput('STACK').connection;
         // Populate else if needed
         if(this.elseCount_) {
           var elseBlock = Blockly.Block.obtain(workspace, 'gnikrap_ev3_xsensor_workwith_else');
@@ -1176,7 +1161,7 @@ function GnikrapBlocks() {
         }
         return containerBlock;
       },
-      
+
       // Update the block based on the Mutator dialog box values
       compose: function(containerBlock) {
         // Disconnect the else input blocks and remove the inputs.
@@ -1202,7 +1187,7 @@ function GnikrapBlocks() {
           }
           clauseBlock = clauseBlock.nextConnection &&
               clauseBlock.nextConnection.targetBlock();
-        }        
+        }
       },
 
       // Add additional data while serialized to XML
@@ -1216,7 +1201,7 @@ function GnikrapBlocks() {
         }
         return container;
       },
-      
+
       // Get block data while de-serialize from XML
       domToMutation: function(xmlElement) {
         this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10);
@@ -1247,7 +1232,7 @@ function GnikrapBlocks() {
         this.contextMenu = false;
       }
     };
-    
+
     Blockly.JavaScript['gnikrap_ev3_xsensor_workwith'] = function(block) {
       var do0 = Blockly.JavaScript.statementToCode(block, 'DO');
       var xsensor_name = block.getFieldValue('XSENSOR_NAME');
@@ -1267,16 +1252,16 @@ function GnikrapBlocks() {
       code += '})(ev3.getXSensor("' + xsensor_name + '"));';
       return code;
     };
-        
+
     /////////////////////////////////////////////////////////////////////////////
     // xGyro sensor API
-    
+
     // getValue(axis): float
     var XGYRO_AXIS = [
-        ["X", "getX()"], 
-        ["Y", "getY()"], 
+        ["X", "getX()"],
+        ["Y", "getY()"],
         ["Z", "getZ()"]];
-        
+
     Blockly.Blocks['gnikrap_ev3_xgyro_getvalue'] = {
       init: function() {
         initBlockWithOutput(this, "blocks.gnikrap_ev3_xgyro_getvalue", XSENSOR_COLOUR, "Number");
@@ -1288,7 +1273,7 @@ function GnikrapBlocks() {
 
     Blockly.JavaScript['gnikrap_ev3_xgyro_getvalue'] = function(block) {
       var axis = block.getFieldValue('AXIS');
-      
+
       var code = self.XSENSOR_MAGIC + '.' + getCodeForList(XGYRO_AXIS, axis) + '.getAngle()';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
@@ -1298,11 +1283,11 @@ function GnikrapBlocks() {
 
     // getValue(field): float
     var XGEO_ACTION = [
-        ["LATITUDE", "getLatitude()"], 
-        ["LONGITUDE", "getLongitude()"], 
-        ["ACCURACY", "getAccuracy()"], 
-        ["ALTITUDE", "getAltitude()"], 
-        ["ALTITUDE_ACCURACY", "getAltitudeAccuracy()"], 
+        ["LATITUDE", "getLatitude()"],
+        ["LONGITUDE", "getLongitude()"],
+        ["ACCURACY", "getAccuracy()"],
+        ["ALTITUDE", "getAltitude()"],
+        ["ALTITUDE_ACCURACY", "getAltitudeAccuracy()"],
         ["TIMESTAMP", "getTimestamp()"]];
 
     Blockly.Blocks['gnikrap_ev3_xgeo_getvalue'] = {
@@ -1320,7 +1305,7 @@ function GnikrapBlocks() {
       var code = self.XSENSOR_MAGIC + '.' + getCodeForList(XGEO_ACTION, action);
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
-    
+
     /////////////////////////////////////////////////////////////////////////////
     // xVideo sensor API
 
@@ -1338,16 +1323,16 @@ function GnikrapBlocks() {
 
     Blockly.JavaScript['gnikrap_ev3_xvideo_containsobject'] = function(block) {
       var object_name = Blockly.JavaScript.valueToCode(block, 'OBJECT_NAME', Blockly.JavaScript.ORDER_ATOMIC);
-      
+
       var code = self.XSENSOR_MAGIC + '.containsObject(' + object_name + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
-    
+
     // getValue(objectName, axis): integer
     var XVIDEO_AXIS_FOR_OBJECT = [
-        ["X", "getX()"], 
+        ["X", "getX()"],
         ["Y", "getY()"]];
-              
+
     Blockly.Blocks['gnikrap_ev3_xvideo_getvalue'] = {
       init: function() {
         initBlockWithOutput(this, "blocks.gnikrap_ev3_xvideo_getvalue", XSENSOR_COLOUR, "Number");
@@ -1359,19 +1344,19 @@ function GnikrapBlocks() {
             .setCheck("String");
         this.setInputsInline(true);
       }
-    };    
-    
+    };
+
     Blockly.JavaScript['gnikrap_ev3_xvideo_getvalue'] = function(block) {
       var object_name = Blockly.JavaScript.valueToCode(block, 'OBJECT_NAME', Blockly.JavaScript.ORDER_ATOMIC);
       var axis = block.getFieldValue('AXIS');
-      
+
       var code = self.XSENSOR_MAGIC + '.getObject(' + object_name + ').' + getCodeForList(XVIDEO_AXIS_FOR_OBJECT, axis);
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-    };    
-    
+    };
+
     /////////////////////////////////////////////////////////////////////////////
     // xTouch sensor API
-    
+
     // isTouchPressed(touchName): boolean
     Blockly.Blocks['gnikrap_ev3_xtouch_istouchpressed'] = {
       init: function() {
@@ -1384,13 +1369,13 @@ function GnikrapBlocks() {
             .appendField(i18n.t("blocks.gnikrap_ev3_xtouch_istouchpressed.text_is_pressed"));
         this.setInputsInline(true);
       }
-    };    
-    
+    };
+
     Blockly.JavaScript['gnikrap_ev3_xtouch_istouchpressed'] = function(block) {
       var touch_name = Blockly.JavaScript.valueToCode(block, 'TOUCH_NAME', Blockly.JavaScript.ORDER_ATOMIC);
 
       var code = self.XSENSOR_MAGIC + '.containsTouch(' + touch_name + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-    };    
+    };
   };
 }
