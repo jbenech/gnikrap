@@ -305,10 +305,12 @@
       "blockTwoDifferentSensorsOnTheSamePort": "There are two different sensors using the same port.",
       "blockTwoDifferentMotorsOnTheSamePort": "There are two different motor types defined for the same port.",
       "blockNeedToDefineMotorType": "Motor type is not defined for this port.",
+      "blockXSensorValue": "All xSensors blocks must be inside a 'with the xSensor ... started do' block.",
       
       "compilePortWithSeveralMotorType": "ERROR: Port __port__ used with several motor types !",
       "compileMotorTypeNotDefineFor": "WARNING: Motor type not defined for port __port__. The motor type will be set by default to 'LargeMotor' for this port.",
-      "compilePortUsedForSeveralSensor": "ERROR: Port __port__ used for several sensors types !"
+      "compilePortUsedForSeveralSensor": "ERROR: Port __port__ used for several sensors types !",
+      "compileXSensorMustBeInsideWithxSensorDo": "ERROR: All xSensors blocks must be inside a 'with the xSensor ... started do' block !"
     },
 
     "list_time_unit": {
@@ -397,6 +399,26 @@
       "DEGREE_PER_S": "degrees/second",
       "TURN_PER_S": "turn/second",
       "PERCENT": "%"
+    },
+    
+    "list_xgyro_axis_angle": {
+      "X": "xGyro x axis angle",
+      "Y": "xGyro y axis angle",
+      "Z": "xGyro z axis angle"
+    },
+    
+    "list_xgeo_action": {
+      "LATITUDE": "xGeo latitude",
+      "LONGITUDE": "xGeo longitude", 
+      "ACCURACY": "xGeo accuracy", 
+      "ALTITUDE": "xGeo altitude",
+      "ALTITUDE_ACCURACY": "xGeo altitude accuracy",
+      "TIMESTAMP": "xGeo timestamp"
+    },
+    
+    "list_xvideo_axis_for_object": {
+      "X": "xVideo x value for object",
+      "Y": "xVideo y value for object"
     },
 
     "gnikrap_ev3_notify": {
@@ -557,6 +579,43 @@
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
       "tooltip": "Reset the tacho count to 0.",
       "text_reset_tacho_count_of_motor": "reset tacho count of motor"
+    },
+    
+    "gnikrap_ev3_xsensor_workwith": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xsensor_object",
+      "tooltip": "TODO",
+      "text_with_the_xSensor": "if the xSensor",
+      "text_started": "is started",
+      "text_do": "do",
+      "text_else": "else"
+    },
+    
+    "gnikrap_ev3_xgyro_getvalue": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xgyro_xsensor",
+      "tooltip": "TODO"
+    },
+    
+    "gnikrap_ev3_xgeo_getvalue": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xgeo_xsensor",
+      "tooltip": "TODO"
+    },
+    
+    "gnikrap_ev3_xvideo_containsobject": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xvideo_xsensor",
+      "tooltip": "TODO",
+      "text_xVideo_known_the_object": "xVideo knows the object"
+    },
+    
+    "gnikrap_ev3_xvideo_getvalue": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xvideo_xsensor",
+      "tooltip": "TODO"
+    },
+    
+    "gnikrap_ev3_xtouch_istouchpressed": {
+      "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xtouch_xsensor",
+      "tooltip": "TODO",
+      "text_xTouch_touch": "xTouch touch",
+      "text_is_pressed": "is pressed"
     }
   }
 }

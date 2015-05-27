@@ -56,11 +56,11 @@ Version history:
 ------------------------------------------------------------------------------
 
 Features to add (no specific order):
- - Add import/export feature (save all the data on the ev3 in one operation)
+ - Add import/export feature (save all the data on the ev3 in one operation) - Will be done while JRE 1.8 is the default leJOS JRE.
  - Add real time sensor probes
  - Add port checking (auto detection for EV3 devices)
  - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
- - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor)
+ - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor) - Will be done while I buy these two sensors :-)
  - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items, etc.)
 
  
