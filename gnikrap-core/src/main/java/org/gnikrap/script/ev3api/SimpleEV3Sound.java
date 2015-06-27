@@ -165,7 +165,7 @@ final public class SimpleEV3Sound implements EV3Device {
   static final int SI3 = 11, B4 = 11;
 
   static int getFrequency(String note) throws EV3ScriptException {
-    String cleanNote = note.trim();
+    String cleanNote = note.trim().toUpperCase();
     int length = cleanNote.length();
     if ((length >= 2) && (length <= 5)) {
       char last = cleanNote.charAt(length - 1);
@@ -181,34 +181,34 @@ final public class SimpleEV3Sound implements EV3Device {
       }
 
       // Note
-      final char c0 = note.charAt(0);
-      final char c1 = note.charAt(1);
+      final char c0 = cleanNote.charAt(0);
+      final char c1 = cleanNote.charAt(1);
 
       // Latin notation
       if ((length <= 4) || isSharp) {
         float coef = ((octaveIndex >= 0) && (octaveIndex < LATIN_OCTAVE_COEF.length) ? LATIN_OCTAVE_COEF[octaveIndex] : 1);
 
-        if (c0 == 'D' && c1 == 'o') { // Do
+        if (c0 == 'D' && c1 == 'O') { // Do
           return getFrequency(DO3, coef, isSharp);
         }
-        if (c0 == 'R' && c1 == 'e') { // Re
+        if (c0 == 'R' && c1 == 'E') { // Re
           return getFrequency(RE3, coef, isSharp);
         }
-        if (c0 == 'M' && c1 == 'i') { // Mi
+        if (c0 == 'M' && c1 == 'I') { // Mi
           return getFrequency(MI3, coef, false);
         }
-        if (c0 == 'F' && c1 == 'a') { // Fa
+        if (c0 == 'F' && c1 == 'A') { // Fa
           return getFrequency(FA3, coef, isSharp);
         }
         if (c0 == 'S') {
-          if (c1 == 'o' && length >= 3 && note.charAt(2) == 'l') { // Sol
+          if (c1 == 'O' && length >= 3 && cleanNote.charAt(2) == 'L') { // Sol
             return getFrequency(SOL3, coef, isSharp);
           }
-          if (c1 == 'i') { // Si
+          if (c1 == 'I') { // Si
             return getFrequency(SI3, coef, false);
           }
         }
-        if (c0 == 'L' && c1 == 'a') { // La
+        if (c0 == 'L' && c1 == 'A') { // La
           return getFrequency(LA3, coef, isSharp);
         }
       }

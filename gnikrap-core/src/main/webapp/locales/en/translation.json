@@ -278,6 +278,7 @@
     "close": "Close"
   },
 
+  
   "blocks": {
     "@comment": "Translation for blockly'blocks defined for Gnikrap",
 
@@ -318,109 +319,12 @@
       "MS": "milliseconds"
     },
 
-    "list_led_status": {
-      "OFF": "off",
-      "GREEN": "green",
-      "GREEN_1": "flashing green",
-      "GREEN_2": "fast flashing green",
-      "ORANGE": "orange",
-      "ORANGE_1": "flashing orange",
-      "ORANGE_2": "fast flashing orange",
-      "RED": "red",
-      "RED_1": "flashing red",
-      "RED_2": "fast flashing red"
-    },
-
-    "list_colors": {
-      "BLACK": "black",
-      "BLUE": "blue",
-      "YELLOW": "yellow",
-      "RED": "red",
-      "WHITE": "white",
-      "BROWN": "brown",
-      "NONE": "no color"
-    },
-
-    "list_beacon_buttons_enabled": {
-      "TOP_LEFT": "top left button is enabled",
-      "TOP_RIGHT": "top right button is enabled",
-      "BOTTOM_LEFT": "bottom left button is enabled",
-      "BOTTOM_RIGHT": "bottom right button is enabled",
-      "BEACON": "beacon button is enabled",
-      "NOTHING": "nothing is enabled"
-    },
-
-    "list_keyboard_buttons_wait": {
-      "UP": "wait up button",
-      "DOWN": "wait down button",
-      "LEFT": "wait left button",
-      "RIGHT": "wait right button",
-      "ENTER": "wait enter button",
-      "ESCAPE": "wait escape button"
-    },
-
-    "list_keyboard_buttons_is_pressed": {
-      "UP": "up button is pressed",
-      "DOWN": "down button is pressed",
-      "LEFT": "left button is pressed",
-      "RIGHT": "right button is pressed",
-      "ENTER": "enter button is pressed",
-      "ESCAPE": "escape button is pressed"
-    },
-
-    "list_keyboard_buttons_actions": {
-      "PRESSED": "is pressed",
-      "PRESSED_AND_RELEASED": "is pressed and released"
-    },
-
-    "list_motor_type": {
-      "LARGE": "a large motor",
-      "MEDIUM": "a medium motor"
-    },
-
-    "list_motor_actions1": {
-      "FORWARD": "rotate forward",
-      "BACKWARD": "rotate backward",
-      "STOP_LOCK": "stop and lock",
-      "STOP": "stop"
-    },
-
-    "list_motor_actions2": {
-      "ROTATE": "rotate motor",
-      "ROTATE_NO_WAIT": "start rotate motor"
-    },
-
-    "list_angle_unit": {
-      "DEGREE": "degree(s)",
-      "TURN": "turn(s)"
-    },
-
     "list_speed_unit": {
-      "DEGREE_PER_S": "degrees/second",
-      "TURN_PER_S": "turn/second",
-      "PERCENT": "%"
+      "DEGREE_PER_S": "degree(s)/second",
+      "TURN_PER_S": "turn(s)/second",
+      "PERCENT": "% power"
     },
-    
-    "list_xgyro_axis_angle": {
-      "X": "xGyro x axis angle",
-      "Y": "xGyro y axis angle",
-      "Z": "xGyro z axis angle"
-    },
-    
-    "list_xgeo_action": {
-      "LATITUDE": "xGeo latitude",
-      "LONGITUDE": "xGeo longitude", 
-      "ACCURACY": "xGeo accuracy", 
-      "ALTITUDE": "xGeo altitude",
-      "ALTITUDE_ACCURACY": "xGeo altitude accuracy",
-      "TIMESTAMP": "xGeo timestamp"
-    },
-    
-    "list_xvideo_axis_for_object": {
-      "X": "xVideo x value for object",
-      "Y": "xVideo y value for object"
-    },
-
+        
     "gnikrap_ev3_notify": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object",
       "tooltip": "Display a message on the Gnikrap interface.",
@@ -429,7 +333,7 @@
 
     "gnikrap_ev3_isok": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ev3_object",
-      "tooltip": "Is everything ok on the EV3 brick ?",
+      "tooltip": "Return true if everything is ok on the EV3 brick, false otherwise.",
       "text_ev3_is_ok": "EV3 is ok"
     },
 
@@ -448,7 +352,18 @@
     "gnikrap_ev3_led": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_led_object",
       "tooltip": "Change the LED status to the selected lightning pattern.",
-      "text_change_LED_status": "change the LED status to"
+      "list_change_LED_status": {
+        "OFF": "change the LED status to off",
+        "GREEN": "change the LED status to green",
+        "GREEN_1": "change the LED status to flashing green",
+        "GREEN_2": "change the LED status to fast flashing green",
+        "ORANGE": "change the LED status to orange",
+        "ORANGE_1": "change the LED status to flashing orange",
+        "ORANGE_2": "change the LED status to fast flashing orange",
+        "RED": "change the LED status to red",
+        "RED_1": "change the LED status to flashing red",
+        "RED_2": "change the LED status to fast flashing red"
+      }
     },
 
     "gnikrap_ev3_sound_setvolume": {
@@ -472,33 +387,41 @@
 
     "gnikrap_ev3_touchsensor_pushed": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_touch_sensor_object",
-      "tooltip": "Is the touch sensor pushed ?",
+      "tooltip": "Return true if the touch sensor is pushed, false otherwise.",
       "text_sensor": "sensor",
       "text_is_pushed": "is pushed"
     },
 
     "gnikrap_ev3_colorsensor_reflected": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
-      "tooltip": "Returns the reflected light: a value between 0 and 100.",
+      "tooltip": "Return the reflected light: a value between 0 and 100.",
       "text_reflected_light": "reflected light of sensor"
     },
 
     "gnikrap_ev3_colorsensor_ambient": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
-      "tooltip": "Returns the ambient light: a value between 0 and 100.",
+      "tooltip": "Return the ambient light: a value between 0 and 100.",
       "text_ambiant_light": "ambient light of sensor"
     },
 
     "gnikrap_ev3_colorsensor_getcolor": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
-      "tooltip": "Returns the color (in English) of the sensor.",
+      "tooltip": "Return the color (in English) of the sensor.",
       "text_color": "color of sensor"
     },
 
     "gnikrap_ev3_colorsensor_iscolor": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_color_sensor_object",
-      "tooltip": "Does the color sensor detect the given color ?",
-      "text_is_detected": "is detected by sensor"
+      "tooltip": "Return true if the color sensor 'view' the selected color, false otherwise.",
+      "list_colors_detected": {
+        "BLACK": "black is detected by sensor",
+        "BLUE": "blue is detected by sensor",
+        "YELLOW": "yellow is detected by sensor",
+        "RED": "red is detected by sensor",
+        "WHITE": "white is detected by sensor",
+        "BROWN": "brown is detected by sensor",
+        "NONE": "no color is detected by sensor"
+      }
     },
 
     "gnikrap_ev3_irsensor_setchannel": {
@@ -516,35 +439,71 @@
 
     "gnikrap_ev3_irsensor_getremotecommand": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_ir_infra_red_sensor_object",
-      "tooltip": "Check for remote command (beacon) buttons usage.",
-      "text_on_sensor": "on IR sensor"
+      "tooltip": "Return true if the selected button of the remote beacon is pressed, false otherwise.",
+      "list_beacon_buttons_enabled_on_sensor": {
+        "TOP_LEFT": "top left button is enabled on IR sensor",
+        "TOP_RIGHT": "top right button is enabled on IR sensor",
+        "BOTTOM_LEFT": "bottom left button is enabled on IR sensor",
+        "BOTTOM_RIGHT": "bottom right button is enabled on IR sensor",
+        "BEACON": "beacon button is enabled on IR sensor",
+        "NOTHING": "nothing is enabled on IR sensor"
+      }
     },
 
     "gnikrap_ev3_keyboard_wait": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_keyboard_object",
-      "tooltip": "Wait for a button to be pressed (and released is selected)."
+      "tooltip": "Wait for a button to be pressed (and released is selected).",
+      "list_keyboard_buttons_wait": {
+        "UP": "wait up button",
+        "DOWN": "wait down button",
+        "LEFT": "wait left button",
+        "RIGHT": "wait right button",
+        "ENTER": "wait enter button",
+        "ESCAPE": "wait escape button"
+      },
+
+      "list_keyboard_buttons_actions": {
+        "PRESSED": "is pressed",
+        "PRESSED_AND_RELEASED": "is pressed and released"
+      }
     },
 
     "gnikrap_ev3_keyboard_ispressed": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_keyboard_object",
-      "tooltip": "Is a button pressed ?"
+      "tooltip": "Return true if the button pressed, false otherwise.",
+      "list_keyboard_buttons_is_pressed": {
+        "UP": "up button is pressed",
+        "DOWN": "down button is pressed",
+        "LEFT": "left button is pressed",
+        "RIGHT": "right button is pressed",
+        "ENTER": "enter button is pressed",
+        "ESCAPE": "escape button is pressed"
+      }
     },
 
     "gnikrap_ev3_motor_settype": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
       "tooltip": "Set the type of motor on the given port.",
-      "text_is_connected_on": "is connected on port"
+      "list_motor_type_connected_on": {
+        "LARGE": "a large motor is connected on port",
+        "MEDIUM": "a medium motor is connected on port"
+      }
     },
 
     "gnikrap_ev3_motor_move": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
       "tooltip": "TODO",
-      "text_motor": "motor"
+      "list_motor_actions": {
+        "FORWARD": "rotate forward motor",
+        "BACKWARD": "rotate backward motor",
+        "STOP_LOCK": "stop and lock motor",
+        "STOP": "stop motor"
+      }
     },
 
     "gnikrap_ev3_motor_ismoving": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
-      "tooltip": "Is the motor currently moving or not ?",
+      "tooltip": "Return true if the motor is currently moving, false otherwise.",
       "text_motor": "motor",
       "text_is_moving": "is moving"
     },
@@ -552,7 +511,15 @@
     "gnikrap_ev3_motor_rotate": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_motor_object",
       "tooltip": "TODO",
-      "text_for": "for"
+      "list_motor_actions": {
+        "ROTATE": "rotate motor",
+        "ROTATE_NO_WAIT": "start rotate motor"
+      },
+      "text_for": "for",
+      "list_angle_unit": {
+        "DEGREE": "degree(s)",
+        "TURN": "turn(s)"
+      }
     },
 
     "gnikrap_ev3_motor_setspeed": {
@@ -583,37 +550,54 @@
     
     "gnikrap_ev3_xsensor_workwith": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xsensor_object",
-      "tooltip": "TODO",
-      "text_with_the_xSensor": "if the xSensor",
-      "text_started": "is started",
+      "tooltip": "If the xSensor exist and is started execute the 'do' statements. Otherwise, the 'else' optional statements will be performed.",
+      "text_with_the_xSensor": "with the xSensor",
+      "text_started": "started",
       "text_do": "do",
       "text_else": "else"
     },
     
     "gnikrap_ev3_xgyro_getvalue": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xgyro_xsensor",
-      "tooltip": "TODO"
+      "tooltip": "Return the angle value of the xGyro for the selected axis.",
+      "list_axis_angle": {
+        "X": "xGyro x axis angle",
+        "Y": "xGyro y axis angle",
+        "Z": "xGyro z axis angle"
+      }    
     },
     
     "gnikrap_ev3_xgeo_getvalue": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xgeo_xsensor",
-      "tooltip": "TODO"
+      "tooltip": "Return the value of the xGeo for the selected measure.",
+      "list_measure": {
+        "LATITUDE": "xGeo latitude",
+        "LONGITUDE": "xGeo longitude", 
+        "ACCURACY": "xGeo accuracy", 
+        "ALTITUDE": "xGeo altitude",
+        "ALTITUDE_ACCURACY": "xGeo altitude accuracy",
+        "TIMESTAMP": "xGeo timestamp"
+      }
     },
     
     "gnikrap_ev3_xvideo_containsobject": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xvideo_xsensor",
-      "tooltip": "TODO",
+      "tooltip": "Return true if the object with the given name currently tracked by the xVideo sensor, false otherwise.",
       "text_xVideo_known_the_object": "xVideo knows the object"
     },
     
     "gnikrap_ev3_xvideo_getvalue": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xvideo_xsensor",
-      "tooltip": "TODO"
+      "tooltip": "Return for the given object the value of the selected coordinate.",
+      "list_axis_for_object": {
+        "X": "xVideo x value for the object",
+        "Y": "xVideo y value for the object"
+      }
     },
     
     "gnikrap_ev3_xtouch_istouchpressed": {
       "helpUrl": "http://jbenech.github.io/gnikrap/gnikrap-doc/index.html#_the_xtouch_xsensor",
-      "tooltip": "TODO",
+      "tooltip": "Return true if the given touch is pressed, false otherwise.",
       "text_xTouch_touch": "xTouch touch",
       "text_is_pressed": "is pressed"
     }
