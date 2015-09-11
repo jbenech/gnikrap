@@ -144,11 +144,12 @@ function GnikrapBlocks() {
               snap: true } */
           });
       self.workspace.addChangeListener(self.__checkBlocks); // Used to set the nodes to warning if needed
-      
+      /*
       self.loadXML(
           '<xml><block type="controls_whileUntil" deletable="false" x="70" y="70">' +
-          '  <value name="BOOL"><block type="gnikrap_ev3_isok" deletable="false" ></block></value>' +
+          '  <value name="BOOL"><block type="gnikrap_ev3_isok" deletable="false"></block></value>' +
           '</block></xml>');
+      */
     };
 
     $.getScript(jsFilename).done(initWorkspace)
@@ -207,7 +208,7 @@ function GnikrapBlocks() {
         } else {
           motorTypes[p1] = p2;
         }
-        return "/* The motor port " + p1 + " will be set to '" + p2 + "' */"; // Discard the motor type definition line
+        return "/* The motor on port " + p1 + " will be set to '" + p2 + "' */"; // Discard the motor type definition line
       });
 
     // Build the list of devices connected to the EV3 ports
@@ -366,13 +367,14 @@ function GnikrapBlocks() {
 
     xml.push('<category name="' + i18n.t("blocks.categories.ev3_brick") + '">');
     xml.push([
-          {type: "gnikrap_ev3_isok"},
-          {type: "controls_whileUntil",
-            xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
           {type: "gnikrap_ev3_notify"},
+          {type: "gnikrap_ev3_wait_until"},
           {type: "gnikrap_ev3_sleep",
             xmlContent: '<value name="TIME"><block type="math_number"><field name="NUM">100</field></block></value>' },
           {type: "gnikrap_ev3_stop"},
+          {type: "gnikrap_ev3_isok"},
+//          {type: "controls_whileUntil",
+//            xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
           {type: "gnikrap_ev3_led"},
           {type: "gnikrap_ev3_sound_setvolume",
             xmlContent: '<value name="VOL"><block type="math_number"><field name="NUM">70</field></block></value>' },
@@ -416,8 +418,8 @@ function GnikrapBlocks() {
             xmlContent: '<value name="SPEED"><block type="math_number"><field name="NUM">75</field></block></value>'},
           {type: "gnikrap_ev3_motor_getspeed"},
           {type: "gnikrap_ev3_motor_ismoving"},
-          {type: "gnikrap_ev3_motor_gettacho"},
-          {type: "gnikrap_ev3_motor_resettacho"}
+          {type: "gnikrap_ev3_motor_resettacho"},
+          {type: "gnikrap_ev3_motor_gettacho"}
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
 
@@ -449,9 +451,9 @@ function GnikrapBlocks() {
     // Very simple XML => Generate with string concatenation
     var xml = [ '<xml>' ];
 
-    xml.push(self.__generateBlocklyCategories());
-    xml.push('<sep></sep>');
     xml.push(self.__generateGnikrapCategories());
+    xml.push('<sep></sep>');
+    xml.push(self.__generateBlocklyCategories());
     xml.push('<sep></sep>');
     xml.push(self.__generateMagicCategories());
 
@@ -471,7 +473,7 @@ function GnikrapBlocks() {
 
     // Init some fields that we want on all blocks
     function initBlock(block, baseKey, colour) {
-      block.setHelpUrl(i18n.t(baseKey + ".helpUrl"));
+      // block.setHelpUrl(i18n.t(baseKey + ".helpUrl"));
       block.setTooltip(i18n.t(baseKey + ".tooltip"));
       block.setColour(colour);
     }
@@ -550,6 +552,21 @@ function GnikrapBlocks() {
       return 'ev3.exit()';
     };
 
+    // notify(String): void
+    Blockly.Blocks['gnikrap_ev3_wait_until'] = {
+      init: function() {
+        initBlockStackable(this, "blocks.gnikrap_ev3_wait_until", EV3_BRICK_COLOUR);
+        this.appendValueInput("UNTIL")
+            .setCheck("Boolean")
+            .appendField(i18n.t("blocks.gnikrap_ev3_wait_until.text_wait_until"));
+      }
+    };
+    Blockly.JavaScript['gnikrap_ev3_wait_until'] = function(block) {
+      var until = Blockly.JavaScript.valueToCode(block, 'UNTIL', Blockly.JavaScript.ORDER_ATOMIC) || 'true';
+
+      return 'while(ev3.isOk() && !' + until + ') ev3.sleep(1);\n';
+    };
+    
     // sleep(int): void
     Blockly.Blocks['gnikrap_ev3_sleep'] = {
       init: function() {
@@ -587,7 +604,6 @@ function GnikrapBlocks() {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_led", EV3_BRICK_COLOUR);
         this.appendDummyInput()
-            //.appendField(i18n.t("blocks.gnikrap_ev3_led.text_change_LED_status"))
             .appendField(new Blockly.FieldDropdown(
                 CHANGE_LED_STATUS.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_led.list_change_LED_status"))), "STATUS");
         this.setInputsInline(true);
@@ -901,7 +917,7 @@ function GnikrapBlocks() {
     Blockly.JavaScript['gnikrap_ev3_keyboard_ispressed'] = function(block) {
       var button = block.getFieldValue('BUTTON');
 
-      code = 'ev3.getBrick().getKeyboard().' + getCodeForList(KEYBOARD_BUTTONS, button) + '.isDown()';
+      var code = 'ev3.getBrick().getKeyboard().' + getCodeForList(KEYBOARD_BUTTONS, button) + '.isDown()';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
 
@@ -1080,8 +1096,7 @@ function GnikrapBlocks() {
         code += 'getSpeed()/360';
       } else {
         code += 'getSpeedPercent()';
-      }
-      
+      }      
       return [code, Blockly.JavaScript.ORDER_NONE]; // Can be a mix of function call and divide <=> ORDER_NONE to avoid problem
     };
 
@@ -1161,7 +1176,7 @@ function GnikrapBlocks() {
         this.elseCount_ = 0;
       },
 
-      // Populate the Mutator dialog box
+      // Populate the mutator's dialog with this block's components.
       decompose: function(workspace) {
         // Init top level block
         var containerBlock = Blockly.Block.obtain(workspace, 'gnikrap_ev3_xsensor_workwith_workwith');
@@ -1176,7 +1191,7 @@ function GnikrapBlocks() {
         return containerBlock;
       },
 
-      // Update the block based on the Mutator dialog box values
+      // Reconfigure this block based on the mutator dialog's components.
       compose: function(containerBlock) {
         // Disconnect the else input blocks and remove the inputs.
         if (this.elseCount_) {
@@ -1203,6 +1218,24 @@ function GnikrapBlocks() {
               clauseBlock.nextConnection.targetBlock();
         }
       },
+      
+      // Store pointers to any connected child blocks.
+      saveConnections: function(containerBlock) {
+        var clauseBlock = containerBlock.getInputTargetBlock('STACK');
+        while (clauseBlock) {
+          switch (clauseBlock.type) {
+            case 'gnikrap_ev3_xsensor_workwith_else':
+              var inputDo = this.getInput('ELSE');
+              clauseBlock.statementConnection_ =
+                  inputDo && inputDo.connection.targetConnection;
+              break;
+            default:
+              throw 'Unknown block type.';
+          }
+          clauseBlock = clauseBlock.nextConnection &&
+              clauseBlock.nextConnection.targetBlock();
+        }
+      },
 
       // Add additional data while serialized to XML
       mutationToDom: function() {
@@ -1218,7 +1251,7 @@ function GnikrapBlocks() {
 
       // Get block data while de-serialize from XML
       domToMutation: function(xmlElement) {
-        this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10);
+        this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 1);
         if (this.elseCount_) {
           this.appendStatementInput('ELSE')
               .appendField(i18n.t("blocks.gnikrap_ev3_xsensor_workwith.text_else"));
@@ -1250,23 +1283,25 @@ function GnikrapBlocks() {
     Blockly.JavaScript['gnikrap_ev3_xsensor_workwith'] = function(block) {
       var do0 = Blockly.JavaScript.statementToCode(block, 'DO');
       var xsensor_name = block.getFieldValue('XSENSOR_NAME');
-      var sensorVar = Blockly.JavaScript.variableDB_.getDistinctName(xsensor_name + '_sensor', Blockly.Variables.NAME_TYPE);
-      var sensorValueVar = Blockly.JavaScript.variableDB_.getDistinctName(xsensor_name + '_value', Blockly.Variables.NAME_TYPE);
 
-/*      
-      var code = '(function(' + sensorVar + ') {\n';
-      code += 'var ' + sensorValueVar + ' = ( ' + sensorVar + ' ? ' + sensorVar + '.getValue() : null);\n';
-      code += 'if(' + sensorValueVar + ' && ' + sensorValueVar + '.isStarted()) {\n';
-      code += do0.replace(new RegExp(self.XSENSOR_MAGIC, "g"), sensorValueVar);
-      code += '}';
+      var fDefinition = [
+          'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+          '  var xSensor = ev3.getXSensor("' + xsensor_name + '");',
+          '  var xSensorValue = (xSensor ? xSensor.getValue() : null);',
+          '  if(xSensorValue && xSensorValue.isStarted()) {',
+          Blockly.JavaScript.prefixLines(do0.replace(new RegExp(self.XSENSOR_MAGIC, "g"), 'xSensorValue'), Blockly.JavaScript.INDENT)];
+          
       if (block.elseCount_) {
-        code += ' else {\n' + Blockly.JavaScript.statementToCode(block, 'ELSE') + '}';
-      } else {
-        code += '\n';
+        fDefinition = fDefinition.concat([
+          '  }  else {', 
+          Blockly.JavaScript.prefixLines(Blockly.JavaScript.statementToCode(block, 'ELSE'), Blockly.JavaScript.INDENT)]);
       }
-      code += '})(ev3.getXSensor("' + xsensor_name + '"));';
-      return code;
-*/
+      fDefinition = fDefinition.concat(['  }', '}']); // close if or else, and close function
+
+      var fName = Blockly.JavaScript.provideFunction_(
+          Blockly.JavaScript.variableDB_.getDistinctName('doXSensorProcessingOn' + xsensor_name), // Use a unique variable name in order to have a different function for each workWith block
+          fDefinition);
+      return fName + '();\n';
     };
 
     /////////////////////////////////////////////////////////////////////////////
