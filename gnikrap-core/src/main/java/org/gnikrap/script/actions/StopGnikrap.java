@@ -19,13 +19,12 @@ package org.gnikrap.script.actions;
 
 import java.util.logging.Logger;
 
-import org.gnikrap.ActionMessageProcessor;
-import org.gnikrap.GnikrapApp;
+import org.gnikrap.GnikrapAppContext;
+import org.gnikrap.script.ActionMessageProcessor;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;
 import org.gnikrap.script.JsonMessageFields;
-import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.LoggerUtils;
 
 /**
@@ -34,9 +33,9 @@ import org.gnikrap.utils.LoggerUtils;
 public class StopGnikrap implements ActionMessageProcessor {
   private static final Logger LOGGER = LoggerUtils.getLogger(StopGnikrap.class);
 
-  private final ApplicationContext appContext;
+  private final GnikrapAppContext appContext;
 
-  public StopGnikrap(ApplicationContext appContext) {
+  public StopGnikrap(GnikrapAppContext appContext) {
     this.appContext = appContext;
   }
 
@@ -48,7 +47,7 @@ public class StopGnikrap implements ActionMessageProcessor {
     new Thread(new Runnable() {
       @Override
       public void run() {
-        appContext.getObject(GnikrapApp.class).stop();
+        appContext.getGnikrapApp().stop();
       }
     }).run();
   }

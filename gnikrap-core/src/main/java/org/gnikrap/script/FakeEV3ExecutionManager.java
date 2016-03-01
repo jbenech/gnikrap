@@ -17,15 +17,15 @@
  */
 package org.gnikrap.script;
 
+import org.gnikrap.GnikrapAppContext;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
-import org.gnikrap.utils.ApplicationContext;
 
 /**
  * Class mainly used in order to perform some basics tests without EV3 brick
  */
 public class FakeEV3ExecutionManager extends ScriptExecutionManager {
 
-  public FakeEV3ExecutionManager(ApplicationContext appContext) {
+  public FakeEV3ExecutionManager(GnikrapAppContext appContext) {
     super(appContext);
   }
 

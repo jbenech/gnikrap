@@ -17,7 +17,7 @@
  */
 package org.gnikrap.script.actions;
 
-import org.gnikrap.ActionMessageProcessor;
+import org.gnikrap.script.ActionMessageProcessor;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;
@@ -30,7 +30,7 @@ public class StopScript implements ActionMessageProcessor {
 
   @Override
   public void process(EV3Message msg, EV3ActionProcessor context) throws EV3Exception {
-    context.getContext().stopScript();
+    context.getScriptExecutionManager().stopScript();
   }
 
   @Override

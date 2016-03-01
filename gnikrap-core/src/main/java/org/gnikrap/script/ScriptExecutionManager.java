@@ -26,13 +26,12 @@ import java.util.logging.Logger;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
+import org.gnikrap.GnikrapAppContext;
 import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
 import org.gnikrap.script.ev3menu.WelcomeMenu;
-import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
 import org.gnikrap.utils.StopableExecutor;
@@ -44,7 +43,7 @@ public class ScriptExecutionManager {
   private static final Logger LOGGER = LoggerUtils.getLogger(EV3SriptCommandSocketConnectionCallback.class);
 
   // The application context
-  private final ApplicationContext appContext;
+  private final GnikrapAppContext appContext;
   // The JMV script engine
   private final ScriptEngineManager scriptEngineFactory = new ScriptEngineManager();
   // private final ExecutorService scriptProcessor = Executors.newSingleThreadExecutor();
@@ -57,13 +56,13 @@ public class ScriptExecutionManager {
   private Future<?> scriptResult;
   private WelcomeMenu menu;
 
-  public ScriptExecutionManager(ApplicationContext appContext) {
+  public ScriptExecutionManager(GnikrapAppContext appContext) {
     this.appContext = appContext;
   }
 
   public void start() {
     // Finalize init
-    this.actionProcessor = appContext.getObject(EV3ActionProcessor.class);
+    this.actionProcessor = appContext.getEV3ActionProcessor();
     reset(true);
   }
 

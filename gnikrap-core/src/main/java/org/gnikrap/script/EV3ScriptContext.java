@@ -21,12 +21,12 @@ import java.util.concurrent.Future;
 
 import lejos.utility.Delay;
 
+import org.gnikrap.GnikrapAppContext;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
 import org.gnikrap.script.ev3api.xsensors.XSensor;
 import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
-import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.ScriptApi;
 
 /**
@@ -50,10 +50,10 @@ public final class EV3ScriptContext {
   private int confWaitingTimeBeforeHardKill = 5000;
   private final ScriptExecutionManager scriptExecutionMgr;
 
-  public EV3ScriptContext(ApplicationContext context, SimpleEV3Brick ev3, XSensorManager xsensor) {
+  public EV3ScriptContext(GnikrapAppContext context, SimpleEV3Brick ev3, XSensorManager xsensor) {
     this.ev3 = ev3;
     this.xsensor = xsensor;
-    this.scriptExecutionMgr = context.getObject(ScriptExecutionManager.class);
+    this.scriptExecutionMgr = context.getScriptExecutionManager();
     if (ev3 != null) {
       escape = ev3.getKeyboard().getEscape();
     } else {

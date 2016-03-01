@@ -20,7 +20,7 @@ package org.gnikrap.script.actions;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.gnikrap.ActionMessageProcessor;
+import org.gnikrap.script.ActionMessageProcessor;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;

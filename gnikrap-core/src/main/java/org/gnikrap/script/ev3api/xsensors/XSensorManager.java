@@ -32,16 +32,11 @@ public class XSensorManager {
   /**
    * Returns the sensor object for the given name. (Note: Sensor object can be locally kept).
    */
-  public XSensor getSensor(String name) {
+  public synchronized XSensor getSensor(String name) {
     XSensor s = sensors.get(name);
-    if (s == null) { // Avoid synchronization cost if possible
-      synchronized (sensors) {
-        s = sensors.get(name);
-        if (s == null) {
-          s = new XSensor(name);
-          sensors.put(name, s);
-        }
-      }
+    if (s == null) {
+      s = new XSensor(name);
+      sensors.put(name, s);
     }
     return s;
   }

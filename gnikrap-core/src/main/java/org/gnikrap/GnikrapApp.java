@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2015 Jean BENECH
+ * Copyright (C) 2015-2016 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,15 @@ package org.gnikrap;
 import static io.undertow.Handlers.path;
 import static io.undertow.Handlers.resource;
 import static io.undertow.Handlers.websocket;
-import io.undertow.Undertow;
-import io.undertow.server.handlers.resource.FileResourceManager;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.gnikrap.httphandler.FilesHttpHandler;
+import org.gnikrap.httphandler.FolderHttpHandler;
 import org.gnikrap.script.EV3ActionProcessor;
+import org.gnikrap.script.EV3SriptCommandSocketConnectionCallback;
 import org.gnikrap.script.FakeEV3ExecutionManager;
 import org.gnikrap.script.ScriptExecutionManager;
 import org.gnikrap.script.actions.RunScript;
@@ -37,31 +36,32 @@ import org.gnikrap.script.actions.SetXSensorValue;
 import org.gnikrap.script.actions.ShutdownBrick;
 import org.gnikrap.script.actions.StopGnikrap;
 import org.gnikrap.script.actions.StopScript;
-import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.Configuration;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.Utils;
 
+import io.undertow.Undertow;
+import io.undertow.server.handlers.resource.FileResourceManager;
+
 /**
- * A class that is able to build/start/stop Gnikrap application.
+ * A class that is able to start/stop Gnikrap application.
  */
-public class GnikrapApp {
+public class GnikrapApp implements GnikrapAppContext {
   private static final Logger LOGGER = LoggerUtils.getLogger(GnikrapApp.class);
 
-  private final ApplicationContext appContext;
   private final Configuration config;
   private Undertow server;
   private EV3ActionProcessor actionProcessor;
   private ScriptExecutionManager scriptExecutionManager;
   private int httpPort;
+  private EV3SriptCommandSocketConnectionCallback webSocketConnectionCallback;
   private boolean alreadyStopped = false;
 
   /**
    * Build a new Gnikrap application.
    */
-  public GnikrapApp(ApplicationContext context) {
-    this.appContext = context;
-    config = appContext.getObject(Configuration.class);
+  public GnikrapApp(Configuration config) {
+    this.config = config;
     buildActionProcessor();
     buildHttpServer();
   }
@@ -70,21 +70,19 @@ public class GnikrapApp {
     boolean fakeEV3 = config.getValueAsBoolean("FakeEV3", false);
 
     if (fakeEV3) {
-      scriptExecutionManager = new FakeEV3ExecutionManager(appContext);
+      scriptExecutionManager = new FakeEV3ExecutionManager(this);
     } else {
-      scriptExecutionManager = new ScriptExecutionManager(appContext);
+      scriptExecutionManager = new ScriptExecutionManager(this);
     }
-    appContext.registerObject(scriptExecutionManager);
 
-    actionProcessor = new EV3ActionProcessor(appContext);
-    appContext.registerObject(actionProcessor);
+    actionProcessor = new EV3ActionProcessor(this);
 
     // Register actions
     actionProcessor.registerActionMessageProcessor(new RunScript());
     actionProcessor.registerActionMessageProcessor(new StopScript());
     actionProcessor.registerActionMessageProcessor(new SetXSensorValue());
     actionProcessor.registerActionMessageProcessor(new ShutdownBrick());
-    actionProcessor.registerActionMessageProcessor(new StopGnikrap(appContext));
+    actionProcessor.registerActionMessageProcessor(new StopGnikrap(this));
   }
 
   private void buildHttpServer() {
@@ -95,21 +93,22 @@ public class GnikrapApp {
     httpPort = config.getValueAsInt("HttpPort", 8080);
 
     // Init web-socket callback
-    EV3SriptCommandSocketConnectionCallback myWsCC = new EV3SriptCommandSocketConnectionCallback(appContext);
-    appContext.registerObject(myWsCC);
+    webSocketConnectionCallback = new EV3SriptCommandSocketConnectionCallback(this);
 
     // Launch server
-    server = Undertow.builder().addHttpListener(httpPort, "0.0.0.0").setHandler( //
-        path() //
-            // ////////////////////////////////////
-            .addPrefixPath("/ws/gnikrap/script", websocket(myWsCC)) //
-            .addPrefixPath("/rest/scriptfiles", new FilesHttpHandler(scriptsFolder)) //
-            .addPrefixPath("/rest/xkeyboardfiles", new FilesHttpHandler(keyboardFolder))
-            // ////////////////////////////////////
-            .addPrefixPath("/", resource(new FileResourceManager(new File(webContentFolder), 4096)). //
-                setWelcomeFiles("index.html").setDirectoryListingEnabled(false))) //
+    server = Undertow.builder().addHttpListener(httpPort, "0.0.0.0")
+        .setHandler( //
+            path() //
+                // ////////////////////////////////////
+                .addPrefixPath("/ws/gnikrap/script", websocket(webSocketConnectionCallback)) //
+                .addPrefixPath("/rest/scriptfiles", new FolderHttpHandler(scriptsFolder)) //
+                .addPrefixPath("/rest/xkeyboardfiles", new FolderHttpHandler(keyboardFolder))
+                // ////////////////////////////////////
+                .addPrefixPath("/",
+                    resource(new FileResourceManager(new File(webContentFolder), 4096)). //
+                        setWelcomeFiles("index.html").setDirectoryListingEnabled(false))) //
         // ////////////////////////////////////
-        .setWorkerThreads(2).setIoThreads(2) //
+        .setWorkerThreads(2).setIoThreads(2) // TODO try IO-Thread at 1
         // .setSocketOption(Options.BALANCING_TOKENS, 0) //
         .build();
   }
@@ -158,5 +157,30 @@ public class GnikrapApp {
     }
 
     return result;
+  }
+
+  @Override
+  public GnikrapApp getGnikrapApp() {
+    return this;
+  }
+
+  @Override
+  public Configuration getConfiguration() {
+    return config;
+  }
+
+  @Override
+  public EV3ActionProcessor getEV3ActionProcessor() {
+    return actionProcessor;
+  }
+
+  @Override
+  public EV3SriptCommandSocketConnectionCallback getEV3SriptCommandSocketConnectionCallback() {
+    return webSocketConnectionCallback;
+  }
+
+  @Override
+  public ScriptExecutionManager getScriptExecutionManager() {
+    return scriptExecutionManager;
   }
 }

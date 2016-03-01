@@ -18,11 +18,11 @@
 package org.gnikrap.script.ev3menu;
 
 import org.gnikrap.GnikrapApp;
+import org.gnikrap.GnikrapAppContext;
 import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Screen;
 import org.gnikrap.script.ev3api.SimpleEV3Screen.SimpleEV3Image;
-import org.gnikrap.utils.ApplicationContext;
 
 /**
  * Display the Gnikrap welcome menu while there is no script running.<br/>
@@ -42,9 +42,9 @@ public class WelcomeMenu {
   private final SimpleEV3Screen screen;
   private final GnikrapApp gnikrapApp;
 
-  public WelcomeMenu(ApplicationContext appContext, SimpleEV3Brick brick) {
+  public WelcomeMenu(GnikrapAppContext appContext, SimpleEV3Brick brick) {
     screen = brick.getScreen();
-    gnikrapApp = appContext.getObject(GnikrapApp.class);
+    gnikrapApp = appContext.getGnikrapApp();
   }
 
   public void start() {

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Gnikrap.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.gnikrap;
+package org.gnikrap.script;
 
 import io.undertow.websockets.WebSocketConnectionCallback;
 import io.undertow.websockets.core.AbstractReceiveListener;
@@ -33,8 +33,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.gnikrap.script.EV3ActionProcessor;
-import org.gnikrap.utils.ApplicationContext;
+import org.gnikrap.GnikrapAppContext;
 import org.gnikrap.utils.LoggerUtils;
 import org.xnio.ChannelListener;
 
@@ -49,8 +48,8 @@ final public class EV3SriptCommandSocketConnectionCallback implements WebSocketC
 
   private final EV3ActionProcessor ev3ActionProcessor;
 
-  public EV3SriptCommandSocketConnectionCallback(ApplicationContext context) {
-    this.ev3ActionProcessor = context.getObject(EV3ActionProcessor.class);
+  public EV3SriptCommandSocketConnectionCallback(GnikrapAppContext context) {
+    this.ev3ActionProcessor = context.getEV3ActionProcessor();
   }
 
   @Override

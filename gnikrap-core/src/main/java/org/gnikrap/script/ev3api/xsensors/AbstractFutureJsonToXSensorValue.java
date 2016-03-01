@@ -46,14 +46,10 @@ abstract class AbstractFutureJsonToXSensorValue implements Future<XSensorValue> 
    * Construct the value only when needed
    */
   @Override
-  public XSensorValue get() {
-    if (value == null) { // Avoid synchronization cost if possible
-      synchronized (this) {
-        if (value == null) {
-          value = buildValue(rawValue.asObject());
-          rawValue = null;
-        }
-      }
+  public synchronized XSensorValue get() {
+    if (value == null) {
+      value = buildValue(rawValue.asObject());
+      rawValue = null;
     }
     return value;
   }

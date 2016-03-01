@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2015 Jean BENECH
+ * Copyright (C) 2014-2016 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,10 +29,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.gnikrap.ActionMessageProcessor;
-import org.gnikrap.EV3SriptCommandSocketConnectionCallback;
+import org.gnikrap.GnikrapAppContext;
 import org.gnikrap.script.ev3api.EV3ScriptException;
-import org.gnikrap.utils.ApplicationContext;
 import org.gnikrap.utils.Configuration;
 import org.gnikrap.utils.LoggerUtils;
 import org.gnikrap.utils.MapBuilder;
@@ -52,24 +50,24 @@ public final class EV3ActionProcessor {
   private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
   private final BlockingQueue<Message> messagesToSend = new LinkedBlockingQueue<Message>();
 
-  private final ApplicationContext appContext;
+  private final GnikrapAppContext appContext;
 
   private final boolean sendMessageToBrowserAsynchroneously;
 
-  public EV3ActionProcessor(ApplicationContext appContext) {
+  public EV3ActionProcessor(GnikrapAppContext appContext) {
     this.appContext = appContext;
 
-    Configuration conf = appContext.getObject(Configuration.class);
+    Configuration conf = appContext.getConfiguration();
     sendMessageToBrowserAsynchroneously = conf.getValueAsBoolean("SendMessageToBrowserAsynchroneously", false);
   }
 
   private void finalizeInit() {
-    scriptExecutionContext = appContext.getObject(ScriptExecutionManager.class);
+    scriptExecutionContext = appContext.getScriptExecutionManager();
     if (scriptExecutionContext == null) {
       throw new RuntimeException("Intialization problem, ScriptExecutionManager should have been initialized");
     }
 
-    this.remoteWebSocketService = appContext.getObject(EV3SriptCommandSocketConnectionCallback.class);
+    this.remoteWebSocketService = appContext.getEV3SriptCommandSocketConnectionCallback();
     if (remoteWebSocketService == null) {
       throw new RuntimeException("Intialization problem, EV3SriptCommandSocketConnectionCallback should have been initialized");
     }
@@ -191,7 +189,7 @@ public final class EV3ActionProcessor {
     actionMessageProcessorRepository.remove(action);
   }
 
-  public ScriptExecutionManager getContext() {
+  public ScriptExecutionManager getScriptExecutionManager() {
     return scriptExecutionContext;
   }
 

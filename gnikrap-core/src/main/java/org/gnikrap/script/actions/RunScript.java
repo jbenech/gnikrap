@@ -17,7 +17,7 @@
  */
 package org.gnikrap.script.actions;
 
-import org.gnikrap.ActionMessageProcessor;
+import org.gnikrap.script.ActionMessageProcessor;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;
@@ -34,7 +34,7 @@ public class RunScript implements ActionMessageProcessor {
     String scriptText = msg.getFieldAsText(JsonMessageFields.SCRIPT_TEXT);
     boolean force = msg.getFieldAsBoolean(JsonMessageFields.SCRIPT_FORCE_STOP);
 
-    context.getContext().runScript(language, scriptText, force);
+    context.getScriptExecutionManager().runScript(language, scriptText, force);
   }
 
   @Override

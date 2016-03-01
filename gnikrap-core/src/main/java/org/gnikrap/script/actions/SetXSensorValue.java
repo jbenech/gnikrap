@@ -19,7 +19,7 @@ package org.gnikrap.script.actions;
 
 import java.util.concurrent.Future;
 
-import org.gnikrap.ActionMessageProcessor;
+import org.gnikrap.script.ActionMessageProcessor;
 import org.gnikrap.script.EV3ActionProcessor;
 import org.gnikrap.script.EV3Exception;
 import org.gnikrap.script.EV3Message;
@@ -58,7 +58,7 @@ public class SetXSensorValue implements ActionMessageProcessor {
       futureValue = new FutureJsonToMapValue(rawSensorValue);
     }
 
-    context.getContext().setXSensorFutureValue(sensorName, futureValue);
+    context.getScriptExecutionManager().setXSensorFutureValue(sensorName, futureValue);
   }
 
   @Override

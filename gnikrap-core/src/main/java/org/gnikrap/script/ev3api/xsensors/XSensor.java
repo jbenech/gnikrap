@@ -55,7 +55,8 @@ public class XSensor {
   @ScriptApi
   public XSensorValue getValue() {
     try {
-      return (value == null ? DEFAULT_XSENSOR_VALUE : value.get());
+      Future<XSensorValue> temp = value; // Get locally to avoid race condition issues
+      return (temp == null ? DEFAULT_XSENSOR_VALUE : temp.get());
     } catch (Exception ex) {
       LOGGER.log(Level.SEVERE, "Error while retrieving value for XSensor: \"" + getName() + "\"", ex);
       return DEFAULT_XSENSOR_VALUE;
