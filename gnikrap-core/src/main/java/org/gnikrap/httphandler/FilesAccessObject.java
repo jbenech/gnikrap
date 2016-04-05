@@ -48,11 +48,11 @@ public class FilesAccessObject {
     }
   }
 
-  public List<String> listFiles() {
-    List<String> result = new ArrayList<String>();
+  public List<File> listFiles() {
+    List<File> result = new ArrayList<>();
     for (File f : dataFolder.listFiles()) {
       if (f.isFile()) {
-        result.add(f.getName());
+        result.add(f);
       }
     }
     return result;

@@ -67,16 +67,7 @@ function JavascriptEditor(appContext) {
   };
   
   self.getValue = function() {
-    var x = self.ace.getValue();
-
-    x.warnings.forEach(function(warn) {
-        self.context.messageLogVM.addMessage(false, warn);
-      });
-    x.errors.forEach(function(err) {
-        self.context.messageLogVM.addMessage(true, err);
-      });
-
-    return (x.errors > 0 ? null : x.code);
+    return self.ace.getValue();
   };
 }
 

@@ -18,12 +18,14 @@
 package org.gnikrap.httphandler;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
@@ -31,15 +33,11 @@ import java.util.logging.Logger;
 
 import org.gnikrap.utils.JsonUtils;
 import org.gnikrap.utils.LoggerUtils;
-import org.xnio.FileAccess;
-import org.xnio.IoUtils;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
-import io.undertow.io.IoCallback;
-import io.undertow.io.Sender;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
@@ -127,31 +125,52 @@ public class FolderHttpHandler implements HttpHandler {
    * Load a file
    */
   private void doReturnAFile(HttpServerExchange exchange) throws IOException {
-    final String filename = exchange.getRelativePath();
-    final FileChannel fileChannel = exchange.getConnection().getWorker().getXnio().openFile(filename, FileAccess.READ_ONLY);
+    String filename = getAndCheckFilename(exchange, true);
+    String storageFilename = getStorageFilename(filename);
+    LOGGER.info("Reading file: '" + storageFilename + "'");
 
-    // String data = fao.loadFile(filename); // Must be done before setResponseCode
-    // exchange.getResponseSender().send(data);
-    exchange.getResponseSender().transferFrom(fileChannel, new IoCallback() {
-
-      @Override
-      public void onException(HttpServerExchange exchange, Sender sender, IOException exception) {
-        LOGGER.warning("Exception while reading the file: '" + filename + "'");
-        IoUtils.safeClose(fileChannel);
-        if (!exchange.isResponseStarted()) {
-          exchange.setResponseCode(StatusCodes.INTERNAL_SERVER_ERROR);
-        }
-        exchange.endExchange();
+    // Load file in memory
+    try (Reader isr = new InputStreamReader(new FileInputStream(storageFilename), CHARSET); //
+        StringWriter sw = new StringWriter(8196)) {
+      char[] buf = new char[1024];
+      int read;
+      while ((read = isr.read(buf)) != -1) {
+        sw.write(buf, 0, read);
       }
 
-      @Override
-      public void onComplete(HttpServerExchange exchange, Sender sender) {
-        IoUtils.safeClose(fileChannel);
-        exchange.setResponseCode(200);
-        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-        exchange.endExchange();
-      }
-    });
+      ScriptFile sf = new ScriptFile(exchange.getRelativePath(), sw.toString(), null);
+
+      String data = sf.toJson().toString(); // Must be done before setResponseCode
+      exchange.setResponseCode(200);
+      exchange.getResponseSender().send(data);
+      exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+    }
+
+    // final String filename = exchange.getRelativePath();
+    // final FileChannel fileChannel = exchange.getConnection().getWorker().getXnio() //
+    // .openFile(new File(dataFolder, filename), FileAccess.READ_ONLY);
+    //
+    // exchange.getResponseSender().transferFrom(fileChannel, new IoCallback() {
+    // @Override
+    // public void onException(HttpServerExchange exchange, Sender sender, IOException exception) {
+    // LOGGER.warning("Exception while reading the file: '" + filename + "'");
+    // IoUtils.safeClose(fileChannel);
+    // if (!exchange.isResponseStarted()) {
+    // exchange.setResponseCode(StatusCodes.INTERNAL_SERVER_ERROR);
+    // }
+    // exchange.endExchange();
+    // }
+    //
+    // @Override
+    // public void onComplete(HttpServerExchange exchange, Sender sender) {
+    // IoUtils.safeClose(fileChannel);
+    // if (!exchange.isResponseStarted()) {
+    // exchange.setResponseCode(200);
+    // }
+    // exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+    // exchange.endExchange();
+    // }
+    // });
   }
 
   private void doCreateOrReplaceAFile(HttpServerExchange exchange, boolean create) throws IOException {
@@ -210,8 +229,8 @@ public class FolderHttpHandler implements HttpHandler {
     // @Override
     // public void handleRequest(HttpServerExchange exchange) throws Exception {
     JsonArray fileList = new JsonArray();
-    for (String fn : fao.listFiles()) {
-      fileList.add(fn);
+    for (File f : fao.listFiles()) {
+      fileList.add(new ScriptFile(f.getName(), null, null).toJson());
     }
 
     String data = JsonUtils.writeToString(fileList, 1024); // Must be done before setResponseCode
@@ -237,7 +256,7 @@ public class FolderHttpHandler implements HttpHandler {
   static class ScriptFile {
     final String name;
     final String content;
-    final String[] tags;
+    final String[] tags; // TODO: Currently not working.
 
     public ScriptFile(String name, String content, String[] tags) {
       this.name = name;
