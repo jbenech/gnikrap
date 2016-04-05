@@ -48,7 +48,7 @@ public class FilesAccessObject {
     }
   }
 
-  public List<String> getFilesnames() {
+  public List<String> listFiles() {
     List<String> result = new ArrayList<String>();
     for (File f : dataFolder.listFiles()) {
       if (f.isFile()) {
