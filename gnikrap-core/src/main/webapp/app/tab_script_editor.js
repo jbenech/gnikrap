@@ -33,11 +33,29 @@ function JavascriptEditor(appContext) {
   var self = this;
   (function() { // Init
     self.context = appContext; // The application context
+    self.langTools = ace.require("ace/ext/language_tools");
     self.ace = ace.edit("aceEditor");
+    // Possible options: https://github.com/ajaxorg/ace/wiki/Configuring-Ace
+    self.ace.setOptions({
+        enableBasicAutocompletion: true,
+        vScrollBarAlwaysVisible: true });
     self.ace.setTheme("ace/theme/chrome");
     self.ace.getSession().setMode("ace/mode/javascript");
     self.ace.getSession().setTabSize(2);
     self.ace.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
+
+    // Enable auto-completion    
+    var staticWordCompleter = {
+      getCompletions: function(editor, session, pos, prefix, callback) {
+        console.log("Prefix: " + prefix);
+          var wordList = ["isOk()", "getBrick()", "notify(\"text\")", "sleep(0)", "getConfiguration()", "getXSensor(\"name\")"];
+          callback(null, wordList.map(function(word) {
+              return { caption: word, value: word, score: 1000, meta: "static" };
+          }));
+      }
+    }
+    // Reset the completers: The default completer add too much useless keyword for us
+    self.langTools.setCompleters([staticWordCompleter, self.langTools.textCompleter, self.langTools.snippetCompleter]);
   })();
 
   self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
