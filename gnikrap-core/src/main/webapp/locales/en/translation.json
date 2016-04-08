@@ -574,5 +574,35 @@
       "text_xTouch_touch": "xTouch touch",
       "text_is_pressed": "is pressed"
     }
+  },
+  
+  "autocompletion": {
+    "js": ["break", "case", "catch", "continue", "default", "do", "else", "false", "finally", "for", "function", "if", "in",
+                   "new", "null", "return", "switch", "true", "try", "var", "while"],
+    "ev3": ["isOk()", "getBrick()", "notify(\"text\")", "sleep(0)", "getConfiguration()", "getXSensor(\"name\")"],
+    "brick": ["getMediumMotor(\"A\")", "getLargeMotor(\"A\")", "getColorSensor(\"1\")", "getIRSensor(\"1\")", "getTouchSensor(\"1\")",
+              "getKeyboard()", "getLed()", "getSound()", "getScreen()", "getBattery()"],
+    "motor": ["forward()", "backward()", "stop()", "stop(true|false)", "stop(true|false, true|false)", "rotate(0)", "rotate(0, true|false)",
+              "isMoving()", "getTachoCount()", "resetTachoCount()", "setSpeedPercent(50)", "getSpeedPercent()", "setSpeed(360)", "getSpeed()"],
+    "color": ["getReflectedLight()", "getAmbientLight()", "getColor()"],
+    "IR": ["setChannel(1)", "getChannel()", "getDistance()", "getRemoteCommand()", "seekBeacon()"],
+    "IR RC": ["getValue()", "isTopLeftEnabled()", "isTopRightEnabled()", "isBottomLeftEnabled()", "isBottomRightEnabled()", 
+                     "isBeaconEnabled()", "isNothingEnabled()"],
+    "IR SB": ["isBeaconFound()", "getBearing()", "getDistance()", "isBeaconFound(0)", "getBearing(0)", "getDistance(0)"],
+    "touch": ["isPushed()"],
+    "keyboard": ["getDown()", "getEnter()", "getEscape()", "getLeft()", "getRight()", "getUp()", "waitForAnyPress()", "isUp()", 
+                 "isDown()", "waitForPress()", "waitForPressAndRelease()", "getId()"], 
+    "led": ["getLed()", "off()", "lightGreen()", "lightRed()", "lightOrange()", "blink()"],
+    "sound": ["setVolume(50)", "getVolume()", "beep()", "playTone(440, 100)", "playNote(\"Do\", 100)"],
+    "screen": ["clear()", "drawText(\"Hello\", 0, 0)", "drawText(\"Hello\", 0, 0, true)", "drawLine(0, 0, 20, 20)", 
+               "drawRectangle(0, 0, 20, 30)", "fillRectangle(10, 10, 20, 30)", "drawCircle(20, 20, 10)",
+               "fillCircle(20, 20, 10)", "drawArc(x, y, width, height, startAngle, arcAngle)", "fillArc(x, y, width, height, startAngle, arcAngle)",
+               "getWidth()", "getHeight()", "getFontHeight()", "drawImage(img, x, y)", "decodeImage(data)", "buildImage(line1, line2, ..., lineN)"],
+    "battery": ["getBatteryCurrent()", "getMotorCurrent()", "getVoltageMilliVolt()"],
+    "xSensor": ["getName()", "getValue()", "isStarted()"],
+    "xTouch": ["containsTouch(\"name\")", "getTouch(\"name\")", "getTouches()", "getName()", "getHits()"],
+    "xGyro": ["getX()", "getY()", "getZ()", "getAngle()"],
+    "xVideo": ["containsObject(\"name\")", "getObject(\"name\")", "getObjects()", "getName()", "getX()", "getY()"],
+    "xGeo": ["getTimestamp()", "getLatitude()", "getLongitude()", "getAccuracy()", "getAltitude()", "getAltitudeAccuracy()"]
   }
 }

@@ -40,7 +40,6 @@ import com.eclipsesource.json.JsonObject.Member;
 
 /**
  * Check for webapp translation <br/>
- * Don't find a better simple way to do it
  */
 public class TranslationTest {
 
@@ -50,23 +49,27 @@ public class TranslationTest {
     Assert.assertTrue(files.size() > 0, "No translation files found");
 
     // Load all files in order to check json
-    Map<String, JsonObject> translations = new HashMap<>();
+    Map<String, Map<String, JsonObject>> translations = new HashMap<>();
     for (File f : files) {
       System.out.println("Checking file: " + f);
       try (Reader r = new FileReader(f)) {
         JsonObject json = JsonObject.readFrom(r);
-        translations.put(f.getParentFile().getName(), json);
+        String lang = f.getParentFile().getName();
+        if (!translations.containsKey(lang)) {
+          translations.put(lang, new HashMap<String, JsonObject>());
+        }
+        translations.get(lang).put(f.getName(), json);
       } catch (Exception ioe) {
         Assert.fail("Problem on file '" + f + "': " + ioe, ioe);
       }
     }
 
     // Compare the files from the reference (english)
-    JsonObject ref = translations.get("en");
-    Assert.assertNotNull(ref, "Reference (English) translation not found");
-    for (Map.Entry<String, JsonObject> e : translations.entrySet()) {
-      if (ref != e.getValue()) {
-        checkTranslation(ref, e.getKey(), e.getValue());
+    Map<String, JsonObject> english = translations.get("en");
+    Assert.assertNotNull(english, "Reference (English) translation not found");
+    for (Map.Entry<String, Map<String, JsonObject>> e : translations.entrySet()) {
+      if (english != e.getValue()) {
+        checkTranslation(english, e.getKey(), e.getValue());
       }
     }
   }
@@ -84,7 +87,7 @@ public class TranslationTest {
    * <li>Compute coverage
    * </ul>
    */
-  private void checkTranslation(JsonObject ref, String lang, JsonObject toCheck) {
+  private void checkTranslation(Map<String, JsonObject> ref, String lang, Map<String, JsonObject> toCheck) {
     Set<String> refSet = flatten(ref);
     Set<String> toCheckSet = flatten(toCheck);
     Set<String> toCheckSet2 = new HashSet<>(toCheckSet);
@@ -110,9 +113,11 @@ public class TranslationTest {
     }
   }
 
-  private Set<String> flatten(JsonObject ref) {
+  private Set<String> flatten(Map<String, JsonObject> ref) {
     Set<String> result = new TreeSet<>();
-    flatten(ref, "", result);
+    for (Map.Entry<String, JsonObject> e : ref.entrySet()) {
+      flatten(e.getValue(), e.getKey(), result);
+    }
     return result;
   }
 

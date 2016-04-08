@@ -143,7 +143,7 @@ $(document).ready(function() {
     ko.applyBindings(context.importImagesVM, $("#importImagesModal")[0]);
 
     // Other initialization
-    context.ev3BrickServer.initialize(); // WS connexion with the server
+    context.ev3BrickServer.initialize(); // WebSsocket connexion with the server
     context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
     
     // Register events to translation
@@ -164,7 +164,7 @@ $(document).ready(function() {
 
     // Register windows events for editor auto-resize
     window.onresize = function() {
-      var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top
+      var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top (in css/HTML)
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
       $.publish(context.events.resize, [workAreaHeight, usefullWorkAreaHeight]);
     };

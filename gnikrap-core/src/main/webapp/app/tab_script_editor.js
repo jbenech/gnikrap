@@ -45,13 +45,17 @@ function JavascriptEditor(appContext) {
     self.ace.getSession().setUseSoftTabs(true); // Use spaces instead of tabs
 
     // Enable auto-completion    
+    self.autoCompleteList = [];
+    var tmp = i18n.t("autocompletion", { returnObjectTrees: true })
+    for(var type in tmp) {
+      self.autoCompleteList = self.autoCompleteList.concat(tmp[type].map(function(word) {
+                return { caption: word, value: word, score: 100, meta: type };
+        }));
+    }
+
     var staticWordCompleter = {
       getCompletions: function(editor, session, pos, prefix, callback) {
-        console.log("Prefix: " + prefix);
-          var wordList = ["isOk()", "getBrick()", "notify(\"text\")", "sleep(0)", "getConfiguration()", "getXSensor(\"name\")"];
-          callback(null, wordList.map(function(word) {
-              return { caption: word, value: word, score: 1000, meta: "static" };
-          }));
+        callback(null, self.autoCompleteList);
       }
     }
     // Reset the completers: The default completer add too much useless keyword for us

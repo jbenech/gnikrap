@@ -138,7 +138,7 @@ public class FolderHttpHandler implements HttpHandler {
         sw.write(buf, 0, read);
       }
 
-      ScriptFile sf = new ScriptFile(exchange.getRelativePath(), sw.toString(), null);
+      DataFile sf = new DataFile(exchange.getRelativePath(), sw.toString(), null);
 
       String data = sf.toJson().toString(); // Must be done before setResponseCode
       exchange.setResponseCode(200);
@@ -178,7 +178,7 @@ public class FolderHttpHandler implements HttpHandler {
     exchange.startBlocking();
 
     InputStreamReader r = new InputStreamReader(exchange.getInputStream(), StandardCharsets.UTF_8); // TODO use HTTP header
-    ScriptFile sf = ScriptFile.fromJson(JsonObject.readFrom(r));
+    DataFile sf = DataFile.fromJson(JsonObject.readFrom(r));
 
     // Compute filename
     String filename;
@@ -230,7 +230,7 @@ public class FolderHttpHandler implements HttpHandler {
     // public void handleRequest(HttpServerExchange exchange) throws Exception {
     JsonArray fileList = new JsonArray();
     for (File f : fao.listFiles()) {
-      fileList.add(new ScriptFile(f.getName(), null, null).toJson());
+      fileList.add(new DataFile(f.getName(), null, null).toJson());
     }
 
     String data = JsonUtils.writeToString(fileList, 1024); // Must be done before setResponseCode
@@ -251,14 +251,14 @@ public class FolderHttpHandler implements HttpHandler {
   // }
 
   /**
-   * A script file (struct like).
+   * A file that contains data
    */
-  static class ScriptFile {
+  static class DataFile {
     final String name;
     final String content;
-    final String[] tags; // TODO: Currently not working.
+    final String[] tags; // TODO: Currently not implemented
 
-    public ScriptFile(String name, String content, String[] tags) {
+    public DataFile(String name, String content, String[] tags) {
       this.name = name;
       this.content = content;
       this.tags = tags;
@@ -270,8 +270,8 @@ public class FolderHttpHandler implements HttpHandler {
           .add("tags", JsonUtils.toJson(tags));
     }
 
-    public static ScriptFile fromJson(JsonObject json) {
-      return new ScriptFile(JsonUtils.toPrimitive(json.get("name"), String.class), //
+    public static DataFile fromJson(JsonObject json) {
+      return new DataFile(JsonUtils.toPrimitive(json.get("name"), String.class), //
           JsonUtils.toPrimitive(json.get("content"), String.class), //
           JsonUtils.safeAsStringArray(json.get("tag")));
     }
