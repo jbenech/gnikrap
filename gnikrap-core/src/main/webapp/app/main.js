@@ -124,7 +124,7 @@ $(document).ready(function() {
     context.videoSensorTabVM = new VideoSensorTabViewModel(context);
     context.geoSensorTabVM = new GeoSensorTabViewModel(context);
     // Dialogs
-    context.manageScriptFilesVM = new ManageScriptFilesViewModel(context);
+    context.manageFilesVM = new ManageFilesViewModel(context);
     context.settingsVM = new SettingsViewModel(context);
     context.importImagesVM = new ImportImagesViewModel(context);
 
@@ -138,7 +138,7 @@ $(document).ready(function() {
     ko.applyBindings(context.videoSensorTabVM, $("#videoSensorTab")[0]);
     ko.applyBindings(context.geoSensorTabVM, $("#geoSensorTab")[0]);
     // Dialogs
-    ko.applyBindings(context.manageScriptFilesVM, $("#manageScriptFilesModal")[0]);
+    ko.applyBindings(context.manageFilesVM, $("#manageFilesModal")[0]);
     ko.applyBindings(context.settingsVM, $("#settingsModal")[0]);
     ko.applyBindings(context.importImagesVM, $("#importImagesModal")[0]);
 

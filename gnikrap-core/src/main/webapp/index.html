@@ -77,7 +77,7 @@
     <script src="app/message_log.js" type="text/javascript"></script>
     <script src="app/navigation_bar.js" type="text/javascript"></script>
     <script src="app/utils.js" type="text/javascript"></script>
-    <script src="app/dialog_manage_script_files.js" type="text/javascript"></script>
+    <script src="app/dialog_manage_files.js" type="text/javascript"></script>
     <script src="app/dialog_import_image.js" type="text/javascript"></script>
     <script src="app/dialog_settings.js" type="text/javascript"></script>
     <script src="app/tab_xGeo_sensor.js" type="text/javascript"></script>
@@ -374,31 +374,30 @@
 
 
     <!-- ############################################################ -->
-    <!-- Scrip file management modal -->
-    <div id="manageScriptFilesModal" class="modal fade" tabindex="-1" role="dialog"> <!-- aria-labelledby="myModalLabel" aria-hidden="true"> -->
+    <!-- File management modal -->
+    <div id="manageFilesModal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">CrossCloseButton</span></button>
-            <h4 class="modal-title"><span class="i18n" data-i18n="manageScriptFilesModal.title">MANAGE_SCRIPTS</span></h4>
+            <h4 class="modal-title"><span class="i18n" data-i18n="manageFilesModal.title">MANAGE_FILES</span></h4>
           </div>
           <div class="modal-body">
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th class="i18n" data-i18n="manageScriptFilesModal.c1.title">FILENAME</th>
-                  <th class="i18n" data-i18n="manageScriptFilesModal.c2.title">LANGUAGE</th>
-                  <th></th>
+                  <th class="i18n" style="width:70%" data-i18n="manageFilesModal.c1.title">FILENAME</th>
+                  <th style="width:30%"></th>
                 </tr>
               </thead>
               <tbody data-bind="foreach: files">
                 <tr>
-                  <td data-bind="text: name">nameOfTheFile</td><td>Unknown</td>
+                  <td data-bind="text: name">nameOfTheFile</td>
                   <td>
-                    <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onLoadScript">
-                      <span class="i18n" data-i18n="manageScriptFilesModal.load">LOAD</span></button>
-                    <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onDeleteScript, visible: isReadWrite">
-                      <span class="i18n" data-i18n="manageScriptFilesModal.delete">DELETE</span></button>
+                    <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onLoad">
+                      <span class="i18n" data-i18n="manageFilesModal.load">LOAD</span></button>
+                    <button type="button" class="btn btn-xs btn-primary" data-bind="click: $parent.onDelete, visible: isReadWrite">
+                      <span class="i18n" data-i18n="manageFilesModal.delete">DELETE</span></button>
                   </td>
                 </tr>
               </tbody>
@@ -407,7 +406,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">
-              <span class="i18n" data-i18n="manageScriptFilesModal.close">CLOSE</span></button>
+              <span class="i18n" data-i18n="manageFilesModal.close">CLOSE</span></button>
           </div>
         </div>
       </div>

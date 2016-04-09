@@ -156,23 +156,20 @@
   },
 
 
-  "manageScriptFilesModal": {
-    "title": "Manage script files",
+  "manageFilesModal": {
+    "title": "Manage files",
     "c1": {
       "title": "Filename"
-    },
-    "c2": {
-      "title": "Language"
     },
     "load": "Load",
     "delete": "Delete",
     "close": "Close",
 
-    "confirmScriptFileDeletion": "Confirm you really want to delete '__filename__' ?",
+    "confirmFileDeletion": "Confirm you really want to delete '__filename__' ?",
 
     "errors": {
-      "cantRetrieveListOfScriptFiles": "Can't retrieve the list of files. [__causedBy__]",
-      "cantDeleteScriptFile": "Can't delete '__filename__' script file. [__causedBy__]"
+      "cantRetrieveListOfFiles": "Can't retrieve the list of files. [__causedBy__]",
+      "cantDeleteFile": "Can't delete '__filename__' file. [__causedBy__]"
     }
   },
 

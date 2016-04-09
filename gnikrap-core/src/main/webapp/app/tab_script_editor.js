@@ -22,8 +22,10 @@
 //   clearScript(): void
 //   setValue(value): void
 //   getValue(): Value
-//   displatMessage(msg): void // Can do nothing
 //   setVisible(visible): void
+//   loadScriptFile(filename): void
+//   saveScript(): void
+//   displayLoadScriptDialog(): void
 
  
  // The Javascript editor based on ace (http://ace.c9.io/)
@@ -33,6 +35,7 @@ function JavascriptEditor(appContext) {
   var self = this;
   (function() { // Init
     self.context = appContext; // The application context
+    self.scriptFilename = undefined;
     self.langTools = ace.require("ace/ext/language_tools");
     self.ace = ace.edit("aceEditor");
     // Possible options: https://github.com/ajaxorg/ace/wiki/Configuring-Ace
@@ -75,11 +78,7 @@ function JavascriptEditor(appContext) {
     self.ace.setValue(value);
     self.ace.moveCursorTo(0, 0);
   };
-  
-  self.displayMessage = function(msg) {
-    self.setValue(msg);
-  };
-  
+
   self.setVisible = function(visible) {
     if(visible) {
       $('#aceEditor').css('display', '');
@@ -90,6 +89,64 @@ function JavascriptEditor(appContext) {
   
   self.getValue = function() {
     return self.ace.getValue();
+  };
+  
+  self.displayLoadScriptDialog = function(loadScriptFile) {
+    self.context.manageFilesVM.display(
+      loadScriptFile,
+      function() { return "/rest/scriptfiles/"; },
+      function(filename) { return "/rest/scriptfiles/" + filename; }
+    );
+  };
+  
+  self.loadScriptFile = function(filename) {
+    self.setValue(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
+    self.scriptFilename = undefined;
+    $.ajax({
+      url: "/rest/scriptfiles/" + filename,
+      success: function(data, status) {
+        var scriptFile = JSON.parse(data);
+        self.setValue(scriptFile.content);
+        if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
+          self.scriptFilename = filename;
+        }
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        // XMLHttpRequest.status: HTTP response code
+        self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantLoadScriptFile",
+          { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+      }
+    });
+  };
+  
+  self.saveScript = function() {
+    bootbox.prompt({
+      title: i18n.t('scriptEditorTab.saveScriptModal.title'),
+      value: (self.scriptFilename ? self.scriptFilename : ""),
+      callback: function(result) {
+        if (result && (result.trim().lenght != 0)) {
+          var filename = result.trim();
+          console.log("Save script: '" + filename + "'");
+          $.ajax({
+            url: "/rest/scriptfiles/" + filename,
+            content: "application/json",
+            data:  JSON.stringify({
+              name: filename,
+              content: self.getValue()
+            }),
+            type: "PUT",
+            success: function(data, status) {
+              self.scriptFilename = filename;
+              self.context.messageLogVM.addMessage(false, i18n.t("scriptEditorTab.scriptSuccessfullySaved", {"filename": filename }));
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+              self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantSaveScriptFile",
+                { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+            }
+          });
+        } // else: cancel clicked
+      }
+    });
   };
 }
 
@@ -121,10 +178,6 @@ function BlocklyEditor(appContext) {
     // TODO
   };
   
-  self.displayMessage = function(msg) {
-    // Does nothing
-  };
-
   self.setVisible = function(visible) {
     if(visible) {
       $('#blocklyEditor').css('display', '');
@@ -145,6 +198,18 @@ function BlocklyEditor(appContext) {
 
     return (result.errors.length > 0 ? undefined : result.code);
   };
+
+  self.displayLoadScriptDialog = function() {
+    // TODO
+  };
+
+  self.loadScriptFile = function(filename) {
+    // TODO
+  };
+
+  self.saveScript = function() {
+    // TODO
+  }
 }  
 
 // Model to manage the script editor tab
@@ -154,7 +219,6 @@ function ScriptEditorTabViewModel(appContext) {
   var self = this;
   (function() { // Init
     self.context = appContext; // The application context
-    self.scriptFilename = undefined;
     self.editor = undefined;
     self.javascriptEditor = undefined;
     self.blocklyEditor = undefined;
@@ -210,30 +274,19 @@ function ScriptEditorTabViewModel(appContext) {
       self.context.messageLogVM.addMessage(false, i18n.t("scriptEditorTab.demo.no_load"));
       return;
     }
-    self.context.manageScriptFilesVM.display();
+    if(self.editor) {
+      self.editor.displayLoadScriptDialog(self.loadScriptFile);
+    } else {
+      console.log("Cannot display load script dialog, self.edtior is not set");
+    }
   };
 
   self.loadScriptFile = function(filename) {
-    if(self.editor == undefined) {
-      return;
+    if(self.editor) {
+      self.editor.loadScriptFile(filename);
+    } else {
+      console.log("Cannot load script file, self.editor is not set");
     }
-    self.editor.displayMessage(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
-    self.scriptFilename = undefined;
-    $.ajax({
-      url: "/rest/scriptfiles/" + filename,
-      success: function(data, status) {
-        var scriptFile = JSON.parse(data);
-        self.editor.setValue(scriptFile.content);
-        if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
-          self.scriptFilename = filename;
-        }
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        // XMLHttpRequest.status: HTTP response code
-        self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantLoadScriptFile",
-          { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
-      }
-    });
   };
 
   self.onSaveScript = function() {
@@ -241,33 +294,11 @@ function ScriptEditorTabViewModel(appContext) {
       self.context.messageLogVM.addMessage(false, i18n.t("scriptEditorTab.demo.no_save"));
       return;
     }
-    bootbox.prompt({
-      title: i18n.t('scriptEditorTab.saveScriptModal.title'),
-      value: (self.scriptFilename ? self.scriptFilename : ""),
-      callback: function(result) {
-        if (result && (result.trim().lenght != 0)) {
-          var filename = result.trim();
-          console.log("Save script: '" + filename + "'");
-          $.ajax({
-            url: "/rest/scriptfiles/" + filename,
-            content: "application/json",
-            data:  JSON.stringify({
-              name: filename,
-              content: self.editor.getValue()
-            }),
-            type: "PUT",
-            success: function(data, status) {
-              self.scriptFilename = filename;
-              self.context.messageLogVM.addMessage(false, i18n.t("scriptEditorTab.scriptSuccessfullySaved", {"filename": filename }));
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-              self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantSaveScriptFile",
-                { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
-            }
-          });
-        } // else: cancel clicked
-      }
-    });
+    if(self.editor) {
+      self.editor.saveScript();
+    } else {
+      console.log("Cannot load script file, self.editor is not set");
+    }
   };
   
   self.getValue = function() {
