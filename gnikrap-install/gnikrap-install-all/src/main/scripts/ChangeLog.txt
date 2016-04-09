@@ -69,7 +69,7 @@ Features to add (no specific order):
 Known defects:
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
- - (0.4.0) - French translation don't work (page will not load) - Let me known if you need a specific patch for this one
+ - (0.4.0) - French translation don't work (page will not load) - Let me known if you need a specific patch for this one - Fixed in 0.5.0
 
 
 ------------------------------------------------------------------------------
@@ -79,12 +79,14 @@ Work in progress:
     - Blockly:
       - Blockly blocks added: logic, loops, math, text, lists, variables, functions
       - Gnikrap blocks created: EV3 brick, Color sensor, IR sensor, Touch sensor, Motors, xSensors
-      - Instantaneous 'Warning' on erroneous blocks
-      - Javascript code generation/optimization/verification
+      - Realtime 'Warning' on erroneous blocks
+      - Javascript code generation
     - Settings dialog added (switch language and Text/Visual programming)
     - Demo mode added (GUI can be launched without error even if not installed on an EV3)
+    - Autocompletion added in javascript editor (use [Ctrl]+[Space])
     - Add an API to exit from the script
     - Documentation updated
+    - Update versions of some library used (ace.js)
     
     - Fix: 
-      - All translations are working (translation files are now checked during the build)
+      - All translations are working (translation files are now automatically checked)

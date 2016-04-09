@@ -22,10 +22,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -74,13 +73,6 @@ public class TranslationTest {
     }
   }
 
-  // Translation linked to bugs of Gnikrap (should never happens) <=> Not needed to be translated
-  private final Collection<String> translationToIgnore = Arrays.asList( //
-      "server.errors.INVALID_MESSAGE_FIELD_FORMAT", //
-      "server.errors.MESSAGE_FIELD_NOT_FOUND", //
-      "server.errors.SCRITP_LANGUAGE_NOT_SUPPORTED", //
-      "server.errors.UNKNOWN_ACTION");
-
   /**
    * <ul>
    * <li>Check all fields defined in toCheck exist in ref
@@ -100,8 +92,10 @@ public class TranslationTest {
       }
     }
     // Check translation coverage
-    refSet.removeAll(translationToIgnore);
-    toCheckSet2.removeAll(translationToIgnore);
+    // refSet.removeAll(translationToIgnore);
+    removeTranslationToIgnore(refSet);
+    removeTranslationToIgnore(toCheckSet2);
+    // toCheckSet2.removeAll(translationToIgnore);
     int refCount = refSet.size();
     refSet.removeAll(toCheckSet2);
     int notTranslated = refSet.size();
@@ -109,6 +103,26 @@ public class TranslationTest {
     if (notTranslated > 0) {
       for (String s : refSet) {
         System.out.println("    WARN - Missing translation in [" + lang + "]: " + s);
+      }
+    }
+  }
+
+  // Translation linked to bugs of Gnikrap (should never happens) <=> Not needed to be translated
+  private final String[] translationToIgnore = { //
+      "translation.json.server.errors.INVALID_MESSAGE_FIELD_FORMAT", //
+      "translation.json.server.errors.MESSAGE_FIELD_NOT_FOUND", //
+      "translation.json.server.errors.SCRITP_LANGUAGE_NOT_SUPPORTED", //
+      "translation.json.server.errors.UNKNOWN_ACTION", //
+      "translation.json.autocompletion." };
+
+  private void removeTranslationToIgnore(Set<String> data) {
+    for (Iterator<String> it = data.iterator(); it.hasNext();) {
+      String s = it.next();
+      for (String toIgnore : translationToIgnore) {
+        if (s.startsWith(toIgnore)) {
+          it.remove();
+          break;
+        }
       }
     }
   }
