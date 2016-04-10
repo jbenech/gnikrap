@@ -144,7 +144,6 @@ $(document).ready(function() {
 
     // Other initialization
     context.ev3BrickServer.initialize(); // WebSsocket connexion with the server
-    context.scriptEditorTabVM.loadScriptFile("__default__.js"); // Load default script
     
     // Register events to translation
     $.subscribe(self.context.events.changeSettings, function(evt, keyChanged, newValue) {

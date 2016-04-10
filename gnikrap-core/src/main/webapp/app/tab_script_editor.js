@@ -26,6 +26,7 @@
 //   loadScriptFile(filename): void
 //   saveScript(): void
 //   displayLoadScriptDialog(): void
+//   loadDefaultScript(): void
 
  
  // The Javascript editor based on ace (http://ace.c9.io/)
@@ -91,9 +92,9 @@ function JavascriptEditor(appContext) {
     return self.ace.getValue();
   };
   
-  self.displayLoadScriptDialog = function(loadScriptFile) {
+  self.displayLoadScriptDialog = function() {
     self.context.manageFilesVM.display(
-      loadScriptFile,
+      self.loadScriptFile,
       function() { return "/rest/scriptfiles/"; },
       function(filename) { return "/rest/scriptfiles/" + filename; }
     );
@@ -148,6 +149,10 @@ function JavascriptEditor(appContext) {
       }
     });
   };
+  
+  self.loadDefaultScript = function() {
+    self.loadScriptFile("__default__.js");
+  }
 }
 
 function BlocklyEditor(appContext) {
@@ -210,6 +215,10 @@ function BlocklyEditor(appContext) {
   self.saveScript = function() {
     // TODO
   }
+  
+  self.loadDefaultScript = function() {
+    // TODO
+  }
 }  
 
 // Model to manage the script editor tab
@@ -245,6 +254,7 @@ function ScriptEditorTabViewModel(appContext) {
       if(self.javascriptEditor == undefined) {
         console.log("Create JavaScript editor...");
         self.javascriptEditor = new JavascriptEditor(self.context);
+        self.javascriptEditor.loadDefaultScript();
       }
       console.log("Editor set to JavaScript editor");
       self.editor = self.javascriptEditor;
@@ -252,6 +262,7 @@ function ScriptEditorTabViewModel(appContext) {
       if(self.blocklyEditor == undefined) {
         console.log("Create Blockly editor...");
         self.blocklyEditor = new BlocklyEditor(self.context);
+        self.blocklyEditor.loadDefaultScript();
       }
       console.log("Editor set to Blockly editor");
       self.editor = self.blocklyEditor;
@@ -275,17 +286,9 @@ function ScriptEditorTabViewModel(appContext) {
       return;
     }
     if(self.editor) {
-      self.editor.displayLoadScriptDialog(self.loadScriptFile);
+      self.editor.displayLoadScriptDialog();
     } else {
       console.log("Cannot display load script dialog, self.edtior is not set");
-    }
-  };
-
-  self.loadScriptFile = function(filename) {
-    if(self.editor) {
-      self.editor.loadScriptFile(filename);
-    } else {
-      console.log("Cannot load script file, self.editor is not set");
     }
   };
 
