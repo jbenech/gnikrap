@@ -70,6 +70,7 @@ Known defects:
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
  - (0.4.0) - French translation don't work (page will not load) - Let me known if you need a specific patch for this one - Fixed in 0.5.0
+ - (0.4.0) - xVideo problems (don't work) with some combinaison of webcam/browser
 
 
 ------------------------------------------------------------------------------
@@ -84,9 +85,10 @@ Work in progress:
     - Settings dialog added (switch language and Text/Visual programming)
     - Demo mode added (GUI can be launched without error even if not installed on an EV3)
     - Autocompletion added in javascript editor (use [Ctrl]+[Space])
+    - Add the ability to load/save xKeyboard
     - Add an API to exit from the script
     - Documentation updated
-    - Update versions of some library used (ace.js)
+    - Update versions of some library used (ace.js, etc.)
     
     - Fix: 
       - All translations are working (translation files are now automatically checked)

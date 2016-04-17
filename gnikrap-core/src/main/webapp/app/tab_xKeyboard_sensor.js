@@ -170,9 +170,11 @@ function KeyboardSensorTabViewModel(appContext) {
   
   self.loadKeyboardFile = function(filename) {
     self.keyboardFilename = undefined;
+    console.log("Try loading keyboard: '" + filename + "'");
     $.ajax({
       url: "/rest/xkeyboardfiles/" + filename,
       success: function(data, status) {
+        console.log("Keyboard downloaded from server: '" + filename + "'");
         var keyboardFile = JSON.parse(data);
         self.loadFromJSON(keyboardFile.content);
         if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
@@ -188,8 +190,6 @@ function KeyboardSensorTabViewModel(appContext) {
   };  
   
   self.loadFromJSON = function(json) {
-    console.log("Load: " + json);
-    // Load the keyboard as a JSON file
     var keyboard = JSON.parse(json);
     if(keyboard && keyboard.version && keyboard.version == 1) {
       self.__doResetKeyboard();
