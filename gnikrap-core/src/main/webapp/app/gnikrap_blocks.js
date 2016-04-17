@@ -58,7 +58,7 @@ function GnikrapBlocks() {
 
   // Return the name of the Blockly translation file according to the given language
   self.__getBlocklyTranslationJs = function(language) {
-    return "lib/blockly-20150510/msg/js/<LANGUAGE>.js".replace("<LANGUAGE>", language);
+    return "lib/blockly-20160417/msg/js/<LANGUAGE>.js".replace("<LANGUAGE>", language);
   };
 
   // Returns the current workspace

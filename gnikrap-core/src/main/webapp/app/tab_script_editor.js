@@ -20,10 +20,8 @@
 // An editor should have the following API:
 //   doResize(workAreaHeight, usefullWorkAreaHeight): void
 //   clearScript(): void
-//   setValue(value): void
 //   getValue(): Value
 //   setVisible(visible): void
-//   loadScriptFile(filename): void
 //   saveScript(): void
 //   displayLoadScriptDialog(): void
 //   loadDefaultScript(): void
@@ -179,9 +177,11 @@ function BlocklyEditor(appContext) {
     self.blockly.clear();
   };
   
+  /*
   self.setValue = function(value) {
     // TODO
   };
+  */
   
   self.setVisible = function(visible) {
     if(visible) {
@@ -217,7 +217,7 @@ function BlocklyEditor(appContext) {
   }
   
   self.loadDefaultScript = function() {
-    // TODO
+    // Does nothing
   }
 }  
 
