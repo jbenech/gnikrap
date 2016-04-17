@@ -28,6 +28,7 @@ function KeyboardSensorTabViewModel(appContext) {
     self.buttons = [];
     self.isStarted = ko.observable(false);
     self.sensorName = ko.observable("xTouch");
+    self.keyboardFilename = undefined;
 
     for(var i = 0; i < 4; i++) {
       self.buttons[i] = [];
@@ -160,13 +161,97 @@ function KeyboardSensorTabViewModel(appContext) {
   };
 
   self.onLoadKeyboard = function() {
-    // TODO: Reuse the dialog for the script ?
-    console.log("TODO: onLoadKeyboard");
+    self.context.manageFilesVM.display(
+      self.loadKeyboardFile,
+      function() { return "/rest/xkeyboardfiles/"; },
+      function(filename) { return "/rest/xkeyboardfiles/" + filename; }
+    );
   };
+  
+  self.loadKeyboardFile = function(filename) {
+    self.keyboardFilename = undefined;
+    $.ajax({
+      url: "/rest/xkeyboardfiles/" + filename,
+      success: function(data, status) {
+        var keyboardFile = JSON.parse(data);
+        self.loadFromJSON(keyboardFile.content);
+        if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
+          self.keyboardFilename = filename;
+        }
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        // XMLHttpRequest.status: HTTP response code
+        self.context.messageLogVM.addMessage(true, i18n.t("keyboardSensorTab.errors.cantLoadKeyboardFile",
+          { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+      }
+    });
+  };  
+  
+  self.loadFromJSON = function(json) {
+    console.log("Load: " + json);
+    // Load the keyboard as a JSON file
+    var keyboard = JSON.parse(json);
+    if(keyboard && keyboard.version && keyboard.version == 1) {
+      self.__doResetKeyboard();
+      self.sensorName(keyboard.sensorName);
+      keyboard.buttons.forEach(function(line, idxLine) {
+        line.forEach(function(btn, idxBtn) {
+          self.buttons[idxLine][idxBtn].name(self.__buildNameFromActions(btn.actions));
+          self.buttons[idxLine][idxBtn].actions = btn.actions;
+        });
+      });
+    } else {
+      // XMLHttpRequest.status: HTTP response code
+      self.context.messageLogVM.addMessage(true, i18n.t("keyboardSensorTab.errors.invalidKeyboadFile",
+        { "version: ": (keyboard ? keyboard.version : "undefined")}));
+    }
+  }
 
-  self.onSaveKeyboard = function() {
-    // TODO: Save subset of buttons as a json
-    console.log("TODO: onSaveKeyboard");
+  self.saveToJSON = function() {
+    var keyboard = {};
+    keyboard.version = 1;
+    keyboard.sensorName = self.sensorName();
+    keyboard.buttons = [];
+    self.buttons.forEach(function(line) {
+      var lineToSave = [];
+      line.forEach(function(btn) {
+        lineToSave.push({ name: btn.name,
+                    actions: btn.actions });
+      });
+      keyboard.buttons.push(lineToSave);
+    });
+
+    return JSON.stringify(keyboard);
+  }
+  
+  self.onSaveKeyboard = function() {    
+    bootbox.prompt({
+      title: i18n.t('keyboardSensorTab.saveKeyboardModal.title'),
+      value: (self.keyboardFilename ? self.keyboardFilename : ""),
+      callback: function(result) {
+        if (result && (result.trim().lenght != 0)) {
+          var filename = result.trim();
+          console.log("Save keyboard: '" + filename + "'");
+          $.ajax({
+            url: "/rest/xkeyboardfiles/" + filename,
+            content: "application/json",
+            data:  JSON.stringify({
+              name: filename,
+              content: self.saveToJSON()
+            }),
+            type: "PUT",
+            success: function(data, status) {
+              self.keyboardFilename = filename;
+              self.context.messageLogVM.addMessage(false, i18n.t("keyboardSensorTab.keyboardSuccessfullySaved", {"filename": filename }));
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+              self.context.messageLogVM.addMessage(true, i18n.t("keyboardSensorTab.errors.cantSaveKeyboardFile",
+                { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+            }
+          });
+        } // else: cancel clicked
+      }
+    });
   };
 
   self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {

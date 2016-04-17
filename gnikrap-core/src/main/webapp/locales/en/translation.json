@@ -74,12 +74,23 @@
     "loadAndManage": "Load/Manage",
     "save": "Save",
 
+    "keyboardSuccessfullySaved": "Keyboard '__filename__' successfully saved",
+    
     "configureKeyboardButtonModal": {
       "title": "Enter the name(s) of the button (use the comma to separate several names)"
     },
 
     "resetKeyboardModal": {
       "title": "Are you sure to clear the current xTouch configuration ?"
+    },
+
+    "saveKeyboardModal": {
+      "title": "Save the keyboard with the following name:"
+    },
+    
+    "errors": {
+      "cantLoadKeyboardFile": "Can't load '__filename__' keyboard file. [__causedBy__]",
+      "cantSaveKeyboardFile": "Can't save '__filename__' keyboard file. [__causedBy__]"
     }
   },
 
