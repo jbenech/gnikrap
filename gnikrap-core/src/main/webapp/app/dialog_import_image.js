@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2015 Jean BENECH
+ * Copyright (C) 2015-2016 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -204,9 +204,9 @@ function ImportImagesViewModel(appContext) {
         currentByte = 0;
         for (var k = 7; k >= 0; k--) {
           currentByte <<= 1;
-          idxInline = j + k;
-          if (idxInline < width) { // End of line is blank
-            currentByte |= (pixels[lineOffset + idxInline] == 255 ? 0 : 1);
+          idxInLine = j + k;
+          if (idxInLine < width) { // End of line is blank
+            currentByte |= (pixels[lineOffset + idxInLine] == 255 ? 0 : 1);
           }
         }
         ev3ImageData[index++] = currentByte;
