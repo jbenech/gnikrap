@@ -46,7 +46,7 @@ function GnikrapBlocks() {
   'use strict';
 
   var self = this;
-  (function() { // Init
+  { // Init
      // Make Blockly more flashy
     Blockly.HSV_SATURATION = 0.70;
     Blockly.HSV_VALUE = 0.65;
@@ -54,7 +54,7 @@ function GnikrapBlocks() {
     self.XSENSOR_MAGIC = '@XSensorValue@';
 
     self.workspace = undefined; // Useless, already to undefined here :-)
-  })();
+  }
 
   // Return the name of the Blockly translation file according to the given language
   self.__getBlocklyTranslationJs = function(language) {
@@ -154,7 +154,7 @@ function GnikrapBlocks() {
 
     $.getScript(jsFilename).done(initWorkspace)
       .fail(function(jqxhr, settings, exception) {
-        console.log("Fail to load javascript file: '" + jsFilename + "' with error: " + exception);
+        console.log("WARNING: Fail to load javascript file: '" + jsFilename + "' with error: " + exception);
         initWorkspace();
       });
   };
@@ -165,8 +165,12 @@ function GnikrapBlocks() {
     // Translation of Blockly blocks need to load the appropriate JS file
     // The toolbox have to be closed. It will be automatically translated at the next use
     // The blocks already created have to be recreated in order to be translated
-
-    // Load again the Blockly language JS (Seems that Blockly JSON files are used at 'compilation' time only)
+    if(!self.workspace) {
+      console.log("WARNING: Blockly not initialized, workspace cannot be translated to another language");
+      return;
+    }
+    
+    // Load again the Blockly language JS (Seems that Blockly JSON files are used at 'compilation' time only)    
     var jsFilename = self.__getBlocklyTranslationJs(language);
     var workspace = self.__getWorkspace();
     $.getScript(jsFilename).done(function(script, textStatus ) {
@@ -521,7 +525,8 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_notify'] = function(block) {
-      var text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_ATOMIC);
+      var text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_ATOMIC)
+                 || "''"; // Default value if no args
 
       return 'ev3.notify(' + text + ');\n';
     };
@@ -552,7 +557,7 @@ function GnikrapBlocks() {
       return 'ev3.exit()';
     };
 
-    // notify(String): void
+    // wait until
     Blockly.Blocks['gnikrap_ev3_wait_until'] = {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_wait_until", EV3_BRICK_COLOUR);
@@ -562,7 +567,8 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_wait_until'] = function(block) {
-      var until = Blockly.JavaScript.valueToCode(block, 'UNTIL', Blockly.JavaScript.ORDER_ATOMIC) || 'true';
+      var until = Blockly.JavaScript.valueToCode(block, 'UNTIL', Blockly.JavaScript.ORDER_ATOMIC) 
+                  || 'true'; // Default value if no args
 
       return 'while(ev3.isOk() && !' + until + ') ev3.sleep(1);\n';
     };
@@ -580,7 +586,8 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_sleep'] = function(block) {
-      var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_ATOMIC);
+      var time = Blockly.JavaScript.valueToCode(block, 'TIME', Blockly.JavaScript.ORDER_ATOMIC)
+                 || 0; // Default value if no args
       var time_unit = block.getFieldValue('TIME_UNIT');
 
       return 'ev3.sleep(' + (time_unit == 'S' ? (time * 1000) : time) + ');\n';
@@ -629,7 +636,8 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_sound_setvolume'] = function(block) {
-      var vol = Blockly.JavaScript.valueToCode(block, 'VOL', Blockly.JavaScript.ORDER_ATOMIC);
+      var vol = Blockly.JavaScript.valueToCode(block, 'VOL', Blockly.JavaScript.ORDER_ATOMIC)
+                || 0; // Default value if no args
 
       return 'ev3.getBrick().getSound().setVolume(' + vol + ');\n';
     };
@@ -664,7 +672,9 @@ function GnikrapBlocks() {
     };
     Blockly.JavaScript['gnikrap_ev3_sound_playnote'] = function(block) {
       var note = Blockly.JavaScript.valueToCode(block, 'NOTE', Blockly.JavaScript.ORDER_ATOMIC);
-      var duration = Blockly.JavaScript.valueToCode(block, 'DURATION', Blockly.JavaScript.ORDER_ATOMIC);
+                 || "''"; // Default value if no args
+      var duration = Blockly.JavaScript.valueToCode(block, 'DURATION', Blockly.JavaScript.ORDER_ATOMIC)
+                     || 0; // Default value if no args
       var time_unit = block.getFieldValue('TIME_UNIT');
 
       // " " are included in the string value
@@ -1021,7 +1031,8 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_motor_rotate'] = function(block) {
-      var value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC);
+      var value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_ATOMIC)
+                  || 0; // Default value if no args
       var angle_unit = block.getFieldValue('ANGLE_UNIT');
       var action = block.getFieldValue('ACTION');
       var port = block.getFieldValue('PORT');
@@ -1053,7 +1064,8 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_motor_setspeed'] = function(block) {
-      var speed = Blockly.JavaScript.valueToCode(block, 'SPEED', Blockly.JavaScript.ORDER_ATOMIC);
+      var speed = Blockly.JavaScript.valueToCode(block, 'SPEED', Blockly.JavaScript.ORDER_ATOMIC)
+                  || 0; // Default value of no args
       var speed_unit = block.getFieldValue('SPEED_UNIT');
       var port = block.getFieldValue('PORT');
 

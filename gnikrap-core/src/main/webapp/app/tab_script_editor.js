@@ -193,6 +193,7 @@ function BlocklyEditor(appContext) {
 
   self.getValue = function() {
     var result = self.blockly.buildJavascriptCode();
+    console.log("Code generated: " + result.code);
 
     result.warnings.forEach(function(warn) {
         self.context.messageLogVM.addMessage(true, warn);

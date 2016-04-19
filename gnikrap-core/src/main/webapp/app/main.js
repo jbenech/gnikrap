@@ -157,8 +157,8 @@ $(document).ready(function() {
 
     
     // Publish events for settings
-    $.publish(context.events.changeSettings, ["language", context.settings.language]);
     $.publish(context.events.changeSettings, ["programmingStyle", context.settings.programmingStyle]);
+    $.publish(context.events.changeSettings, ["language", context.settings.language]);
     
 
     // Register windows events for editor auto-resize
