@@ -40,7 +40,7 @@
 //    Verification/validation is also done in the Javascript code post-processing phase.
 //     - Some case will emit warning, some other will emit errors that will block the script to be sent to the EV3 brick.
 
-
+console.log("Gnikrap blocks loaded...");
 // Define utils function for blockly
 function GnikrapBlocks() {
   'use strict';
@@ -671,7 +671,7 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_sound_playnote'] = function(block) {
-      var note = Blockly.JavaScript.valueToCode(block, 'NOTE', Blockly.JavaScript.ORDER_ATOMIC);
+      var note = Blockly.JavaScript.valueToCode(block, 'NOTE', Blockly.JavaScript.ORDER_ATOMIC)
                  || "''"; // Default value if no args
       var duration = Blockly.JavaScript.valueToCode(block, 'DURATION', Blockly.JavaScript.ORDER_ATOMIC)
                      || 0; // Default value if no args
