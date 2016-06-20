@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2015 Jean BENECH
+ * Copyright (C) 2015-2016 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -196,6 +196,11 @@ function GnikrapBlocks() {
   self.clear = function() {
     self.__getWorkspace().clear();
   };
+  
+  // Dispose Blockly
+  self.dispose = function() {
+    self.__getWorkspace().dispose();
+  }
 
   // Return an object containing the code generated and the list of error/warning if any
   self.buildJavascriptCode = function() {

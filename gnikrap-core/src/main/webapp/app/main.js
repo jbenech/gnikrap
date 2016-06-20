@@ -29,11 +29,21 @@ if(!('WebSocket' in window &&
 
 
 var context = { // The application context - used as a basic dependency-injection mechanism
+  // Define events that are used internally in the application (See https://api.jquery.com/category/callbacks-object/).
   events: {
-    resize: "gnikrap_resize", // Params: workAreaHeight, usefullWorkAreaHeight
-    changeSettings: "gnikrap_changeSettings", // Params: keyChanged, newValue
-                                              // Be carefull, on 'language' translations may not have been reloaded, use 'languageReloaded' instead
-    languageReloaded: "gnikrap_languageReleaoded" // Params: none
+    // Gnikrap resized event.
+    // Params: workAreaHeight, usefullWorkAreaHeight
+    resize: $.Callbacks('unique'),
+    // Settings (configuration change event. 
+    // Params: keyChanged, newValue
+    // Be carefull, on 'language' translations may not have been reloaded, use 'languageReloaded' instead
+    changeSettings: $.Callbacks('unique'),
+    // Language reloaded event (the i18n has been updated with the new language).
+    // Params: none
+    languageReloaded: $.Callbacks('unique'),
+    // The displayed tab has changed
+    // Params: tabName, isVisible
+    tabDisplayedChanged: $.Callbacks('unique')
   }  
 };
 
@@ -87,7 +97,7 @@ function GnikrapSettings() {
     for(var key in newSettings) {
       if(self[key] && self[key] != newSettings[key]) {
         self[key] = newSettings[key];
-        $.publish(context.events.changeSettings, [key, self[key]]);
+        context.events.changeSettings.fire(key, self[key]);
         needSave = true;
       }
     }
@@ -145,27 +155,27 @@ $(document).ready(function() {
     // Other initialization
     context.ev3BrickServer.initialize(); // WebSsocket connexion with the server
     
-    // Register events to translation
-    $.subscribe(self.context.events.changeSettings, function(evt, keyChanged, newValue) {
+    // Register config events to update translation if needed
+    self.context.events.changeSettings.add(function(keyChanged, newValue) {
       if("language" == keyChanged) {
         i18n.setLng(context.settings.language, function(t) { 
           $(".i18n").i18n(); 
-          $.publish(context.events.languageReloaded, []);
+          context.events.languageReloaded.fire();
         });
       }
     });
 
     
     // Publish events for settings
-    $.publish(context.events.changeSettings, ["programmingStyle", context.settings.programmingStyle]);
-    $.publish(context.events.changeSettings, ["language", context.settings.language]);
+    context.events.changeSettings.fire("programmingStyle", context.settings.programmingStyle);
+    context.events.changeSettings.fire("language", context.settings.language);
     
 
     // Register windows events for editor auto-resize
     window.onresize = function() {
       var workAreaHeight = window.innerHeight - 60; // Should be synchronized with body.padding-top (in css/HTML)
       var usefullWorkAreaHeight = workAreaHeight - 35; // Also remove the button bar
-      $.publish(context.events.resize, [workAreaHeight, usefullWorkAreaHeight]);
+      context.events.resize.fire(workAreaHeight, usefullWorkAreaHeight);
     };
     $(window).resize();
 

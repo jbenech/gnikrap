@@ -61,7 +61,7 @@ function KeyboardSensorTabViewModel(appContext) {
     });
     
     // Register events
-    $.subscribe(self.context.events.resize, function(evt, workAreaHeight, usefullWorkAreaHeight) {
+    self.context.events.resize.add(function(workAreaHeight, usefullWorkAreaHeight) {
       self.doResize(workAreaHeight, usefullWorkAreaHeight);
     });
   }

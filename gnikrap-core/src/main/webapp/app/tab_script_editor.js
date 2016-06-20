@@ -19,15 +19,16 @@
 
 // An editor should have the following API:
 //   doResize(workAreaHeight, usefullWorkAreaHeight): void
-//   clearScript(): void
-//   getValue(): Value
 //   setVisible(visible): void
-//   saveScript(): void
-//   displayLoadScriptDialog(): void
+//   dispose(): void
+//   clearScript(): void
 //   loadDefaultScript(): void
+//   displayLoadScriptDialog(): void
+//   saveScript(): void
+//   getValue(): Value
 
  
- // The Javascript editor based on ace (http://ace.c9.io/)
+ // The Javascript editor using the component ace (http://ace.c9.io/)
 function JavascriptEditor(appContext) {
   'use strict';
   
@@ -85,6 +86,10 @@ function JavascriptEditor(appContext) {
       $('#aceEditor').css('display', 'none');
     }
   };
+  
+  self.dispose = function() {
+    // Nothing to do
+  }
   
   self.getValue = function() {
     return self.ace.getValue();
@@ -153,6 +158,7 @@ function JavascriptEditor(appContext) {
   }
 }
 
+// The visual editor using Blockly (https://developers.google.com/blockly/)
 function BlocklyEditor(appContext) {
   'use strict';
   
@@ -164,9 +170,17 @@ function BlocklyEditor(appContext) {
     self.blockly.injectInDOM(document.getElementById('blocklyEditor'), self.context.settings.language);
 
     // Register events
-    $.subscribe(self.context.events.languageReloaded, function(evt) {
+    self.context.events.languageReloaded.add(function() {
       self.blockly.updateLanguage(self.context.settings.language);
     });
+
+    self.__onTabDisplayedChanged = function(tabName, visible) {
+      //console.log("tab: " + tabName + ", " + visible);
+      if(tabName == "scriptEditorTab") {
+        Blockly.fireUiEvent(window, 'resize')
+      }
+    };
+    self.context.events.tabDisplayedChanged.add(self.__onTabDisplayedChanged);
   })();
   
   self.doResize = function(workAreaHeight, usefullWorkAreaHeight) {
@@ -184,12 +198,21 @@ function BlocklyEditor(appContext) {
   */
   
   self.setVisible = function(visible) {
+    // Note: css applied to gnikrap widget but also blockly created widget
     if(visible) {
+      //$('#blocklyEditor, #blocklyWidgetDiv, #blocklyTooltipDiv, #blocklyToolboxDiv').css('display', '');
       $('#blocklyEditor').css('display', '');
     } else {
+      //$('#blocklyEditor, #blocklyWidgetDiv, #blocklyTooltipDiv, #blocklyToolboxDiv').css('display', 'none');
       $('#blocklyEditor').css('display', 'none');
     }
+    Blockly.fireUiEvent(window, 'resize')
   };
+  
+  self.dispose = function() {
+    self.context.events.tabDisplayedChanged.remove(self.__onTabDisplayedChanged);
+    self.blockly.dispose();
+  }
 
   self.getValue = function() {
     var result = self.blockly.buildJavascriptCode();
@@ -234,12 +257,12 @@ function ScriptEditorTabViewModel(appContext) {
     self.blocklyEditor = undefined;
 
     // Register events
-    $.subscribe(self.context.events.resize, function(evt, workAreaHeight, usefullWorkAreaHeight) {
+    self.context.events.resize.add(function(workAreaHeight, usefullWorkAreaHeight) {
       if(self.editor) {
         self.editor.doResize(workAreaHeight, usefullWorkAreaHeight);
       }
     });
-    $.subscribe(self.context.events.changeSettings, function(evt, keyChanged, newValue) {
+    self.context.events.changeSettings.add(function(keyChanged, newValue) {
       if("programmingStyle" == keyChanged) {
         self.__doChangeEditor();
       }
@@ -249,6 +272,7 @@ function ScriptEditorTabViewModel(appContext) {
   self.__doChangeEditor = function() {
     if(self.editor) {
       self.editor.setVisible(false);
+      self.editor.dispose();
       self.editor = undefined;
     }
     if("TEXT" == self.context.settings.programmingStyle) {
@@ -269,7 +293,7 @@ function ScriptEditorTabViewModel(appContext) {
       self.editor = self.blocklyEditor;
     }
     self.editor.setVisible(true);
-    // Force resiez in order to ensure visibility
+    // Force resize in order to ensure visibility
     $(window).resize();    
   };
     
