@@ -198,12 +198,9 @@ function BlocklyEditor(appContext) {
   */
   
   self.setVisible = function(visible) {
-    // Note: css applied to gnikrap widget but also blockly created widget
     if(visible) {
-      //$('#blocklyEditor, #blocklyWidgetDiv, #blocklyTooltipDiv, #blocklyToolboxDiv').css('display', '');
       $('#blocklyEditor').css('display', '');
     } else {
-      //$('#blocklyEditor, #blocklyWidgetDiv, #blocklyTooltipDiv, #blocklyToolboxDiv').css('display', 'none');
       $('#blocklyEditor').css('display', 'none');
     }
     Blockly.fireUiEvent(window, 'resize')

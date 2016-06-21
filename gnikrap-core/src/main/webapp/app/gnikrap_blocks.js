@@ -177,7 +177,7 @@ function GnikrapBlocks() {
       // Recreate blocks on workspace
       var xml = Blockly.Xml.workspaceToDom(workspace);
       workspace.clear();
-      Blockly.Xml.domToWorkspace(workspace, xml);
+      Blockly.Xml.domToWorkspace(xml, workspace);
       workspace.updateToolbox(self.__generateXmlToolboxTree());
     }).fail(function(jqxhr, settings, exception) {
       // Does nothing, blocks will stay in previous language
@@ -189,7 +189,7 @@ function GnikrapBlocks() {
   // Note can throw exception if XML isn't valid
   self.loadXML = function(xml) {
     var xml = Blockly.Xml.textToDom(xml);
-    Blockly.Xml.domToWorkspace(self.__getWorkspace(), xml);
+    Blockly.Xml.domToWorkspace(xml, self.__getWorkspace());
   }
   
   // Clear the current script
@@ -624,7 +624,7 @@ function GnikrapBlocks() {
     Blockly.JavaScript['gnikrap_ev3_led'] = function(block) {
       var status = block.getFieldValue('STATUS');
 
-      return 'ev3.getBrick().getLED().' + getCodeForList(LED_STATUS, status) + ';\n';
+      return 'ev3.getBrick().getLED().' + getCodeForList(CHANGE_LED_STATUS, status) + ';\n';
     };
 
     /////////////////////////////////////////////////////////////////////////////
@@ -1043,7 +1043,7 @@ function GnikrapBlocks() {
       var port = block.getFieldValue('PORT');
 
       return 'ev3.getBrick().getLargeMotor("'+ port + '").rotate(' +
-          (angle_unit == "TURN" ? value * 360 : value) +
+          (angle_unit == "TURN" ? value + '*360' : value) +
           ', ' + (action == "ROTATE_NO_WAIT" ? "true" : "false") + ');\n';
     };
 
