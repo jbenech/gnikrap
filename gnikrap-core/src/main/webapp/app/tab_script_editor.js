@@ -175,10 +175,9 @@ function BlocklyEditor(appContext) {
     });
 
     self.__onTabDisplayedChanged = function(tabName, visible) {
-      //console.log("tab: " + tabName + ", " + visible);
       if(tabName == "scriptEditorTab") {
-        Blockly.fireUiEvent(window, 'resize')
-      }
+        self.setVisible(visible);
+      } 
     };
     self.context.events.tabDisplayedChanged.add(self.__onTabDisplayedChanged);
   })();
@@ -198,12 +197,13 @@ function BlocklyEditor(appContext) {
   */
   
   self.setVisible = function(visible) {
+    self.blockly.setVisible(visible);
     if(visible) {
       $('#blocklyEditor').css('display', '');
+      Blockly.fireUiEvent(window, 'resize');
     } else {
       $('#blocklyEditor').css('display', 'none');
     }
-    Blockly.fireUiEvent(window, 'resize')
   };
   
   self.dispose = function() {

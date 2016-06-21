@@ -48,10 +48,17 @@ function GnikrapBlocks() {
   var self = this;
   { // Init
      // Make Blockly more flashy
-    Blockly.HSV_SATURATION = 0.70;
-    Blockly.HSV_VALUE = 0.65;
+    Blockly.HSV_SATURATION = 0.80;
+    Blockly.HSV_VALUE = 0.70;
 
     self.XSENSOR_MAGIC = '@XSensorValue@';
+    self.EV3_COLOR_SENSOR_COLOUR = 0;
+    self.EV3_IR_SENSOR_COLOUR = 25;
+    self.EV3_TOUCH_SENSOR_COLOUR = 50;
+    self.EV3_KEYBOARD_COLOUR = 225; // 75;
+    self.XSENSOR_COLOUR = 100;
+    self.EV3_BRICK_COLOUR = 225;
+    self.EV3_MOTOR_COLOUR = 275;
 
     self.workspace = undefined; // Useless, already to undefined here :-)
   }
@@ -136,12 +143,21 @@ function GnikrapBlocks() {
     var jsFilename = self.__getBlocklyTranslationJs(language);
     var initWorkspace = function() {
       self.workspace = Blockly.inject(domElement, 
-          { toolbox: self.__generateXmlToolboxTree() /* ,
+          { toolbox: self.__generateXmlToolboxTree(),
+            /* zoom:
+              {controls: true,
+              wheel: true,
+              startScale: 1.0,
+              maxScale: 4,
+              minScale: .25,
+              scaleSpeed: 1.1} */
+          /* ,
             grid: {
               spacing: 20,
               length: 3,
               colour: '#ccc',
               snap: true } */
+              
           });
       self.workspace.addChangeListener(self.__checkBlocks); // Used to set the nodes to warning if needed
       /*
@@ -202,6 +218,13 @@ function GnikrapBlocks() {
     self.__getWorkspace().dispose();
   }
 
+  // Show/Hide blockly workspace (including toolbar, etc.)
+  self.setVisible = function(visible) {
+    if(self.workspace) {
+      self.workspace.setVisible(visible);
+    }
+  }
+  
   // Return an object containing the code generated and the list of error/warning if any
   self.buildJavascriptCode = function() {
     var code = "\n" + Blockly.JavaScript.workspaceToCode(self.__getWorkspace());
@@ -289,7 +312,7 @@ function GnikrapBlocks() {
   self.__generateBlocklyCategories = function() {
     var xml = [ ];
     // Logic
-    xml.push('<category id="catLogic" name="' + i18n.t("blocks.categories.logic") + '">');
+    xml.push('<category id="catLogic" name="' + i18n.t("blocks.categories.logic") + '" colour="210">');
     xml.push([
           {type: "controls_if"},
           {type: "controls_if",
@@ -303,7 +326,7 @@ function GnikrapBlocks() {
     xml.push('</category>');
 
     // Loop
-    xml.push('<category id="catLoops"  name="' + i18n.t("blocks.categories.loops") + '">');
+    xml.push('<category id="catLoops"  name="' + i18n.t("blocks.categories.loops") + '" colour="120">');
     xml.push([
           {type: "controls_repeat_ext",
             xmlContent: '<value name="TIMES"><block type="math_number"><field name="NUM">10</field></block></value>'},
@@ -316,7 +339,7 @@ function GnikrapBlocks() {
     xml.push('</category>');
 
     // Math
-    xml.push('<category id="catMath" name="' + i18n.t("blocks.categories.math") + '">');
+    xml.push('<category id="catMath" name="' + i18n.t("blocks.categories.math") + '" colour="230">');
     xml.push([
           {type: "math_number"},
           {type: "math_arithmetic"},
@@ -336,7 +359,7 @@ function GnikrapBlocks() {
     xml.push('</category>');
 
     // Text
-    xml.push('<category id="catText" name="' + i18n.t("blocks.categories.text") + '">');
+    xml.push('<category id="catText" name="' + i18n.t("blocks.categories.text") + '" colour="160">');
     xml.push([
           {type: "text"},
           {type: "text_join"},
@@ -350,7 +373,7 @@ function GnikrapBlocks() {
     xml.push('</category>');
 
     // Lists
-    xml.push('<category id="catLists" name="' + i18n.t("blocks.categories.lists") + '">');
+    xml.push('<category id="catLists" name="' + i18n.t("blocks.categories.lists") + '" colour="260">');
     xml.push([
           {type: "lists_create_empty"},
           {type: "lists_create_with"},
@@ -374,7 +397,7 @@ function GnikrapBlocks() {
   self.__generateGnikrapCategories = function() {
     var xml = [];
 
-    xml.push('<category name="' + i18n.t("blocks.categories.ev3_brick") + '">');
+    xml.push('<category name="' + i18n.t("blocks.categories.ev3_brick") + '" colour="' + self.EV3_BRICK_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_notify"},
           {type: "gnikrap_ev3_wait_until"},
@@ -396,7 +419,7 @@ function GnikrapBlocks() {
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
 
-    xml.push('<category name="' + i18n.t("blocks.categories.color_sensor") + '">');
+    xml.push('<category name="' + i18n.t("blocks.categories.color_sensor") + '" colour="' + self.EV3_COLOR_SENSOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_colorsensor_reflected"},
           {type: "gnikrap_ev3_colorsensor_ambient"},
@@ -404,20 +427,20 @@ function GnikrapBlocks() {
           {type: "gnikrap_ev3_colorsensor_iscolor"}
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
-    xml.push('<category name="' + i18n.t("blocks.categories.ir_sensor") + '">');
+    xml.push('<category name="' + i18n.t("blocks.categories.ir_sensor") + '" colour="' + self.EV3_IR_SENSOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_irsensor_setchannel"},
           {type: "gnikrap_ev3_irsensor_getdistance"},
           {type: "gnikrap_ev3_irsensor_getremotecommand"}
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
-    xml.push('<category name="' + i18n.t("blocks.categories.touch_sensor") + '">');
+    xml.push('<category name="' + i18n.t("blocks.categories.touch_sensor") + '" colour="' + self.EV3_TOUCH_SENSOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_touchsensor_pushed"}
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
 
-    xml.push('<category name="' + i18n.t("blocks.categories.motors") + '">');
+    xml.push('<category name="' + i18n.t("blocks.categories.motors") + '" colour="' + self.EV3_MOTOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_motor_settype"},
           {type: "gnikrap_ev3_motor_move"},
@@ -432,7 +455,7 @@ function GnikrapBlocks() {
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
 
-    xml.push('<category name="' + i18n.t("blocks.categories.xSensors") + '">');
+    xml.push('<category name="' + i18n.t("blocks.categories.xSensors") + '" colour="' + self.XSENSOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_xsensor_workwith"},
           {type: "gnikrap_ev3_xgyro_getvalue"},
@@ -451,8 +474,8 @@ function GnikrapBlocks() {
 
   self.__generateMagicCategories = function() {
     var xml = [];
-    xml.push('<category name="' + i18n.t("blocks.categories.variables") + '" custom="VARIABLE"></category>');
-    xml.push('<category name="' + i18n.t("blocks.categories.functions") + '" custom="PROCEDURE"></category>');
+    xml.push('<category name="' + i18n.t("blocks.categories.variables") + '" custom="VARIABLE" colour="330"></category>');
+    xml.push('<category name="' + i18n.t("blocks.categories.functions") + '" custom="PROCEDURE" colour="290"></category>');
     return xml.join('');
   };
 
@@ -472,13 +495,6 @@ function GnikrapBlocks() {
 
   // Function (a bit long :-) ) that create all the blocks needed for Gnikrap
   self.__createBlocksForGnikrap = function() {
-    var EV3_COLOR_SENSOR_COLOUR = 0;
-    var EV3_IR_SENSOR_COLOUR = 25;
-    var EV3_TOUCH_SENSOR_COLOUR = 50;
-    var EV3_KEYBOARD_COLOUR = 225; // 75;
-    var XSENSOR_COLOUR = 100;
-    var EV3_BRICK_COLOUR = 225;
-    var EV3_MOTOR_COLOUR = 275;
 
     // Init some fields that we want on all blocks
     function initBlock(block, baseKey, colour) {
@@ -524,7 +540,7 @@ function GnikrapBlocks() {
     // notify(String): void
     Blockly.Blocks['gnikrap_ev3_notify'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_notify", EV3_BRICK_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_notify", self.EV3_BRICK_COLOUR);
         this.appendValueInput("TEXT")
             .appendField(i18n.t("blocks.gnikrap_ev3_notify.text_notify"));
       }
@@ -539,7 +555,7 @@ function GnikrapBlocks() {
     // isOK(): boolean
     Blockly.Blocks['gnikrap_ev3_isok'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_isok", EV3_BRICK_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_isok", self.EV3_BRICK_COLOUR, "Boolean");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_isok.text_ev3_is_ok"));
       }
@@ -552,7 +568,7 @@ function GnikrapBlocks() {
     // stop(): boolean
     Blockly.Blocks['gnikrap_ev3_stop'] = {
       init: function() {
-        initBlock(this, "blocks.gnikrap_ev3_stop", EV3_BRICK_COLOUR);
+        initBlock(this, "blocks.gnikrap_ev3_stop", self.EV3_BRICK_COLOUR);
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_stop.text_stop_script"));
         this.setPreviousStatement(true);
@@ -565,7 +581,7 @@ function GnikrapBlocks() {
     // wait until
     Blockly.Blocks['gnikrap_ev3_wait_until'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_wait_until", EV3_BRICK_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_wait_until", self.EV3_BRICK_COLOUR);
         this.appendValueInput("UNTIL")
             .setCheck("Boolean")
             .appendField(i18n.t("blocks.gnikrap_ev3_wait_until.text_wait_until"));
@@ -581,7 +597,7 @@ function GnikrapBlocks() {
     // sleep(int): void
     Blockly.Blocks['gnikrap_ev3_sleep'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_sleep", EV3_BRICK_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_sleep", self.EV3_BRICK_COLOUR);
         this.appendValueInput("TIME")
             .setCheck("Number")
             .appendField(i18n.t("blocks.gnikrap_ev3_sleep.text_sleep"));
@@ -614,7 +630,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_led'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_led", EV3_BRICK_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_led", self.EV3_BRICK_COLOUR);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 CHANGE_LED_STATUS.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_led.list_change_LED_status"))), "STATUS");
@@ -633,7 +649,7 @@ function GnikrapBlocks() {
     // setVolume(int): void
     Blockly.Blocks['gnikrap_ev3_sound_setvolume'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_sound_setvolume", EV3_BRICK_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_sound_setvolume", self.EV3_BRICK_COLOUR);
         this.appendValueInput("VOL")
             .setCheck("Number")
             .appendField(i18n.t("blocks.gnikrap_ev3_sound_setvolume.text_set_volume"));
@@ -650,7 +666,7 @@ function GnikrapBlocks() {
     // beep()
     Blockly.Blocks['gnikrap_ev3_sound_beep'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_sound_beep", EV3_BRICK_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_sound_beep", self.EV3_BRICK_COLOUR);
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_sound_beep.text_beep"));
         this.setInputsInline(true);
@@ -663,7 +679,7 @@ function GnikrapBlocks() {
     // playNote(string, int): void
     Blockly.Blocks['gnikrap_ev3_sound_playnote'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_sound_playnote", EV3_BRICK_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_sound_playnote", self.EV3_BRICK_COLOUR);
         this.appendValueInput("NOTE")
             .setCheck("String")
             .appendField(i18n.t("blocks.gnikrap_ev3_sound_playnote.text_play_note"));
@@ -692,7 +708,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_touchsensor_pushed'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_touchsensor_pushed", EV3_TOUCH_SENSOR_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_touchsensor_pushed", self.EV3_TOUCH_SENSOR_COLOUR, "Boolean");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_touchsensor_pushed.text_sensor"))
             .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT")
@@ -717,7 +733,7 @@ function GnikrapBlocks() {
     // getReflectedLight(): float
     Blockly.Blocks['gnikrap_ev3_colorsensor_reflected'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_reflected", EV3_COLOR_SENSOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_reflected", self.EV3_COLOR_SENSOR_COLOUR, "Number");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_colorsensor_reflected.text_reflected_light") )
             .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
@@ -738,7 +754,7 @@ function GnikrapBlocks() {
     // getAmbientLight(): float
     Blockly.Blocks['gnikrap_ev3_colorsensor_ambient'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_ambient", EV3_COLOR_SENSOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_ambient", self.EV3_COLOR_SENSOR_COLOUR, "Number");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_colorsensor_ambient.text_ambiant_light"))
             .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
@@ -759,7 +775,7 @@ function GnikrapBlocks() {
     // getColor(): String
     Blockly.Blocks['gnikrap_ev3_colorsensor_getcolor'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_getcolor", EV3_COLOR_SENSOR_COLOUR, "String");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_getcolor", self.EV3_COLOR_SENSOR_COLOUR, "String");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_colorsensor_getcolor.text_color"))
             .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
@@ -788,7 +804,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_colorsensor_iscolor'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_iscolor", EV3_COLOR_SENSOR_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_colorsensor_iscolor", self.EV3_COLOR_SENSOR_COLOUR, "Boolean");
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 COLORS.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_colorsensor_iscolor.list_colors_detected"))), "COLOR")
@@ -814,7 +830,7 @@ function GnikrapBlocks() {
     // setChannel(int): void
     Blockly.Blocks['gnikrap_ev3_irsensor_setchannel'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_irsensor_setchannel", EV3_IR_SENSOR_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_irsensor_setchannel", self.EV3_IR_SENSOR_COLOUR);
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_irsensor_setchannel.text_set_channel"))
             .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "CHANNEL")
@@ -838,7 +854,7 @@ function GnikrapBlocks() {
     // getDistance(): int
     Blockly.Blocks['gnikrap_ev3_irsensor_getdistance'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_irsensor_getdistance", EV3_IR_SENSOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_irsensor_getdistance", self.EV3_IR_SENSOR_COLOUR, "Number");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_irsensor_getdistance.text_distance_to_sensor"))
             .appendField(new Blockly.FieldDropdown([["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"]]), "PORT");
@@ -867,7 +883,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_irsensor_getremotecommand'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_irsensor_getremotecommand", EV3_IR_SENSOR_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_irsensor_getremotecommand", self.EV3_IR_SENSOR_COLOUR, "Boolean");
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 BEACON_BUTTONS.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_irsensor_getremotecommand.list_beacon_buttons_enabled_on_sensor"))), "CHECK")
@@ -904,7 +920,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_keyboard_wait'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_keyboard_wait", EV3_KEYBOARD_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_keyboard_wait", self.EV3_KEYBOARD_COLOUR);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 KEYBOARD_BUTTONS.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_keyboard_wait.list_keyboard_buttons_wait"))), "BUTTON")
@@ -923,7 +939,7 @@ function GnikrapBlocks() {
     // isPressed(touch): boolean
     Blockly.Blocks['gnikrap_ev3_keyboard_ispressed'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_keyboard_ispressed", EV3_KEYBOARD_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_keyboard_ispressed", self.EV3_KEYBOARD_COLOUR, "Boolean");
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 KEYBOARD_BUTTONS.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_keyboard_ispressed.list_keyboard_buttons_is_pressed"))), "BUTTON");
@@ -946,7 +962,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_motor_settype'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_motor_settype", EV3_MOTOR_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_motor_settype", self.EV3_MOTOR_COLOUR);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 MOTOR_TYPE.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_settype.list_motor_type_connected_on"))), "TYPE")
@@ -973,7 +989,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_motor_move'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_motor_move", EV3_MOTOR_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_motor_move", self.EV3_MOTOR_COLOUR);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 MOTOR_ACTION1.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_move.list_motor_actions"))), "ACTION")
@@ -994,7 +1010,7 @@ function GnikrapBlocks() {
     // isMoving(port): boolean
     Blockly.Blocks['gnikrap_ev3_motor_ismoving'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_motor_ismoving", EV3_MOTOR_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_motor_ismoving", self.EV3_MOTOR_COLOUR, "Boolean");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_motor_ismoving.text_motor"))
             .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT")
@@ -1018,7 +1034,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_motor_rotate'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_motor_rotate", EV3_MOTOR_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_motor_rotate", self.EV3_MOTOR_COLOUR);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 MOTOR_ACTION2.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_rotate.list_motor_actions"))), "ACTION")
@@ -1052,7 +1068,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_motor_setspeed'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_motor_setspeed", EV3_MOTOR_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_motor_setspeed", self.EV3_MOTOR_COLOUR);
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_motor_setspeed.text_set_speed_of_motor"))
             .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
@@ -1088,7 +1104,7 @@ function GnikrapBlocks() {
     // getSpeed(port): void
     Blockly.Blocks['gnikrap_ev3_motor_getspeed'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_motor_getspeed", EV3_MOTOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_motor_getspeed", self.EV3_MOTOR_COLOUR, "Number");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_motor_getspeed.text_speed_of_motor"))
             .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
@@ -1120,7 +1136,7 @@ function GnikrapBlocks() {
     //  getTacho(port): int
     Blockly.Blocks['gnikrap_ev3_motor_gettacho'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_motor_gettacho", EV3_MOTOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_motor_gettacho", self.EV3_MOTOR_COLOUR, "Number");
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_motor_gettacho.text_tacho_count_of_motor"))
             .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
@@ -1141,7 +1157,7 @@ function GnikrapBlocks() {
     // resetTacho(port): void
     Blockly.Blocks['gnikrap_ev3_motor_resettacho'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_motor_resettacho", EV3_MOTOR_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_motor_resettacho", self.EV3_MOTOR_COLOUR);
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_motor_resettacho.text_reset_tacho_count_of_motor"))
             .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
@@ -1180,7 +1196,7 @@ function GnikrapBlocks() {
     // Get the xSensor, check if it exists, then get the value, and check if the xSensor is running. Finally execute the user code (if running)
     Blockly.Blocks['gnikrap_ev3_xsensor_workwith'] = {
       init: function() {
-        initBlockStackable(this, "blocks.gnikrap_ev3_xsensor_workwith", XSENSOR_COLOUR);
+        initBlockStackable(this, "blocks.gnikrap_ev3_xsensor_workwith", self.XSENSOR_COLOUR);
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_xsensor_workwith.text_with_the_xSensor"))
             .appendField(new Blockly.FieldTextInput("xGyro"), "XSENSOR_NAME")
@@ -1279,7 +1295,7 @@ function GnikrapBlocks() {
     // Mutator for gnikrap_ev3_xsensor_workwith
     Blockly.Blocks['gnikrap_ev3_xsensor_workwith_workwith'] = {
       init: function() {
-        this.setColour(XSENSOR_COLOUR);
+        this.setColour(self.XSENSOR_COLOUR);
         this.appendDummyInput()
             .appendField("if xSensor started"); // TODO i18n
         this.appendStatementInput('STACK');
@@ -1289,7 +1305,7 @@ function GnikrapBlocks() {
     // Mutator for gnikrap_ev3_xsensor_workwith
     Blockly.Blocks['gnikrap_ev3_xsensor_workwith_else'] = {
       init: function() {
-        this.setColour(XSENSOR_COLOUR);
+        this.setColour(self.XSENSOR_COLOUR);
         this.appendDummyInput()
             .appendField(i18n.t("blocks.gnikrap_ev3_xsensor_workwith.text_else"));
         this.setPreviousStatement(true);
@@ -1332,7 +1348,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_xgyro_getvalue'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_xgyro_getvalue", XSENSOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_xgyro_getvalue", self.XSENSOR_COLOUR, "Number");
         initXSensor(this);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
@@ -1360,7 +1376,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_xgeo_getvalue'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_xgeo_getvalue", XSENSOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_xgeo_getvalue", self.XSENSOR_COLOUR, "Number");
         initXSensor(this);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
@@ -1380,7 +1396,7 @@ function GnikrapBlocks() {
     // containsObject(objectName): boolean
     Blockly.Blocks['gnikrap_ev3_xvideo_containsobject'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_xvideo_containsobject", XSENSOR_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_xvideo_containsobject", self.XSENSOR_COLOUR, "Boolean");
         initXSensor(this);
         this.appendValueInput("OBJECT_NAME")
             .setCheck("String")
@@ -1402,7 +1418,7 @@ function GnikrapBlocks() {
 
     Blockly.Blocks['gnikrap_ev3_xvideo_getvalue'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_xvideo_getvalue", XSENSOR_COLOUR, "Number");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_xvideo_getvalue", self.XSENSOR_COLOUR, "Number");
         initXSensor(this);
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
@@ -1426,7 +1442,7 @@ function GnikrapBlocks() {
     // isTouchPressed(touchName): boolean
     Blockly.Blocks['gnikrap_ev3_xtouch_istouchpressed'] = {
       init: function() {
-        initBlockWithOutput(this, "blocks.gnikrap_ev3_xtouch_istouchpressed", XSENSOR_COLOUR, "Boolean");
+        initBlockWithOutput(this, "blocks.gnikrap_ev3_xtouch_istouchpressed", self.XSENSOR_COLOUR, "Boolean");
         initXSensor(this);
         this.appendValueInput("TOUCH_NAME")
             .setCheck("String")
