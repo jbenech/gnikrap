@@ -14,7 +14,7 @@
   </modules>
   
   <properties>
-    <InnoSetupCompiler>C:/Program Files/Inno Setup 5/ISCC.exe</InnoSetupCompiler>
+    <InnoSetupCompiler>C:/Program Files (x86)/Inno Setup 5/ISCC.exe</InnoSetupCompiler>
 
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
@@ -30,7 +30,8 @@
         <scope>provided</scope>
       </dependency>  
       <dependency>
-        <groupId>org.freedesktop.dbus</groupId>
+        <!-- groupId>org.freedesktop.dbus</groupId -->
+        <groupId>com.github.bdeneuter</groupId>
         <artifactId>dbus-java</artifactId>
         <version>2.7</version>
         <scope>provided</scope>

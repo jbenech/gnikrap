@@ -21,7 +21,7 @@
       <artifactId>ev3classes</artifactId>
     </dependency>  
     <dependency>
-      <groupId>org.freedesktop.dbus</groupId>
+      <groupId>com.github.bdeneuter</groupId>
       <artifactId>dbus-java</artifactId>
     </dependency>
     <dependency>

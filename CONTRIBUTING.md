@@ -12,7 +12,9 @@ You can contribute to Gnikrap in several way:
 In order to build Gnikrap, you will need: 
 * an JDK (1.7+) - See [Oracle JDK download page](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * Maven (3+) - See [Apache Maven download page](http://maven.apache.org/download.cgi)
-* Optionally for generating the Windows 'Installer', you need InnoSetup (5+ unicode) - See [InnoSetup download page](http://www.jrsoftware.org/isdl.php) 
+* Optionally for generating the Windows 'Installer', you need InnoSetup (5+ unicode) 
+  * InnoSetup can be downloaded [here](http://www.jrsoftware.org/isdl.php) 
+  * The path of the iscc.exe command can be setup in the `/pom.xml` file (`InnoSetupCompiler` property)
 
 
 In the dependencies, the leJOS library need to be pushed manually to your local repository (currently not available on public repositories): 
