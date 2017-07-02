@@ -26,43 +26,46 @@ function NavigationBarViewModel(appContext) {
     self.context = appContext; // The application context
     self.workAreaItems = ko.observableArray();
     
-    self.workAreaItems.removeAll();
-    self.workAreaItems.push({
-      name: "SCRIPT_EDITOR",
-      data_i18n: "workArea.scriptEditorTab",
-      tabId: "scriptEditorTab",
-      active: ko.observable(true)
+    self.btnScript = {
+        name: "SCRIPT_EDITOR",
+        data_i18n: "workArea.scriptEditorTab",
+        tabId: "scriptEditorTab",
+        active: ko.observable(true)
+      };
+    
+    self.btnKeyboard = {
+        name: "xKEYBOARD",
+        data_i18n: "workArea.keyboardSensorTab",
+        tabId: "keyboardSensorTab",
+        active: ko.observable(false)
+      };
+    
+    self.btnGyro = {
+        name: "xGYRO",
+        data_i18n: "workArea.gyroSensorTab",
+        tabId: "gyroSensorTab",
+        active: ko.observable(false)
+      };
+      
+    self.btnVideo = {
+        name: "xVIDEO",
+        data_i18n: "workArea.videoSensorTab",
+        tabId: "videoSensorTab",
+        active: ko.observable(false)
+      };
+      
+    self.btnGeo = {
+        name: "xGEO",
+        data_i18n: "workArea.geoSensorTab",
+        tabId: "geoSensorTab",
+        active: ko.observable(false)
+      };
+    
+    self.context.events.changeSettings.add(function(keyChanged, newValue) {
+      if("programmingStyle" == keyChanged) {
+        self.__doChangeProgrammingStyle();
+      }
     });
-    self.workAreaItems.push({
-      name: "xKEYBOARD",
-      data_i18n: "workArea.keyboardSensorTab",
-      tabId: "keyboardSensorTab",
-      active: ko.observable(false)
-    });
-    if(window.DeviceOrientationEvent) {
-      self.workAreaItems.push({
-          name: "xGYRO",
-          data_i18n: "workArea.gyroSensorTab",
-          tabId: "gyroSensorTab",
-          active: ko.observable(false)
-      });
-    } // else: Don't show xGyro, not supported by the browser
-    if(self.context.compatibility.isUserMediaSupported()) {
-      self.workAreaItems.push({
-          name: "xVIDEO",
-          data_i18n: "workArea.videoSensorTab",
-          tabId: "videoSensorTab",
-          active: ko.observable(false)
-      });
-    } // else: Don't show xVideo, video/WebCam not supported by the browser
-    if(navigator.geolocation) {
-      self.workAreaItems.push({
-          name: "xGEO",
-          data_i18n: "workArea.geoSensorTab",
-          tabId: "geoSensorTab",
-          active: ko.observable(false)
-      });
-    } // else: Don't show xGeo, GPS not supported by the browser    
   }
 
   // Auto collapse navbar while collapse feature is enabled (screen width is < 768)
@@ -71,6 +74,24 @@ function NavigationBarViewModel(appContext) {
       $("#bs-navbar-collapse-1-button").click();
     }
   };
+  
+  self.__doChangeProgrammingStyle = function() {
+    self.workAreaItems.removeAll();
+    self.workAreaItems.push(self.btnScript);
+    if("TEXT" == self.context.settings.programmingStyle) {
+      self.workAreaItems.push(self.btnKeyboard);
+      if(window.DeviceOrientationEvent) {
+        self.workAreaItems.push(self.btnGyro);
+      } // else: Don't show xGyro, not supported by the browser
+      if(self.context.compatibility.isUserMediaSupported()) {
+        self.workAreaItems.push(self.btnVideo);
+      } // else: Don't show xVideo, video/WebCam not supported by the browser
+      if(navigator.geolocation) {
+        self.workAreaItems.push(self.btnGeo);
+      } // else: Don't show xGeo, GPS not supported by the browser
+    }
+    self.onShowWorkAreaItem(self.btnScript);
+  }
   
   self.onRunScript = function() {
     self.doRunScript(false);

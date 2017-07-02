@@ -455,6 +455,8 @@ function GnikrapBlocks() {
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
 
+    /*
+    // Currently not happy of the Blockly' integration of xSensor => Disable it
     xml.push('<category name="' + i18n.t("blocks.categories.xSensors") + '" colour="' + self.XSENSOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_xsensor_workwith"},
@@ -468,7 +470,7 @@ function GnikrapBlocks() {
             xmlContent: '<value name="TOUCH_NAME"><block type="text"><field name="TEXT">abc</field></block></value>' }
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
-
+    */
     return xml.join('');
   };
 
@@ -1173,7 +1175,7 @@ function GnikrapBlocks() {
 
       return 'ev3.getBrick().getLargeMotor("' + port + '").resetTachoCount();\n';
     };
-
+/*
     /////////////////////////////////////////////////////////////////////////////
     // xSensor sensor API
 
@@ -1458,5 +1460,6 @@ function GnikrapBlocks() {
       var code = self.XSENSOR_MAGIC + '.containsTouch(' + touch_name + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     };
+*/
   };
 }
