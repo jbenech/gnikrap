@@ -22,11 +22,11 @@ function SettingsViewModel(appContext) {
   'use strict';
 
   var self = this;
-  { // Init
+  (function() { // Init
     self.context = appContext; // The application context
     self.language = ko.observable("");
     self.programmingStyle = ko.observable("TEXT");
-  }
+  })();
   
   self.display = function() {
     // Initialize the values

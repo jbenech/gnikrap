@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2016 Jean BENECH
+ * Copyright (C) 2014-2017 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 // An editor should have the following API:
 //   doResize(workAreaHeight, usefullWorkAreaHeight): void
 //   setVisible(visible): void
-//   dispose(): void
 //   clearScript(): void
 //   loadDefaultScript(): void
 //   displayLoadScriptDialog(): void
@@ -87,10 +86,6 @@ function JavascriptEditor(appContext) {
     }
   };
   
-  self.dispose = function() {
-    // Nothing to do
-  }
-  
   self.getValue = function() {
     return self.ace.getValue();
   };
@@ -155,7 +150,7 @@ function JavascriptEditor(appContext) {
   
   self.loadDefaultScript = function() {
     self.loadScriptFile("__default__.js");
-  }
+  };
 }
 
 // The visual editor using Blockly (https://developers.google.com/blockly/)
@@ -169,16 +164,18 @@ function BlocklyEditor(appContext) {
     self.blockly = new GnikrapBlocks();
     self.blockly.injectInDOM(document.getElementById('blocklyEditor'), self.context.settings.language);
 
-    // Register events
-    self.context.events.languageReloaded.add(function() {
+    // Define events function
+    self.__onUpdateLanguage = function() {
       self.blockly.updateLanguage(self.context.settings.language);
-    });
-
+    };
     self.__onTabDisplayedChanged = function(tabName, visible) {
       if(tabName == "scriptEditorTab") {
         self.setVisible(visible);
       } 
     };
+    
+    // Register events - /!\ Unregister all events in dispose
+    self.context.events.languageReloaded.add(self.__onUpdateLanguage);
     self.context.events.tabDisplayedChanged.add(self.__onTabDisplayedChanged);
   })();
   
@@ -208,6 +205,7 @@ function BlocklyEditor(appContext) {
   
   self.dispose = function() {
     self.context.events.tabDisplayedChanged.remove(self.__onTabDisplayedChanged);
+    self.context.events.languageReloaded.remove(self.__onUpdateLanguage);
     self.blockly.dispose();
   }
 
@@ -269,7 +267,10 @@ function ScriptEditorTabViewModel(appContext) {
   self.__doChangeEditor = function() {
     if(self.editor) {
       self.editor.setVisible(false);
-      self.editor.dispose();
+      if(self.blocklyEditor) {
+        self.blocklyEditor.dispose();
+        self.blocklyEditor = undefined;
+      }
       self.editor = undefined;
     }
     if("TEXT" == self.context.settings.programmingStyle) {
@@ -281,11 +282,10 @@ function ScriptEditorTabViewModel(appContext) {
       console.log("Editor set to JavaScript editor");
       self.editor = self.javascriptEditor;
     } else {
-      if(self.blocklyEditor == undefined) {
-        console.log("Create Blockly editor...");
-        self.blocklyEditor = new BlocklyEditor(self.context);
-        self.blocklyEditor.loadDefaultScript();
-      }
+      // Blockly has been disposed => Need to recreate it each time.
+      console.log("Create Blockly editor...");
+      self.blocklyEditor = new BlocklyEditor(self.context);
+      self.blocklyEditor.loadDefaultScript();
       console.log("Editor set to Blockly editor");
       self.editor = self.blocklyEditor;
     }
@@ -295,11 +295,15 @@ function ScriptEditorTabViewModel(appContext) {
   };
     
   self.onClearScript = function() {
-    bootbox.confirm(i18n.t("scriptEditorTab.clearScriptModal.title"), function(result) {
-      if(result) {
-        self.editor.clearScript();
-      }
-    });
+    if(self.editor) {
+      bootbox.confirm(i18n.t("scriptEditorTab.clearScriptModal.title"), function(result) {
+        if(result) {
+          self.editor.clearScript();
+        }
+      });
+    } else {
+      console.log("Cannot clear script, self.editor is not set");
+    }
   };
 
   self.onLoadScript = function() {
@@ -325,8 +329,21 @@ function ScriptEditorTabViewModel(appContext) {
       console.log("Cannot load script file, self.editor is not set");
     }
   };
+
+  self.onViewJavaScript = function() {
+    if(self.editor) {
+      self.editor.viewJavaScript();
+    } else {
+      console.log("Cannot view javascript, self.editor is not set");
+    }
+  };
   
   self.getValue = function() {
-    return self.editor.getValue();
-  };
+    if(self.editor) {
+      return self.editor.getValue();
+    } else {
+      console.log("Cannot getValue, self.editor is not set");
+      return "";
+    }
+  };  
 }

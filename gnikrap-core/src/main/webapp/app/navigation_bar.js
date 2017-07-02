@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2016 Jean BENECH
+ * Copyright (C) 2014-2017 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ function NavigationBarViewModel(appContext) {
   'use strict';
 
   var self = this;
-  { // Init
+  (function() { // Init
     self.context = appContext; // The application context
     self.workAreaItems = ko.observableArray();
     
@@ -66,7 +66,7 @@ function NavigationBarViewModel(appContext) {
         self.__doChangeProgrammingStyle();
       }
     });
-  }
+  })();
 
   // Auto collapse navbar while collapse feature is enabled (screen width is < 768)
   self.__collapseNavbar = function() {

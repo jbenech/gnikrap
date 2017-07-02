@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2015-2016 Jean BENECH
+ * Copyright (C) 2015-2017 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ function GnikrapBlocks() {
   'use strict';
 
   var self = this;
-  { // Init
+  (function() { // Init
      // Make Blockly more flashy
     Blockly.HSV_SATURATION = 0.80;
     Blockly.HSV_VALUE = 0.70;
@@ -61,7 +61,7 @@ function GnikrapBlocks() {
     self.EV3_MOTOR_COLOUR = 275;
 
     self.workspace = undefined; // Useless, already to undefined here :-)
-  }
+  })();
 
   // Return the name of the Blockly translation file according to the given language
   self.__getBlocklyTranslationJs = function(language) {
@@ -216,6 +216,7 @@ function GnikrapBlocks() {
   // Dispose Blockly
   self.dispose = function() {
     self.__getWorkspace().dispose();
+    //
   }
 
   // Show/Hide blockly workspace (including toolbar, etc.)
