@@ -137,6 +137,7 @@ $(document).ready(function() {
     context.manageFilesVM = new ManageFilesViewModel(context);
     context.settingsVM = new SettingsViewModel(context);
     context.importImagesVM = new ImportImagesViewModel(context);
+    context.viewCodeVM = new ViewCodeViewModel(context);
 
     // Knockout bindings
     ko.applyBindings(context.navigationBarVM, $("#navigationBar")[0]);
@@ -151,6 +152,7 @@ $(document).ready(function() {
     ko.applyBindings(context.manageFilesVM, $("#manageFilesModal")[0]);
     ko.applyBindings(context.settingsVM, $("#settingsModal")[0]);
     ko.applyBindings(context.importImagesVM, $("#importImagesModal")[0]);
+    ko.applyBindings(context.viewCodeVM, $("#viewCodeModal")[0]);
 
     // Other initialization
     context.ev3BrickServer.initialize(); // WebSsocket connexion with the server

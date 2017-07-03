@@ -211,7 +211,13 @@
     }
   },
 
+  
+  "viewCodeModal": {
+    "title": "Generated JavaScript code",
+    "close": "Close"
+  },  
 
+  
   "ev3brick": {
     "ev3ConnectionOk": "EV3 Brick connection ok",
     "confirmStopScriptAlreadyRunning": "A script is already running, stop the script currently running and start the new script ?",

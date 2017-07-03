@@ -25,9 +25,11 @@
 //   displayLoadScriptDialog(): void
 //   saveScript(): void
 //   getValue(): Value
+//   getJSCode(): String
+//   isJSViewable() : boolean
 
  
- // The Javascript editor using the component ace (http://ace.c9.io/)
+ // The Javascript editor using the ace component (http://ace.c9.io/)
 function JavascriptEditor(appContext) {
   'use strict';
   
@@ -151,6 +153,14 @@ function JavascriptEditor(appContext) {
   self.loadDefaultScript = function() {
     self.loadScriptFile("__default__.js");
   };
+
+  self.isJSViewable = function() {
+    return false;
+  }
+  
+  self.getJSCode = function() {
+    return self.getValue();
+  }
 }
 
 // The visual editor using Blockly (https://developers.google.com/blockly/)
@@ -238,6 +248,15 @@ function BlocklyEditor(appContext) {
   self.loadDefaultScript = function() {
     // Does nothing
   }
+
+  self.isJSViewable = function() {
+    return true;
+  }
+  
+  self.getJSCode = function() {
+    var result = self.blockly.buildJavascriptCode();
+    return result.code;
+  }
 }  
 
 // Model to manage the script editor tab
@@ -248,6 +267,7 @@ function ScriptEditorTabViewModel(appContext) {
   (function() { // Init
     self.context = appContext; // The application context
     self.editor = undefined;
+    self.isJSViewable = ko.observable(false);
     self.javascriptEditor = undefined;
     self.blocklyEditor = undefined;
 
@@ -290,6 +310,7 @@ function ScriptEditorTabViewModel(appContext) {
       self.editor = self.blocklyEditor;
     }
     self.editor.setVisible(true);
+    self.isJSViewable(self.editor.isJSViewable());
     // Force resize in order to ensure visibility
     $(window).resize();    
   };
@@ -330,11 +351,12 @@ function ScriptEditorTabViewModel(appContext) {
     }
   };
 
-  self.onViewJavaScript = function() {
+  self.onViewJS = function() {
     if(self.editor) {
-      self.editor.viewJavaScript();
+      var jsCode = self.editor.getJSCode();
+      self.context.viewCodeVM.display(jsCode);
     } else {
-      console.log("Cannot view javascript, self.editor is not set");
+      console.log("Cannot view JavaScript, self.editor is not set");
     }
   };
   
