@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2016 Jean BENECH
+ * Copyright (C) 2014-2017 Jean BENECH
  *
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -165,11 +165,67 @@ var Utils = (function() {
         }
     }
   };
+    
+  /**
+   * From a JS line, compute the last 2 significant identifier for the current context. 
+   * Return an array of 2 element (elements can be undefined)
+   *
+   * Sample:
+   *  getJSContext("abc(); xxx"): [undefined, xxx]
+   *  getJSContext("abc('foo', bar.getA()).xxx"):  [abc, xxx]
+   *  getJSContext("abc('foo', bar.getA(), xxx"): [undefined, xxx]
+   *  getJSContext("abc.xxx"): [abc, xxx]
+   *  getJSContext("abc(xxx"): [undefined, xxx]
+   *  getJSContext("abc."): [abc, '']
+   *  getJSContext(""): [undefined, '']
+   *  getJSContext("abc = xxx"): [undefined, xxx] // Same with other sign: +-/*% &|!?:<>~
+   *  getJSContext("abc[4].xxx"): [abc, xxx]
+   *
+   * Things that can be improved:
+   *  getJSContext("(abc).xxx"): [undefined, xxx] // Will be more accurate with [abc, xxx]
+   */
+  var getJSContext = function(line) {
+    var temp = line.split(/[=;\+\-\/\*\%\&\|\!\?\:\<\>\~]/).pop().trim(); // Last element of the array
+    // eat matching parenthesis
+    function eatMatchingChars(text, open, close) {
+      var acc = text.split("").reduceRight(function(acc, b) {
+        if(acc.level < 0) {
+          return acc;
+        }
+        if(b == close) {
+          acc.level = acc.level + 1;
+        } else if(b == open) {
+          acc.level = acc.level - 1;
+        } else if(acc.level == 0) {
+          acc.data.push(b);
+        }
+        return acc;
+      }, {level: 0, data: []});
+      return acc.data.reverse().join("");
+    }
+    temp = eatMatchingChars(temp, "(", ")");
+    temp = eatMatchingChars(temp, "[", "]");
+    temp = eatMatchingChars(temp, "{", "}");
+    
+    temp = temp.split(",").pop().trim();
+    var significantToken = temp.split(".");
+    var current = significantToken.pop().trim();
+    var previous = significantToken.pop();
+    if(previous) {
+      previous = previous.trim();
+    }
+    if(previous && previous.indexOf("\"") >= 0) {
+      previous = undefined;
+    }
+    
+    return [previous, current];
+  };
   
   return {
     round2dec: round2dec,
     generateUUID: generateUUID,
-    getUrlParameter: getUrlParameter
+    getUrlParameter: getUrlParameter,
+    getJSContext: getJSContext
   };
 })();
 

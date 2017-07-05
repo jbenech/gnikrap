@@ -36,6 +36,7 @@ function JavascriptEditor(appContext) {
   var self = this;
   (function() { // Init
     self.context = appContext; // The application context
+    self.STORAGE_URL_PREFIX = "/rest/scriptfiles/";
     self.scriptFilename = undefined;
     self.langTools = ace.require("ace/ext/language_tools");
     self.ace = ace.edit("aceEditor");
@@ -50,16 +51,48 @@ function JavascriptEditor(appContext) {
 
     // Enable auto-completion    
     self.autoCompleteList = [];
-    var tmp = i18n.t("autocompletion", { returnObjectTrees: true })
+    self.keywordToCategories = {};
+    var tmp = i18n.t("autocompletion", { returnObjectTrees: true }); // The whole object as defined in the json
     for(var type in tmp) {
-      self.autoCompleteList = self.autoCompleteList.concat(tmp[type].map(function(word) {
-                return { caption: word, value: word, score: 100, meta: type };
+      var typeData = tmp[type];
+      self.autoCompleteList = self.autoCompleteList.concat(typeData.words.map(function(word) {
+          return { caption: word, value: word, score: typeData.score, meta: type };
         }));
+      
+      typeData.keywords.forEach(function(kw) {
+        var lkw = kw.toLowerCase();
+        if(!self.keywordToCategories[lkw]) {
+          self.keywordToCategories[lkw] = [];
+        }
+        self.keywordToCategories[lkw].push(type);
+      });
     }
-
+    
     var staticWordCompleter = {
       getCompletions: function(editor, session, pos, prefix, callback) {
-        callback(null, self.autoCompleteList);
+        var line = session.getLine(pos.row);
+        line = line.substring(0, pos.column);
+        var context = Utils.getJSContext(line);
+        var catKw = (context[0] ? context[0].toLowerCase() : "");
+        var categories = Object.keys(self.keywordToCategories).filter(function(kw) {
+            return (catKw == kw) || (kw.length > 0 && catKw.indexOf(kw) != -1);
+          }).reduce(function(acc, kw) {
+            return acc.concat(self.keywordToCategories[kw]);
+          }, []);
+        // var categories = self.keywordToCategories[catKw];
+        console.log("Context: " + JSON.stringify(context) + ", categories: " + JSON.stringify(categories));
+        var temp = JSON.parse(JSON.stringify(self.autoCompleteList)); // Need to clone each time otherwise the list is mixed
+        if(categories) {
+          callback(null, temp.map(function(item) {
+              if(categories.indexOf(item.meta) != -1) {
+                item.score = 1000;
+                return item;
+              }
+              return item;
+            }));
+        } else {
+          callback(null, temp);
+        }        
       }
     }
     // Reset the completers: The default completer add too much useless keyword for us
@@ -71,15 +104,6 @@ function JavascriptEditor(appContext) {
     self.ace.resize();
   };
   
-  self.clearScript = function() {
-    self.setValue("");
-  };
-  
-  self.setValue = function(value) {
-    self.ace.setValue(value);
-    self.ace.moveCursorTo(0, 0);
-  };
-
   self.setVisible = function(visible) {
     if(visible) {
       $('#aceEditor').css('display', '');
@@ -87,37 +111,21 @@ function JavascriptEditor(appContext) {
       $('#aceEditor').css('display', 'none');
     }
   };
-  
-  self.getValue = function() {
-    return self.ace.getValue();
+
+  self.clearScript = function() {
+    self.setValue("");
+  };
+
+  self.loadDefaultScript = function() {
+    self.loadScriptFile("__default__.js");
   };
   
   self.displayLoadScriptDialog = function() {
     self.context.manageFilesVM.display(
       self.loadScriptFile,
-      function() { return "/rest/scriptfiles/"; },
-      function(filename) { return "/rest/scriptfiles/" + filename; }
+      function() { return self.STORAGE_URL_PREFIX; },
+      function(filename) { return self.STORAGE_URL_PREFIX + filename; }
     );
-  };
-  
-  self.loadScriptFile = function(filename) {
-    self.setValue(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
-    self.scriptFilename = undefined;
-    $.ajax({
-      url: "/rest/scriptfiles/" + filename,
-      success: function(data, status) {
-        var scriptFile = JSON.parse(data);
-        self.setValue(scriptFile.content);
-        if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
-          self.scriptFilename = filename;
-        }
-      },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
-        // XMLHttpRequest.status: HTTP response code
-        self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantLoadScriptFile",
-          { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
-      }
-    });
   };
   
   self.saveScript = function() {
@@ -129,7 +137,7 @@ function JavascriptEditor(appContext) {
           var filename = result.trim();
           console.log("Save script: '" + filename + "'");
           $.ajax({
-            url: "/rest/scriptfiles/" + filename,
+            url: self.STORAGE_URL_PREFIX + filename,
             content: "application/json",
             data:  JSON.stringify({
               name: filename,
@@ -149,18 +157,43 @@ function JavascriptEditor(appContext) {
       }
     });
   };
-  
-  self.loadDefaultScript = function() {
-    self.loadScriptFile("__default__.js");
-  };
 
-  self.isJSViewable = function() {
-    return false;
-  }
+  self.getValue = function() {
+    return self.ace.getValue();
+  };
   
   self.getJSCode = function() {
     return self.getValue();
   }
+  
+  self.isJSViewable = function() {
+    return false;
+  }
+  
+  self.setValue = function(value) {
+    self.ace.setValue(value);
+    self.ace.moveCursorTo(0, 0);
+  };
+  
+  self.loadScriptFile = function(filename) {
+    self.setValue(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
+    self.scriptFilename = undefined;
+    $.ajax({
+      url: self.STORAGE_URL_PREFIX + filename,
+      success: function(data, status) {
+        var scriptFile = JSON.parse(data);
+        self.setValue(scriptFile.content);
+        if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
+          self.scriptFilename = filename;
+        }
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        // XMLHttpRequest.status: HTTP response code
+        self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantLoadScriptFile",
+          { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+      }
+    });
+  };
 }
 
 // The visual editor using Blockly (https://developers.google.com/blockly/)
@@ -170,6 +203,7 @@ function BlocklyEditor(appContext) {
   var self = this;
   (function() { // Init
     self.context = appContext; // The application context
+    self.STORAGE_URL_PREFIX = "/rest/blocklyfiles/";
 
     self.blockly = new GnikrapBlocks();
     self.blockly.injectInDOM(document.getElementById('blocklyEditor'), self.context.settings.language);
@@ -193,16 +227,6 @@ function BlocklyEditor(appContext) {
     $('#blocklyEditor').css('height', Math.max(350, usefullWorkAreaHeight - 10).toString() + 'px');
   };
   
-  self.clearScript = function() {
-    self.blockly.clear();
-  };
-  
-  /*
-  self.setValue = function(value) {
-    // TODO
-  };
-  */
-  
   self.setVisible = function(visible) {
     self.blockly.setVisible(visible);
     if(visible) {
@@ -212,13 +236,27 @@ function BlocklyEditor(appContext) {
       $('#blocklyEditor').css('display', 'none');
     }
   };
-  
-  self.dispose = function() {
-    self.context.events.tabDisplayedChanged.remove(self.__onTabDisplayedChanged);
-    self.context.events.languageReloaded.remove(self.__onUpdateLanguage);
-    self.blockly.dispose();
+
+  self.clearScript = function() {
+    self.blockly.clear();
+  };
+
+  self.loadDefaultScript = function() {
+    // Does nothing
   }
 
+  self.displayLoadScriptDialog = function() {
+    self.context.manageFilesVM.display(
+      self.loadScriptFile,
+      function() { return self.STORAGE_URL_PREFIX; },
+      function(filename) { return self.STORAGE_URL_PREFIX + filename; }
+    );
+  };
+
+  self.saveScript = function() {
+    // TODO
+  }
+  
   self.getValue = function() {
     var result = self.blockly.buildJavascriptCode();
     console.log("Code generated: " + result.code);
@@ -233,30 +271,41 @@ function BlocklyEditor(appContext) {
     return (result.errors.length > 0 ? undefined : result.code);
   };
 
-  self.displayLoadScriptDialog = function() {
-    // TODO
-  };
-
-  self.loadScriptFile = function(filename) {
-    // TODO
-  };
-
-  self.saveScript = function() {
-    // TODO
-  }
-  
-  self.loadDefaultScript = function() {
-    // Does nothing
+  self.getJSCode = function() {
+    var result = self.blockly.buildJavascriptCode();
+    return result.code;
   }
 
   self.isJSViewable = function() {
     return true;
   }
-  
-  self.getJSCode = function() {
-    var result = self.blockly.buildJavascriptCode();
-    return result.code;
+
+  self.dispose = function() {
+    self.context.events.tabDisplayedChanged.remove(self.__onTabDisplayedChanged);
+    self.context.events.languageReloaded.remove(self.__onUpdateLanguage);
+    self.blockly.dispose();
   }
+  
+  self.loadScriptFile = function(filename) {
+    // TODO - FINALIZE
+    self.setValue(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
+    self.scriptFilename = undefined;
+    $.ajax({
+      url: self.STORAGE_URL_PREFIX + filename,
+      success: function(data, status) {
+        var scriptFile = JSON.parse(data);
+        self.setValue(scriptFile.content);
+        if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
+          self.scriptFilename = filename;
+        }
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        // XMLHttpRequest.status: HTTP response code
+        self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantLoadScriptFile",
+          { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+      }
+    });
+  };
 }  
 
 // Model to manage the script editor tab
