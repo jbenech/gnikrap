@@ -170,7 +170,7 @@ function GnikrapBlocks() {
 
     $.getScript(jsFilename).done(initWorkspace)
       .fail(function(jqxhr, settings, exception) {
-        console.log("WARNING: Fail to load javascript file: '" + jsFilename + "' with error: " + exception);
+        console.log("WARNING: Fail to load blockly translation JS file: '" + jsFilename + "' with error: " + exception);
         initWorkspace();
       });
   };
@@ -241,15 +241,15 @@ function GnikrapBlocks() {
         } else {
           motorTypes[p1] = p2;
         }
-        return "/* The motor on port " + p1 + " will be set to '" + p2 + "' */"; // Discard the motor type definition line
+        return ""; // "/* The motor on port " + p1 + " will be set to '" + p2 + "' */"; // Discard the motor type definition line
       });
 
     // Build the list of devices connected to the EV3 ports
     var ev3Ports = {}; // Key: port, value: [varName, getter ]
-    [ [/ev3\.getBrick\(\).getTouchSensor\("([1-4])"\)/g, 'ev3TouchSensor'],
-      [/ev3\.getBrick\(\).getColorSensor\("([1-4])"\)/g, 'ev3ColorSensor'],
-      [/ev3\.getBrick\(\).getIRSensor\("([1-4])"\)/g, 'ev3IRSensor'],
-      [/ev3\.getBrick\(\)\.getLargeMotor\("([A-D])"\)/g, 'ev3Motor']
+    [ [/ev3\.getBrick\(\).getTouchSensor\("([1-4])"\)/g, 'touchSensor'],
+      [/ev3\.getBrick\(\).getColorSensor\("([1-4])"\)/g, 'colorSensor'],
+      [/ev3\.getBrick\(\).getIRSensor\("([1-4])"\)/g, 'irSensor'],
+      [/ev3\.getBrick\(\)\.getLargeMotor\("([A-D])"\)/g, 'motor']
     ].forEach(function(value) {
         code = code.replace(value[0], function(match, p1) {
             // Check if the port is not already used by another device and register it if new
@@ -270,7 +270,7 @@ function GnikrapBlocks() {
                 return match;
               }
             } else {
-              varInfo[0] = Blockly.JavaScript.variableDB_.getDistinctName("ev3Port_" + p1);
+              varInfo[0] = Blockly.JavaScript.variableDB_.getDistinctName(value[1] + "_" + p1); //"ev3Port_" + p1);
               ev3Ports[p1] = varInfo;
             }
             return ev3Ports[p1][0];
@@ -283,9 +283,9 @@ function GnikrapBlocks() {
     }
 
     // Other simple replace (for better Javascript execution performances)
-    [ [/ev3.getBrick\(\).getKeyboard\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('ev3Keyboard'), 'ev3.getBrick().getKeyboard()'],
-      [/ev3.getBrick\(\).getLED\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('ev3LED'), 'ev3.getBrick().getLED()'],
-      [/ev3.getBrick\(\).getSound\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('ev3Sound'), 'ev3.getBrick().getSound()']
+    [ [/ev3.getBrick\(\).getKeyboard\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('keyboard'), 'ev3.getBrick().getKeyboard()'],
+      [/ev3.getBrick\(\).getLED\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('led'), 'ev3.getBrick().getLED()'],
+      [/ev3.getBrick\(\).getSound\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('sound'), 'ev3.getBrick().getSound()']
     ].forEach(function(value) {
         var varName = value[1];
         var newCode = code.replace(value[0], varName);

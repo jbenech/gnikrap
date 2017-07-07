@@ -214,7 +214,7 @@ var Utils = (function() {
     if(previous) {
       previous = previous.trim();
     }
-    if(previous && previous.indexOf("\"") >= 0) {
+    if(previous && (previous.indexOf("\"") != -1 || previous.indexOf("'") != -1)) {
       previous = undefined;
     }
     

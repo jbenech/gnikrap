@@ -25,7 +25,7 @@
 //   displayLoadScriptDialog(): void
 //   saveScript(): void
 //   getValue(): Value
-//   getJSCode(): String
+//   displayJSCode(): String
 //   isJSViewable() : boolean
 
  
@@ -162,8 +162,8 @@ function JavascriptEditor(appContext) {
     return self.ace.getValue();
   };
   
-  self.getJSCode = function() {
-    return self.getValue();
+  self.displayJSCode = function() {
+    // Does nothing
   }
   
   self.isJSViewable = function() {
@@ -271,9 +271,13 @@ function BlocklyEditor(appContext) {
     return (result.errors.length > 0 ? undefined : result.code);
   };
 
-  self.getJSCode = function() {
-    var result = self.blockly.buildJavascriptCode();
-    return result.code;
+  self.displayJSCode = function() {
+    var jsCode = self.getValue();
+    if(jsCode) {
+      self.context.viewCodeVM.display(jsCode);
+    } else {
+      bootbox.alert(i18n.t("scriptEditorTab.fixGenikrapErrorModal.title"));
+    }
   }
 
   self.isJSViewable = function() {
@@ -402,8 +406,7 @@ function ScriptEditorTabViewModel(appContext) {
 
   self.onViewJS = function() {
     if(self.editor) {
-      var jsCode = self.editor.getJSCode();
-      self.context.viewCodeVM.display(jsCode);
+      self.editor.displayJSCode();
     } else {
       console.log("Cannot view JavaScript, self.editor is not set");
     }
