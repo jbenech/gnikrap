@@ -44,17 +44,23 @@ public class EV3Constants {
   final static String BATTERY_KEY = "BATTERY";
   final static String SCREEN_KEY = "SCREEN";
 
-  // Sensor mode (for notification)
-  // IR sensor mode
+  // Sensor (for notification)
+  // IR sensor
   public static final String IR_SENSOR_REMOTE = "Remote";
   public static final String IR_SENSOR_DISTANCE = "Distance";
   public static final String IR_SENSOR_SEEK = "Seek";
-  // Color sensor mode
+  // Color sensor
   public static final String COLOR_SENSOR_REFLECTED_LIGHT = "Reflected";
   public static final String COLOR_SENSOR_AMBIENT_LIGHT = "Ambient";
   public static final String COLOR_SENSOR_COLOR = "Color";
-  // Battery sensor mode
+  // Battery sensor
   public static final String BATTERY_BATTERY_CURRENT = "BatteryCur";
   public static final String BATTERY_MOTOR_CURRENT = "MotorCur";
   public static final String BATTERY_VOLTAGE_MV = "VoltageMv";
+  // Sound sensor
+  public static final String SOUND_SENSOR_DBA = "DBA";
+  public static final String SOUND_SENSOR_DB = "DB";
+  // Ultrasonic sensor
+  public static final String ULTRASONIC_DISTANCE = "Distance";
+  public static final String ULTRASONIC_PRESENCE = "Presence";
 }

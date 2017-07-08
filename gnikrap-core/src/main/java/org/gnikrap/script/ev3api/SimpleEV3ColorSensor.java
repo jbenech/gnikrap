@@ -17,12 +17,12 @@
  */
 package org.gnikrap.script.ev3api;
 
+import org.gnikrap.utils.ScriptApi;
+
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.Color;
-
-import org.gnikrap.utils.ScriptApi;
 
 final public class SimpleEV3ColorSensor implements EV3Device {
 
@@ -58,9 +58,7 @@ final public class SimpleEV3ColorSensor implements EV3Device {
   }
 
   /**
-   * TODO: Confirm the value range
-   * 
-   * @return A value between 0 and 100.
+   * @return A value between 0 and 100 (normalized value in the {@link EV3ColorSensor#getRedMode} documentation).
    */
   @ScriptApi
   public int getReflectedLight() {
@@ -71,9 +69,7 @@ final public class SimpleEV3ColorSensor implements EV3Device {
   }
 
   /**
-   * TODO: Confirm the value range
-   * 
-   * @return A value between 0 and 100.
+   * @return A value between 0 and 100 (normalized value in the {@link EV3ColorSensor#getAmbientMode} documentation)
    */
   @ScriptApi
   public int getAmbientLight() {

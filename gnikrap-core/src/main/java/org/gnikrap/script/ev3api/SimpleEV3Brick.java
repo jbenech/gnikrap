@@ -22,14 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.gnikrap.script.EV3ScriptContext;
+import org.gnikrap.utils.MapBuilder;
+import org.gnikrap.utils.ScriptApi;
+
 import lejos.hardware.BrickFinder;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
-
-import org.gnikrap.script.EV3ScriptContext;
-import org.gnikrap.utils.MapBuilder;
-import org.gnikrap.utils.ScriptApi;
 
 /**
  * This class act as a factory and is the main entry point to access to the EV3 devices.<br/>
@@ -166,6 +166,34 @@ public class SimpleEV3Brick {
     }
     devices.put(port, new SimpleEV3TouchSensor(getSensorPort(port)));
     return getTouchSensor(port);
+  }
+
+  @ScriptApi(isIncubating = true, versionAdded = "0.5.0")
+  public SimpleNXTSoundSensor getSoundSensor(String port) throws EV3ScriptException {
+    EV3Device d = devices.get(port);
+    if (d != null) {
+      if (d instanceof SimpleNXTSoundSensor) {
+        return (SimpleNXTSoundSensor) d;
+      }
+      d.release();
+      devices.remove(port);
+    }
+    devices.put(port, new SimpleNXTSoundSensor(getSensorPort(port)));
+    return getSoundSensor(port);
+  }
+
+  @ScriptApi(isIncubating = true, versionAdded = "0.5.0")
+  public SimpleEV3UltrasonicSensor getUltrasonicSensor(String port) throws EV3ScriptException {
+    EV3Device d = devices.get(port);
+    if (d != null) {
+      if (d instanceof SimpleEV3UltrasonicSensor) {
+        return (SimpleEV3UltrasonicSensor) d;
+      }
+      d.release();
+      devices.remove(port);
+    }
+    devices.put(port, new SimpleEV3UltrasonicSensor(getSensorPort(port)));
+    return getUltrasonicSensor(port);
   }
 
   public void releaseResources() {

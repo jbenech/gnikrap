@@ -37,7 +37,7 @@ public @interface ScriptApi {
   String versionAdded() default "NA";
 
   /**
-   * Is the API in incubating state (caould be change)
+   * Is the API in incubating state (could be changed)
    */
   boolean isIncubating() default false;
 

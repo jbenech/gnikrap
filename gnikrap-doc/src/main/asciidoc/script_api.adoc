@@ -46,7 +46,7 @@ getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with th
                          *XSensorName*: the name of the sensor.
 
 exit():: Terminate the script. +
-         _Note_: If you use `try`/`catch` in your scripts, this function may not work as it use internally `Exception` in order to stop the script engine.
+         _Note_: If you use `try`/`catch` in your scripts, this function may not work as it internally use an `Exception` in order to stop the script.
 ****
 
 
@@ -108,6 +108,12 @@ getIRSensor(port):: Return an <<The IR (Infra-Red) sensor object,Infra-Red senso
 getTouchSensor(port):: Return a <<The Touch sensor object,Touch sensor>> object for the given port. +
                        *port*: value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
 
+getNXTSoundSensor(port):: Return a <<The NXTSound sensor object,NXTSound sensor>> object for the given port. +
+                       *port*: value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+
+getUltrasonicSensor(port):: Return a <<The Ultrasonic sensor object,Ultrasonic sensor>> object for the given port. +
+                            *port*: value should be in [`"1"`, `"2"`, `"3"`, `"4"`] or [`"S1"`, `"S2"`, `"S3"`, `"S4"`].
+                       
 getKeyboard():: Return <<The Keyboard object, Keyboard object>>.
 
 getLed():: Return the <<The Led object,Led object>>.
@@ -428,6 +434,32 @@ while(ev3.isOk()) {
   ev3.sleep(200);
 }
 ----
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The NXTSound sensor object
+// ///////////////////////////////////////////////////////////////////////////
+
+WARNING: Experimental implementation for this sensor. 
+
+****
+getDBA():: Returns the DBA. A value between 0 and 100.
+
+getDB():: Returns the DB. A value between 0 and 100.
+****
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== The Ultrasonic sensor object
+// ///////////////////////////////////////////////////////////////////////////
+
+WARNING: Experimental implementation for this sensor. 
+
+****
+getDistance():: Returns the distance in cm.
+
+isAnotherSensorDetected():: Returns `true` if another sensor was detected, `false` otherwise.
+****
 
 
 // ///////////////////////////////////////////////////////////////////////////
