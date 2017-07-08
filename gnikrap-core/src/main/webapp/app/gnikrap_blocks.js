@@ -53,12 +53,22 @@ function GnikrapBlocks() {
 
     self.XSENSOR_MAGIC = '@XSensorValue@';
     self.EV3_BRICK_COLOUR = 0;
-    self.EV3_KEYBOARD_COLOUR = 0; // 75;
-    self.EV3_COLOR_SENSOR_COLOUR = 25;
-    self.EV3_IR_SENSOR_COLOUR = 50;
+    self.EV3_KEYBOARD_COLOUR = 0;
+    self.EV3_MOTOR_COLOUR = 20;
+    self.EV3_COLOR_SENSOR_COLOUR = 40;
+    self.EV3_IR_SENSOR_COLOUR = 60;
+    self.EV3_TOUCH_SENSOR_COLOUR = 80;
     self.XSENSOR_COLOUR = 100;
-    self.EV3_TOUCH_SENSOR_COLOUR = 225;
-    self.EV3_MOTOR_COLOUR = 275;
+    
+    // Colors that match the predefined blocks colour
+    self.BLOCKLY_LOOP_COLOUR = 120;
+    self.BLOCKLY_LOGIC_COLOUR = 210;
+    self.BLOCKLY_MATH_COLOUR = 230;
+    // Advanced
+    self.BLOCKLY_TEXT_COLOUR = 160;
+    self.BLOCKLY_LIST_COLOUR = 260;
+    self.BLOCKLY_PROCEDURE_COLOUR = 290;
+    self.BLOCKLY_VARIABLE_COLOUR = 330;
 
     self.workspace = undefined; // Useless, already to undefined here :-)
   })();
@@ -209,14 +219,18 @@ function GnikrapBlocks() {
    */
   self.loadEV3Blocks = function(ev3blocks) {
     if(ev3blocks) { 
-      if(ev3blocks.version && ev3blocks.version == 1) {
-        var xml = Blockly.Xml.textToDom(ev3blocks.blocklyXML);
-        Blockly.Xml.domToWorkspace(xml, self.__getWorkspace());
+      if(ev3blocks.version) {
+        if(ev3blocks.version == 1) {
+          var xml = Blockly.Xml.textToDom(ev3blocks.blocklyXML);
+          Blockly.Xml.domToWorkspace(xml, self.__getWorkspace());
+        } else {
+          throw "File corrupted, unsuported version. Version: '" + ev3blocks.version + "'";
+        }
       } else {
-        throw "No version set in ev3blocks or unsuported version. Version: '" + ev3blocks.version + "'";
+        throw "File corrupted, no version set.";
       }
     } else {
-      throw "No ev3blocks provided";
+      throw "No ev3blocks data provided.";
     }
   }
   
@@ -337,8 +351,21 @@ function GnikrapBlocks() {
 
   self.__generateBlocklyCategories = function() {
     var xml = [ ];
+    // Loop
+    xml.push('<category id="catLoops"  name="' + i18n.t("blocks.categories.loops") + '" colour="' + self.BLOCKLY_LOOP_COLOUR + '">');
+    xml.push([
+          {type: "controls_repeat_ext",
+            xmlContent: '<value name="TIMES"><block type="math_number"><field name="NUM">10</field></block></value>'},
+          {type: "controls_whileUntil"},
+          {type: "controls_whileUntil",
+            xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
+          {type: "controls_forEach"}
+        ].map(self.__blockToXML).join(''));
+    // Other existing blocks: controls_for, controls_flow_statements
+    xml.push('</category>');
+
     // Logic
-    xml.push('<category id="catLogic" name="' + i18n.t("blocks.categories.logic") + '" colour="210">');
+    xml.push('<category id="catLogic" name="' + i18n.t("blocks.categories.logic") + '" colour="' + self.BLOCKLY_LOGIC_COLOUR + '">');
     xml.push([
           {type: "controls_if"},
           {type: "controls_if",
@@ -351,21 +378,8 @@ function GnikrapBlocks() {
     // Other existing blocks: logic_null, logic_ternary
     xml.push('</category>');
 
-    // Loop
-    xml.push('<category id="catLoops"  name="' + i18n.t("blocks.categories.loops") + '" colour="120">');
-    xml.push([
-          {type: "controls_repeat_ext",
-            xmlContent: '<value name="TIMES"><block type="math_number"><field name="NUM">10</field></block></value>'},
-          {type: "controls_whileUntil"},
-          {type: "controls_whileUntil",
-            xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
-          {type: "controls_forEach"}
-        ].map(self.__blockToXML).join(''));
-    // Other existing blocks: controls_for, controls_flow_statements
-    xml.push('</category>');
-
     // Math
-    xml.push('<category id="catMath" name="' + i18n.t("blocks.categories.math") + '" colour="230">');
+    xml.push('<category id="catMath" name="' + i18n.t("blocks.categories.math") + '" colour="' + self.BLOCKLY_MATH_COLOUR + '">');
     xml.push([
           {type: "math_number"},
           {type: "math_arithmetic"},
@@ -382,39 +396,6 @@ function GnikrapBlocks() {
           {type: "math_on_list"}
         ].map(self.__blockToXML).join(''));
     // Other existing blocks: math_trig, math_constant, math_change, math_random_float
-    xml.push('</category>');
-
-    // Text
-    xml.push('<category id="catText" name="' + i18n.t("blocks.categories.text") + '" colour="160">');
-    xml.push([
-          {type: "text"},
-          {type: "text_join"},
-          {type: "text_length"},
-          {type: "text_isEmpty"},
-          {type: "text_charAt",
-            xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="textVar">text</field></block></value>' +
-              '<value name="AT"><block type="math_number"><field name="NUM">0</field></block></value>'}
-        ].map(self.__blockToXML).join(''));
-    // other existing blocks: text_append, text_indexOf, text_getSubstring, text_changeCase, text_trim, text_print, text_prompt_ext
-    xml.push('</category>');
-
-    // Lists
-    xml.push('<category id="catLists" name="' + i18n.t("blocks.categories.lists") + '" colour="260">');
-    xml.push([
-          {type: "lists_create_empty"},
-          {type: "lists_create_with"},
-          {type: "lists_length"},
-          {type: "lists_isEmpty"},
-          {type: "lists_indexOf",
-            xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
-          {type: "lists_getIndex",
-            xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
-          {type: "lists_setIndex",
-            xmlContent: '<value name="LIST"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
-          {type: "lists_getSublist",
-            xmlContent: '<value name="LIST"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'}
-        ].map(self.__blockToXML).join(''));
-    // other existing blocks: lists_repeat, list-split
     xml.push('</category>');
 
     return xml.join('');
@@ -445,6 +426,21 @@ function GnikrapBlocks() {
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
 
+    xml.push('<category name="' + i18n.t("blocks.categories.motors") + '" colour="' + self.EV3_MOTOR_COLOUR + '">');
+    xml.push([
+          {type: "gnikrap_ev3_motor_settype"},
+          {type: "gnikrap_ev3_motor_move"},
+          {type: "gnikrap_ev3_motor_rotate",
+            xmlContent: '<value name="VALUE"><block type="math_number"><field name="NUM">180</field></block></value>' },
+          {type: "gnikrap_ev3_motor_setspeed",
+            xmlContent: '<value name="SPEED"><block type="math_number"><field name="NUM">75</field></block></value>'},
+          {type: "gnikrap_ev3_motor_getspeed"},
+          {type: "gnikrap_ev3_motor_ismoving"},
+          {type: "gnikrap_ev3_motor_resettacho"},
+          {type: "gnikrap_ev3_motor_gettacho"}
+        ].map(self.__blockToXML).join(''));
+    xml.push('</category>');
+
     xml.push('<category name="' + i18n.t("blocks.categories.color_sensor") + '" colour="' + self.EV3_COLOR_SENSOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_colorsensor_reflected"},
@@ -463,21 +459,6 @@ function GnikrapBlocks() {
     xml.push('<category name="' + i18n.t("blocks.categories.touch_sensor") + '" colour="' + self.EV3_TOUCH_SENSOR_COLOUR + '">');
     xml.push([
           {type: "gnikrap_ev3_touchsensor_pushed"}
-        ].map(self.__blockToXML).join(''));
-    xml.push('</category>');
-
-    xml.push('<category name="' + i18n.t("blocks.categories.motors") + '" colour="' + self.EV3_MOTOR_COLOUR + '">');
-    xml.push([
-          {type: "gnikrap_ev3_motor_settype"},
-          {type: "gnikrap_ev3_motor_move"},
-          {type: "gnikrap_ev3_motor_rotate",
-            xmlContent: '<value name="VALUE"><block type="math_number"><field name="NUM">180</field></block></value>' },
-          {type: "gnikrap_ev3_motor_setspeed",
-            xmlContent: '<value name="SPEED"><block type="math_number"><field name="NUM">75</field></block></value>'},
-          {type: "gnikrap_ev3_motor_getspeed"},
-          {type: "gnikrap_ev3_motor_ismoving"},
-          {type: "gnikrap_ev3_motor_resettacho"},
-          {type: "gnikrap_ev3_motor_gettacho"}
         ].map(self.__blockToXML).join(''));
     xml.push('</category>');
 
@@ -502,9 +483,42 @@ function GnikrapBlocks() {
 
   self.__generateMagicCategories = function() {
     var xml = [];
-    xml.push('<category name="' + i18n.t("blocks.categories.variables") + '" custom="VARIABLE" colour="330"></category>');
-    xml.push('<category name="' + i18n.t("blocks.categories.functions") + '" custom="PROCEDURE" colour="290"></category>');
-    return xml.join('');
+    // Text
+    xml.push('<category id="catText" name="' + i18n.t("blocks.categories.text") + '" colour="' + self.BLOCKLY_TEXT_COLOUR + '">');
+    xml.push([
+          {type: "text"},
+          {type: "text_join"},
+          {type: "text_length"},
+          {type: "text_isEmpty"},
+          {type: "text_charAt",
+            xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="textVar">text</field></block></value>' +
+              '<value name="AT"><block type="math_number"><field name="NUM">0</field></block></value>'}
+        ].map(self.__blockToXML).join(''));
+    // other existing blocks: text_append, text_indexOf, text_getSubstring, text_changeCase, text_trim, text_print, text_prompt_ext
+    xml.push('</category>');
+
+    // Lists
+    xml.push('<category id="catLists" name="' + i18n.t("blocks.categories.lists") + '" colour="' + self.BLOCKLY_LIST_COLOUR + '">');
+    xml.push([
+          {type: "lists_create_empty"},
+          {type: "lists_create_with"},
+          {type: "lists_length"},
+          {type: "lists_isEmpty"},
+          {type: "lists_indexOf",
+            xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
+          {type: "lists_getIndex",
+            xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
+          {type: "lists_setIndex",
+            xmlContent: '<value name="LIST"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
+          {type: "lists_getSublist",
+            xmlContent: '<value name="LIST"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'}
+        ].map(self.__blockToXML).join(''));
+    // other existing blocks: lists_repeat, list-split
+    xml.push('</category>');
+    
+    xml.push('<category name="' + i18n.t("blocks.categories.functions") + '" custom="PROCEDURE" colour="' + self.BLOCKLY_PROCEDURE_COLOUR + '"></category>');
+    xml.push('<category name="' + i18n.t("blocks.categories.variables") + '" custom="VARIABLE" colour="' + self.BLOCKLY_VARIABLE_COLOUR + '"></category>');
+    return '<category name="' + i18n.t("blocks.categories.advanced") + '">' + xml.join('') + '</category>';
   };
 
   self.__generateXmlToolboxTree = function() {
@@ -514,7 +528,6 @@ function GnikrapBlocks() {
     xml.push(self.__generateGnikrapCategories());
     xml.push('<sep></sep>');
     xml.push(self.__generateBlocklyCategories());
-    xml.push('<sep></sep>');
     xml.push(self.__generateMagicCategories());
 
     xml.push('</xml>');

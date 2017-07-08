@@ -318,7 +318,9 @@
       "motors": "Motors",
 
       "variables": "Variables",
-      "functions": "Functions"
+      "functions": "Functions",
+      
+      "advanced": "Advanced"
     },
     
     "errors": {
