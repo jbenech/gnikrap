@@ -169,7 +169,7 @@ public class SimpleEV3Brick {
   }
 
   @ScriptApi(isIncubating = true, versionAdded = "0.5.0")
-  public SimpleNXTSoundSensor getSoundSensor(String port) throws EV3ScriptException {
+  public SimpleNXTSoundSensor getNXTSoundSensor(String port) throws EV3ScriptException {
     EV3Device d = devices.get(port);
     if (d != null) {
       if (d instanceof SimpleNXTSoundSensor) {
@@ -179,7 +179,7 @@ public class SimpleEV3Brick {
       devices.remove(port);
     }
     devices.put(port, new SimpleNXTSoundSensor(getSensorPort(port)));
-    return getSoundSensor(port);
+    return getNXTSoundSensor(port);
   }
 
   @ScriptApi(isIncubating = true, versionAdded = "0.5.0")

@@ -71,7 +71,7 @@ public class SimpleEV3UltrasonicSensor implements EV3Device {
    * @return True if another ultrasonic sensor is detected, false otherwise.
    */
   @ScriptApi(isIncubating = true, versionAdded = "0.5.0")
-  public boolean isAnotherSensorDetected() {
+  public boolean isUltrasonicDetected() {
     listenMode.fetchSample(listenSample, 0);
     float result = listenSample[0];
     logger.log(EV3Constants.ULTRASONIC_PRESENCE, result);

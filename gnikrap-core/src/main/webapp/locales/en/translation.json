@@ -613,7 +613,7 @@
       "keywords": ["brick", "getBrick"],
       "score": 110,
       "words": ["getMediumMotor(\"A\")", "getLargeMotor(\"A\")", "getColorSensor(\"1\")", "getIRSensor(\"1\")", "getTouchSensor(\"1\")",
-                "getKeyboard()", "getLed()", "getSound()", "getScreen()", "getBattery()"]
+                "getKeyboard()", "getLed()", "getSound()", "getScreen()", "getBattery()", "getNXTSoundSensor(\"1\")", "getUltrasonicSensor(\"1\")"]
     },
     "motor": { 
       "keywords": ["motor", "getMediumMotor", "getLargeMotor"],
@@ -676,6 +676,16 @@
       "keywords": ["battery", "getBattery"],
       "score": 10,
       "words": ["getBatteryCurrent()", "getMotorCurrent()", "getVoltageMilliVolt()"]
+    },
+    "NXTSound": {
+      "keywords": ["NXTSound", "getNXTSoundSensor", "sound"],
+      "score": 5,
+      "words": ["getDBA()", "getDB()"]
+    },
+    "ultrasonic": {
+      "keywords": ["ultrasonic", "getUltrasonicSensor"],
+      "score": 4,
+      "words": ["getDistance()", "isUltrasonicDetected()"]
     },
     "xSensor": {
       "keywords": ["xSensor", "getXSensor"],

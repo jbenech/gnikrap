@@ -458,7 +458,7 @@ WARNING: Experimental implementation for this sensor.
 ****
 getDistance():: Returns the distance in cm.
 
-isAnotherSensorDetected():: Returns `true` if another sensor was detected, `false` otherwise.
+isUltrasonicDetected():: Returns `true` if another sensor was detected, `false` otherwise.
 ****
 
 
