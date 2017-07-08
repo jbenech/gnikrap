@@ -1,5 +1,9 @@
 == Quick overview
 
+// ///////////////////////////////////////////////////////////////////////////
+=== Main screen
+// ///////////////////////////////////////////////////////////////////////////
+
 You can first have a look to video that introduce the main concept of Gnikrap: https://www.youtube.com/watch?feature=player_embedded&v=NE7edagobj8[Gnikrap introduction to EV3 programming with Javascript]
 
 
@@ -22,8 +26,36 @@ image::Gnikrap_MainScreenArea.png[Main screen areas]
 
 The Gnikrap menu give access to following features:
 
-* **Stopping Gnikrap**: Either stopping Gnikrap and come back to the leJOS menu or stopping (shutdown) the E3 brick.
-* **Importing images**: This screen give the ability to generate the code (including the image data) in order to use images within Gnikrap.
+* **Toggle full screen**: Toggle the browser in full screen mode (no more title bar/status bar/task bar displayed)
+* **Import images**: This screen give the ability to generate the code (including the image data) in order to use images within Gnikrap.
+* **Stop Gnikrap**: Either stopping Gnikrap and come back to the leJOS menu or stopping (shutdown) the E3 brick.
+* **Settings**: Display the configuration of Gnikrap:
+** Can switch the language of the graphical user interface (currently English and rench are available)
+** Can switch from JavaScript and Blockly (Scratch-like) programming mode
 * **Documentation**: Give access to an embedded version of the documentation. +
   _Note_: In order to have the up to date version of the documentation please visit the Gnikrap site: http://jbenech.github.io/gnikrap/
 * **About box**: Give standard informations on licensing and author.
+
+
+// ///////////////////////////////////////////////////////////////////////////
+=== Scratch-like editor
+// ///////////////////////////////////////////////////////////////////////////
+
+image::Gnikrap_Blockly.png[Scratch-like editor]
+
+In order to enable this graphical editor:
+
+. Click on "Gnikrap" on the top-right of the screen
+. Choose "Settings"
+. Select "Visual" in programming style
+. And finally save the settings
+
+
+On each blocks, an integrated help is available through tool tips.
+
+If you need more help on this editor, please contact the author or open an issue https://github.com/jbenech/gnikrap/issues[here].
+
+[TIP]
+====
+A way to have more details documentation on blocks is to generated the JavaScript code and consult the documentation of JavaScript functions (in this document).
+====

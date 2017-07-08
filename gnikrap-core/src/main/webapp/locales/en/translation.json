@@ -195,7 +195,7 @@
     "language": "Language",
     "programmingStyle": "Programming style",
     "programmingStyleText": "Text (JavaScript)",
-    "programmingStyleVisual": "Visual (EV3 blocks)",
+    "programmingStyleVisual": "Visual (Scratch-like)",
     "save": "Save",
     "cancel": "Cancel"
   },

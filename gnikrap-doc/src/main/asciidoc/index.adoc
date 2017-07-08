@@ -11,7 +11,7 @@ Gnikrap documentation
 Jean Bénech <jbenech at free dot fr>
 v0.5.0 (c) 2014-2017
 
-A javascript development environment simple to use and powerfull for http://mindstroms.lego.com[Lego Mindstrom EV3]
+A Scratch-like and JavaScript development environment for http://www.lego.com/mindstorms/[Lego Mindstrom EV3]
 
 // Paragraphs
 

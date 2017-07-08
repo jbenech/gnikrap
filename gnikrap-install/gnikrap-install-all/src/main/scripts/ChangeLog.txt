@@ -60,7 +60,7 @@ Features to add (no specific order):
  - Add real time sensor probes
  - Add port checking (auto detection for EV3 devices)
  - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
- - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor, Soud sensor) - Will be done while I buy these two sensors :-)
+ - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor, Sound sensor) - Will be done while I buy these two sensors :-)
  - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items, etc.)
  - Add support for leJOS 0.9.1-beta (currently 0.9.0-beta)
 
@@ -71,6 +71,7 @@ Known defects:
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
  - (0.4.0 and following) - xVideo don't work with some combinaison of webcam/browser
+ - (0.4.0 and following) - Seems don't work with version 0.9.1-beta of leJOS (work fine with 0.9.0-beta)
 
 Fixed defects:
  - (0.4.0) - French translation don't work (page will not load) - Let me known if you need a specific patch for this one - Fixed in 0.5.0
@@ -82,16 +83,19 @@ Work in progress:
  0.5.0:
     - Blockly:
       - Blockly blocks added: logic, loops, math, text, lists, variables, functions
-      - Gnikrap blocks created: EV3 brick, Color sensor, IR sensor, Touch sensor, Motors, xSensors
-      - Realtime 'Warning' on erroneous blocks
-      - Javascript code generation
+      - Gnikrap blocks created: EV3 brick, Color sensor, IR sensor, Touch sensor, Motors
+      - Realtime 'Warning'/'Error' on erroneous blocks / erroneous use of ports
+      - Javascript code generation and visualization (can copy/paste in JavaScript editor)
+      - Load and save blockly scripts
     - Settings dialog added (switch language and Text/Visual programming)
     - Demo mode added (GUI can be launched without error even if not installed on an EV3)
     - Autocompletion added in javascript editor (use [Ctrl]+[Space])
     - Load/save xKeyboard added
     - Add an API to exit from the script
+    - Add experimental support for NXTSound sensor
+    - Add experimental support for Ultrasonic sensor
     - Documentation updated
     - Update versions of some library used (ace.js, undertow, etc.)
-    
+
     - Fix: 
-      - All translations are working (translation files are now automatically checked)
+      - All translations are now working (translation files are now automatically checked)
