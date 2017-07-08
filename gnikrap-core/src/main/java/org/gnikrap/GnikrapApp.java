@@ -90,6 +90,7 @@ public class GnikrapApp implements GnikrapAppContext {
     String webContentFolder = config.getValueAsString("WebContent");
     String scriptsFolder = config.getValueAsString("ScriptsFolder");
     String keyboardFolder = config.getValueAsString("xKeyboardFolder");
+    String blocklyFolder = config.getValueAsString("BlocklyFolder");
     httpPort = config.getValueAsInt("HttpPort", 8080);
 
     // Init web-socket callback
@@ -102,7 +103,8 @@ public class GnikrapApp implements GnikrapAppContext {
                 // ////////////////////////////////////
                 .addPrefixPath("/ws/gnikrap/script", websocket(webSocketConnectionCallback)) //
                 .addPrefixPath("/rest/scriptfiles", new FolderHttpHandler(scriptsFolder)) //
-                .addPrefixPath("/rest/xkeyboardfiles", new FolderHttpHandler(keyboardFolder))
+                .addPrefixPath("/rest/xkeyboardfiles", new FolderHttpHandler(keyboardFolder))//
+                .addPrefixPath("/rest/blocklyfiles", new FolderHttpHandler(blocklyFolder))
                 // ////////////////////////////////////
                 .addPrefixPath("/",
                     resource(new FileResourceManager(new File(webContentFolder), 4096)). //

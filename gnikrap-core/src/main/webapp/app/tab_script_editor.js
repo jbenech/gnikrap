@@ -24,9 +24,9 @@
 //   loadDefaultScript(): void
 //   displayLoadScriptDialog(): void
 //   saveScript(): void
-//   getValue(): Value
-//   displayJSCode(): String
-//   isJSViewable() : boolean
+//   getValue(): String // Return the JS code
+//   displayJSCode(): String // Display the JS code
+//   isJSViewable() : boolean // Is the JS code viewable
 
  
  // The Javascript editor using the ace component (http://ace.c9.io/)
@@ -254,9 +254,36 @@ function BlocklyEditor(appContext) {
   };
 
   self.saveScript = function() {
-    // TODO
-  }
+    bootbox.prompt({
+      title: i18n.t('scriptEditorTab.saveScriptModal.title'),
+      value: (self.scriptFilename ? self.scriptFilename : ""),
+      callback: function(result) {
+        if (result && (result.trim().lenght != 0)) {
+          var filename = result.trim();
+          console.log("Save ev3blocks: '" + filename + "'");
+          $.ajax({
+            url: self.STORAGE_URL_PREFIX + filename,
+            content: "application/json",
+            data:  JSON.stringify({
+              name: filename,
+              content: JSON.stringify(self.blockly.getEV3Blocks()) // String expected by Java code
+            }),
+            type: "PUT",
+            success: function(data, status) {
+              self.scriptFilename = filename;
+              self.context.messageLogVM.addMessage(false, i18n.t("scriptEditorTab.scriptSuccessfullySaved", {"filename": filename }));
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+              self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantSaveScriptFile",
+                { "filename": filename, causedBy: ("" + XMLHttpRequest.status + " - " +  errorThrown)}));
+            }
+          });
+        } // else: cancel clicked
+      }
+    });
+   }
   
+  // Returns the JS code or undefined if there is errors
   self.getValue = function() {
     var result = self.blockly.buildJavascriptCode();
     console.log("Code generated: " + result.code);
@@ -291,16 +318,21 @@ function BlocklyEditor(appContext) {
   }
   
   self.loadScriptFile = function(filename) {
-    // TODO - FINALIZE
-    self.setValue(i18n.t("scriptEditorTab.loadingScripWait", { "filename": filename }));
+    self.clearScript();
     self.scriptFilename = undefined;
     $.ajax({
       url: self.STORAGE_URL_PREFIX + filename,
       success: function(data, status) {
-        var scriptFile = JSON.parse(data);
-        self.setValue(scriptFile.content);
-        if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
-          self.scriptFilename = filename;
+        try {
+          var scriptFile = JSON.parse(data);
+          var ev3blocks = JSON.parse(scriptFile.content);
+          self.blockly.loadEV3Blocks(ev3blocks);
+          if(filename.indexOf("__") != 0) { // Not read-only => memorize the filename
+            self.scriptFilename = filename;
+          }
+        } catch(e) {
+          self.context.messageLogVM.addMessage(true, i18n.t("scriptEditorTab.errors.cantLoadScriptFile",
+          { "filename": filename, causedBy: ("" + e)}));
         }
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {

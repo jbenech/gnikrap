@@ -52,12 +52,12 @@ function GnikrapBlocks() {
     Blockly.HSV_VALUE = 0.70;
 
     self.XSENSOR_MAGIC = '@XSensorValue@';
-    self.EV3_COLOR_SENSOR_COLOUR = 0;
-    self.EV3_IR_SENSOR_COLOUR = 25;
-    self.EV3_TOUCH_SENSOR_COLOUR = 50;
-    self.EV3_KEYBOARD_COLOUR = 225; // 75;
+    self.EV3_BRICK_COLOUR = 0;
+    self.EV3_KEYBOARD_COLOUR = 0; // 75;
+    self.EV3_COLOR_SENSOR_COLOUR = 25;
+    self.EV3_IR_SENSOR_COLOUR = 50;
     self.XSENSOR_COLOUR = 100;
-    self.EV3_BRICK_COLOUR = 225;
+    self.EV3_TOUCH_SENSOR_COLOUR = 225;
     self.EV3_MOTOR_COLOUR = 275;
 
     self.workspace = undefined; // Useless, already to undefined here :-)
@@ -202,10 +202,35 @@ function GnikrapBlocks() {
     });
   };
 
-  // Note can throw exception if XML isn't valid
-  self.loadXML = function(xml) {
-    var xml = Blockly.Xml.textToDom(xml);
-    Blockly.Xml.domToWorkspace(xml, self.__getWorkspace());
+  /**
+   * Load blocks from the provided JavaScript object.
+   *
+   * Note: can throw exception if XML isn't valid
+   */
+  self.loadEV3Blocks = function(ev3blocks) {
+    if(ev3blocks) { 
+      if(ev3blocks.version && ev3blocks.version == 1) {
+        var xml = Blockly.Xml.textToDom(ev3blocks.blocklyXML);
+        Blockly.Xml.domToWorkspace(xml, self.__getWorkspace());
+      } else {
+        throw "No version set in ev3blocks or unsuported version. Version: '" + ev3blocks.version + "'";
+      }
+    } else {
+      throw "No ev3blocks provided";
+    }
+  }
+  
+  /**
+   * Returns a javascript 'object' with the blocks information.
+   */
+  self.getEV3Blocks = function() {
+    var blocklyXML = Blockly.Xml.workspaceToDom(self.__getWorkspace());
+    var blocklyText = Blockly.Xml.domToText(blocklyXML);
+
+    return {
+      version: 1,
+      "blocklyXML": blocklyText
+    };
   }
   
   // Clear the current script
@@ -299,7 +324,7 @@ function GnikrapBlocks() {
       result.errors.push(i18n.t("blocks.errors.compileXSensorMustBeInsideWithxSensorDo"));
     }
 
-    result.code = code;
+    result.code = code.trim();
     return result;
   };
 
@@ -406,8 +431,8 @@ function GnikrapBlocks() {
             xmlContent: '<value name="TIME"><block type="math_number"><field name="NUM">100</field></block></value>' },
           {type: "gnikrap_ev3_stop"},
           {type: "gnikrap_ev3_isok"},
-//          {type: "controls_whileUntil",
-//            xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
+          {type: "controls_whileUntil",
+            xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
           {type: "gnikrap_ev3_led"},
           {type: "gnikrap_ev3_sound_setvolume",
             xmlContent: '<value name="VOL"><block type="math_number"><field name="NUM">70</field></block></value>' },

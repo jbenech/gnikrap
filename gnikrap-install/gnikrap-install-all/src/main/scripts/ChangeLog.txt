@@ -7,7 +7,7 @@ Current stable release is: 0.4.0
 
 Version history:
  0.4.0 (28APR2015 - leJOS Firmware/Menu integration)
-    - Easy use (no more need telnet/ssh/scp) / leJOS integration:
+    - Easy to use (no more need telnet/ssh/scp) / leJOS integration:
       - Automated GUI installation on Windows.
       - Shell script (for the EV3) for others platforms.
       - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
@@ -60,8 +60,9 @@ Features to add (no specific order):
  - Add real time sensor probes
  - Add port checking (auto detection for EV3 devices)
  - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
- - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor) - Will be done while I buy these two sensors :-)
+ - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor, Soud sensor) - Will be done while I buy these two sensors :-)
  - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items, etc.)
+ - Add support for leJOS 0.9.1-beta (currently 0.9.0-beta)
 
  
 ------------------------------------------------------------------------------
@@ -69,10 +70,12 @@ Features to add (no specific order):
 Known defects:
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
+ - (0.4.0 and following) - xVideo don't work with some combinaison of webcam/browser
+
+Fixed defects:
  - (0.4.0) - French translation don't work (page will not load) - Let me known if you need a specific patch for this one - Fixed in 0.5.0
- - (0.4.0) - xVideo problems (don't work) with some combinaison of webcam/browser
 
-
+ 
 ------------------------------------------------------------------------------
 
 Work in progress:
@@ -88,7 +91,7 @@ Work in progress:
     - Load/save xKeyboard added
     - Add an API to exit from the script
     - Documentation updated
-    - Update versions of some library used (ace.js, etc.)
+    - Update versions of some library used (ace.js, undertow, etc.)
     
     - Fix: 
       - All translations are working (translation files are now automatically checked)

@@ -631,13 +631,13 @@
       "words": ["setChannel(1)", "getChannel()", "getDistance()", "getRemoteCommand()", "seekBeacon()"]
     },
     "IR RC": { 
-      "keywords": ["ir", "getIRSensor", "infra", "infrared", "getRemoteCommand", "remote", "command"],
+      "keywords": ["ir", "getIRSensor", "getRemoteCommand", "remote", "command"],
       "score": 80,
       "words": ["getValue()", "isTopLeftEnabled()", "isTopRightEnabled()", "isBottomLeftEnabled()", "isBottomRightEnabled()", 
                 "isBeaconEnabled()", "isNothingEnabled()"]
     },
     "IR SB": {
-      "keywords": ["ir", "getIRSensor", "infra", "infrared", "seekBeacon", "beacon"],
+      "keywords": ["ir", "getIRSensor", "seekBeacon", "beacon"],
       "score": 80,
       "words": ["isBeaconFound()", "getBearing()", "getDistance()", "isBeaconFound(0)", "getBearing(0)", "getDistance(0)"]
     },
