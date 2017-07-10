@@ -444,7 +444,7 @@
     },
 
     "gnikrap_ev3_irsensor_getdistance": {
-      "tooltip": "The distance from the IR sensor: a value between 0 and 100.",
+      "tooltip": "Return the distance from the IR sensor: a value between 0 and 100.",
       "text_distance_to_sensor": "distance to IR sensor"
     },
 
@@ -498,7 +498,7 @@
     },
 
     "gnikrap_ev3_motor_move": {
-      "tooltip": "TODO",
+      "tooltip": "Start/stop the given motor. The program execution continue immediatly while the motor has taken in account the action.",
       "list_motor_actions": {
         "FORWARD": "rotate forward motor",
         "BACKWARD": "rotate backward motor",
@@ -508,13 +508,13 @@
     },
 
     "gnikrap_ev3_motor_ismoving": {
-      "tooltip": "Return true if the motor is currently moving, false otherwise.",
+      "tooltip": "Return true if the motor is moving, false otherwise.",
       "text_motor": "motor",
       "text_is_moving": "is moving"
     },
 
     "gnikrap_ev3_motor_rotate": {
-      "tooltip": "TODO",
+      "tooltip": "Rotate the given motor for the given number of turn or degree. With 'start rotate', the program execution continue immediatly while the motor has taken in account the action. With 'rotate' the program wait the end of the move before going further.",
       "list_motor_actions": {
         "ROTATE": "rotate motor",
         "ROTATE_NO_WAIT": "start rotate motor"
@@ -533,13 +533,13 @@
     },
 
     "gnikrap_ev3_motor_getspeed": {
-      "tooltip": "Get the speed of the motor.",
+      "tooltip": "Return the speed of the motor.",
       "text_speed_of_motor": "speed of motor",
       "text_in": "in"
     },
 
     "gnikrap_ev3_motor_gettacho": {
-      "tooltip": "Get the tacho count since the last 'reset tacho'.",
+      "tooltip": "Return the tacho count since the last 'reset tacho'.",
       "text_tacho_count_of_motor": "tacho count of motor"
     },
 
