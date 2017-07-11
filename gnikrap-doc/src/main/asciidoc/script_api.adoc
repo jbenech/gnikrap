@@ -23,7 +23,7 @@ the API in a more efficient way:
 === JavaScript autocompletion
 // ///////////////////////////////////////////////////////////////////////////
 
-Since version 0.5.0, the JavaScript editor has an autocompletion feature. In order to enable it, while editing click on kbd:[Ctrl+Space]. The list of available functions will be displayed. According to the current context the more relevant items are at the begining of the list but list always contains all the items.
+Since version 0.5.0, the JavaScript editor has an autocompletion feature. In order to enable it, while editing press kbd:[Ctrl+Space]. The list of available functions will be displayed. According to the current context the more relevant items are at the begining of the list but the list always contains all the items.
 
 [TIP]
 ====

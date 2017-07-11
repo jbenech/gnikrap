@@ -57,5 +57,5 @@ If you need more help on this editor, please contact the author or open an issue
 
 [TIP]
 ====
-A way to have more details documentation on blocks is to generated the JavaScript code and consult the documentation of JavaScript functions (in this document).
+A way to have more detailed documentation on blocks is to generated the JavaScript code and consult the documentation of JavaScript functions (in this page).
 ====

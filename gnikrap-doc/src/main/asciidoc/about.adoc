@@ -8,14 +8,15 @@
 * Gnikrap is *straightforward to use*.
 * Gnikrap can be *used on a computer or a tablet*, in fact any device that have a modern browser (HTML5 compatible).
 * *Javascript*, is currently (2017) one of the more popular scripting language
-* Since version 0.5.0 autocompletion make writing JavaScript really more easier.
+* Code autocompletion (since 0.5.0) make writing JavaScript really more easier.
 
-=== Scratch-like the EV3
 
-Gnikrap started with JavaScript in mind. The fact that my son was not really familiar with JavaScript but often use Scratch-like applications/games make me reconsider this choice. *Since version 0.5.0 a https://scratch.mit.edu/[Scratch]-like editor has been added to Gnikrap in order to write program simply.*
+=== Scratch-like on the EV3
 
-* A Scratch-like editor to program the EV3 brick simply (even more simple than the Lego default programing environment).
-* *Generation of clean JavaScript code* from any Scratch-like program: This provide an easy way to JavaScript programmation.
+*Since version 0.5.0 a https://scratch.mit.edu/[Scratch]-like editor has been added to Gnikrap in order to write program simply.* This feature has been added mainly to provide to kids that are often familiar with Scratch-like applications/games a simple way to start before moving towards JavaScript programming
+
+* A Scratch-like editor to program the EV3 brick simply (even more simple than the programing environment provided with the Mindstrom).
+* *Generation of clean JavaScript code* from any Scratch-like program: This provide an easy way to JavaScript programming.
 
 [NOTE]
 ====

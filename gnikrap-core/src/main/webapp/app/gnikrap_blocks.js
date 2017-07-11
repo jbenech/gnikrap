@@ -354,11 +354,11 @@ function GnikrapBlocks() {
     // Loop
     xml.push('<category id="catLoops"  name="' + i18n.t("blocks.categories.loops") + '" colour="' + self.BLOCKLY_LOOP_COLOUR + '">');
     xml.push([
-          {type: "controls_repeat_ext",
-            xmlContent: '<value name="TIMES"><block type="math_number"><field name="NUM">10</field></block></value>'},
-          {type: "controls_whileUntil"},
           {type: "controls_whileUntil",
             xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
+          {type: "controls_whileUntil"},
+          {type: "controls_repeat_ext",
+            xmlContent: '<value name="TIMES"><block type="math_number"><field name="NUM">10</field></block></value>'},
           {type: "controls_forEach"}
         ].map(self.__blockToXML).join(''));
     // Other existing blocks: controls_for, controls_flow_statements
@@ -406,14 +406,14 @@ function GnikrapBlocks() {
 
     xml.push('<category name="' + i18n.t("blocks.categories.ev3_brick") + '" colour="' + self.EV3_BRICK_COLOUR + '">');
     xml.push([
-          {type: "gnikrap_ev3_notify"},
-          {type: "gnikrap_ev3_wait_until"},
-          {type: "gnikrap_ev3_sleep",
-            xmlContent: '<value name="TIME"><block type="math_number"><field name="NUM">100</field></block></value>' },
-          {type: "gnikrap_ev3_stop"},
-          {type: "gnikrap_ev3_isok"},
           {type: "controls_whileUntil",
             xmlContent: '<value name="BOOL"><block type="gnikrap_ev3_isok"></block></value>'},
+          {type: "gnikrap_ev3_notify"},
+          {type: "gnikrap_ev3_sleep",
+            xmlContent: '<value name="TIME"><block type="math_number"><field name="NUM">100</field></block></value>' },
+          {type: "gnikrap_ev3_wait_until"},
+          {type: "gnikrap_ev3_isok"},
+          {type: "gnikrap_ev3_stop"},
           {type: "gnikrap_ev3_led"},
           {type: "gnikrap_ev3_sound_setvolume",
             xmlContent: '<value name="VOL"><block type="math_number"><field name="NUM">70</field></block></value>' },

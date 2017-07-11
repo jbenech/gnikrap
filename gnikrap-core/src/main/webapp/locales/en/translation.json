@@ -273,13 +273,13 @@
 
 
   "aboutModal": {
-    "gnikrapShortDescription": "<a href=\"http://jbenech.github.io/gnikrap/\" target=\"_blank\">Gnikrap</a> is a simple to use but powerfull JavaScript development environment for the <a href=\"http://www.lego.com/mindstorms/\" target=\"_blank\">Lego Mindstrom EV3</a>.",
+    "gnikrapShortDescription": "<a href=\"http://jbenech.github.io/gnikrap/\" target=\"_blank\">Gnikrap</a> is a Scratch-like and JavaScript development environment for the <a href=\"http://www.lego.com/mindstorms/\" target=\"_blank\">Lego Mindstrom EV3</a>.",
     "softwareUsed": "This software has been made possible by using several open-source software:",
     "gnikrapLicence": "Licence (full text of the <a href=\"licence-lgpl-3.0.txt\" target=\"_blank\">GPL v3</a> licence):",
     "gplV3Notice": [
       "Gnikrap is a simple to use but powerfull JavaScript development ",
       "environment for the Lego Mindstrom EV3",
-      "Copyright (C) 2014-2015 Jean BENECH",
+      "Copyright (C) 2014-2017 Jean BENECH",
       "",
       "This program is free software: you can redistribute it and/or modify",
       "it under the terms of the GNU General Public License as published by",
