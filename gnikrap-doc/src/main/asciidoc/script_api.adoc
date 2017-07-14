@@ -30,7 +30,7 @@ Since version 0.5.0, the JavaScript editor has an autocompletion feature. In ord
 The relevance of the items is based on the context, and more specifically on some keywords.
 
 So if you want to maximize the autocompletion help, you must use keywords in your variable names.
-For example, you retreive a motor with the function `getMotor()`, so you may use the keyword _"motor"_ in the variable name that will hold your motor, _good_ variable name can be: `motorLeft` or `motorA` or `theBigMotor` or ... 
+For example, you retreive a motor with the function `getMotor()`, so you may use the keyword _"motor"_ in the variable name that will hold your motor, _good_ variable name can be: `motorLeft` or `motorA` or `theBigMotor` or ... whatever with the keyword _"motor"_ in it.
 ====
 
 

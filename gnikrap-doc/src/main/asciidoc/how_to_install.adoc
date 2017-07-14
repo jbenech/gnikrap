@@ -2,13 +2,24 @@
 
 === Prerequesite: Install leJOS
 
+[WARNING]
+====
+Version 0.5.0 of Gnikrap work with LeJOS 0.9.0-beta
+====
+
 Before installing Gnikrap, you need to have a working leJOS firmware. Moreover, a network (either Wifi or bluetooth should have been configured.
 
 Lejos installation::
-. Download and install http://www.lejos.org/[leJOS] as described on the page: http://sourceforge.net/p/lejos/wiki/Installing%20leJOS/[Installing leJOS
+. Download and install http://www.lejos.org/[leJOS] as described on the page: http://sourceforge.net/p/lejos/wiki/Installing%20leJOS/[Installing leJOS]
 . Configure a network link between your computer and the EV3:
 ** Either with Wifi, see http://sourceforge.net/p/lejos/wiki/Configuring%20Wifi/[Configuring Wifi]
 ** Either with bluetooth PAN, see http://sourceforge.net/p/lejos/wiki/Configuring%20Bluetooth%20PAN/[Pairing (from the PC)]
+
+While leJOS is correctly setup and configured, you should have a screen like the following one:
+
+image::install/ev3_screen_0010_leJOS.jpg[LeJOS main screen]
+
+You can notice the IP adress which is in this snapshot: 10.0.1.1
 
 
 === Install for Windows users
@@ -40,11 +51,18 @@ That's all ! You can now run Gnikrap, see <<Launch Gnikrap>>
 ** With the leJOS menu go to 'Programs' menu click on the middle button.
 ** On the 'Files' list, select Gnikrap and click again on the middle button.
 ** Select 'Execute program' (this is the default) and click again on the middle button.
-** Duke, the java maskot is displayed with the following message: "Wait a second", ... so just wait +
-   Gnikrap will be launched (it take a some long seconds).
+** The following screen is displayed: 
++
+image::install/ev3_screen_0020_wait_screen.jpg[Duke, the java maskot]
++
+Just wait about 20 seconds. Then an empty screen will be displayed for a few seconds. Again just wait.
+
 ** Once Gnikrap was launched, you can connect with a browser (Note: Once the Gnikrap welcome screen was displayed, you have to wait a few seconds +
-   before being able to connect with a browser). +
-   _Note:_ In order to come back to the leJOS menu, you have to stop Gnikrap by using the `Gnikrap` menu in the any browser connected to the brick.
+   before being able to connect with a browser).
++
+image::install/ev3_screen_0030_gnikrap.jpg[Gnikrap main screen]
++
+_Note:_ In order to come back to the leJOS menu, you have to stop Gnikrap by using the `Gnikrap` menu in the any browser connected to the brick.
 
 
 [TIP]

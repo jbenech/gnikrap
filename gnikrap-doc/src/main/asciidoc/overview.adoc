@@ -45,17 +45,17 @@ image::Gnikrap_Blockly.png[Scratch-like editor]
 
 In order to enable this graphical editor:
 
-. Click on "Gnikrap" on the top-right of the screen
-. Choose "Settings"
-. Select "Visual" in programming style
-. And finally save the settings
+. Click on "Gnikrap" on the top-right of the screen.
+. Choose "Settings".
+. Select "Visual" in programming style.
+. And finally save the settings.
 
 
-On each blocks, an integrated help is available through tool tips.
+On each blocks, an integrated help is available through tooltips.
 
 If you need more help on this editor, please contact the author or open an issue https://github.com/jbenech/gnikrap/issues[here].
 
 [TIP]
 ====
-A way to have more detailed documentation on blocks is to generated the JavaScript code and consult the documentation of JavaScript functions (in this page).
+A way to have more detailed documentation on blocks is to visualize the JavaScript code and consult the documentation of JavaScript functions (in this page) corresponding to the blocks.
 ====

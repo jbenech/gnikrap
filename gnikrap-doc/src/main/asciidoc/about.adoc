@@ -13,7 +13,7 @@
 
 === Scratch-like on the EV3
 
-*Since version 0.5.0 a https://scratch.mit.edu/[Scratch]-like editor has been added to Gnikrap in order to write program simply.* This feature has been added mainly to provide to kids that are often familiar with Scratch-like applications/games a simple way to start before moving towards JavaScript programming
+*Since version 0.5.0 a https://scratch.mit.edu/[Scratch]-like editor has been added to Gnikrap in order to write program simply.* This feature has been added mainly to provide to kids that are often familiar with Scratch-like applications/games a simple way to start before moving towards JavaScript programming.
 
 * A Scratch-like editor to program the EV3 brick simply (even more simple than the programing environment provided with the Mindstrom).
 * *Generation of clean JavaScript code* from any Scratch-like program: This provide an easy way to JavaScript programming.
@@ -39,16 +39,7 @@ The list of XSensors (for eXternal Sensors) available right now is:
 
 [NOTE]
 ====
-XSensors are available only in JavaScript.
-====
-
-[NOTE]
-====
-Other XSensors that could be envisaged in the future: 
-
-- xSound sensor, 
-- other video algorithms for the xVideo sensor, 
-- other modes for the xTouch sensor
+XSensors are available only in JavaScript mode.
 ====
 
 
