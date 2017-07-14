@@ -359,9 +359,10 @@ function GnikrapBlocks() {
           {type: "controls_whileUntil"},
           {type: "controls_repeat_ext",
             xmlContent: '<value name="TIMES"><block type="math_number"><field name="NUM">10</field></block></value>'},
-          {type: "controls_forEach"}
+          {type: "controls_flow_statements"},
+          {type: "controls_forEach"},
+          {type: "controls_for"}
         ].map(self.__blockToXML).join(''));
-    // Other existing blocks: controls_for, controls_flow_statements
     xml.push('</category>');
 
     // Logic
@@ -373,9 +374,10 @@ function GnikrapBlocks() {
           {type: "logic_compare"},
           {type: "logic_operation"},
           {type: "logic_negate"},
-          {type: "logic_boolean"}
+          {type: "logic_boolean"},
+          {type: "logic_ternary"},
+          {type: "logic_null"}
         ].map(self.__blockToXML).join(''));
-    // Other existing blocks: logic_null, logic_ternary
     xml.push('</category>');
 
     // Math
@@ -393,9 +395,12 @@ function GnikrapBlocks() {
           {type: "math_modulo"},
           {type: "math_single"},
           {type: "math_round"},
-          {type: "math_on_list"}
+          {type: "math_on_list"},
+          {type: "math_trig"},
+          {type: "math_constant"},
+          {type: "math_random_float"},
+          {type: "math_change"}
         ].map(self.__blockToXML).join(''));
-    // Other existing blocks: math_trig, math_constant, math_change, math_random_float
     xml.push('</category>');
 
     return xml.join('');
@@ -492,9 +497,16 @@ function GnikrapBlocks() {
           {type: "text_isEmpty"},
           {type: "text_charAt",
             xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="textVar">text</field></block></value>' +
-              '<value name="AT"><block type="math_number"><field name="NUM">0</field></block></value>'}
+              '<value name="AT"><block type="math_number"><field name="NUM">0</field></block></value>'},
+          {type: "text_append"},
+          {type: "text_indexOf"},
+          {type: "text_getSubstring"},
+          {type: "text_changeCase"},
+          {type: "text_trim"}
+          // ev3_notify to print text with Gnikrap
+          // {type: "text_print"},
+          // {type: "text_prompt_ext"}              
         ].map(self.__blockToXML).join(''));
-    // other existing blocks: text_append, text_indexOf, text_getSubstring, text_changeCase, text_trim, text_print, text_prompt_ext
     xml.push('</category>');
 
     // Lists
@@ -503,7 +515,8 @@ function GnikrapBlocks() {
           {type: "lists_create_empty"},
           {type: "lists_create_with"},
           {type: "lists_length"},
-          {type: "lists_isEmpty"},
+          {type: "lists_isEmpty",
+            xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
           {type: "lists_indexOf",
             xmlContent: '<value name="VALUE"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
           {type: "lists_getIndex",
@@ -511,9 +524,11 @@ function GnikrapBlocks() {
           {type: "lists_setIndex",
             xmlContent: '<value name="LIST"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
           {type: "lists_getSublist",
-            xmlContent: '<value name="LIST"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'}
+            xmlContent: '<value name="LIST"><block type="variables_get"><field name="VAR" class="listVar">list</field></block></value>'},
+          {type: "lists_repeat",
+            xmlContent: '<value name="NUM"><block type="math_number"><field name="NUM">10</field></block></value>'},
+          {type: "lists_split"}
         ].map(self.__blockToXML).join(''));
-    // other existing blocks: lists_repeat, list-split
     xml.push('</category>');
     
     xml.push('<category name="' + i18n.t("blocks.categories.functions") + '" custom="PROCEDURE" colour="' + self.BLOCKLY_PROCEDURE_COLOUR + '"></category>');
