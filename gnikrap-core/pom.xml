@@ -100,7 +100,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
       </plugin>
 
-      <plugin>
+      <!-- plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>yuicompressor-maven-plugin</artifactId>
         <version>1.5.1</version>
@@ -114,11 +114,11 @@
         <configuration>
           <nosuffix>true</nosuffix>
           <excludes>
-            <!-- Path relative to webapp folder -->
+            <!- - Path relative to webapp folder - ->
             <exclude>lib/**/*.js</exclude>
           </excludes>
         </configuration>
-      </plugin>
+      </plugin -->
 		</plugins>
   </build>
 </project>
