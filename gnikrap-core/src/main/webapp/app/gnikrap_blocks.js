@@ -337,7 +337,7 @@ function GnikrapBlocks() {
     if(code.indexOf(self.XSENSOR_MAGIC) != -1) {
       result.errors.push(i18n.t("blocks.errors.compileXSensorMustBeInsideWithxSensorDo"));
     }
-
+    
     result.code = code.trim();
     return result;
   };
@@ -616,7 +616,7 @@ function GnikrapBlocks() {
       }
     };
     Blockly.JavaScript['gnikrap_ev3_stop'] = function(block) {
-      return 'ev3.exit()';
+      return 'ev3.exit();\n';
     };
 
     // wait until
@@ -632,7 +632,7 @@ function GnikrapBlocks() {
       var until = Blockly.JavaScript.valueToCode(block, 'UNTIL', Blockly.JavaScript.ORDER_ATOMIC) 
                   || 'true'; // Default value if no args
 
-      return 'while(ev3.isOk() && !' + until + ') ev3.sleep(1);\n';
+      return 'while(ev3.isOk() && !' + until + ') ev3.sleep(10);\n';
     };
     
     // sleep(int): void
@@ -889,7 +889,7 @@ function GnikrapBlocks() {
       var port = block.getFieldValue('PORT');
 
       var code = 'ev3.getBrick().getIRSensor("' + port + '").setChannel("' + channel + '");\n';
-      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+      return code;
     };
 
     // getDistance(): int
