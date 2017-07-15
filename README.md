@@ -1,7 +1,7 @@
 Gnikrap 
 -------
 
-Gnikrap is a simple and powerfull javascript development environment for the Lego Mindstrom EV3.
+Gnikrap is a JavaScript and Scratch-like development environment for the Lego Mindstrom EV3.
 
 For more information, visit the [home page](http://jbenech.github.io/gnikrap)
 
