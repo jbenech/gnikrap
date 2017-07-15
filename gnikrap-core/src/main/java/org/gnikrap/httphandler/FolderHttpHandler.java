@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2016 Jean BENECH
+ * Copyright (C) 2014-2017 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,8 @@ import io.undertow.util.StatusCodes;
  * Enable to manage a folder and containing files as a REST resource.
  * 
  * <pre>
- * TODO Make NIO compliant (see exchange.dispatch(runnable); ?)
+ * TODO Make NIO compliant (see exchange.dispatch(runnable); ?) - 
+ * TODO //!\\ Mix of blocking/NIO no more work with Undertow 1.4.x nor 1.3.x => locked in 1.2.x
  * </pre>
  */
 public class FolderHttpHandler implements HttpHandler {
