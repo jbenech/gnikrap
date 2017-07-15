@@ -4,20 +4,21 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="generator" content="Asciidoctor 1.5.2">
 <meta name="author" content="Jean Bénech">
 <title>Gnikrap documentation</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
-/* Remove comment around @import statement below when using as a custom stylesheet */
-/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+/* Remove the comments around the @import statement below when using this as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400";*/
 article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
 audio,canvas,video{display:inline-block}
 audio:not([controls]){display:none;height:0}
 [hidden],template{display:none}
 script{display:none!important}
 html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+body{margin:0}
 a{background:transparent}
 a:focus{outline:thin dotted}
 a:active,a:hover{outline:0}
@@ -52,11 +53,12 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
 img{-ms-interpolation-mode:bicubic}
+#map_canvas img,#map_canvas embed,#map_canvas object,.map_canvas img,.map_canvas embed,.map_canvas object{max-width:none!important}
 .left{float:left!important}
 .right{float:right!important}
 .text-left{text-align:left!important}
@@ -64,11 +66,10 @@ img{-ms-interpolation-mode:bicubic}
 .text-center{text-align:center!important}
 .text-justify{text-align:justify!important}
 .hide{display:none}
-img,object,svg{display:inline-block;vertical-align:middle}
+.antialiased,body{-webkit-font-smoothing:antialiased}
+img{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
-.center{margin-left:auto;margin-right:auto}
-.spread{width:100%}
 p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
 .subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
 div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
@@ -111,8 +112,7 @@ blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
 h1{font-size:2.75em}
 h2{font-size:2.3125em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
-h4{font-size:1.4375em}}
-table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+h4{font-size:1.4375em}}table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
 table thead,table tfoot{background:#f7f8f7;font-weight:bold}
 table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
@@ -122,14 +122,10 @@ h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-s
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
 .clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
 .clearfix:after,.float-group:after{clear:both}
-*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
-*:not(pre)>code.nobreak{word-wrap:normal}
-*:not(pre)>code.nowrap{white-space:nowrap}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
-em em{font-style:normal}
-strong strong{font-weight:400}
 .keyseq{color:rgba(51,51,51,.8)}
-kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+kbd{display:inline-block;color:rgba(0,0,0,.8);font-size:.75em;line-height:1.4;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:-.15em .15em 0 .15em;padding:.2em .6em .2em .5em;vertical-align:middle;white-space:nowrap}
 .keyseq kbd:first-child{margin-left:0}
 .keyseq kbd:last-child{margin-right:0}
 .menuseq,.menu{color:rgba(0,0,0,.8)}
@@ -160,33 +156,29 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toc ul.sectlevel0>li>a{font-style:italic}
 #toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
 #toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
-#toc li{line-height:1.3334;margin-top:.3334em}
 #toc a{text-decoration:none}
 #toc a:active{text-decoration:underline}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media only screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
 #toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
-#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2 #toctitle{margin-top:0;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
 #toc.toc2 ul ul{margin-left:0;padding-left:1em}
 #toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
 body.toc2.toc-right{padding-left:0;padding-right:15em}
-body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
-@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
 #toc.toc2{width:20em}
 #toc.toc2 #toctitle{font-size:1.375em}
 #toc.toc2>ul{font-size:.95em}
 #toc.toc2 ul ul{padding-left:1.25em}
-body.toc2.toc-right{padding-left:0;padding-right:20em}}
-#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
 #content #toc>:first-child{margin-top:0}
 #content #toc>:last-child{margin-bottom:0}
 #footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
 #footer-text{color:rgba(255,255,255,.8);line-height:1.44}
 .sect1{padding-bottom:.625em}
-@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
-.sect1+.sect1{border-top:1px solid #efefed}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}.sect1+.sect1{border-top:1px solid #efefed}
 #content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
 #content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
 #content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
@@ -215,9 +207,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
 .literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
 .literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
-@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
-@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
-.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
 .listingblock pre.highlightjs{padding:0}
 .listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
 .listingblock pre.prettyprint{border-width:0}
@@ -227,7 +217,7 @@ table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inh
 .listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
 .listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
 table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
-table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0}
 table.pyhltable td.code{padding-left:.75em;padding-right:0}
 pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
 pre.pygments .lineno{display:inline-block;margin-right:.25em}
@@ -248,12 +238,13 @@ table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
 .verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
 .quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
 .quoteblock .attribution br,.verseblock .attribution br{display:none}
-.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.05em;color:rgba(0,0,0,.6)}
 .quoteblock.abstract{margin:0 0 1.25em 0;display:block}
 .quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
 .quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
 table.tableblock{max-width:100%;border-collapse:separate}
 table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.spread{width:100%}
 table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
 table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
 table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
@@ -299,8 +290,8 @@ ol.upperroman{list-style-type:upper-roman}
 ol.lowergreek{list-style-type:lower-greek}
 .hdlist>table,.colist>table{border:0;background:none}
 .hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
-td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
-td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist1{padding-right:.75em;font-weight:bold}
+td.hdlist1,td.hdlist2{vertical-align:top}
 .literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
 .colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
 .colist>table tr>td:last-of-type{padding:.25em 0}
@@ -313,14 +304,13 @@ td.hdlist1{font-weight:bold;padding-bottom:1.25em}
 .image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
 .image.left{margin-right:.625em}
 .image.right{margin-left:.625em}
-a.image{text-decoration:none;display:inline-block}
-a.image object{pointer-events:none}
-sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
-sup.footnote a,sup.footnoteref a{text-decoration:none}
-sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+a.image{text-decoration:none}
+span.footnote,span.footnoteref{vertical-align:super;font-size:.875em}
+span.footnote a,span.footnoteref a{text-decoration:none}
+span.footnote a:active,span.footnoteref a:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
-#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
+#footnotes .footnote{padding:0 .375em;line-height:1.3;font-size:.875em;margin-left:1.2em;text-indent:-1.2em;margin-bottom:.2em}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
@@ -378,10 +368,11 @@ span.icon>.fa{cursor:default}
 pre .conum[data-value]{position:relative;top:-.125em}
 b.conum *{color:inherit!important}
 .conum:not([data-value]):empty{display:none}
-dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
-h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
-p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+h1,h2{letter-spacing:-.01em}
+dt,th.tableblock,td.content{text-rendering:optimizeLegibility}
+p,td.content{letter-spacing:-.01em}
+p strong,td.content strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -392,9 +383,9 @@ a{color:inherit!important;text-decoration:underline!important}
 a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
 a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
 abbr[title]:after{content:" (" attr(title) ")"}
-pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+pre,blockquote,tr,img{page-break-inside:avoid}
 thead{display:table-header-group}
-svg{max-width:100%}
+img{max-width:100%!important}
 p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
 h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
 #toc,.sidebarblock,.exampleblock>.content{background:none!important}
@@ -418,7 +409,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .hide-for-print{display:none!important}
 .show-for-print{display:inherit!important}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -426,7 +420,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Jean Bénech</span><br>
 <span id="email" class="email">jbenech at free dot fr</span><br>
-<span id="revnumber">version 0.5.0 (C) 2014-2017</span>
+<span id="revdate">v0.4.0 (c) 2014-2015</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -434,10 +428,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_about">1. About</a>
 <ul class="sectlevel2">
 <li><a href="#_javascript_on_the_ev3">1.1. Javascript on the EV3</a></li>
-<li><a href="#_scratch_like_on_the_ev3">1.2. Scratch-like on the EV3</a></li>
-<li><a href="#_empower_your_device_sensors">1.3. Empower your device' sensors</a></li>
-<li><a href="#_full_documentation_available">1.4. Full documentation available</a></li>
-<li><a href="#_why_don_t_use_gnikrap">1.5. Why don&#8217;t use Gnikrap</a></li>
+<li><a href="#_empower_your_device_sensors">1.2. Empower your device' sensors</a></li>
+<li><a href="#_full_documentation_available">1.3. Full documentation available</a></li>
+<li><a href="#_why_don_t_use_gnikrap">1.4. Why don&#8217;t use Gnikrap</a></li>
 </ul>
 </li>
 <li><a href="#_how_to_install">2. How to install</a>
@@ -448,65 +441,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_launch_gnikrap">2.4. Launch Gnikrap</a></li>
 </ul>
 </li>
-<li><a href="#_quick_overview">3. Quick overview</a>
-<ul class="sectlevel2">
-<li><a href="#_main_screen">3.1. Main screen</a></li>
-<li><a href="#_scratch_like_editor">3.2. Scratch-like editor</a></li>
-</ul>
-</li>
+<li><a href="#_quick_overview">3. Quick overview</a></li>
 <li><a href="#_script_api">4. Script API</a>
 <ul class="sectlevel2">
 <li><a href="#_general_principles">4.1. General principles</a></li>
-<li><a href="#_javascript_autocompletion">4.2. JavaScript autocompletion</a></li>
-<li><a href="#_the_ev3_object">4.3. The ev3 object</a>
+<li><a href="#_the_ev3_object">4.2. The ev3 object</a>
 <ul class="sectlevel3">
-<li><a href="#_configuration_object">4.3.1. Configuration object</a></li>
+<li><a href="#_configuration_object">4.2.1. Configuration object</a></li>
 </ul>
 </li>
-<li><a href="#_the_brick_object">4.4. The Brick object</a></li>
-<li><a href="#_the_motor_object">4.5. The Motor object</a></li>
-<li><a href="#_the_color_sensor_object">4.6. The Color sensor object</a>
+<li><a href="#_the_brick_object">4.3. The Brick object</a></li>
+<li><a href="#_the_motor_object">4.4. The Motor object</a></li>
+<li><a href="#_the_color_sensor_object">4.5. The Color sensor object</a>
 <ul class="sectlevel3">
-<li><a href="#_color_object">4.6.1. Color object</a></li>
+<li><a href="#_color_object">4.5.1. Color object</a></li>
 </ul>
 </li>
-<li><a href="#_the_ir_infra_red_sensor_object">4.7. The IR (Infra-Red) sensor object</a>
+<li><a href="#_the_ir_infra_red_sensor_object">4.6. The IR (Infra-Red) sensor object</a>
 <ul class="sectlevel3">
-<li><a href="#_remotecommandresult_object">4.7.1. RemoteCommandResult object</a></li>
-<li><a href="#_seekbeaconresult_object">4.7.2. SeekBeaconResult object</a></li>
+<li><a href="#_remotecommandresult_object">4.6.1. RemoteCommandResult object</a></li>
+<li><a href="#_seekbeaconresult_object">4.6.2. SeekBeaconResult object</a></li>
 </ul>
 </li>
-<li><a href="#_the_touch_sensor_object">4.8. The Touch sensor object</a></li>
-<li><a href="#_the_nxtsound_sensor_object">4.9. The NXTSound sensor object</a></li>
-<li><a href="#_the_ultrasonic_sensor_object">4.10. The Ultrasonic sensor object</a></li>
-<li><a href="#_the_keyboard_object">4.11. The Keyboard object</a>
+<li><a href="#_the_touch_sensor_object">4.7. The Touch sensor object</a></li>
+<li><a href="#_the_keyboard_object">4.8. The Keyboard object</a>
 <ul class="sectlevel3">
-<li><a href="#_button_object">4.11.1. Button object</a></li>
+<li><a href="#_button_object">4.8.1. Button object</a></li>
 </ul>
 </li>
-<li><a href="#_the_led_object">4.12. The Led object</a></li>
-<li><a href="#_the_sound_object">4.13. The Sound object</a></li>
-<li><a href="#_the_screen_object">4.14. The Screen object</a></li>
-<li><a href="#_the_battery_object">4.15. The Battery object</a></li>
-<li><a href="#_the_xsensor_object">4.16. The XSensor object</a>
+<li><a href="#_the_led_object">4.9. The Led object</a></li>
+<li><a href="#_the_sound_object">4.10. The Sound object</a></li>
+<li><a href="#_the_screen_object">4.11. The Screen object</a></li>
+<li><a href="#_the_battery_object">4.12. The Battery object</a></li>
+<li><a href="#_the_xsensor_object">4.13. The XSensor object</a>
 <ul class="sectlevel3">
-<li><a href="#_the_xtouch_xsensor">4.16.1. The xTouch XSensor</a>
+<li><a href="#_the_xtouch_xsensor">4.13.1. The xTouch XSensor</a>
 <ul class="sectlevel4">
 <li><a href="#_touch_object">Touch object</a></li>
 </ul>
 </li>
-<li><a href="#_the_xgyro_xsensor">4.16.2. The xGyro XSensor</a>
+<li><a href="#_the_xgyro_xsensor">4.13.2. The xGyro XSensor</a>
 <ul class="sectlevel4">
 <li><a href="#_axis_object">Axis object</a></li>
 </ul>
 </li>
-<li><a href="#_the_xvideo_xsensor">4.16.3. The xVideo XSensor</a>
+<li><a href="#_the_xvideo_xsensor">4.13.3. The xVideo XSensor</a>
 <ul class="sectlevel4">
 <li><a href="#_visibleobject_object">VisibleObject object</a></li>
 </ul>
 </li>
-<li><a href="#_the_xgeo_xsensor">4.16.4. The xGeo XSensor</a></li>
-<li><a href="#_advanced_usage">4.16.5. Advanced usage</a></li>
+<li><a href="#_the_xgeo_xsensor">4.13.4. The xGeo XSensor</a></li>
+<li><a href="#_advanced_usage">4.13.5. Advanced usage</a></li>
 </ul>
 </li>
 </ul>
@@ -539,7 +524,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>A Scratch-like and JavaScript development environment for <a href="http://www.lego.com/mindstorms/">Lego Mindstrom EV3</a></p>
+<p>A javascript development environment simple to use and powerfull for <a href="http://mindstroms.lego.com">Lego Mindstrom EV3</a></p>
 </div>
 </div>
 </div>
@@ -562,44 +547,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p><strong>Javascript</strong>, is currently one of the more popular scripting language</p>
 </li>
-<li>
-<p>Code autocompletion (since 0.5.0) make writing JavaScript really more easier.</p>
-</li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_scratch_like_on_the_ev3">1.2. Scratch-like on the EV3</h3>
-<div class="paragraph">
-<p><strong>Since version 0.5.0 a <a href="https://scratch.mit.edu/">Scratch</a>-like editor has been added to Gnikrap in order to write program simply.</strong> This feature has been added mainly to provide to kids that are often familiar with Scratch-like applications/games a simple way to start before moving towards JavaScript programming.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>A Scratch-like editor to program the EV3 brick simply (even more simple than the programing environment provided with the Mindstrom).</p>
-</li>
-<li>
-<p><strong>Generation of clean JavaScript code</strong> from any Scratch-like program: This provide an easy way to JavaScript programming.</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>The graphical editor is based on the <a href="https://developers.google.com/blockly/">Blockly</a> library.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_empower_your_device_sensors">1.3. Empower your device' sensors</h3>
+<h3 id="_empower_your_device_sensors">1.2. Empower your device' sensors</h3>
 <div class="paragraph">
 <p><strong>Gnikrap give the opportunity to use the tablet sensors in the same way as if this is sensor directly linked to the EV3 device</strong>.
 The list of XSensors (for eXternal Sensors) available right now is:</p>
@@ -619,7 +571,7 @@ The list of XSensors (for eXternal Sensors) available right now is:</p>
 your robot react to the environment.</p>
 </li>
 <li>
-<p>xGeo: <strong>Use the GPS</strong> of your device (eg. tablet or smartphone) in order to send GPS coordinate to the EV3 (see <a href="#_the_xgeo_xsensor">The xGeo XSensor</a> for more details).</p>
+<p>xGeo: <strong>Use the *GPS</strong> of your device (eg. tablet or smartphone) in order to send GPS coordinate to the EV3 (see <a href="#_the_xgeo_xsensor">The xGeo XSensor</a> for more details).</p>
 </li>
 </ul>
 </div>
@@ -631,7 +583,20 @@ your robot react to the environment.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>XSensors are available only in JavaScript mode.</p>
+<p>Other XSensors that could be envisaged in the future:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>xSound sensor,</p>
+</li>
+<li>
+<p>other video algorithms for the xVideo sensor,</p>
+</li>
+<li>
+<p>other modes for the xTouch sensor</p>
+</li>
+</ul>
 </div>
 </td>
 </tr>
@@ -639,28 +604,27 @@ your robot react to the environment.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_full_documentation_available">1.4. Full documentation available</h3>
+<h3 id="_full_documentation_available">1.3. Full documentation available</h3>
 <div class="paragraph">
 <p>You are at the right place to evaluate it ! Just have look to see if it&#8217;s ok for you :-)</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_why_don_t_use_gnikrap">1.5. Why don&#8217;t use Gnikrap</h3>
+<h3 id="_why_don_t_use_gnikrap">1.4. Why don&#8217;t use Gnikrap</h3>
 <div class="paragraph">
 <p>Gnikrap is nice, but you&#8217;re not sure&#8230;&#8203; Here are some element that can make you use another tool/library to program with the EV3 :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>If you need a <strong>full featured API</strong> (<strong>access to non-Lego sensors</strong>, navigation/orientation API, etc.) consider using a library like <a href="http://www.lejos.org/">leJOS</a> or <a href="http://www.monobrick.dk/">MonoBrick</a>.</p>
+<p>If you need a full featured API (<strong>access to non-Lego sensors</strong>, navigation/orientation API, etc.) or if <strong>speed
+execution</strong> (you plan to implement complex/CPU-intensive algorithm) is one of you key criteria, consider using a library like <a href="http://www.lejos.org/">leJOS</a> or <a href="http://www.monobrick.dk/">MonoBrick</a>.<br>
+<em>Note:</em> Gnikrap is internally based on leJOS.</p>
 </li>
 <li>
-<p>If <strong>speed execution</strong> (you plan to implement complex/CPU-intensive algorithm) consider using a library like <a href="http://www.lejos.org/">leJOS</a> or <a href="http://www.monobrick.dk/">MonoBrick</a>.</p>
+<p>If you need <strong>graphical programming</strong> tools, consider using the software provided by Lego</p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p><em>Note:</em> Gnikrap is internally based on leJOS.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -670,15 +634,12 @@ your robot react to the environment.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>To sum up, the three main objective of Gnikrap are:</p>
+<p>To sum up, the two main objective of Gnikrap are:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Give a really simple way to program EV3 in a Scratch-like graphical user interface.</p>
-</li>
-<li>
-<p>Give a middle path between the Lego visual programming environment and the <em>"complex"</em> development environment (and associated knowledge) needed by lejos or MonoBrick.</p>
+<p>Give a middle path between the Lego visual programming environment and the "complex" development environment (and associated knowledge) needed by lejos or MonoBrick.</p>
 </li>
 <li>
 <p>Give access to the some of the sensors of your tablet/laptop/smartphone in order to leverage the EV3 possibilities and add more fun to your creations.</p>
@@ -697,20 +658,6 @@ your robot react to the environment.</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_prerequesite_install_lejos">2.1. Prerequesite: Install leJOS</h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Version 0.5.0 of Gnikrap work with LeJOS 0.9.0-beta</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>Before installing Gnikrap, you need to have a working leJOS firmware. Moreover, a network (either Wifi or bluetooth should have been configured.</p>
 </div>
@@ -721,7 +668,7 @@ your robot react to the environment.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download and install <a href="http://www.lejos.org/">leJOS</a> as described on the page: <a href="http://sourceforge.net/p/lejos/wiki/Installing%20leJOS/">Installing leJOS</a></p>
+<p>Download and install <a href="http://www.lejos.org/">leJOS</a> as described on the page: <a href="http://sourceforge.net/p/lejos/wiki/Installing%20leJOS/" class="bare">http://sourceforge.net/p/lejos/wiki/Installing%20leJOS/</a>[Installing leJOS</p>
 </li>
 <li>
 <p>Configure a network link between your computer and the EV3:</p>
@@ -740,17 +687,6 @@ your robot react to the environment.</p>
 </div>
 </dd>
 </dl>
-</div>
-<div class="paragraph">
-<p>While leJOS is correctly setup and configured, you should have a screen like the following one:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="images/install/ev3_screen_0010_leJOS.jpg" alt="LeJOS main screen">
-</div>
-</div>
-<div class="paragraph">
-<p>You can notice the IP adress which is in this snapshot: 10.0.1.1</p>
 </div>
 </div>
 <div class="sect2">
@@ -815,27 +751,13 @@ Note: If Gnikrap has already been installed, the program can prompt you to confi
 <p>Select <em>Execute program</em> (this is the default) and click again on the middle button.</p>
 </li>
 <li>
-<p>The following screen is displayed:</p>
-<div class="imageblock">
-<div class="content">
-<img src="images/install/ev3_screen_0020_wait_screen.jpg" alt="Duke" width="the java maskot">
-</div>
-</div>
-<div class="paragraph">
-<p>Just wait about 20 seconds. Then an empty screen will be displayed for a few seconds. Again just wait.</p>
-</div>
+<p>Duke, the java maskot is displayed with the following message: "Wait a second", &#8230;&#8203; so just wait<br>
+Gnikrap will be launched (it take a some long seconds).</p>
 </li>
 <li>
 <p>Once Gnikrap was launched, you can connect with a browser (Note: Once the Gnikrap welcome screen was displayed, you have to wait a few seconds<br>
-before being able to connect with a browser).</p>
-<div class="imageblock">
-<div class="content">
-<img src="images/install/ev3_screen_0030_gnikrap.jpg" alt="Gnikrap main screen">
-</div>
-</div>
-<div class="paragraph">
-<p><em>Note:</em> In order to come back to the leJOS menu, you have to stop Gnikrap by using the <code>Gnikrap</code> menu in the any browser connected to the brick.</p>
-</div>
+before being able to connect with a browser).<br>
+<em>Note:</em> In order to come back to the leJOS menu, you have to stop Gnikrap by using the <code>Gnikrap</code> menu in the any browser connected to the brick.</p>
 </li>
 </ul>
 </div>
@@ -859,8 +781,6 @@ before being able to connect with a browser).</p>
 <div class="sect1">
 <h2 id="_quick_overview">3. Quick overview</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_main_screen">3.1. Main screen</h3>
 <div class="paragraph">
 <p>You can first have a look to video that introduce the main concept of Gnikrap: <a href="https://www.youtube.com/watch?feature=player_embedded&amp;v=NE7edagobj8">Gnikrap introduction to EV3 programming with Javascript</a></p>
 </div>
@@ -911,26 +831,10 @@ can use an xSensors and edti at the same time.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Toggle full screen</strong>: Toggle the browser in full screen mode (no more title bar/status bar/task bar displayed)</p>
+<p><strong>Stopping Gnikrap</strong>: Either stopping Gnikrap and come back to the leJOS menu or stopping (shutdown) the E3 brick.</p>
 </li>
 <li>
-<p><strong>Import images</strong>: This screen give the ability to generate the code (including the image data) in order to use images within Gnikrap.</p>
-</li>
-<li>
-<p><strong>Stop Gnikrap</strong>: Either stopping Gnikrap and come back to the leJOS menu or stopping (shutdown) the E3 brick.</p>
-</li>
-<li>
-<p><strong>Settings</strong>: Display the configuration of Gnikrap:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Can switch the language of the graphical user interface (currently English and rench are available)</p>
-</li>
-<li>
-<p>Can switch from JavaScript and Blockly (Scratch-like) programming mode</p>
-</li>
-</ul>
-</div>
+<p><strong>Importing images</strong>: This screen give the ability to generate the code (including the image data) in order to use images within Gnikrap.</p>
 </li>
 <li>
 <p><strong>Documentation</strong>: Give access to an embedded version of the documentation.<br>
@@ -940,54 +844,6 @@ can use an xSensors and edti at the same time.</p>
 <p><strong>About box</strong>: Give standard informations on licensing and author.</p>
 </li>
 </ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_scratch_like_editor">3.2. Scratch-like editor</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/Gnikrap_Blockly.png" alt="Scratch-like editor">
-</div>
-</div>
-<div class="paragraph">
-<p>In order to enable this graphical editor:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Click on "Gnikrap" on the top-right of the screen.</p>
-</li>
-<li>
-<p>Choose "Settings".</p>
-</li>
-<li>
-<p>Select "Visual" in programming style.</p>
-</li>
-<li>
-<p>And finally save the settings.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>On each blocks, an integrated help is available through tooltips.</p>
-</div>
-<div class="paragraph">
-<p>If you need more help on this editor, please contact the author or open an issue <a href="https://github.com/jbenech/gnikrap/issues">here</a>.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>A way to have more detailed documentation on blocks is to visualize the JavaScript code and consult the documentation of JavaScript functions (in this page) corresponding to the blocks.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 </div>
@@ -1044,31 +900,7 @@ the API in a more efficient way:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_javascript_autocompletion">4.2. JavaScript autocompletion</h3>
-<div class="paragraph">
-<p>Since version 0.5.0, the JavaScript editor has an autocompletion feature. In order to enable it, while editing press <span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Space</kbd></span>. The list of available functions will be displayed. According to the current context the more relevant items are at the begining of the list but the list always contains all the items.</p>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>The relevance of the items is based on the context, and more specifically on some keywords.</p>
-</div>
-<div class="paragraph">
-<p>So if you want to maximize the autocompletion help, you must use keywords in your variable names.
-For example, you retreive a motor with the function <code>getMotor()</code>, so you may use the keyword <em>"motor"</em> in the variable name that will hold your motor, <em>good</em> variable name can be: <code>motorLeft</code> or <code>motorA</code> or <code>theBigMotor</code> or &#8230;&#8203; whatever with the keyword <em>"motor"</em> in it.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_the_ev3_object">4.3. The ev3 object</h3>
+<h3 id="_the_ev3_object">4.2. The ev3 object</h3>
 <div class="admonitionblock tip">
 <table>
 <tr>
@@ -1114,17 +946,12 @@ For example, you retreive a motor with the function <code>getMotor()</code>, so 
 <p>Returns <a href="#_the_xsensor_object">The XSensor object</a> for the XSensor with the given name. (The name is configured within the GUI)
 <strong>XSensorName</strong>: the name of the sensor.</p>
 </dd>
-<dt class="hdlist1">exit()</dt>
-<dd>
-<p>Terminate the script.<br>
-<em>Note</em>: If you use <code>try</code>/<code>catch</code> in your scripts, this function may not work as it internally use an <code>Exception</code> in order to stop the script.</p>
-</dd>
 </dl>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration_object">4.3.1. Configuration object</h4>
+<h4 id="_configuration_object">4.2.1. Configuration object</h4>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -1179,7 +1006,7 @@ For example, you retreive a motor with the function <code>getMotor()</code>, so 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_brick_object">4.4. The Brick object</h3>
+<h3 id="_the_brick_object">4.3. The Brick object</h3>
 <div id="img-ev3-brick" class="imageblock">
 <div class="content">
 <img src="images/ev3/Brick.png" alt="EV3 Brick" width="300" height="200">
@@ -1229,16 +1056,6 @@ For example, you retreive a motor with the function <code>getMotor()</code>, so 
 <p>Return a <a href="#_the_touch_sensor_object">Touch sensor</a> object for the given port.<br>
 <strong>port</strong>: value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
 </dd>
-<dt class="hdlist1">getNXTSoundSensor(port)</dt>
-<dd>
-<p>Return a <a href="#_the_nxtsound_sensor_object">NXTSound sensor</a> object for the given port.<br>
-<strong>port</strong>: value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
-</dd>
-<dt class="hdlist1">getUltrasonicSensor(port)</dt>
-<dd>
-<p>Return a <a href="#_the_ultrasonic_sensor_object">Ultrasonic sensor</a> object for the given port.<br>
-<strong>port</strong>: value should be in [<code>"1"</code>, <code>"2"</code>, <code>"3"</code>, <code>"4"</code>] or [<code>"S1"</code>, <code>"S2"</code>, <code>"S3"</code>, <code>"S4"</code>].</p>
-</dd>
 <dt class="hdlist1">getKeyboard()</dt>
 <dd>
 <p>Return <a href="#_the_keyboard_object">Keyboard object</a>.</p>
@@ -1268,7 +1085,7 @@ For example, you retreive a motor with the function <code>getMotor()</code>, so 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_motor_object">4.5. The Motor object</h3>
+<h3 id="_the_motor_object">4.4. The Motor object</h3>
 <div class="imageblock" style="float: right">
 <div class="content">
 <img src="images/ev3/MotorMedium.png" alt="Medium motor" width="300" height="200">
@@ -1405,7 +1222,7 @@ while((tacho = largeMotor.getTachoCount()) &lt; 1000) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_color_sensor_object">4.6. The Color sensor object</h3>
+<h3 id="_the_color_sensor_object">4.5. The Color sensor object</h3>
 <div id="img-ev3-color-sensor" class="imageblock">
 <div class="content">
 <img src="images/ev3/ColorSensor.png" alt="Color sensor" width="300" height="200">
@@ -1461,7 +1278,7 @@ After this 1<sup>st</sup> call, successive calls to <code>getColor()</code>  wil
 </table>
 </div>
 <div class="sect3">
-<h4 id="_color_object">4.6.1. Color object</h4>
+<h4 id="_color_object">4.5.1. Color object</h4>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1498,7 +1315,7 @@ After this 1<sup>st</sup> call, successive calls to <code>getColor()</code>  wil
 <dd>
 <p>Returns <code>true</code> if the brown color was detected, <code>false</code> otherwise.</p>
 </dd>
-<dt class="hdlist1">getColorAsText()</dt>
+<dt class="hdlist1">getColorAsText</dt>
 <dd>
 <p>Returns the color as a string.</p>
 </dd>
@@ -1542,7 +1359,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_ir_infra_red_sensor_object">4.7. The IR (Infra-Red) sensor object</h3>
+<h3 id="_the_ir_infra_red_sensor_object">4.6. The IR (Infra-Red) sensor object</h3>
 <div id="img-ev3-ir-sensor" class="imageblock">
 <div class="content">
 <img src="images/ev3/IRSensor.png" alt="IR sensor" width="300" height="200">
@@ -1606,7 +1423,7 @@ while(ev3.isOk()) {
 </table>
 </div>
 <div class="sect3">
-<h4 id="_remotecommandresult_object">4.7.1. RemoteCommandResult object</h4>
+<h4 id="_remotecommandresult_object">4.6.1. RemoteCommandResult object</h4>
 <div id="img-ev3-ir-beacon" class="imageblock">
 <div class="content">
 <img src="images/ev3/IRBeacon.png" alt="IR Beacon" width="300" height="200">
@@ -1651,7 +1468,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_seekbeaconresult_object">4.7.2. SeekBeaconResult object</h4>
+<h4 id="_seekbeaconresult_object">4.6.2. SeekBeaconResult object</h4>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1726,7 +1543,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_touch_sensor_object">4.8. The Touch sensor object</h3>
+<h3 id="_the_touch_sensor_object">4.7. The Touch sensor object</h3>
 <div id="img-ev3-touch-sensor" class="imageblock">
 <div class="content">
 <img src="images/ev3/TouchSensor.png" alt="Touch sensor" width="300" height="200">
@@ -1760,69 +1577,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_nxtsound_sensor_object">4.9. The NXTSound sensor object</h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Experimental implementation for this sensor.
-</td>
-</tr>
-</table>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="dlist">
-<dl>
-<dt class="hdlist1">getDBA()</dt>
-<dd>
-<p>Returns the DBA. A value between 0 and 100.</p>
-</dd>
-<dt class="hdlist1">getDB()</dt>
-<dd>
-<p>Returns the DB. A value between 0 and 100.</p>
-</dd>
-</dl>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_the_ultrasonic_sensor_object">4.10. The Ultrasonic sensor object</h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-Experimental implementation for this sensor.
-</td>
-</tr>
-</table>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="dlist">
-<dl>
-<dt class="hdlist1">getDistance()</dt>
-<dd>
-<p>Returns the distance in cm.</p>
-</dd>
-<dt class="hdlist1">isUltrasonicDetected()</dt>
-<dd>
-<p>Returns <code>true</code> if another sensor was detected, <code>false</code> otherwise.</p>
-</dd>
-</dl>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_the_keyboard_object">4.11. The Keyboard object</h3>
+<h3 id="_the_keyboard_object">4.8. The Keyboard object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1865,7 +1620,7 @@ Experimental implementation for this sensor.
 </div>
 </div>
 <div class="sect3">
-<h4 id="_button_object">4.11.1. Button object</h4>
+<h4 id="_button_object">4.8.1. Button object</h4>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1911,7 +1666,7 @@ ev3.notify("Enter - Down: " + enterKey.isDown() + " / Up: " + enterKey.isUp());<
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_led_object">4.12. The Led object</h3>
+<h3 id="_the_led_object">4.9. The Led object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -1958,7 +1713,7 @@ leds.off();</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_sound_object">4.13. The Sound object</h3>
+<h3 id="_the_sound_object">4.10. The Sound object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -2017,7 +1772,7 @@ sound.playNote("Do4", 500);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_screen_object">4.14. The Screen object</h3>
+<h3 id="_the_screen_object">4.11. The Screen object</h3>
 <div class="paragraph">
 <p>The EV3 screen is monochrome (only white and black) and has a resolution of 178x128.</p>
 </div>
@@ -2242,7 +1997,7 @@ ev3.sleep(5000);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_battery_object">4.15. The Battery object</h3>
+<h3 id="_the_battery_object">4.12. The Battery object</h3>
 <div class="sidebarblock">
 <div class="content">
 <div class="dlist">
@@ -2277,7 +2032,7 @@ ev3.notify("Voltage: " + battery.getVoltageMilliVolt());</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_the_xsensor_object">4.16. The XSensor object</h3>
+<h3 id="_the_xsensor_object">4.13. The XSensor object</h3>
 <div class="paragraph">
 <p>The XSensor enable you to use sensors of the device used to access to the EV3 brick. For example you can use
 the gyroscope sensor of your tablet, or you can use the webcam of your laptop.</p>
@@ -2332,7 +2087,7 @@ So after retrieving the value, it is important to check if <code>isStarted()</co
 </table>
 </div>
 <div class="sect3">
-<h4 id="_the_xtouch_xsensor">4.16.1. The xTouch XSensor</h4>
+<h4 id="_the_xtouch_xsensor">4.13.1. The xTouch XSensor</h4>
 <div class="paragraph">
 <p>The aim of the xTouch sensor is to provide an easy to define a keyboard (24 touchs) that can be used in order to send "action" to the ev3.
 In some sense, it can be seens as a <em>super</em> beacon (see <a href="#_remotecommandresult_object">RemoteCommandResult object</a>)</p>
@@ -2447,7 +2202,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_the_xgyro_xsensor">4.16.2. The xGyro XSensor</h4>
+<h4 id="_the_xgyro_xsensor">4.13.2. The xGyro XSensor</h4>
 <div class="paragraph">
 <p>The aim of the xGyro sensor is to provide an access to the gyroscope sensor of a tablet or a smartphone. The EV3 brick can use in real-time the information for the x, y and z axis.</p>
 </div>
@@ -2552,7 +2307,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_the_xvideo_xsensor">4.16.3. The xVideo XSensor</h4>
+<h4 id="_the_xvideo_xsensor">4.13.3. The xVideo XSensor</h4>
 <div class="paragraph">
 <p>The aim of the xVideo sensor is to provide an access to the webcam of a laptop or a tablet. You can indicate one or several object that are tracked. The EV3 brick can use in real-time the position of all the tracked objects.</p>
 </div>
@@ -2687,7 +2442,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_the_xgeo_xsensor">4.16.4. The xGeo XSensor</h4>
+<h4 id="_the_xgeo_xsensor">4.13.4. The xGeo XSensor</h4>
 <div class="paragraph">
 <p>The aim of the xGeo sensor is to provide an access to the GPX sensor of a tablet or a smartphone. The EV3 brick can use in real-time the information for the latitude, longitude and altitude.</p>
 </div>
@@ -2782,7 +2537,7 @@ while(ev3.isOk()) {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_advanced_usage">4.16.5. Advanced usage</h4>
+<h4 id="_advanced_usage">4.13.5. Advanced usage</h4>
 <div class="paragraph">
 <p>You can use several xSensor at the same time. Theses sensors can be on the same device or on several devices.
 For example, you can run on the same device the xGyro sensor and the xTouch sensor. Another example could be
@@ -3692,43 +3447,24 @@ have the libraries available.</p>
 <div class="content">
 <pre>------------------------------------------------------------------------------
 
-Current stable release is: 0.5.0
+Current stable release is: 0.4.0
 
 
 ------------------------------------------------------------------------------
 
 Version history:
- 0.5.0 (15JUL2017 - Visual programming / JS autocompletion):
-    - Blockly:
-      - Blockly blocks added: logic, loops, math, text, lists, variables, functions
-      - Gnikrap blocks created: EV3 brick, Color sensor, IR sensor, Touch sensor, Motors
-      - Realtime 'Warning'/'Error' on erroneous blocks / erroneous use of ports
-      - Javascript code generation and visualization (can copy/paste in JavaScript editor)
-      - Load and save blockly scripts
-    - Settings dialog added (switch language and Text/Visual programming)
-    - Demo mode added (GUI can be launched without error even if not installed on an EV3)
-    - Autocompletion added in javascript editor (use [Ctrl]+[Space])
-    - Load/save xKeyboard added
-    - Add an API to exit from the script
-    - Add experimental support for NXTSound sensor and Ultrasonic sensor
-    - Documentation updated
-    - Update versions of some library used (ace.js, undertow, ...)
-
-    - Fix:
-      - French translation is now working (translation files are now checked at build time)
-
  0.4.0 (28APR2015 - leJOS Firmware/Menu integration)
-    - Easy to use (no more need telnet/ssh/scp) / leJOS integration:
-      - Automated GUI installation on Windows.
-      - Shell script (for the EV3) for others platforms.
-      - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
-      - Shutdown EV3 brick / Stop Gnikrap (&lt;=&gt; return to leJOS menu) from the Gnikrap user interface
+    - Easy use (no more need telnet/ssh/scp) / leJOS integration:
+     - Automated GUI installation on Windows.
+     - Shell script (for the EV3) for others platforms.
+     - Gnikrap is installed as a leJOS 'Program', it can be launched directly from the leJOS menu
+     - Shutdown EV3 brick / Stop Gnikrap (&lt;=&gt; return to leJOS menu) from the Gnikrap user interface
     - xGeo (GPS) xSensor added
     - Update versions of some library used (especially: leJOS updated to 0.9.0-beta)
     - Documentation updated
 
     - Fix:
-      - API for the EV3 brick screen is now operational (include import of images for displaying on the EV3 screen)
+     - API for the EV3 brick screen is now operational (include import of images for displaying on the EV3 screen)
 
 
  0.3.0 (30JAN2015 - xSensors):
@@ -3767,31 +3503,27 @@ Version history:
 ------------------------------------------------------------------------------
 
 Features to add (no specific order):
- - Add import/export feature (save all the data on the ev3 in one operation) - Will be done while JRE 1.8 is the default leJOS JRE.
+ - Add import/export feature (save all the data on the ev3 in one operation)
  - Add real time sensor probes
  - Add port checking (auto detection for EV3 devices)
- - Add API for other LEGO EV3 sensors (Gyro sensor) - Will be done while I buy these two sensors :-)
+ - Add exit script (from the script) feature/function
+ - Add a visual (or mix) code editing (better usability on tablets) (eg: GRAFSET - http://www.gojs.net/beta/samples/grafcet.html, Blocky: https://developers.google.com/blockly/)
+ - Add API for other LEGO EV3 sensors (Gyro sensor, Ultrasonic sensor)
  - Add new xSensors (eg. xAudio) and other modes to existing xSensors (eg. video object detection for balls/round items, etc.)
- - Add support for leJOS 0.9.1-beta (currently 0.9.0-beta)
 
 
 ------------------------------------------------------------------------------
 
 Known defects:
+ - (0.1.0 and following) - Screen API don't work - only clear working (Checked with lejos 0.6.0-alpha, to be confirmed with lejos-0.8.1-beta)
  - (0.3.0 and following) - Firefox on android, a cosmetic display problem on the xTouch xSensor
  - (0.3.0 and following) - Chrome on android, a display problem on the full screen mode
- - (0.4.0 and following) - xVideo don't work with some combinaison of webcam/browser
- - (0.4.0 and following) - Seems don't work with version 0.9.1-beta of leJOS (works with 0.9.0-beta)
 
 
 ------------------------------------------------------------------------------
 
 Work in progress:
- 0.6.0:
-    - TBD
-
-    - Fix:
-      - TBD</pre>
+ - Blockly</pre>
 </div>
 </div>
 </div>
@@ -3799,12 +3531,8 @@ Work in progress:
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.5.0 (C) 2014-2017<br>
-Last updated 2017-07-15 11:36:40 CEST
+Last updated 2015-04-28 22:14:32 CEST
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
-<script>hljs.initHighlighting()</script>
 </body>
 </html>

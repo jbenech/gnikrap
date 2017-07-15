@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Other meta -->
     <meta charset="utf-8">
-    <meta name="description" content="Gnikrap is a simple and powerful JavaScript development environment for the Lego Mindstrom EV3">
+    <meta name="description" content="A JavaScript and Scratch-like development environment for the Lego Mindstrom EV3">
     <meta name="author" content="Jean BENECH">
-    <meta name="keywords" content="Mindstrom,EV3,JavaScript,Webcam,Video,Gyroscope,Programming,Lego">
+    <meta name="keywords" content="Mindstrom,EV3,JavaScript,Scratch,Webcam,Video,Gyroscope,Programming,Lego">
     <meta name="google-site-verification" content="pqsfgUaDQeS0j9KEACiKTQdcVPsuFvyKKr5Wnq4fKIc" />
     <link rel="shortcut icon" href="images/gnikrap.png">
 
@@ -26,92 +26,120 @@
     <div class="container">
       <div class="header">
         <nav>
+          <ul class="nav nav-pills pull-left">
+            <li><a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+          </ul>
           <ul class="nav nav-pills pull-right">
             <li role="presentation"><a href="https://github.com/jbenech/gnikrap/releases">Download</a></li>
-            <li role="presentation"><a href="gnikrap-doc/index.html">Documentation</a></li>
+            <li role="presentation"><a href="documentation.html">Documentation</a></li>
             <li role="presentation"><a href="https://raw.githubusercontent.com/jbenech/gnikrap/master/gnikrap-install/gnikrap-install-all/src/main/scripts/ChangeLog.txt">What's new</a></li>
             <li role="presentation"><a href="https://github.com/jbenech/gnikrap">View project on github</a></li>
           </ul>
         </nav>
       </div>
 
+      <!-- ###### Title ###### -->
       <div class="jumbotron">
         <h1>Gnikrap</h1>
-        <p class="lead">Gnikrap is a simple and powerful javascript development environment for the Lego Mindstrom EV3</p>
-        <p><a class="btn btn-lg btn-success" href="https://github.com/jbenech/gnikrap/releases" role="button">Download &raquo;</a></p>
+        <p class="lead">A JavaScript and Scratch-like development environment for the Lego Mindstrom EV3</p>
+        <p><a class="btn btn-lg btn-primary" href="https://github.com/jbenech/gnikrap/releases" role="button">Download &raquo;</a></p>
       </div>
-      <hr class="featurette-divider">
+      <p>&nbsp;</p>
 
+      <!-- ###### JavaScript ###### -->
       <div class="row featurette">
         <div class="col-md-7">
           <h2 class="featurette-heading"><span class="text-muted">JavaScript</span> on the Lego Mindstrom EV3</h2>
-          <p class="lead">You can develop with Javascript directly on the EV3 in a development environment running 
-          on the device of your choice (Windows, Apple, Linux, Android, etc.). You benefit of both the power of Javascript and the simplicity
-          of the API to use the EV3 world (brick, motor and sensors) but also the XSensors.</p>
+          <p class="lead">You can develop with JavaScript directly on the EV3 in a development environment running 
+          in the browser of your choice (Firefox, Chrome, IE11, etc.). You benefit of both the power of JavaScript and the simplicity
+          of a simple API to use the EV3 world (brick, motor and sensors) and also the XSensors.</p>
           <p>
-            <a class="btn btn-default" href="http://youtu.be/NE7edagobj8" role="button">Watch the video &raquo;</a>
+            <a class="btn btn-warning" href="https://rawgit.com/jbenech/gnikrap/master/gnikrap-core/src/main/webapp/index.html?demoMode=true&programmingStyle=TEXT" role="button">Try the live demo &raquo;</a>
+          </p>
+          <p>
+            <a class="btn btn-success" href="http://youtu.be/NE7edagobj8" role="button">Watch the video &raquo;</a>
           </p>
         </div>
         <div class="col-md-5">
-          <div class="embed-responsive embed-responsive-16by9">
+          <!-- div class="embed-responsive embed-responsive-16by9">
             <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/NE7edagobj8?cc_load_policy=1"></iframe>
-          </div>
-          <!-- img class="featurette-image img-responsive img-thumbnail" src="images/develop_in_web_browser.png" alt="Develop in web browser"></img -->
+          </div -->
+          <img class="featurette-image img-responsive img-thumbnail" src="images/develop_in_web_browser.png" alt="Develop in web browser"></img>
         </div>
       </div>
-      <hr class="featurette-divider">
+      <p>&nbsp;</p> <hr class="featurette-divider"> <p>&nbsp;</p>
 
+      <!-- ###### Scratch like ###### -->
       <div class="row featurette">
         <div class="col-md-5">
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/skdaGRvRs_4?cc_load_policy=1"></iframe>
-          </div>
-          <!-- img class="featurette-image img-responsive img-thumbnail" src="images/empower_device_sensors.png" alt="Empower device sensors" -->
+          <img class="featurette-image img-responsive img-thumbnail" src="images/scratch_like_development.png" alt="Empower device sensors">
         </div>
+        <div class="col-md-7">
+          <h2 class="featurette-heading"><span class="text-muted">Scratch-like</span> development environment</h2>
+          <p class="lead">Provide to kids that are often familiar with <a href="https://scratch.mit.edu/">Scratch-like</a> applications/games a simple way to start EV3 programmation with Gnikrap before moving towards JavaScript programming. Here again, it run on any modern browser (Firefox, Chrome, IE11, etc.)</p>
+          <p>
+            <a class="btn btn-warning" href="https://rawgit.com/jbenech/gnikrap/master/gnikrap-core/src/main/webapp/index.html?demoMode=true&programmingStyle=VISUAL" role="button">Try the live demo &raquo;</a>
+          </p>
+        </div>
+      </div>
+      <p>&nbsp;</p> <hr class="featurette-divider"> <p>&nbsp;</p>
+      
+      <!-- ###### xSensors ###### -->
+      <div class="row featurette">
         <div class="col-md-7">
           <h2 class="featurette-heading"><span class="text-muted">XSensors</span> - Empower your device' sensors</h2>
           <p class="lead">You want to do more with your Mindstrom: Use all the sensors you already have in your devices: 
           gyroscope (in smartphone or tablet), mouse or touch screen, webcam as if they were standard EV3 sensors ! </br>
           With Gnikrap you can use the Lego sensors and motors and the XSensors (eXternal Sensors) in the same program 
           with the same straightforward API.</p>
-          <p><a class="btn btn-default" href="gnikrap-doc/index.html#_the_xsensor_object" role="button">See XSensors documentation &raquo;</a></p>
+          <p><a class="btn btn-info" href="gnikrap-doc/index.html#_the_xsensor_object" role="button">See XSensors documentation &raquo;</a></p>
           <p>
-            <a class="btn btn-default" href="gnikrap-doc/index.html#_a_robot_that_stay_in_the_video" role="button">See code sample for xVideo &raquo;</a>&nbsp;
-            <a class="btn btn-default" href="http://youtu.be/skdaGRvRs_4" role="button">Watch the video &raquo;</a>
+            <a class="btn btn-info" href="gnikrap-doc/index.html#_a_robot_that_stay_in_the_video" role="button">See code sample for xVideo &raquo;</a>&nbsp;
+            <a class="btn btn-success" href="http://youtu.be/skdaGRvRs_4" role="button">Watch the video &raquo;</a>
           </p>
           <p>
-            <a class="btn btn-default" href="gnikrap-doc/index.html#_a_robot_controlled_with_the_xgyro_sensor" role="button">See code sample for xGyro &raquo;</a>&nbsp;
-            <a class="btn btn-default" href="http://youtu.be/IDihLF-AEEY" role="button">Watch the video &raquo;</a>
+            <a class="btn btn-info" href="gnikrap-doc/index.html#_a_robot_controlled_with_the_xgyro_sensor" role="button">See code sample for xGyro &raquo;</a>&nbsp;
+            <a class="btn btn-success" href="http://youtu.be/IDihLF-AEEY" role="button">Watch the video &raquo;</a>
           </p>
           <p>
-            <a class="btn btn-default" href="gnikrap-doc/index.html#_a_robot_controlled_with_the_xtouch_sensor" role="button">See code sample for xTouch &raquo;</a>&nbsp;
+            <a class="btn btn-info" href="gnikrap-doc/index.html#_a_robot_controlled_with_the_xtouch_sensor" role="button">See code sample for xTouch &raquo;</a>&nbsp;
           </p>
+        </div>
+        <div class="col-md-5">
+          <!-- div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/skdaGRvRs_4?cc_load_policy=1"></iframe>
+          </div -->
+          <img class="featurette-image img-responsive img-thumbnail" src="images/empower_device_sensors.png" alt="Empower device sensors">
         </div>
       </div>
-      <hr class="featurette-divider">
+      <p>&nbsp;</p> <hr class="featurette-divider"> <p>&nbsp;</p>
 
+      <!-- ###### Documentation ###### -->
       <div class="row featurette">
-        <div class="col-md-7">
-          <h2 class="featurette-heading">A full <span class="text-muted">documentation</span> is available</h2>
-          <p class="lead">The API available is fully documented with code snippet. There is also some more real samples that are commented.</p>
-          <p><a class="btn btn-default" href="gnikrap-doc/index.html" role="button">Browse the documentation &raquo;</a></p>
-        </div>
         <div class="col-md-5">
           <img class="featurette-image img-responsive img-thumbnail" src="images/full_documentation_available.png" alt="Full documentation available">
         </div>
+        <div class="col-md-7">
+          <h2 class="featurette-heading">A full <span class="text-muted">documentation</span> is available</h2>
+          <p class="lead">The API available is fully documented with code snippet. There is also some more real samples that are commented.</p>
+          <p><a class="btn btn-info" href="documentation.html" role="button">Browse the documentation &raquo;</a></p>
+        </div>
       </div>
-      <hr class="featurette-divider">
-
+      <p>&nbsp;</p> <hr class="featurette-divider"> <p>&nbsp;</p>
+      
+      <!-- ###### Open source ###### -->
       <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Gnikrap is <span class="text-muted">Open Source software</span></h2>
+          <p class="lead">As Gnikrap is open source, you can consult, modify and redistribute the software.</p>
+          <p><a class="btn btn-default" href="https://github.com/jbenech/gnikrap/blob/master/LICENSE" role="button">View licence file &raquo;</a></p>
+          <p><a class="btn btn-default" href="https://github.com/jbenech/gnikrap" role="button">View source code on github &raquo;</a></p>
+        </div>
         <div class="col-md-5">
           <img class="featurette-image img-responsive img-thumbnail" src="images/open_source_software.png" alt="Open source software">
         </div>
-        <div class="col-md-7">
-          <h2 class="featurette-heading">Gnikrap is <span class="text-muted">Open Source software</span></h2>
-          <p class="lead">As Gnikrap is open source, you can consult, modify and redistribute the software (see the <a href="https://github.com/jbenech/gnikrap/blob/master/LICENSE">licence</a> file for more details).</p>
-        </div>
       </div>
-      <hr class="featurette-divider">
+      <p>&nbsp;</p>
       
       <footer>
         <p class="pull-right"><a href="#">Back to top</a></p>
