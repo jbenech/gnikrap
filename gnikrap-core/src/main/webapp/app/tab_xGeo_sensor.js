@@ -68,16 +68,18 @@ function GeoSensorTabViewModel(appContext) {
   };
   
   self.watchPositionHandler = function(position) {
-    self.xValue.timestamp = position.timestamp;
-    self.xValue.latitude = position.coords.latitude;
-    self.xValue.longitude = position.coords.longitude;
-    self.xValue.accuracy = position.coords.accuracy;
-    self.xValue.altitude = position.coords.altitude;
-    self.xValue.altitudeAccuracy = position.coords.altitudeAccuracy;
-    //self.xValue.heading = position.coords.heading; // Heading can be computed (or use the gyro compass)
-    //self.xValue.speed = position.coords.speed; // Speed can be computed
-    
-    self.__sendXValue();
+    if(self.isStarted()) { // Workaround: In some version of Firefox, the geolocation.clearWatch don't unregister the callback <=> avoid flooding the EV3 brick
+      self.xValue.timestamp = position.timestamp;
+      self.xValue.latitude = position.coords.latitude;
+      self.xValue.longitude = position.coords.longitude;
+      self.xValue.accuracy = position.coords.accuracy;
+      self.xValue.altitude = position.coords.altitude;
+      self.xValue.altitudeAccuracy = position.coords.altitudeAccuracy;
+      //self.xValue.heading = position.coords.heading; // Heading can be computed (or use the gyro compass)
+      //self.xValue.speed = position.coords.speed; // Speed can be computed
+      
+      self.__sendXValue();
+    }
   };
   
   self.watchPositionErrorHandler = function(error) {
@@ -112,11 +114,12 @@ function GeoSensorTabViewModel(appContext) {
           timeout: 27000
         };
         self.watchID = navigator.geolocation.watchPosition(self.watchPositionHandler, self.watchPositionErrorHandler, geo_options);
+        console.log("  ... id of callback is: " + self.watchID);
         self.__sendXValue();
       }
     } else {
       if (navigator.geolocation) {
-        console.log("Remove geolocation callback...");
+        console.log("Unregister geolocation for callback: " + self.watchID);
         if(self.watchID) {
           navigator.geolocation.clearWatch(self.watchID);
           self.watchID = undefined;
