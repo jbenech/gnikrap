@@ -25,6 +25,7 @@ Version history:
     - Fix: 
       - French translation is now working (translation files are now checked at build time)
 
+      
  0.4.0 (28APR2015 - leJOS Firmware/Menu integration)
     - Easy to use (no more need telnet/ssh/scp) / leJOS integration:
       - Automated GUI installation on Windows.
