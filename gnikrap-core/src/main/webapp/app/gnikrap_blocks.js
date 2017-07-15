@@ -323,7 +323,7 @@ function GnikrapBlocks() {
 
     // Other simple replace (for better Javascript execution performances)
     [ [/ev3.getBrick\(\).getKeyboard\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('keyboard'), 'ev3.getBrick().getKeyboard()'],
-      [/ev3.getBrick\(\).getLED\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('led'), 'ev3.getBrick().getLED()'],
+      [/ev3.getBrick\(\).getLed\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('led'), 'ev3.getBrick().getLed()'],
       [/ev3.getBrick\(\).getSound\(\)/g, Blockly.JavaScript.variableDB_.getDistinctName('sound'), 'ev3.getBrick().getSound()']
     ].forEach(function(value) {
         var varName = value[1];
@@ -696,7 +696,7 @@ function GnikrapBlocks() {
     Blockly.JavaScript['gnikrap_ev3_led'] = function(block) {
       var status = block.getFieldValue('STATUS');
 
-      return 'ev3.getBrick().getLED().' + getCodeForList(CHANGE_LED_STATUS, status) + ';\n';
+      return 'ev3.getBrick().getLed().' + getCodeForList(CHANGE_LED_STATUS, status) + ';\n';
     };
 
     /////////////////////////////////////////////////////////////////////////////
