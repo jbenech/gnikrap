@@ -7,7 +7,7 @@
 
 * Gnikrap is *straightforward to use*.
 * Gnikrap can be *used on a computer or a tablet*, in fact any device that have a modern browser (HTML5 compatible).
-* *Javascript*, is currently (2017) one of the more popular scripting language
+* *Javascript*, is currently one of the more popular scripting language
 * Code autocompletion (since 0.5.0) make writing JavaScript really more easier.
 
 
