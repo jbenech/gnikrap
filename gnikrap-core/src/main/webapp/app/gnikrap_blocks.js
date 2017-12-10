@@ -1049,7 +1049,8 @@ function GnikrapBlocks() {
         this.appendDummyInput()
             .appendField(new Blockly.FieldDropdown(
                 MOTOR_ACTION1.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_move.list_motor_actions"))), "ACTION")
-            .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
+            .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT")
+            .appendField(i18n.t("blocks.gnikrap_ev3_motor_move.text_and_execute_next_block"));
 
         this.getEV3PortData = function() {
           return { port: this.getFieldValue('PORT'), type: undefined, action: 'useMotor' };
@@ -1092,14 +1093,16 @@ function GnikrapBlocks() {
       init: function() {
         initBlockStackable(this, "blocks.gnikrap_ev3_motor_rotate", self.EV3_MOTOR_COLOUR);
         this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown(
-                MOTOR_ACTION2.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_rotate.list_motor_actions"))), "ACTION")
+            .appendField(i18n.t("blocks.gnikrap_ev3_motor_rotate.text_start_motor"))
             .appendField(new Blockly.FieldDropdown([["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]]), "PORT");
         this.appendValueInput("VALUE")
             .setCheck("Number")
             .appendField(i18n.t("blocks.gnikrap_ev3_motor_rotate.text_for"));
         this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown(ANGLE_UNIT.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_rotate.list_angle_unit"))), "ANGLE_UNIT");
+            .appendField(new Blockly.FieldDropdown(ANGLE_UNIT.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_rotate.list_angle_unit"))), "ANGLE_UNIT")
+            .appendField(new Blockly.FieldDropdown(
+                MOTOR_ACTION2.map(createListForFieldDropdownMapper("blocks.gnikrap_ev3_motor_rotate.list_motor_actions"))), "ACTION")
+
         this.setInputsInline(true);
 
         this.getEV3PortData = function() {

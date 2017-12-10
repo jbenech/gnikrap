@@ -500,11 +500,12 @@
     "gnikrap_ev3_motor_move": {
       "tooltip": "Start/stop the given motor. The program execution continue immediatly while the motor has taken in account the action.",
       "list_motor_actions": {
-        "FORWARD": "rotate forward motor",
-        "BACKWARD": "rotate backward motor",
+        "FORWARD": "start the motor",
+        "BACKWARD": "start the motor in reverse",
         "STOP_LOCK": "stop and lock motor",
         "STOP": "stop motor"
-      }
+      },
+      "text_and_execute_next_block": "and execute next block"
     },
 
     "gnikrap_ev3_motor_ismoving": {
@@ -515,9 +516,10 @@
 
     "gnikrap_ev3_motor_rotate": {
       "tooltip": "Rotate the given motor for the given number of turn or degree. With 'start rotate', the program execution continue immediatly while the motor has taken in account the action. With 'rotate' the program wait the end of the move before going further.",
+      "text_start_motor": "start the motor",
       "list_motor_actions": {
-        "ROTATE": "rotate motor",
-        "ROTATE_NO_WAIT": "start rotate motor"
+        "ROTATE": "and wait it's done before before continue",
+        "ROTATE_NO_WAIT": "and continue directly"
       },
       "text_for": "for",
       "list_angle_unit": {
