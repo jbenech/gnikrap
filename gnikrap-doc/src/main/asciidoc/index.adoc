@@ -9,7 +9,7 @@
 Gnikrap documentation
 =====================
 Jean Bénech <jbenech at free dot fr>
-v0.5.0 (C) 2014-2017
+v0.6.0 (C) 2014-2017
 
 A Scratch-like and JavaScript development environment for http://www.lego.com/mindstorms/[Lego Mindstrom EV3]
 

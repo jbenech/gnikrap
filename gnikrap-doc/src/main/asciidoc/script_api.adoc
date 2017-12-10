@@ -56,11 +56,27 @@ sleep(timeInMs):: Make the script sleeping for the given number of milliseconds.
 
 getConfiguration():: Returns a <<Configuration object>>. Enable to configure some behaviour of the scripting environment.
 
-getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with the given name. (The name is configured within the GUI)
-                         *XSensorName*: the name of the sensor.
+getXSensor(XSensorName):: Returns <<The XSensor object>> for the XSensor with the given name. (The name is configured within the GUI) +
+                          *XSensorName*: the name of the sensor.
 
 exit():: Terminate the script. +
          _Note_: If you use `try`/`catch` in your scripts, this function may not work as it internally use an `Exception` in order to stop the script.
+
+getChrono():: Returns the <<Chrono object>>.         
+****
+
+==== Chrono object
+
+****
+start(name):: Start a chrono with the given name +
+              _Note_: If a chrono with the same name is already started, it is restarted. +
+              *name*: the name of the chrono.
+
+getTime():: Returns the number of milliseconds since the chrono has been started. +
+            This function can be called several time, the result will change according to the time elapsed.
+
+stop(name):: Stop and remove the chrono with the given name. +
+             *name*: the name of the chrono.
 ****
 
 
@@ -176,8 +192,8 @@ stop(lock, immediateReturn):: Stop and lock or not the motor. +
 rotate(angle):: Rotate the given number of degree. This call wait the end of the motor move. +
                 *angle*: the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
 
-rotate(angle, immediateReturn):: Rotate the given number of degree. This call wait the end of the motor move. +
-                                 *angle*: the number of degree to rotate. Positive number will rotate forward, negative will rotate backward.
+rotate(angle, immediateReturn):: Rotate the given number of degree. +
+                                 *angle*: the number of degree to rotate. Positive number will rotate forward, negative will rotate backward. +
                                  *immediateReturn*: Is the function returns immediately or wait that the motor rotation was ended ?
                                  Values should be in [`true`, `false`]
 
