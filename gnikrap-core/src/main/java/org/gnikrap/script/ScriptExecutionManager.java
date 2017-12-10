@@ -29,7 +29,6 @@ import javax.script.ScriptEngineManager;
 import org.gnikrap.GnikrapAppContext;
 import org.gnikrap.script.ev3api.EV3ScriptException;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
-import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
 import org.gnikrap.script.ev3menu.WelcomeMenu;
 import org.gnikrap.utils.LoggerUtils;
@@ -75,7 +74,7 @@ public class ScriptExecutionManager {
       scriptContext.releaseResources();
     } else {
       SimpleEV3Brick brick = buildNewEV3Brick();
-      scriptContext = new EV3ScriptContext(appContext, brick, new XSensorManager());
+      scriptContext = new EV3ScriptContext(appContext, brick);
       if (brick != null) { // In case of FakeEV3
         brick.setScriptContext(scriptContext);
         menu = new WelcomeMenu(appContext, brick);
@@ -101,7 +100,7 @@ public class ScriptExecutionManager {
         LOGGER.warning("Submiting a new script while a first one is already running => Stoping the running script");
         stopScript();
       } else {
-        throw new EV3ScriptException(EV3ScriptException.SCRIPT_ALREADY_RUNNING, Collections.<String, String> emptyMap(), true);
+        throw new EV3ScriptException(EV3ScriptException.SCRIPT_ALREADY_RUNNING, Collections.<String, String>emptyMap(), true);
       }
     }
     reset(false);
@@ -117,14 +116,14 @@ public class ScriptExecutionManager {
             }
             engine.put("ev3", scriptContext);
             scriptContext.start();
-            sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_STARTING, Collections.<String, String> emptyMap()));
+            sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_STARTING, Collections.<String, String>emptyMap()));
             try {
               engine.eval(scriptText);
             } catch (EV3StopScriptException stopEx) {
               // Script normally stopped, just ignore
               LOGGER.fine(stopEx.getMessage());
             }
-            sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_ENDED, Collections.<String, String> emptyMap()));
+            sendBackMessage(EV3MessageBuilder.buildInfoCodedMessage(CodedMessages.SCRIPT_ENDED, Collections.<String, String>emptyMap()));
           } catch (EV3Exception ev3ex) {
             throw ev3ex;
           } catch (Exception ex1) {
@@ -179,7 +178,7 @@ public class ScriptExecutionManager {
         scriptExecutor.stop();
         try {
           // Script has not stopped gracefully => We act as if there is an EV3ScriptException
-          sendBackMessage(EV3MessageBuilder.buildEV3ExceptionMessage(new EV3ScriptException(EV3ScriptException.SCRIPT_STOP_FORCED, Collections.<String, String> emptyMap())));
+          sendBackMessage(EV3MessageBuilder.buildEV3ExceptionMessage(new EV3ScriptException(EV3ScriptException.SCRIPT_STOP_FORCED, Collections.<String, String>emptyMap())));
         } catch (IOException ioe) {
           LOGGER.log(Level.WARNING, "Exception ignored", ioe);
         }

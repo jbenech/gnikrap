@@ -1,6 +1,6 @@
 /*
  * Gnikrap is a simple scripting environment for the Lego Mindstrom EV3
- * Copyright (C) 2014-2015 Jean BENECH
+ * Copyright (C) 2014-2017 Jean BENECH
  * 
  * Gnikrap is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,8 @@ package org.gnikrap.script;
 
 import java.util.concurrent.Future;
 
-import lejos.utility.Delay;
-
 import org.gnikrap.GnikrapAppContext;
+import org.gnikrap.script.ev3api.SimpleChrono;
 import org.gnikrap.script.ev3api.SimpleEV3Brick;
 import org.gnikrap.script.ev3api.SimpleEV3Keyboard.SimpleEV3Button;
 import org.gnikrap.script.ev3api.xsensors.XSensor;
@@ -29,9 +28,11 @@ import org.gnikrap.script.ev3api.xsensors.XSensorManager;
 import org.gnikrap.script.ev3api.xsensors.XSensorValue;
 import org.gnikrap.utils.ScriptApi;
 
+import lejos.utility.Delay;
+
 /**
  * Enable to provide main entry point to access ev3 device to the script engine.<br/>
- * Within the script, the object {@code ev3} is in fact an instance of this object.
+ * Within the script, the object {@code ev3} is an instance of this object.
  */
 public final class EV3ScriptContext {
 
@@ -43,6 +44,9 @@ public final class EV3ScriptContext {
   private final XSensorManager xsensor;
   private int xSensorActive = 0;
 
+  // Other resources
+  private final SimpleChrono chrono;
+
   // Configuration
   private final Configuration configuration = new Configuration();
   private int confIsRunningWait = 0;
@@ -50,9 +54,10 @@ public final class EV3ScriptContext {
   private int confWaitingTimeBeforeHardKill = 5000;
   private final ScriptExecutionManager scriptExecutionMgr;
 
-  public EV3ScriptContext(GnikrapAppContext context, SimpleEV3Brick ev3, XSensorManager xsensor) {
+  public EV3ScriptContext(GnikrapAppContext context, SimpleEV3Brick ev3) {
     this.ev3 = ev3;
-    this.xsensor = xsensor;
+    this.xsensor = new XSensorManager();
+    this.chrono = new SimpleChrono();
     this.scriptExecutionMgr = context.getScriptExecutionManager();
     if (ev3 != null) {
       escape = ev3.getKeyboard().getEscape();
@@ -164,6 +169,11 @@ public final class EV3ScriptContext {
   public void sleep(long ms) {
     // TODO: Is it better sleep of delay ? maybe both are needed ?
     Delay.msDelay(ms);
+  }
+
+  @ScriptApi(versionAdded = "0.6.0")
+  public SimpleChrono getChrono() {
+    return chrono;
   }
 
   void releaseResources() {

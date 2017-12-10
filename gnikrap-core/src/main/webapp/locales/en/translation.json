@@ -607,7 +607,7 @@
     "ev3": { 
       "keywords": ["ev3"],
       "score": 120,
-      "words": ["isOk()", "getBrick()", "notify(\"text\")", "sleep(0)", "getConfiguration()", "getXSensor(\"name\")"]
+      "words": ["isOk()", "getBrick()", "notify(\"text\")", "sleep(0)", "getConfiguration()", "getXSensor(\"name\")", "getChrono()"]
     },
     "brick": { 
       "keywords": ["brick", "getBrick"],
@@ -671,6 +671,11 @@
                 "drawRectangle(x1, y1, x2, y2)", "fillRectangle(x1, y1, x2, y2)", "drawCircle(x, y, radius)",
                 "fillCircle(x, y, radius)", "drawArc(x, y, width, height, startAngle, arcAngle)", "fillArc(x, y, width, height, startAngle, arcAngle)",
                 "getWidth()", "getHeight()", "getFontHeight()", "drawImage(img, x, y)", "decodeImage(data)", "buildImage(line1, line2, ..., lineN)"]
+    },
+    "chrono": {
+      "keywords": ["chrono", "getChrono"],
+      "score": 20,
+      "words": ["start(\"name\")", "getTime(\"name\")", "stop(\"name\")"]
     },
     "battery": {
       "keywords": ["battery", "getBattery"],
