@@ -749,7 +749,7 @@ function GnikrapBlocks() {
     };
     Blockly.JavaScript['gnikrap_ev3_sound_playnote'] = function(block) {
       var note = Blockly.JavaScript.valueToCode(block, 'NOTE', Blockly.JavaScript.ORDER_ATOMIC)
-                 || "''"; // Default value if no args
+                 || "'Do'"; // Default value if no args
       var duration = Blockly.JavaScript.valueToCode(block, 'DURATION', Blockly.JavaScript.ORDER_ATOMIC)
                      || 0; // Default value if no args
       var time_unit = block.getFieldValue('TIME_UNIT');
