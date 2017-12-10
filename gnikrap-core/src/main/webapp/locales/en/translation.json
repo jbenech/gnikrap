@@ -255,7 +255,7 @@
       "INVALID_MOTOR_PORT": "Motor port '__port__' isn't valid, should be in [A, B, C, D]",
       "API_NOT_IMPLEMENTED": "The function __function__ isn't implemented",
       "INVALID_CHANNEL_VALUE": "Invalid channel value: '__channel__', valid values in [1, 2, 3, 4]",
-      "INVALID_NOTE": "Invalid note: '__note__', should be in [C1-B7, # allowed on C, D, F, G, A] or [Do-Si, # allowed on Do, Re, Fa, Sol, La]",
+      "INVALID_NOTE": "Invalid note: '__note__', should be in [C1-B7, # allowed on C, D, F, G, A] or [Do, Do#, Re, Re#, Mi, Fa, Fa#, Sol, Sol#, La, La#, Si]",
       "UNEXPECTED_ERROR": "Unexpected error: '__error__'",
       "SCRIPT_STOP_FORCED": "Script forced to stop, please use \"ev3.isOk()\"",
       "CANT_READ_FILE": "Can't read file '__filename__', technical error is: __error__",
@@ -388,7 +388,7 @@
     },
 
     "gnikrap_ev3_sound_setvolume": {
-      "tooltip": "Set the sound volume.",
+      "tooltip": "Set the sound volume (between 0 and 100).",
       "text_set_volume": "set volume to"
     },
 
@@ -398,7 +398,7 @@
     },
 
     "gnikrap_ev3_sound_playnote": {
-      "tooltip": "Play the given note for the given duration.",
+      "tooltip": "Play the given note (A, A#, B, C, C#, D, D#, E, F, F#, G, G#) for the given duration.",
       "text_play_note": "play note",
       "text_for": "for"
     },
